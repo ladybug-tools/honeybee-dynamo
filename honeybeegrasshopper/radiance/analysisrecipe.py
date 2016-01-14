@@ -26,6 +26,9 @@ class GridBasedAnalysisRecipe(HBGridBasedAnalysisRecipe):
     def testPts(self, pts):
         """Set list of test points
         """
+        pts.SimplifyPaths()
+
+        # clean datatree
         self.__testPts = pts
 
     @property
@@ -42,3 +45,6 @@ class GridBasedAnalysisRecipe(HBGridBasedAnalysisRecipe):
             +Z Vector will be assigned if vectors are not provided
         """
         self.__ptsVectors = vectors
+
+    def __repr__(self):
+        return "%s #testPts:%d #gourp:%d"%(self.__class__.__name__, self.__testPts.DataCount, self.__testPts.BranchCount)
