@@ -1,3 +1,3 @@
-__all__ = ["hbzone"]
+__all__ = ["hbzone", "wrapper"]
 
-import hbzone
+import hbzone, wrapper
