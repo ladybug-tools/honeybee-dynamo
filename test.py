@@ -1,7 +1,8 @@
-import sys
-sys.path.append(r"C:\Users\Administrator\Documents\GitHub\honeybee-grasshopper")
+#import sys
+#sys.path.append(r"C:\Users\Administrator\Documents\GitHub\honeybee-grasshopper\honeybee")
 
-from honeybeegrasshopper.radiance import analysisrecipe, sky
+import honeybeegrasshopper
+# from honeybee.radiance.sky.certainIlluminance import SkyWithCertainIlluminanceLevel
 
-sk = sky.HBCertainIlluminanceLevelSky(200)
-analysisrecipe.GridBasedAnalysisRecipe(sk, [])
+#sk = SkyWithCertainIlluminanceLevel(200)
+# analysisrecipe.GridBasedAnalysisRecipe(sk, [])

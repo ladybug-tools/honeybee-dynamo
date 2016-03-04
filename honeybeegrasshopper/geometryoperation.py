@@ -1,4 +1,5 @@
 """Collection of methods for Honeybee geometry operations in Grasshopper."""
+from honeybee.geometryoperation import *
 import Rhino as rc
 
 

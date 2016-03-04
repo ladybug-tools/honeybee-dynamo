@@ -1,3 +1,4 @@
-__all__ = ["hbzone", "wrapper"]
+"""Honeybee Grasshopper library."""
+__all__ = ["hbzone", "hbsurface", "radiance", "surfacetype", "wrapper", "settings"]
 
-import hbzone, wrapper
+import hbzone, hbsurface, radiance, surfacetype, wrapper, settings
