@@ -1,7 +1,7 @@
 """Collection of methods for Honeybee geometry operations in Grasshopper."""
+
 from honeybee.geometryoperation import *
 import Rhino as rc
-
 
 # TODO: Add support for non-planar surfaces. The current implementation is a simple
 # implementation to prototype the workflow
@@ -44,7 +44,7 @@ def extractSurfacePoints(HBSurface, triangulate=False, meshingParameters=None):
         pointsSorted = sorted(pts, key=lambda pt: border.ClosestPoint(pt)[1])
 
         # make sure points are anti clockwise
-        if not isPointsSortedAntiClockwise(pointsSorted, HBSurface.basePlane):
+        if not isPointsSortedAntiClockwise(pointsSorted, HBSurface.normal):
             return pointsSorted.reverse()
 
         # return sorted points
@@ -99,6 +99,21 @@ def getSurfaceCenterPtandNormal(HBSurface):
             normalVector = brepFace.NormalAt(uv[1], uv[2])
 
         return centerPt, normalVector
+
+
+def getSurfaceCenterPtNormalandBasePlane(HBSurface):
+    """Calculate center point, normal and basePlane for a HBSurface.
+
+    Args:
+        HBSurface: A Honeybee surface
+
+    Returns:
+        Returns a tuple as (centerPt, normalVector, basePlane)
+    """
+    centerPt, normalVector = getSurfaceCenterPtandNormal(HBSurface)
+    basePlane = rc.Geometry.Plane(centerPt, normalVector)
+
+    return centerPt, normalVector, basePlane
 
 
 def checkPlanarity(HBSurface, tolerance=1e-3):
