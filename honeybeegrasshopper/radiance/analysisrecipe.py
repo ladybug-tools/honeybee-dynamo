@@ -1,69 +1,75 @@
 from ..honeybee.radiance.analysisrecipe import HBGridBasedAnalysisRecipe
-from Rhino.Geometry import Vector3d
 
 
 class GridBasedAnalysisRecipe(HBGridBasedAnalysisRecipe):
-    """Grid base analysis base class.
+    """Grid base analysis recipe.
 
     Attributes:
         sky: A honeybee sky for the analysis
-        testPtsT: Test points as a DataTree of Rhino.Geometry.Point3d
-        ptsVectorsT: An optional DataTree of point vectors as Rhino.Geometry.Vector3d
-            +Z Vector will be assigned if vectors are not provided
-        radianceParameters: Radiance parameters for this analysis (Default: RadianceParameters.LowQuality)
+        pointGroups: A Grasshopper DataTree of Point3d test points. Each branch
+            of test points will be converted to a TestPointGroup.
+        vectorGroups: A DataTree of Vector3d vectors. Each vector represents direction
+            of corresponding point in testPts. If the vector is not provided (0, 0, 1)
+            will be assigned.
+        radParameters: Radiance parameters for this analysis.
+            (Default: RadianceParameters.LowQuality)
     """
 
-    def __init__(self, sky, testPtsT, ptsVectorsT=None, radParameters=None):
-        """Initialize analysis recipe."""
-        HBGridBasedAnalysisRecipe.__init__(
-            self, sky=sky, testPts=[], ptsVectors=[], radParameters=radParameters)
-        self.testPts = testPtsT
-        """A list of test points as Rhino.Geometry.Point3d."""
-        self.ptsVectors = testPtsT
-        """An optional list of point vectors as Rhino.Geometry.Vector3d
-            +Z Vector will be assigned if vectors are not provided."""
+    def __init__(self, sky, pointGroupsT, vectorGroupsT, radParameters=None):
+        """Create grid-based recipe."""
+        # convert DataTrees to lists
+        pointGroups, vectorGroups = self.matchPointsAndVectors(pointGroupsT, vectorGroupsT)
 
-    @property
-    def testPts(self):
-        """List of test points."""
-        return self.__testPts
+        if len(pointGroups) == 0:
+            print "No test points!"
 
-    # TODO: Add check for test points. Remove null test points
-    @testPts.setter
-    def testPts(self, pts):
-        """Set list of test points."""
-        # Flatten DataTree to a flattened generator
-        # Save the pattern in self.PtsStructure
-        # write a function for datatree to list and list to datatree
-        try:
-            pts.SimplifyPaths()
-        except AttributeError:
-            pass
+        HBGridBasedAnalysisRecipe.__init__(self, sky, pointGroups,
+                                           vectorGroups, radParameters)
 
-        # clean datatree
-        self.__testPts = pts
+    def matchPointsAndVectors(self, ptsT, vecT):
+        """Convert a grasshopperDataTree to list.
 
-    @property
-    def ptsVectors(self):
-        """List of vectors for each test point.
+        Args:
+            ptsT: A Grasshopper DataTree of test points.
+            vecT: A Grasshopper DataTree of vectors.
 
-        +Z Vector will be assigned if vectors are not provided
+        Returns:
+            pts: Nested list of points
+            vectors: Nested list of vectors
         """
-        return self.__ptsVectors
+        pts = []
+        vec = []
+        ptsT.SimplifyPaths()
+        vecT.SimplifyPaths()
 
-    @ptsVectors.setter
-    def ptsVectors(self, vectors):
-        """List of vectors for each test point.
+        for i, path in enumerate(ptsT.Paths):
+            p = list(ptsT.Branch(path))
+            try:
+                v = list(vecT.Branch(path))
+            except:
+                v = []
 
-        +Z Vector will be assigned if vectors are not provided
-        """
-        if vectors == []:
-            self.__ptsVectors = [Vector3d.ZAxis for pt in self.testPts]
-        else:
-            assert len(self.testPts) == len(vectors), \
-                "Length of test points should be equal to length of vectors."
-            self.__ptsVectors = vectors
+            tempPts = []
+            tempVectors = []
 
-    def __repr__(self):
-        """Represent grid based recipe."""
-        return "%s #testPts:%d #gourp:%d" % (self.__class__.__name__, self.__testPts.DataCount, self.__testPts.BranchCount)
+            for c, dp in enumerate(p):
+                if dp is not None:
+                    tempPts.append(dp)
+                    try:
+                        dv = v[c]
+                    except IndexError:
+                        try:
+                            dv = v[-1]
+                        except IndexError:
+                            dv = (0, 0, 1)
+                    finally:
+                        if dv is None:
+                            dv = (0, 0, 1)
+
+                        tempVectors.append(dv)
+
+            if len(tempPts) > 0:
+                pts.append(tempPts)
+                vec.append(tempVectors)
+
+        return pts, vec
