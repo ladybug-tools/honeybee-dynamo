@@ -6,6 +6,7 @@ try:
 except ImportError:
     print "Failed to import Rhino. Make sure the path is added to sys.path."
 
+
 # TODO: Add support for non-planar surfaces. The current implementation is a simple
 # implementation to prototype the workflow
 # TODO: Extract point should support mesh as well as brep surfaces. Currently we have
@@ -51,7 +52,8 @@ def extractSurfacePoints(HBSurface, triangulate=False, meshingParameters=None):
             return pointsSorted.reverse()
 
         # return sorted points
-        return pointsSorted
+        # Wrap in a list as Honeybee accepts list of list of points
+        return [pointsSorted]
 
 
 def vectorsCrossProduct(vector1, vector2):
