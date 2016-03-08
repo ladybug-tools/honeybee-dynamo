@@ -1,7 +1,10 @@
 """Collection of methods for Honeybee geometry operations in Grasshopper."""
 
 from honeybee.geometryoperation import *
-import Rhino as rc
+try:
+    import Rhino as rc
+except ImportError:
+    print "Failed to import Rhino. Make sure the path is added to sys.path."
 
 # TODO: Add support for non-planar surfaces. The current implementation is a simple
 # implementation to prototype the workflow

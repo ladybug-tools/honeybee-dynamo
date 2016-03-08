@@ -1,7 +1,13 @@
 """Collection of methods for data operation."""
 from collections import namedtuple
-from Grasshopper import DataTree
-from System import Object
+try:
+    from Grasshopper import DataTree
+except ImportError:
+    print "Failed to import Grasshopper. Make sure the path is added to sys.path."
+try:
+    from System import Object
+except ImportError:
+    print "Failed to import System. Are you using Python and not IronPython to test the code?"
 
 
 def flattenDataTree(input):

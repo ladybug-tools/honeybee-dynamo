@@ -1,5 +1,5 @@
 # from honeybee.radiance.sky.certainIlluminance import SkyWithCertainIlluminanceLevel
-# from honeybee.radiance.analysisrecipe import HBGridBasedAnalysisRecipe
+# from honeybee.radiance.recipe.gridbased import HBGridBasedAnalysisRecipe
 # from honeybee import dataoperation
 #
 # pts = (0, 0, 0)
