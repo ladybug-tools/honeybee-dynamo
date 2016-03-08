@@ -1270,9 +1270,13 @@ class RadianceParameters(object):
     def toRadString(self, remParameters=[]):
         """Get parameters as a radiance definition."""
         radianceString = []
-        for key in self.__parameters.keys():
+
+        for key in sorted(self.__parameters.keys()):
             if key in remParameters:
                 continue
+            if key == "-xScale" or key == "-yScale":
+                continue
+
             radianceString.append("-%s" % key)
             radianceString.append(str(self.getParameterValue(key)))
 
@@ -1582,8 +1586,10 @@ A value of zero implies no indirect calculation.</p></div>
     <pre><code>def toRadString(self, remParameters=[]):
     """Get parameters as a radiance definition."""
     radianceString = []
-    for key in self.__parameters.keys():
+    for key in sorted(self.__parameters.keys()):
         if key in remParameters:
+            continue
+        if key == "-xScale" or key == "-yScale":
             continue
         radianceString.append("-%s" % key)
         radianceString.append(str(self.getParameterValue(key)))
@@ -1864,8 +1870,10 @@ A value of zero implies no indirect calculation.</p></div>
     <pre><code>def toRadString(self, remParameters=[]):
     """Get parameters as a radiance definition."""
     radianceString = []
-    for key in self.__parameters.keys():
+    for key in sorted(self.__parameters.keys()):
         if key in remParameters:
+            continue
+        if key == "-xScale" or key == "-yScale":
             continue
         radianceString.append("-%s" % key)
         radianceString.append(str(self.getParameterValue(key)))
@@ -2146,8 +2154,10 @@ A value of zero implies no indirect calculation.</p></div>
     <pre><code>def toRadString(self, remParameters=[]):
     """Get parameters as a radiance definition."""
     radianceString = []
-    for key in self.__parameters.keys():
+    for key in sorted(self.__parameters.keys()):
         if key in remParameters:
+            continue
+        if key == "-xScale" or key == "-yScale":
             continue
         radianceString.append("-%s" % key)
         radianceString.append(str(self.getParameterValue(key)))
@@ -2379,9 +2389,13 @@ A value of zero implies no indirect calculation.</p></div>
     def toRadString(self, remParameters=[]):
         """Get parameters as a radiance definition."""
         radianceString = []
-        for key in self.__parameters.keys():
+
+        for key in sorted(self.__parameters.keys()):
             if key in remParameters:
                 continue
+            if key == "-xScale" or key == "-yScale":
+                continue
+
             radianceString.append("-%s" % key)
             radianceString.append(str(self.getParameterValue(key)))
 
@@ -2628,8 +2642,10 @@ A value of zero implies no indirect calculation.</p></div>
     <pre><code>def toRadString(self, remParameters=[]):
     """Get parameters as a radiance definition."""
     radianceString = []
-    for key in self.__parameters.keys():
+    for key in sorted(self.__parameters.keys()):
         if key in remParameters:
+            continue
+        if key == "-xScale" or key == "-yScale":
             continue
         radianceString.append("-%s" % key)
         radianceString.append(str(self.getParameterValue(key)))

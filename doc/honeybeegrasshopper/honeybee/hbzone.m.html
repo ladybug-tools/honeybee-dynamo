@@ -1015,12 +1015,16 @@ table {
   
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.hbzone', this);">Show source &equiv;</a></p>
   <div id="source-honeybeegrasshopper.honeybee.hbzone" class="source">
-    <pre><code>lass HBZone(object):
-   """Honeybee base class."""
-   def __init__(self, name, buildingProgram, zoneProgram, isConditioned=True):
-       """Initialize Honeybee Zone."""
-       self.name = name
-       """Zone name"""
+    <pre><code>from hbobject import HBObject
+
+
+class HBZone(HBObject):
+    """Honeybee base class."""
+
+    def __init__(self, name, buildingProgram, zoneProgram, isConditioned=True):
+        """Initialize Honeybee Zone."""
+        self.name = name
+        """Zone name"""
 </code></pre>
   </div>
 
@@ -1039,7 +1043,7 @@ table {
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.hbzone.HBZone', this);">Show source &equiv;</a></p>
   <div id="source-honeybeegrasshopper.honeybee.hbzone.HBZone" class="source">
-    <pre><code>class HBZone(object):
+    <pre><code>class HBZone(HBObject):
     """Honeybee base class."""
 
     def __init__(self, name, buildingProgram, zoneProgram, isConditioned=True):
@@ -1055,9 +1059,21 @@ table {
           <h3>Ancestors (in MRO)</h3>
           <ul class="class_list">
           <li><a href="#honeybeegrasshopper.honeybee.hbzone.HBZone">HBZone</a></li>
+          <li>honeybeegrasshopper.honeybee.hbobject.HBObject</li>
           <li>__builtin__.object</li>
           </ul>
           <h3>Instance variables</h3>
+            <div class="item">
+            <p id="honeybeegrasshopper.honeybee.hbzone.HBZone.isHBObject" class="name">var <span class="ident">isHBObject</span></p>
+            
+
+            
+  
+    <div class="desc"><p>Return True.</p></div>
+  <div class="source_cont">
+</div>
+
+            </div>
             <div class="item">
             <p id="honeybeegrasshopper.honeybee.hbzone.HBZone.name" class="name">var <span class="ident">name</span></p>
             
