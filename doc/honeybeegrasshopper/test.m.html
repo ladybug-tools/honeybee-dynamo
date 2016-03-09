@@ -983,14 +983,6 @@ table {
   <div id="sidebar">
     <h1>Index</h1>
     <ul id="index">
-    <li class="set"><h3><a href="#header-variables">Module variables</a></h3>
-      
-  <ul>
-    <li class="mono"><a href="#honeybeegrasshopper.test.pts">pts</a></li>
-    <li class="mono"><a href="#honeybeegrasshopper.test.vectors">vectors</a></li>
-  </ul>
-
-    </li>
 
 
 
@@ -1014,35 +1006,20 @@ table {
 from honeybee.radiance.recipe.gridbased import HBGridBasedAnalysisRecipe
 from honeybee.hbsurface import HBAnalysisSurface
 
-pts = [(0, 0, 0), (10, 0, 0), (10, 10, 0), (0, 10, 0)]
-vectors = [(0, 0, 1)]
-sky = SkyWithCertainIlluminanceLevel(2000)
-hbsrf = HBAnalysisSurface("001", pts, surfaceType=None, isNameSetByUser=True, isTypeSetByUser=True)
-rp = HBGridBasedAnalysisRecipe(sky, pts, vectors, None, [hbsrf])
-rp.writeToFile("c:\ladybug", "test")
+if __name__ == "__main__":
+	pts = [(0, 0, 0), (10, 0, 0), (10, 10, 0), (0, 10, 0)]
+	vectors = [(0, 0, 1)]
+	sky = SkyWithCertainIlluminanceLevel(2000)
+	hbsrf = HBAnalysisSurface("001", pts, surfaceType=None, isNameSetByUser=True, isTypeSetByUser=True)
+	rp = HBGridBasedAnalysisRecipe(sky, pts, vectors, None, [hbsrf])
+	rp.writeToFile("c:\ladybug", "test")
+	rp.run(False)
 </code></pre>
   </div>
 
   </header>
 
   <section id="section-items">
-    <h2 class="section-title" id="header-variables">Module variables</h2>
-      <div class="item">
-      <p id="honeybeegrasshopper.test.pts" class="name">var <span class="ident">pts</span></p>
-      
-  
-  <div class="source_cont">
-</div>
-
-      </div>
-      <div class="item">
-      <p id="honeybeegrasshopper.test.vectors" class="name">var <span class="ident">vectors</span></p>
-      
-  
-  <div class="source_cont">
-</div>
-
-      </div>
 
 
 
