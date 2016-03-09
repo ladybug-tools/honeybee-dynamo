@@ -1,7 +1,7 @@
 # honeybee-grasshopper
 Honeybee plugin for Grasshopper
 
-### [API Documentation](http://ladybug-analysis-tools.github.io/honeybee-grasshopper/doc/honeybeegrasshopper/)
+### [API Documentation](http://ladybug-analysis-tools.github.io/honeybee-grasshopper/doc/)
 
 ```python
 # Here is a simple example on how to use the API
