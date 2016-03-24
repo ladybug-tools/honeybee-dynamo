@@ -2,13 +2,13 @@
 
 from ...hbpointgroup import AnalysisPointGroup
 from .recipeBase import HBDaylightAnalysisRecipe
-from collections import Iterable
+from collections import namedtuple, Iterable
 from ..command.oconv import Oconv
 from ..command.rtrace import Rtrace
 from ...helper import preparedir
 import os
-from collections import namedtuple
 import subprocess
+
 
 class HBGridBasedAnalysisRecipe(HBDaylightAnalysisRecipe):
     """Grid base analysis base class.
@@ -37,7 +37,7 @@ class HBGridBasedAnalysisRecipe(HBDaylightAnalysisRecipe):
     @property
     def points(self):
         """Return nested list of points."""
-        return [ap.poins for ap in self.analysisPointsGroups]
+        return [ap.points for ap in self.analysisPointsGroups]
 
     @property
     def numOfPointGroups(self):
@@ -87,9 +87,26 @@ class HBGridBasedAnalysisRecipe(HBDaylightAnalysisRecipe):
             finally:
                 # last check for vectors in case user input is a flatten lists
                 # for nested group of points.
-                if not isinstance(vectors[0], Iterable):
+                if not isinstance(vectors[0], Iterable) and not hasattr(vectors[0], 'X'):
                     vectors = [vectors]
+
                 self.__analysisPointGroups.append(AnalysisPointGroup(pts, vectors))
+
+    def flatten(self, inputList):
+        """Return a flattened genertor from an input list.
+
+        Usage:
+
+            inputList = [['a'], ['b', 'c', 'd'], [['e']], ['f']]
+            list(flatten(inputList))
+            >> ['a', 'b', 'c', 'd', 'e', 'f']
+        """
+        for el in inputList:
+            if isinstance(el, Iterable) and not isinstance(el, basestring):
+                for sub in self.flatten(el):
+                    yield sub
+            else:
+                yield el
 
     def toRadString(self, hbObjects=False, points=False):
         """Return a tuple of multiline string radiance definition.

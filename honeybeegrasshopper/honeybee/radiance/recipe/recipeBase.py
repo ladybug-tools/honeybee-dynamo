@@ -1,6 +1,5 @@
 """Radiance Analysis Recipes."""
 from abc import ABCMeta, abstractmethod
-from ..sky.skyBase import RadianceSky
 from ..parameters import RadianceParameters, LowQuality
 from ...helper import preparedir
 
@@ -36,6 +35,11 @@ class HBDaylightAnalysisRecipe(object):
         """Sub-folder for this analysis recipe. (e.g. "gridbased", "imagebased")"""
 
     @property
+    def isAnalysisRecipe(self):
+        """Return true to indicate it is an analysis recipe."""
+        return True
+
+    @property
     def hbObjects(self):
         """Get and set Honeybee objects for this recipe."""
         return self.__hbObjs
@@ -57,7 +61,7 @@ class HBDaylightAnalysisRecipe(object):
 
     @sky.setter
     def sky(self, newSky):
-        assert isinstance(newSky, RadianceSky), "%s is not a valid Honeybee sky." % type(newSky)
+        assert hasattr(newSky, "isRadianceSky"), "%s is not a valid Honeybee sky." % type(newSky)
         self.__sky = newSky
 
     @property
@@ -69,7 +73,7 @@ class HBDaylightAnalysisRecipe(object):
     def radianceParameters(self, radParameters):
         if not radParameters:
             radParameters = LowQuality()
-        assert isinstance(radParameters, RadianceParameters), \
+        assert hasattr(radParameters, "isRadianceParameters"), \
             "%s is not a radiance parameters." % type(radParameters)
         self.__radParameters = radParameters
 

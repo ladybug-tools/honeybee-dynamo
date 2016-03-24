@@ -7,7 +7,7 @@ def extractSurfacePoints(HBSurface, *args, **kwargs):
 
     Args:
         HBSurface: A HBSurface
-        **<Grasshopper>
+        --- Grasshopper ---
         triangulate: If set to True the function returns the points for triangulated
             surfaces (Default: False)
         meshingParameters: Optional Rhino meshingParameters. This will only be used
@@ -15,7 +15,7 @@ def extractSurfacePoints(HBSurface, *args, **kwargs):
             Default:
                 Rhino.Geometry.MeshingParameters.Coarse; SimplePlanes = True for planar surfaces
                 Rhino.Geometry.MeshingParameters.Smooth for non-planar surfaces
-        **<Dynamo>
+        --- Dynamo ---
             maxTessellationDivisions: Maximum number of divisions for surface tessellation.
     Returns:
         A list of point lists. For planar surfaces the length of the list will be
@@ -28,7 +28,7 @@ def extractSurfacePoints(HBSurface, *args, **kwargs):
         return __extractSurfacePointsGH(HBSurface.geometry, HBSurface.normal,
                                         *args, **kwargs)
     elif config.platform == 'ds' or config.platform == 'rvt':
-        return __extractSurfacePointsGH(HBSurface.geometry, *args, **kwargs)
+        return __extractSurfacePointsDS(HBSurface.geometry, *args, **kwargs)
 
 
 # TODO: Add support for non-planar surfaces. The current implementation is a simple
@@ -180,7 +180,7 @@ def getSurfaceCenterPtandNormal(HBSurface):
             normalVector = brepFace.NormalAt(uv[1], uv[2])
 
     elif config.platform == "ds" or config.platform == "rvt":
-        uv = config.libs.DesignScript.UV.ByCoordinates(0.5, 0.5)
+        uv = config.libs.DesignScript.Geometry.UV.ByCoordinates(0.5, 0.5)
         centerPt = geometry.PointAtParameter(uv.U, uv.V)
         normalVector = geometry.NormalAtParameter(uv.U, uv.V).Normalized()
 

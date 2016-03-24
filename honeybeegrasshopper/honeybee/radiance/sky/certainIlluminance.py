@@ -8,6 +8,7 @@ class SkyWithCertainIlluminanceLevel(RadianceSky):
         illuminanceValue: Desired illuminance value in lux
 
     Usage:
+
         sky = HBCertainIlluminanceLevelSky(1000)
         sky.toFile("c:/ladybug/skies", "1000luxsky.sky")
     """

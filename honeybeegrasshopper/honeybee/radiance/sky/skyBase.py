@@ -36,6 +36,11 @@ class RadianceSky:
             "0 0 -1 180\n"
 
     @property
+    def isRadianceSky(self):
+        """Return True for skies."""
+        return True
+
+    @property
     def main(self):
         """Radiance sky line."""
         return self.__main
