@@ -1083,7 +1083,7 @@ class HBAnalysisSurface(HBObject):
 
     @property
     def name(self):
-        """Retuen surface name."""
+        """Return surface name."""
         return self.__name
 
     # TODO: name should be checked not to have illegal charecters for ep and radiance
@@ -1095,9 +1095,10 @@ class HBAnalysisSurface(HBObject):
             values: A name or a tuple as (name, isSetByUser)
 
         Usage:
-            HBSrf.name = "surface_001"
-            # or
-            HBSrf.name = ("mySurfaceName", True)
+
+            >> HBSrf.name = "surface_001"
+            >> # or
+            >> HBSrf.name = ("mySurfaceName", True)
         """
         try:
             # check if user passed a tuple
@@ -1253,10 +1254,13 @@ class HBAnalysisSurface(HBObject):
         Radiance material is set by user or is based on surface type.
 
         Usage:
+
+
             radianceMaterial = PlasticMaterial.bySingleReflectValue("wall_material", 0.55)
             HBSrf.radianceMaterial = (radianceMaterial, True)
-            # or
+            #or
             HBSrf.radianceMaterial = radianceMaterial
+
         """
         if self.radProperties.radianceMaterial is None:
             if self.surfaceType is not None:
@@ -1440,7 +1444,7 @@ if __name__ == "__main__":
 
     @property
     def name(self):
-        """Retuen surface name."""
+        """Return surface name."""
         return self.__name
 
     # TODO: name should be checked not to have illegal charecters for ep and radiance
@@ -1452,9 +1456,10 @@ if __name__ == "__main__":
             values: A name or a tuple as (name, isSetByUser)
 
         Usage:
-            HBSrf.name = "surface_001"
-            # or
-            HBSrf.name = ("mySurfaceName", True)
+
+            >> HBSrf.name = "surface_001"
+            >> # or
+            >> HBSrf.name = ("mySurfaceName", True)
         """
         try:
             # check if user passed a tuple
@@ -1610,10 +1615,13 @@ if __name__ == "__main__":
         Radiance material is set by user or is based on surface type.
 
         Usage:
+
+
             radianceMaterial = PlasticMaterial.bySingleReflectValue("wall_material", 0.55)
             HBSrf.radianceMaterial = (radianceMaterial, True)
-            # or
+            #or
             HBSrf.radianceMaterial = radianceMaterial
+
         """
         if self.radProperties.radianceMaterial is None:
             if self.surfaceType is not None:
@@ -1803,11 +1811,12 @@ RADProperties will be assigned to surface by Honeybee.</p></div>
     <div class="desc"><p>Get and set Radiance material.</p>
 <p>When you set Radiance material you can pass a Boolean to determine if the
 Radiance material is set by user or is based on surface type.</p>
-<p>Usage:
-    radianceMaterial = PlasticMaterial.bySingleReflectValue("wall_material", 0.55)
-    HBSrf.radianceMaterial = (radianceMaterial, True)
-    # or
-    HBSrf.radianceMaterial = radianceMaterial</p></div>
+<p>Usage:</p>
+<pre><code>radianceMaterial = PlasticMaterial.bySingleReflectValue("wall_material", 0.55)
+HBSrf.radianceMaterial = (radianceMaterial, True)
+#or
+HBSrf.radianceMaterial = radianceMaterial
+</code></pre></div>
   <div class="source_cont">
 </div>
 

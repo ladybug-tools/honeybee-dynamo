@@ -1,10 +1,30 @@
-"""Honeybee system setting."""
+"""Honeybee configurations.
+
+Import this module in every module that you need to access Honeybee configurations.
+
+Usage:
+
+    import config
+    print config.radlibPath
+    print config.radbinPath
+    print config.platform
+    config.radbinPath = "c:/radiance/bin"
+"""
 import os
 import sys
 
 
-class DefaultSettings(object):
-    """Default system settings."""
+class Folders(object):
+    """Honeybee folders.
+
+    Attributes:
+        mute: Set to True if you don't want the class to print the report (Default: False)
+
+    Usage:
+
+        folders = Folders(mute=False)
+        print folders.radbinPath
+    """
 
     # You can manually set the path to Radinace and EnergyPlus here between r" "
     __userPath = {
@@ -13,20 +33,20 @@ class DefaultSettings(object):
     }
 
     def __init__(self, mute=False):
-        """Set up default settings for Honeybee.
+        """Find default path for Honeybee.
 
-        It includes:
+        It currently includes:
             Default path to Radinace folders.
             Default path to EnergyPlus folders.
         """
         self.mute = mute
         if self.__userPath["pathToRadianceFolder"].strip() is not "":
-            self.radbinFolder = os.path.join(
+            self.radbinPath = os.path.join(
                 self.__userPath["pathToRadianceFolder"], "bin")
         else:
             if sys.platform == 'win32' or sys.platform == 'cli':
                 __radbin, __radFile = self.__which("rad.exe")
-                self.radbinFolder = __radbin
+                self.radbinPath = __radbin
 
             # TODO: @sariths we need a method to search and find the executables
             elif sys.platform == 'linux2':
@@ -61,12 +81,12 @@ class DefaultSettings(object):
         return None, None
 
     @property
-    def radbinFolder(self):
+    def radbinPath(self):
         """Path to Radiance binary folder."""
         return self.__radbin
 
-    @radbinFolder.setter
-    def radbinFolder(self, path):
+    @radbinPath.setter
+    def radbinPath(self, path):
         if path is None and (sys.platform == 'win32' or sys.platform == 'cli'):
             # finding by path failed. Let's check typical folders on Windows
             if os.path.isfile(r"c:\radiance\bin\rad.exe"):
@@ -79,29 +99,29 @@ class DefaultSettings(object):
         if not path or not os.path.isdir(path):
             if not self.mute:
                 print "Warning: Radiance bin folder not found on your machine.\n" + \
-                    "Use currentSettings.radbinFolder = 'pathToFolder' to set it up manually."
+                    "Use currentSettings.radbinPath = 'pathToFolder' to set it up manually."
             self.__radbin = None
-            self.radlibFolder = None
+            self.radlibPath = None
         else:
             # set up lib path
             self.__radbin = os.path.normpath(path)
-            self.radlibFolder = os.path.join(os.path.split(self.__radbin)[0], "lib")
+            self.radlibPath = os.path.join(os.path.split(self.__radbin)[0], "lib")
             if not self.mute:
                 print "Path to radiance binaries is set to: %s" % self.__radbin
 
     @property
-    def radlibFolder(self):
+    def radlibPath(self):
         """Path to Radiance library folder."""
         return self.__radlib
 
-    @radlibFolder.setter
-    def radlibFolder(self, path):
+    @radlibPath.setter
+    def radlibPath(self, path):
         if path is not None:
             self.__radlib = os.path.normpath(path)
             if not self.mute:
                 if not os.path.isdir(self.__radlib):
                     print "Warning: Radiance lib folder not found on your machine.\n" + \
-                        "Use currentSettings.radlibFolder = 'pathToFolder' to set it up manually."
+                        "Use currentSettings.radlibPath = 'pathToFolder' to set it up manually."
                 else:
                     print "Path to radiance libraries is set to: %s" % self.__radlib
         else:
@@ -113,7 +133,13 @@ class DefaultSettings(object):
         raise NotImplementedError
         # return self.__eplus
 
+f = Folders(mute=True)
+radlibPath = f.radlibPath
+"""Path to Radinace libraries folder."""
 
-if __name__ == "__main__":
-    setting = DefaultSettings(mute=False)
-    print setting.radbinFolder
+radbinPath = f.radbinPath
+"""Path to Radinace binaries folder."""
+
+# NotImplemented yet
+epPath = None
+"""Path to EnergyPlus folder."""

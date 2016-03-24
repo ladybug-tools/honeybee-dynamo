@@ -1057,6 +1057,7 @@ class CustomMaterial(RadianceMaterial):
            lineCount: An integer between 0-2 that represnt the line number.
            values: Values as a list of string
          Usage:
+
             # This line will assign 9 values to line 0 of the material
             material.modifyValues(0, ["0.5", "0.5", "0.5",
                 "/usr/local/lib/ray/oakfloor.pic", ".", "frac(U)",
@@ -1131,6 +1132,7 @@ class CustomMaterial(RadianceMaterial):
            lineCount: An integer between 0-2 that represnt the line number.
            values: Values as a list of string
          Usage:
+
             # This line will assign 9 values to line 0 of the material
             material.modifyValues(0, ["0.5", "0.5", "0.5",
                 "/usr/local/lib/ray/oakfloor.pic", ".", "frac(U)",
@@ -1263,11 +1265,12 @@ class CustomMaterial(RadianceMaterial):
 <p>Args:
    lineCount: An integer between 0-2 that represnt the line number.
    values: Values as a list of string
- Usage:
-    # This line will assign 9 values to line 0 of the material
-    material.modifyValues(0, ["0.5", "0.5", "0.5",
-        "/usr/local/lib/ray/oakfloor.pic", ".", "frac(U)",
-        "frac(V)", "-s", "1.1667"])</p></div>
+ Usage:</p>
+<pre><code># This line will assign 9 values to line 0 of the material
+material.modifyValues(0, ["0.5", "0.5", "0.5",
+    "/usr/local/lib/ray/oakfloor.pic", ".", "frac(U)",
+    "frac(V)", "-s", "1.1667"])
+</code></pre></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.radiance.material.custom.CustomMaterial.modifyValues', this);">Show source &equiv;</a></p>
   <div id="source-honeybeegrasshopper.honeybee.radiance.material.custom.CustomMaterial.modifyValues" class="source">

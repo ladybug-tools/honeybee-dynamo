@@ -1,0 +1,16 @@
+0 Failed 15 Passed
+Passed! >> Uniform CIE sky [10000.00 lux]
+Passed! >> -aa 0.1 -ab 6 -ad 4096 -ar 128 -as 4096 -av 0 -dc 0.75 -dj 0.7 -dp 512 -dr 3 -ds 0.05 -dt 0.15 -lr 8 -lw 0.005 -pj 0.9 -ps 2 -pt 0.05 -st 0.15
+Passed! >> void plastic wall 0 0 5 0.550 0.550 0.550 0.000 0.000
+Passed! >> HBSurface: 1
+Passed! >> HBSurface: 2
+Passed! >> HBSurface: 3
+Passed! >> HBSurface: 4
+Passed! >> HBSurface: 5
+Passed! >> void glass g_material 0 0 4 0.708 0.708 0.708 1.520
+Passed! >> Radiance Properties > g_material
+Passed! >> HBSurface: glass_wall
+Passed! >> GridBasedAnalysisRecipe #PointGroup: 1 #Points: 117
+Passed! >> Number of total materials: 4
+Passed! >> Number of total surfaces: 6
+Passed! >> Files are written to: c:\ladybug\untitled\gridbased

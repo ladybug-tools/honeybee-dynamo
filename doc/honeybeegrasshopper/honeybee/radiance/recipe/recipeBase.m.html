@@ -1112,6 +1112,7 @@ class HBDaylightAnalysisRecipe(object):
             A namedTuple of multiline data. Keys are: materials geometries
 
         Usage:
+
             s = self.hbObjectsToRadString()
             geoString = s.geometries
             matString = s.materials
@@ -1299,6 +1300,7 @@ class HBDaylightAnalysisRecipe(object):
             A namedTuple of multiline data. Keys are: materials geometries
 
         Usage:
+
             s = self.hbObjectsToRadString()
             geoString = s.geometries
             matString = s.materials
@@ -1523,13 +1525,14 @@ def write(filePath, data, mkdir=False):
     <div class="desc"><p>Return geometries and materials as a tuple of multiline string.</p>
 <p>Returns:
     A namedTuple of multiline data. Keys are: materials geometries</p>
-<p>Usage:
-    s = self.hbObjectsToRadString()
-    geoString = s.geometries
-    matString = s.materials
-    or
-    s = self.hbObjectsToRadString()
-    matString, geoString = s</p></div>
+<p>Usage:</p>
+<pre><code>s = self.hbObjectsToRadString()
+geoString = s.geometries
+matString = s.materials
+or
+s = self.hbObjectsToRadString()
+matString, geoString = s
+</code></pre></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.radiance.recipe.recipeBase.HBDaylightAnalysisRecipe.hbObjectsToRadString', this);">Show source &equiv;</a></p>
   <div id="source-honeybeegrasshopper.honeybee.radiance.recipe.recipeBase.HBDaylightAnalysisRecipe.hbObjectsToRadString" class="source">
