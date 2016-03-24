@@ -1,4 +1,4 @@
-from abc import ABCMeta, abstractmethod
+from abc import ABCMeta, abstractmethod, abstractproperty
 import os
 
 
@@ -39,6 +39,11 @@ class RadianceSky:
     def isRadianceSky(self):
         """Return True for skies."""
         return True
+
+    @abstractproperty
+    def isClimateBased(self):
+        """Return True if the sky is created based on values from weather file."""
+        pass
 
     @property
     def main(self):

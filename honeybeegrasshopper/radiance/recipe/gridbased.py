@@ -12,11 +12,14 @@ class GridBasedAnalysisRecipe(HBGridBasedAnalysisRecipe):
         vectorGroups: A DataTree of Vector3d vectors. Each vector represents direction
             of corresponding point in testPts. If the vector is not provided (0, 0, 1)
             will be assigned.
+        simulationType: 0: Illuminance(lux), 1: Radiation (kWh), 2: Luminance (Candela)
+            (Default: 0)
         radParameters: Radiance parameters for this analysis.
             (Default: RadianceParameters.LowQuality)
     """
 
-    def __init__(self, sky, pointGroupsT, vectorGroupsT, radParameters=None):
+    def __init__(self, sky, pointGroupsT, vectorGroupsT, simulationType=0,
+                 radParameters=None):
         """Create grid-based recipe."""
         # convert DataTrees to lists
         pointGroups, vectorGroups = self.matchPointsAndVectors(pointGroupsT, vectorGroupsT)
@@ -25,7 +28,8 @@ class GridBasedAnalysisRecipe(HBGridBasedAnalysisRecipe):
             print "No test points!"
 
         HBGridBasedAnalysisRecipe.__init__(self, sky, pointGroups,
-                                           vectorGroups, radParameters)
+                                           vectorGroups, simulationType,
+                                           radParameters)
 
     def matchPointsAndVectors(self, ptsT, vecT):
         """Convert a grasshopperDataTree to list.

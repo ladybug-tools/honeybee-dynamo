@@ -21,16 +21,22 @@ class HBGridBasedAnalysisRecipe(HBDaylightAnalysisRecipe):
         vectorGroups: An optional list of (x, y, z) vectors. Each vector represents direction
             of corresponding point in testPts. If the vector is not provided (0, 0, 1)
             will be assigned.
-        hbObjects: An optional list of Honeybee surfaces or zones (Default: None).
+        simulationType: 0: Illuminance(lux), 1: Radiation (kWh), 2: Luminance (Candela)
+            (Default: 0)
         radParameters: Radiance parameters for this analysis.
             (Default: RadianceParameters.LowQuality)
+        hbObjects: An optional list of Honeybee surfaces or zones (Default: None).
+        subFolder: Analysis subfolder for this recipe. (Default: "gridbased")
     """
 
-    def __init__(self, sky, pointGroups, vectorGroups=[], radParameters=None,
-                 hbObjects=None, subFolder="gridbased"):
+    def __init__(self, sky, pointGroups, vectorGroups=[], simulationType=0,
+                 radParameters=None, hbObjects=None, subFolder="gridbased"):
         """Create grid-based recipe."""
-        HBDaylightAnalysisRecipe.__init__(self, sky=sky, radParameters=radParameters,
-                                          hbObjects=hbObjects, subFolder=subFolder)
+        HBDaylightAnalysisRecipe.__init__(self, sky=sky,
+                                          simulationType=simulationType,
+                                          radParameters=radParameters,
+                                          hbObjects=hbObjects,
+                                          subFolder=subFolder)
         self.batchFile = None
         self.createAnalysisPointGroups(pointGroups, vectorGroups)
 
@@ -279,10 +285,18 @@ class HBGridBasedAnalysisRecipe(HBDaylightAnalysisRecipe):
         else:
             raise Exception("You need to write the files before running the recipe.")
 
+    def results(self):
+        """Return results for this analysis."""
+        pass
+
     def __repr__(self):
         """Represent grid based recipe."""
-        return "%s #PointGroup: %d #Points: %d" % \
+        _analysisType = {
+            0: "Illuminance", 1: "Radiation", 2: "Luminance"
+        }
+        return "%s: %s\n#PointGroups: %d #Points: %d" % \
             (self.__class__.__name__,
+             _analysisType[self.simulationType],
              self.numOfPointGroups,
              self.numOfTotalPoints)
 

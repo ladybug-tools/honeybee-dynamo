@@ -19,6 +19,11 @@ class SkyWithCertainIlluminanceLevel(RadianceSky):
         self.illuminanceValue = illuminanceValue
 
     @property
+    def isClimateBased(self):
+        """Return True if the sky is generated from values from weather file."""
+        return False
+
+    @property
     def name(self):
         """Sky default name."""
         return "Uniform_CIE_%d" % int(self.illuminanceValue)
