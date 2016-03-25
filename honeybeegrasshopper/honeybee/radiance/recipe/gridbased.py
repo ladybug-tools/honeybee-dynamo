@@ -1,12 +1,14 @@
 """Radiance Analysis Recipes."""
 
+from ..postprocess.gridbasedresults import LoadGridBasedDLAnalysisResults
 from ...hbpointgroup import AnalysisPointGroup
 from .recipeBase import HBDaylightAnalysisRecipe
-from collections import namedtuple, Iterable
 from ..command.oconv import Oconv
 from ..command.rtrace import Rtrace
 from ...helper import preparedir
+
 import os
+from collections import namedtuple, Iterable
 import subprocess
 
 
@@ -29,6 +31,8 @@ class HBGridBasedAnalysisRecipe(HBDaylightAnalysisRecipe):
         subFolder: Analysis subfolder for this recipe. (Default: "gridbased")
     """
 
+    # TODO: implemnt isChanged at HBDaylightAnalysisRecipe level to reload the results
+    # if there has been no changes in inputs.
     def __init__(self, sky, pointGroups, vectorGroups=[], simulationType=0,
                  radParameters=None, hbObjects=None, subFolder="gridbased"):
         """Create grid-based recipe."""
@@ -37,7 +41,15 @@ class HBGridBasedAnalysisRecipe(HBDaylightAnalysisRecipe):
                                           radParameters=radParameters,
                                           hbObjects=hbObjects,
                                           subFolder=subFolder)
-        self.batchFile = None
+
+        self.__batchFile = None
+        self.resultsFile = []
+
+        # create a result loader to load the results once the analysis is done.
+        self.loader = LoadGridBasedDLAnalysisResults(self.simulationType,
+                                                     self.resultsFile)
+
+        # create point groups
         self.createAnalysisPointGroups(pointGroups, vectorGroups)
 
     @property
@@ -234,6 +246,10 @@ class HBGridBasedAnalysisRecipe(HBDaylightAnalysisRecipe):
 
         assert _ispath, "Failed to create %s. Try a different path!" % _path
 
+        # Check if anything has changed
+        # if not self.isChanged:
+        #     print "Inputs has not changed! Check files at %s" % _path
+
         # 1.write sky file
         skyFile = self.sky.writeToFile(_path)
 
@@ -268,7 +284,7 @@ class HBGridBasedAnalysisRecipe(HBDaylightAnalysisRecipe):
 
         self.write(batchFile, "\n".join(batchFileLines))
 
-        self.batchFile = batchFile
+        self.__batchFile = batchFile
 
         print "Files are written to: %s" % _path
         return _path
@@ -276,20 +292,30 @@ class HBGridBasedAnalysisRecipe(HBDaylightAnalysisRecipe):
     # TODO: Update the method to batch run and move it to baseclass
     def run(self, debug=False):
         """Run the analysis."""
-        if self.batchFile:
+        if self.__batchFile:
             if debug:
-                with open(self.batchFile, "a") as bf:
+                with open(self.__batchFile, "a") as bf:
                     bf.write("\npause")
 
-            subprocess.call(self.batchFile)
-            return self.batchFile.replace(".bat", ".res")
-            # subprocess.Popen(['cmd', self.batchFile], shell=minimize)
+            subprocess.call(self.__batchFile)
+
+            self.isCalculated = True
+            # self.isChanged = False
+
+            self.resultsFile = [self.__batchFile.replace(".bat", ".res")]
+            return True
         else:
             raise Exception("You need to write the files before running the recipe.")
 
-    def results(self):
+    def results(self, flattenResults=True):
         """Return results for this analysis."""
-        pass
+        assert self.isCalculated, \
+            "You haven't run the Recipe yet. Use self.run " + \
+            "to run the analysis before loading the results."
+
+        self.loader.simulationType = self.simulationType
+        self.loader.resultFiles = self.resultsFile
+        return self.loader.results
 
     def __repr__(self):
         """Represent grid based recipe."""

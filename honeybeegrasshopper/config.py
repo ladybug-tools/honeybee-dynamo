@@ -78,7 +78,7 @@ class Platform(object):
             # It's running from inside dynamo script
             self.platform = "ds"
             self.platformId = 2
-        elif __cwd.find("revit") > -1:
+        elif __cwd.find("revit") > -1 or __cwd == "c:\\":
             # It's running from inside Revit from a Dynamo node
             self.platform = "rvt"
             self.platformId = 3

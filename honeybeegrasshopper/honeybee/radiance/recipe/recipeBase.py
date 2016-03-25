@@ -44,6 +44,9 @@ class HBDaylightAnalysisRecipe(object):
         self.subFolder = subFolder
         """Sub-folder for this analysis recipe. (e.g. "gridbased", "imagebased")"""
 
+        self.isCalculated = False
+        self.isChanged = True
+
     @property
     def isAnalysisRecipe(self):
         """Return true to indicate it is an analysis recipe."""
