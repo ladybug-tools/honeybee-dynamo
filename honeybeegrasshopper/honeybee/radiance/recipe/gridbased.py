@@ -255,7 +255,9 @@ class HBGridBasedAnalysisRecipe(HBDaylightAnalysisRecipe):
         oc.inputFiles = [skyFile, matFile, geoFile]
 
         # # 4.2.prepare rtrace
-        rt = Rtrace(projectName)
+        rt = Rtrace(projectName,
+                    simulationType=self.simulationType,
+                    radianceParameters=self.radianceParameters)
         rt.octFile = os.path.join(_path, projectName + ".oct")
         rt.pointFile = pointsFile
 

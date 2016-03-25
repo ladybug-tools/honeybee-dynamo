@@ -1,4 +1,4 @@
-<Workspace Version="0.9.1.3872" X="-2353.43261177411" Y="595.578634841775" zoom="1.17135557702406" Name="Home" Description="" RunType="Automatic" RunPeriod="1000" HasRunWithoutCrash="True">
+<Workspace Version="0.9.1.3872" X="-1454.71379095158" Y="403.701533919626" zoom="0.828892114312086" Name="Home" Description="" RunType="Automatic" RunPeriod="1000" HasRunWithoutCrash="True">
   <NamespaceResolutionMap>
     <ClassMap partialName="List" resolvedName="DSCore.List" assemblyName="DSCoreNodes.dll" />
   </NamespaceResolutionMap>
@@ -38,7 +38,7 @@ if _quality:
     #wrap the object
     OUT = wrapper.Wrapper(radParameters)</Script>
     </PythonNodeModels.PythonNode>
-    <Dynamo.Graph.Nodes.CodeBlockNodeModel guid="3b0b27bb-a80c-40ed-81c1-0e6e47f958f8" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" nickname="Code Block" x="1411.408342375" y="225.302015132197" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" CodeText="2;" ShouldFocus="false" />
+    <Dynamo.Graph.Nodes.CodeBlockNodeModel guid="3b0b27bb-a80c-40ed-81c1-0e6e47f958f8" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" nickname="Code Block" x="1411.408342375" y="225.302015132197" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" CodeText="0;" ShouldFocus="false" />
     <PythonNodeModels.PythonNode guid="d51848e8-6663-4eaf-a5f1-f164de9dec9f" type="PythonNodeModels.PythonNode" nickname="Analysis Recipe" x="2283.82901332794" y="-303.836383258501" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" inputcount="6">
       <Script>import sys
 sys.path.extend(IN[0])
@@ -109,7 +109,7 @@ if _name and _TVis:
     </PythonNodeModels.PythonNode>
     <CoreNodeModels.Watch guid="db482029-a1e5-4167-b16f-f3dc28417864" type="CoreNodeModels.Watch" nickname="Watch" x="1783.0947201486" y="49.451570889174" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" />
     <CoreNodeModels.Watch guid="bf50bdad-75cd-4cd6-b151-3f1073797251" type="CoreNodeModels.Watch" nickname="Watch" x="1465.34697393625" y="789.87866257154" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" />
-    <CoreNodeModels.Watch guid="6b07a96b-50ab-402f-baab-4af06f1d5c96" type="CoreNodeModels.Watch" nickname="Watch" x="2504.81335344356" y="-299.4407561021" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" />
+    <CoreNodeModels.Watch guid="6b07a96b-50ab-402f-baab-4af06f1d5c96" type="CoreNodeModels.Watch" nickname="Watch" x="2516.31934037016" y="-380.121404681632" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" />
     <CoreNodeModels.Watch guid="d9cfd2af-8f41-4eba-bb4b-3753ca3d9e0a" type="CoreNodeModels.Watch" nickname="Watch" x="1801.36548883413" y="-377.713285813607" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" />
     <PythonNodeModels.PythonNode guid="30e728a8-1092-45aa-ae25-2249c0d5053d" type="PythonNodeModels.PythonNode" nickname="Python Script" x="1665.13875293187" y="637.768621659053" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" inputcount="2">
       <Script>import sys
@@ -200,7 +200,7 @@ if _geo:
     </PythonNodeModels.PythonNode>
     <Dynamo.Graph.Nodes.CodeBlockNodeModel guid="4256d3b4-e752-4659-a4c2-f7588e692792" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" nickname="Code Block" x="1644.74680121287" y="482.554514133321" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" CodeText="&quot;glass_wall&quot;;" ShouldFocus="false" />
     <CoreNodeModels.Watch guid="1b507eac-892f-48cd-9521-db3505b797fa" type="CoreNodeModels.Watch" nickname="Watch" x="1843.82317852312" y="773.04182464394" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" />
-    <PythonNodeModels.PythonNode guid="ba3dca4f-8406-4a58-ae20-f51c53be632a" type="PythonNodeModels.PythonNode" nickname="Python Script" x="2824.16404633913" y="-73.7901953394821" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" inputcount="7">
+    <PythonNodeModels.PythonNode guid="ba3dca4f-8406-4a58-ae20-f51c53be632a" type="PythonNodeModels.PythonNode" nickname="Python Script" x="2822.97104292498" y="-74.9831987536353" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" inputcount="7">
       <Script>import sys
 sys.path.extend(IN[0])
 
@@ -230,7 +230,7 @@ if _HBObjs and _recipe and _write:
         OUT = _recipe.run(False)</Script>
     </PythonNodeModels.PythonNode>
     <CoreNodeModels.Input.BoolSelector guid="a2d8174f-b3ea-47e9-b382-446b165d915a" type="CoreNodeModels.Input.BoolSelector" nickname="Boolean" x="2502.49767363497" y="108.057048494263" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="True" IsFrozen="false">
-      <System.Boolean>False</System.Boolean>
+      <System.Boolean>True</System.Boolean>
     </CoreNodeModels.Input.BoolSelector>
     <CoreNodeModels.Watch guid="7eda6215-3ab3-4df6-b2b7-d213ff2291c9" type="CoreNodeModels.Watch" nickname="Watch" x="3065.80842754192" y="-75.23864101554" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" />
     <Dynamo.Graph.Nodes.CodeBlockNodeModel guid="5655de16-8df7-441e-b5f9-bdbe6c8b1198" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" nickname="Code Block" x="2499.34357950398" y="16.7379939366418" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" CodeText="&quot;c:\ladybug&quot;;&#xA;&quot;untitled1&quot;;" ShouldFocus="false" />
@@ -336,7 +336,7 @@ if _geo:
     </Dynamo.Graph.Nodes.ZeroTouch.DSFunction>
     <Dynamo.Graph.Nodes.CodeBlockNodeModel guid="d84e7bfe-b398-4d5f-b65d-556807e1d1f5" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" nickname="Code Block" x="507.29310534818" y="-300.710477663405" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" CodeText="0.5;" ShouldFocus="false" />
     <Dynamo.Graph.Nodes.CodeBlockNodeModel guid="1ce1e453-a710-4c69-8c9d-92ce026d48cd" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" nickname="Code Block" x="987.28143545589" y="-7.89086580454398" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" CodeText="12;" ShouldFocus="false" />
-    <Dynamo.Graph.Nodes.CodeBlockNodeModel guid="a00eac2d-9442-4f0e-be80-ebfaab0b2470" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" nickname="Code Block" x="2099.29447433508" y="-195.523060766339" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" CodeText="0;" ShouldFocus="false" />
+    <Dynamo.Graph.Nodes.CodeBlockNodeModel guid="a00eac2d-9442-4f0e-be80-ebfaab0b2470" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" nickname="Code Block" x="2099.29447433508" y="-195.523060766339" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" CodeText="2;" ShouldFocus="false" />
   </Elements>
   <Connectors>
     <Dynamo.Graph.Connectors.ConnectorModel start="7e6ef32f-0181-43fa-916c-913d9b63467f" start_index="0" end="d51848e8-6663-4eaf-a5f1-f164de9dec9f" end_index="1" portType="0" />
@@ -420,7 +420,7 @@ if _geo:
     <Dynamo.Graph.Annotations.AnnotationModel guid="e60eb519-61c5-4739-bc1f-880ee139233b" annotationText="Honeybee Surface" left="1951.6503654983" top="395.679150554131" width="144" height="253" fontSize="14" InitialTop="425.679150554131" InitialHeight="253" TextblockHeight="20" backgrouund="#FFC1D676">
       <Models ModelGuid="d42d2c7e-1bff-4d9e-9617-65ea2ddaed1e" />
     </Dynamo.Graph.Annotations.AnnotationModel>
-    <Dynamo.Graph.Annotations.AnnotationModel guid="ce8a620f-d757-435c-8bdb-30a1adc24ba5" annotationText="runDaylightAnalysis" left="2814.16404633913" top="-103.790195339482" width="144" height="279" fontSize="14" InitialTop="-73.7901953394821" InitialHeight="227" TextblockHeight="20" backgrouund="#FF48B9FF">
+    <Dynamo.Graph.Annotations.AnnotationModel guid="ce8a620f-d757-435c-8bdb-30a1adc24ba5" annotationText="runDaylightAnalysis" left="2812.97104292498" top="-104.983198753635" width="144" height="279" fontSize="14" InitialTop="-74.9831987536353" InitialHeight="227" TextblockHeight="20" backgrouund="#FF48B9FF">
       <Models ModelGuid="ba3dca4f-8406-4a58-ae20-f51c53be632a" />
     </Dynamo.Graph.Annotations.AnnotationModel>
     <Dynamo.Graph.Annotations.AnnotationModel guid="e0f74d54-9999-40c0-92d1-5596d1ebb71f" annotationText="I assume there is a better way to merge lists that I'm not aware of!" left="2187.15629444112" top="187.351788048574" width="287.18355145602" height="163.556438029144" fontSize="14" InitialTop="231.351788048574" InitialHeight="151.658547083294" TextblockHeight="34" backgrouund="#FFC1D676">

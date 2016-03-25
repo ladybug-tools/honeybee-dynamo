@@ -100,7 +100,7 @@ class HBDaylightAnalysisRecipe(object):
         self.__sky = newSky
 
     @property
-    def radianceParameters(self, radianceParameters):
+    def radianceParameters(self):
         """Get and set Radiance parameters."""
         return self.__radParameters
 
