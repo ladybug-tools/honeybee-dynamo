@@ -78,7 +78,7 @@ class Platform(object):
             # It's running from inside dynamo script
             self.platform = "ds"
             self.platformId = 2
-        elif __cwd.find("revit") > -1 or __cwd == "c:\\":
+        elif __cwd.find("revit") > -1:
             # It's running from inside Revit from a Dynamo node
             self.platform = "rvt"
             self.platformId = 3
@@ -137,7 +137,7 @@ class Platform(object):
                 # Assign Rhino and Grasshopper to the libraries
                 self.libs = self._Libs(None, None, dyn, ds)
 
-# expose them as global variables
+# expose platform and libraries as global variables
 __p = Platform(mute=False)
 platform = __p.platform
 platformId = __p.platformId
