@@ -3,7 +3,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 
-    <title>honeybeegrasshopper.honeybee.geometryoperation API documentation</title>
+    <title>honeybeex.honeybee.geometryoperation API documentation</title>
     <meta name="description" content="Collection of methods for geometrical operations." />
 
   <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300' rel='stylesheet' type='text/css'>
@@ -988,9 +988,9 @@ table {
     <li class="set"><h3><a href="#header-functions">Functions</a></h3>
       
   <ul>
-    <li class="mono"><a href="#honeybeegrasshopper.honeybee.geometryoperation.calculateCenterPointFromPoints">calculateCenterPointFromPoints</a></li>
-    <li class="mono"><a href="#honeybeegrasshopper.honeybee.geometryoperation.calculateNormalFromPoints">calculateNormalFromPoints</a></li>
-    <li class="mono"><a href="#honeybeegrasshopper.honeybee.geometryoperation.calculateVectorAngleToZAxis">calculateVectorAngleToZAxis</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.geometryoperation.calculateCenterPointFromPoints">calculateCenterPointFromPoints</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.geometryoperation.calculateNormalFromPoints">calculateNormalFromPoints</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.geometryoperation.calculateVectorAngleToZAxis">calculateVectorAngleToZAxis</a></li>
   </ul>
 
     </li>
@@ -1007,11 +1007,11 @@ table {
 
 
   <header id="section-intro">
-  <h1 class="title"><span class="name">honeybeegrasshopper.honeybee.geometryoperation</span> module</h1>
+  <h1 class="title"><span class="name">honeybeex.honeybee.geometryoperation</span> module</h1>
   <p>Collection of methods for geometrical operations.</p>
   
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.geometryoperation', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.honeybee.geometryoperation" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.geometryoperation', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.geometryoperation" class="source">
     <pre><code>"""Collection of methods for geometrical operations."""
 from vectormath.euclid import math, Vector3
 
@@ -1059,7 +1059,11 @@ def calculateCenterPointFromPoints(pts):
 def calculateVectorAngleToZAxis(vector):
     """Calculate angle between vectoe and (0, 0, 1) in degrees."""
     zAxis = Vector3(0, 0, 1)
-    return math.degrees(zAxis.angle(Vector3(*vector)))
+    try:
+        return math.degrees(zAxis.angle(Vector3(*vector)))
+    except TypeError:
+        # Vectors from Dynamo are not iterable!
+        return math.degrees(zAxis.angle(Vector3(vector.X, vector.Y, vector.Z)))
 
 if __name__ == "__main__":
     pts = ((0, 0, 0), (10, 10, 0), (10, 0, 0))
@@ -1077,7 +1081,7 @@ if __name__ == "__main__":
     <h2 class="section-title" id="header-functions">Functions</h2>
       
   <div class="item">
-    <div class="name def" id="honeybeegrasshopper.honeybee.geometryoperation.calculateCenterPointFromPoints">
+    <div class="name def" id="honeybeex.honeybee.geometryoperation.calculateCenterPointFromPoints">
     <p>def <span class="ident">calculateCenterPointFromPoints</span>(</p><p>pts)</p>
     </div>
     
@@ -1087,8 +1091,8 @@ if __name__ == "__main__":
     <div class="desc"><p>Calculate center point.</p>
 <p>This method finds the center point by averging x, y and z values.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.geometryoperation.calculateCenterPointFromPoints', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.honeybee.geometryoperation.calculateCenterPointFromPoints" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.geometryoperation.calculateCenterPointFromPoints', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.geometryoperation.calculateCenterPointFromPoints" class="source">
     <pre><code>def calculateCenterPointFromPoints(pts):
     """Calculate center point.
 
@@ -1116,7 +1120,7 @@ if __name__ == "__main__":
   
       
   <div class="item">
-    <div class="name def" id="honeybeegrasshopper.honeybee.geometryoperation.calculateNormalFromPoints">
+    <div class="name def" id="honeybeex.honeybee.geometryoperation.calculateNormalFromPoints">
     <p>def <span class="ident">calculateNormalFromPoints</span>(</p><p>pts)</p>
     </div>
     
@@ -1127,8 +1131,8 @@ if __name__ == "__main__":
 <p>This method uses the pts[-1], pts[0] and pts[1] to calculate the normal
 assuming the points are representing a planar surface</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.geometryoperation.calculateNormalFromPoints', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.honeybee.geometryoperation.calculateNormalFromPoints" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.geometryoperation.calculateNormalFromPoints', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.geometryoperation.calculateNormalFromPoints" class="source">
     <pre><code>def calculateNormalFromPoints(pts):
     """Calculate normal vector for a list of points.
 
@@ -1154,7 +1158,7 @@ assuming the points are representing a planar surface</p></div>
   
       
   <div class="item">
-    <div class="name def" id="honeybeegrasshopper.honeybee.geometryoperation.calculateVectorAngleToZAxis">
+    <div class="name def" id="honeybeex.honeybee.geometryoperation.calculateVectorAngleToZAxis">
     <p>def <span class="ident">calculateVectorAngleToZAxis</span>(</p><p>vector)</p>
     </div>
     
@@ -1163,12 +1167,16 @@ assuming the points are representing a planar surface</p></div>
   
     <div class="desc"><p>Calculate angle between vectoe and (0, 0, 1) in degrees.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.geometryoperation.calculateVectorAngleToZAxis', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.honeybee.geometryoperation.calculateVectorAngleToZAxis" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.geometryoperation.calculateVectorAngleToZAxis', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.geometryoperation.calculateVectorAngleToZAxis" class="source">
     <pre><code>def calculateVectorAngleToZAxis(vector):
     """Calculate angle between vectoe and (0, 0, 1) in degrees."""
     zAxis = Vector3(0, 0, 1)
-    return math.degrees(zAxis.angle(Vector3(*vector)))
+    try:
+        return math.degrees(zAxis.angle(Vector3(*vector)))
+    except TypeError:
+        # Vectors from Dynamo are not iterable!
+        return math.degrees(zAxis.angle(Vector3(vector.X, vector.Y, vector.Z)))
 </code></pre>
   </div>
 </div>

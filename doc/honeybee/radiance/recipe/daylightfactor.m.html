@@ -3,7 +3,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 
-    <title>honeybeegrasshopper.honeybee.radiance.recipe.daylightfactor API documentation</title>
+    <title>honeybeex.honeybee.radiance.recipe.daylightfactor API documentation</title>
     <meta name="description" content="Radiance Analysis Recipes." />
 
   <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300' rel='stylesheet' type='text/css'>
@@ -989,19 +989,22 @@ table {
     <li class="set"><h3><a href="#header-classes">Classes</a></h3>
       <ul>
         <li class="mono">
-        <span class="class_name"><a href="#honeybeegrasshopper.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe">HBDaylightFactorRecipe</a></span>
+        <span class="class_name"><a href="#honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe">HBDaylightFactorRecipe</a></span>
         
           
   <ul>
-    <li class="mono"><a href="#honeybeegrasshopper.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.write">write</a></li>
-    <li class="mono"><a href="#honeybeegrasshopper.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.__init__">__init__</a></li>
-    <li class="mono"><a href="#honeybeegrasshopper.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.createAnalysisPointGroups">createAnalysisPointGroups</a></li>
-    <li class="mono"><a href="#honeybeegrasshopper.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.hbObjectsToRadString">hbObjectsToRadString</a></li>
-    <li class="mono"><a href="#honeybeegrasshopper.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.run">run</a></li>
-    <li class="mono"><a href="#honeybeegrasshopper.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.toRadString">toRadString</a></li>
-    <li class="mono"><a href="#honeybeegrasshopper.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.writeHBObjectsToFile">writeHBObjectsToFile</a></li>
-    <li class="mono"><a href="#honeybeegrasshopper.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.writePointsToFile">writePointsToFile</a></li>
-    <li class="mono"><a href="#honeybeegrasshopper.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.writeToFile">writeToFile</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.write">write</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.__init__">__init__</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.createAnalysisPointGroups">createAnalysisPointGroups</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.flatten">flatten</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.hbObjectsToRadString">hbObjectsToRadString</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.results">results</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.run">run</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.toRadString">toRadString</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.updatePointGroups">updatePointGroups</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.writeHBObjectsToFile">writeHBObjectsToFile</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.writePointsToFile">writePointsToFile</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.writeToFile">writeToFile</a></li>
   </ul>
 
         </li>
@@ -1019,11 +1022,11 @@ table {
 
 
   <header id="section-intro">
-  <h1 class="title"><span class="name">honeybeegrasshopper.honeybee.radiance.recipe.daylightfactor</span> module</h1>
+  <h1 class="title"><span class="name">honeybeex.honeybee.radiance.recipe.daylightfactor</span> module</h1>
   <p>Radiance Analysis Recipes.</p>
   
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.radiance.recipe.daylightfactor', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.honeybee.radiance.recipe.daylightfactor" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.recipe.daylightfactor', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.recipe.daylightfactor" class="source">
     <pre><code>"""Radiance Analysis Recipes."""
 
 from gridbased import HBGridBasedAnalysisRecipe
@@ -1046,13 +1049,13 @@ class HBDaylightFactorRecipe(HBGridBasedAnalysisRecipe):
     <h2 class="section-title" id="header-classes">Classes</h2>
       
       <div class="item">
-      <p id="honeybeegrasshopper.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe" class="name">class <span class="ident">HBDaylightFactorRecipe</span></p>
+      <p id="honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe" class="name">class <span class="ident">HBDaylightFactorRecipe</span></p>
       
   
     <div class="desc"><p>Daylight Factor Recipe.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe" class="source">
     <pre><code>class HBDaylightFactorRecipe(HBGridBasedAnalysisRecipe):
     """Daylight Factor Recipe."""
 
@@ -1067,15 +1070,15 @@ class HBDaylightFactorRecipe(HBGridBasedAnalysisRecipe):
       <div class="class">
           <h3>Ancestors (in MRO)</h3>
           <ul class="class_list">
-          <li><a href="#honeybeegrasshopper.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe">HBDaylightFactorRecipe</a></li>
-          <li>honeybeegrasshopper.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe</li>
-          <li>honeybeegrasshopper.honeybee.radiance.recipe.recipeBase.HBDaylightAnalysisRecipe</li>
+          <li><a href="#honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe">HBDaylightFactorRecipe</a></li>
+          <li>honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe</li>
+          <li>honeybeex.honeybee.radiance.recipe.recipeBase.HBDaylightAnalysisRecipe</li>
           <li>__builtin__.object</li>
           </ul>
           <h3>Static methods</h3>
             
   <div class="item">
-    <div class="name def" id="honeybeegrasshopper.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.write">
+    <div class="name def" id="honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.write">
     <p>def <span class="ident">write</span>(</p><p>filePath, data, mkdir=False)</p>
     </div>
     
@@ -1088,8 +1091,8 @@ class HBDaylightFactorRecipe(HBGridBasedAnalysisRecipe):
     data: Any data as string
     mkdir: Set to True to create the directory if doesn't exist (Default: False)</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.write', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.write" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.write', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.write" class="source">
     <pre><code>@staticmethod
 def write(filePath, data, mkdir=False):
     """Write a string of data to file.
@@ -1119,7 +1122,7 @@ def write(filePath, data, mkdir=False):
   
           <h3>Instance variables</h3>
             <div class="item">
-            <p id="honeybeegrasshopper.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.analysisPointsGroups" class="name">var <span class="ident">analysisPointsGroups</span></p>
+            <p id="honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.analysisPointsGroups" class="name">var <span class="ident">analysisPointsGroups</span></p>
             
 
             
@@ -1130,7 +1133,7 @@ def write(filePath, data, mkdir=False):
 
             </div>
             <div class="item">
-            <p id="honeybeegrasshopper.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.hbObjects" class="name">var <span class="ident">hbObjects</span></p>
+            <p id="honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.hbObjects" class="name">var <span class="ident">hbObjects</span></p>
             
 
             
@@ -1141,7 +1144,18 @@ def write(filePath, data, mkdir=False):
 
             </div>
             <div class="item">
-            <p id="honeybeegrasshopper.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.numOfPointGroups" class="name">var <span class="ident">numOfPointGroups</span></p>
+            <p id="honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.isAnalysisRecipe" class="name">var <span class="ident">isAnalysisRecipe</span></p>
+            
+
+            
+  
+    <div class="desc"><p>Return true to indicate it is an analysis recipe.</p></div>
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.numOfPointGroups" class="name">var <span class="ident">numOfPointGroups</span></p>
             
 
             
@@ -1152,7 +1166,7 @@ def write(filePath, data, mkdir=False):
 
             </div>
             <div class="item">
-            <p id="honeybeegrasshopper.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.numOfTotalPoints" class="name">var <span class="ident">numOfTotalPoints</span></p>
+            <p id="honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.numOfTotalPoints" class="name">var <span class="ident">numOfTotalPoints</span></p>
             
 
             
@@ -1163,7 +1177,18 @@ def write(filePath, data, mkdir=False):
 
             </div>
             <div class="item">
-            <p id="honeybeegrasshopper.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.points" class="name">var <span class="ident">points</span></p>
+            <p id="honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.pointGroups" class="name">var <span class="ident">pointGroups</span></p>
+            
+
+            
+  
+    <div class="desc"><p>Return analysis point groups.</p></div>
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.points" class="name">var <span class="ident">points</span></p>
             
 
             
@@ -1174,7 +1199,7 @@ def write(filePath, data, mkdir=False):
 
             </div>
             <div class="item">
-            <p id="honeybeegrasshopper.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.radianceParameters" class="name">var <span class="ident">radianceParameters</span></p>
+            <p id="honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.radianceParameters" class="name">var <span class="ident">radianceParameters</span></p>
             
 
             
@@ -1185,7 +1210,19 @@ def write(filePath, data, mkdir=False):
 
             </div>
             <div class="item">
-            <p id="honeybeegrasshopper.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.sky" class="name">var <span class="ident">sky</span></p>
+            <p id="honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.simulationType" class="name">var <span class="ident">simulationType</span></p>
+            
+
+            
+  
+    <div class="desc"><p>Get/set simulation Type.</p>
+<p>0: Illuminance(lux), 1: Radiation (kWh), 2: Luminance (Candela) (Default: 0)</p></div>
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.sky" class="name">var <span class="ident">sky</span></p>
             
 
             
@@ -1196,7 +1233,7 @@ def write(filePath, data, mkdir=False):
 
             </div>
             <div class="item">
-            <p id="honeybeegrasshopper.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.subFolder" class="name">var <span class="ident">subFolder</span></p>
+            <p id="honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.subFolder" class="name">var <span class="ident">subFolder</span></p>
             
 
             
@@ -1207,7 +1244,7 @@ def write(filePath, data, mkdir=False):
 
             </div>
             <div class="item">
-            <p id="honeybeegrasshopper.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.vectors" class="name">var <span class="ident">vectors</span></p>
+            <p id="honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.vectors" class="name">var <span class="ident">vectors</span></p>
             
 
             
@@ -1220,7 +1257,7 @@ def write(filePath, data, mkdir=False):
           <h3>Methods</h3>
             
   <div class="item">
-    <div class="name def" id="honeybeegrasshopper.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.__init__">
+    <div class="name def" id="honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.__init__">
     <p>def <span class="ident">__init__</span>(</p><p>self)</p>
     </div>
     
@@ -1229,8 +1266,8 @@ def write(filePath, data, mkdir=False):
   
     <div class="desc"><p>Create daylight factor recipe.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.__init__', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.__init__" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.__init__', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.__init__" class="source">
     <pre><code>def __init__(self):
     """Create daylight factor recipe."""
     raise NotImplementedError()
@@ -1242,7 +1279,7 @@ def write(filePath, data, mkdir=False):
   
             
   <div class="item">
-    <div class="name def" id="honeybeegrasshopper.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.createAnalysisPointGroups">
+    <div class="name def" id="honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.createAnalysisPointGroups">
     <p>def <span class="ident">createAnalysisPointGroups</span>(</p><p>self, pointGroups, vectorGroups)</p>
     </div>
     
@@ -1252,8 +1289,8 @@ def write(filePath, data, mkdir=False):
     <div class="desc"><p>Create AnalysisPointGroups from input points and vectors.</p>
 <p>You can acces AnalysisPointGroups using self.analysisPointsGroups property.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.createAnalysisPointGroups', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.createAnalysisPointGroups" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.createAnalysisPointGroups', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.createAnalysisPointGroups" class="source">
     <pre><code>def createAnalysisPointGroups(self, pointGroups, vectorGroups):
     """Create AnalysisPointGroups from input points and vectors.
     You can acces AnalysisPointGroups using self.analysisPointsGroups property.
@@ -1261,7 +1298,7 @@ def write(filePath, data, mkdir=False):
     self.__analysisPointGroups = []
     if len(pointGroups) == 0:
         return
-    # input is single point! Create a single group but seriously!
+    # input is single point! Create a single group but seriously!?
     elif not isinstance(pointGroups[0], Iterable):
         pointGroups = [[pointGroups]]
         vectorGroups = [[vectorGroups]]
@@ -1280,7 +1317,7 @@ def write(filePath, data, mkdir=False):
         finally:
             # last check for vectors in case user input is a flatten lists
             # for nested group of points.
-            if not isinstance(vectors[0], Iterable):
+            if not isinstance(vectors[0], Iterable) and not hasattr(vectors[0], 'X'):
                 vectors = [vectors]
             self.__analysisPointGroups.append(AnalysisPointGroup(pts, vectors))
 </code></pre>
@@ -1291,7 +1328,44 @@ def write(filePath, data, mkdir=False):
   
             
   <div class="item">
-    <div class="name def" id="honeybeegrasshopper.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.hbObjectsToRadString">
+    <div class="name def" id="honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.flatten">
+    <p>def <span class="ident">flatten</span>(</p><p>self, inputList)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Return a flattened genertor from an input list.</p>
+<p>Usage:</p>
+<pre><code>inputList = [['a'], ['b', 'c', 'd'], [['e']], ['f']]
+list(flatten(inputList))
+&gt;&gt; ['a', 'b', 'c', 'd', 'e', 'f']
+</code></pre></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.flatten', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.flatten" class="source">
+    <pre><code>def flatten(self, inputList):
+    """Return a flattened genertor from an input list.
+    Usage:
+        inputList = [['a'], ['b', 'c', 'd'], [['e']], ['f']]
+        list(flatten(inputList))
+        >> ['a', 'b', 'c', 'd', 'e', 'f']
+    """
+    for el in inputList:
+        if isinstance(el, Iterable) and not isinstance(el, basestring):
+            for sub in self.flatten(el):
+                yield sub
+        else:
+            yield el
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.hbObjectsToRadString">
     <p>def <span class="ident">hbObjectsToRadString</span>(</p><p>self)</p>
     </div>
     
@@ -1309,8 +1383,8 @@ def write(filePath, data, mkdir=False):
     s = self.hbObjectsToRadString()
     matString, geoString = s</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.hbObjectsToRadString', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.hbObjectsToRadString" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.hbObjectsToRadString', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.hbObjectsToRadString" class="source">
     <pre><code>def hbObjectsToRadString(self):
     """Return geometries and materials as a tuple of multiline string.
     Returns:
@@ -1355,7 +1429,34 @@ def write(filePath, data, mkdir=False):
   
             
   <div class="item">
-    <div class="name def" id="honeybeegrasshopper.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.run">
+    <div class="name def" id="honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.results">
+    <p>def <span class="ident">results</span>(</p><p>self, flattenResults=True)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Return results for this analysis.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.results', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.results" class="source">
+    <pre><code>def results(self, flattenResults=True):
+    """Return results for this analysis."""
+    assert self.isCalculated, \
+        "You haven't run the Recipe yet. Use self.run " + \
+        "to run the analysis before loading the results."
+    self.loader.simulationType = self.simulationType
+    self.loader.resultFiles = self.resultsFile
+    return self.loader.results
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.run">
     <p>def <span class="ident">run</span>(</p><p>self, debug=False)</p>
     </div>
     
@@ -1364,17 +1465,19 @@ def write(filePath, data, mkdir=False):
   
     <div class="desc"><p>Run the analysis.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.run', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.run" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.run', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.run" class="source">
     <pre><code>def run(self, debug=False):
     """Run the analysis."""
-    if self.batchFile:
+    if self.__batchFile:
         if debug:
-            with open(self.batchFile, "a") as bf:
+            with open(self.__batchFile, "a") as bf:
                 bf.write("\npause")
-        subprocess.call(self.batchFile)
-        return self.batchFile.replace(".bat", ".res")
-        # subprocess.Popen(['cmd', self.batchFile], shell=minimize)
+        subprocess.call(self.__batchFile)
+        self.isCalculated = True
+        # self.isChanged = False
+        self.resultsFile = [self.__batchFile.replace(".bat", ".res")]
+        return True
     else:
         raise Exception("You need to write the files before running the recipe.")
 </code></pre>
@@ -1385,7 +1488,7 @@ def write(filePath, data, mkdir=False):
   
             
   <div class="item">
-    <div class="name def" id="honeybeegrasshopper.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.toRadString">
+    <div class="name def" id="honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.toRadString">
     <p>def <span class="ident">toRadString</span>(</p><p>self, hbObjects=False, points=False)</p>
     </div>
     
@@ -1405,8 +1508,8 @@ def write(filePath, data, mkdir=False):
     s = self.toRadString(points=True)
     ptsString = s.points</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.toRadString', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.toRadString" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.toRadString', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.toRadString" class="source">
     <pre><code>def toRadString(self, hbObjects=False, points=False):
     """Return a tuple of multiline string radiance definition.
     Args:
@@ -1438,7 +1541,46 @@ def write(filePath, data, mkdir=False):
   
             
   <div class="item">
-    <div class="name def" id="honeybeegrasshopper.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.writeHBObjectsToFile">
+    <div class="name def" id="honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.updatePointGroups">
+    <p>def <span class="ident">updatePointGroups</span>(</p><p>self, pointGroups, vectorGroups=[])</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Update point groups.</p>
+<p>Args:
+    pointGroups: A list of (x, y, z) test points or lists of (x, y, z)
+        test points. Each list of test points will be converted to a
+        TestPointGroup. If testPts is a single flattened list only one
+        TestPointGroup will be created.
+    vectorGroups: An optional list of (x, y, z) vectors. Each vector
+        represents direction of corresponding point in testPts. If the
+        vector is not provided (0, 0, 1) will be assigned.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.updatePointGroups', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.updatePointGroups" class="source">
+    <pre><code>def updatePointGroups(self, pointGroups, vectorGroups=[]):
+    """Update point groups.
+    Args:
+        pointGroups: A list of (x, y, z) test points or lists of (x, y, z)
+            test points. Each list of test points will be converted to a
+            TestPointGroup. If testPts is a single flattened list only one
+            TestPointGroup will be created.
+        vectorGroups: An optional list of (x, y, z) vectors. Each vector
+            represents direction of corresponding point in testPts. If the
+            vector is not provided (0, 0, 1) will be assigned.
+    """
+    self.createAnalysisPointGroups(pointGroups, vectorGroups)
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.writeHBObjectsToFile">
     <p>def <span class="ident">writeHBObjectsToFile</span>(</p><p>self, targetDir, projectName, mkdir=False, writeMaterial=True, writeGeometry=True)</p>
     </div>
     
@@ -1456,8 +1598,8 @@ def write(filePath, data, mkdir=False):
 <p>Exceptions:
     ValueError if targetDir doesn't exist and mkdir is False.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.writeHBObjectsToFile', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.writeHBObjectsToFile" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.writeHBObjectsToFile', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.writeHBObjectsToFile" class="source">
     <pre><code>def writeHBObjectsToFile(self, targetDir, projectName, mkdir=False,
                          writeMaterial=True, writeGeometry=True):
     """Write HBobjects to *.rad and .mat files.
@@ -1487,7 +1629,7 @@ def write(filePath, data, mkdir=False):
   
             
   <div class="item">
-    <div class="name def" id="honeybeegrasshopper.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.writePointsToFile">
+    <div class="name def" id="honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.writePointsToFile">
     <p>def <span class="ident">writePointsToFile</span>(</p><p>self, targetDir, projectName, mkdir=False)</p>
     </div>
     
@@ -1504,8 +1646,8 @@ def write(filePath, data, mkdir=False):
 <p>Exceptions:
     ValueError if targetDir doesn't exist and mkdir is False.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.writePointsToFile', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.writePointsToFile" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.writePointsToFile', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.writePointsToFile" class="source">
     <pre><code>def writePointsToFile(self, targetDir, projectName, mkdir=False):
     """Write point groups to file.
     Args:
@@ -1531,7 +1673,7 @@ def write(filePath, data, mkdir=False):
   
             
   <div class="item">
-    <div class="name def" id="honeybeegrasshopper.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.writeToFile">
+    <div class="name def" id="honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.writeToFile">
     <p>def <span class="ident">writeToFile</span>(</p><p>self, targetFolder, projectName, radFiles=None, useRelativePath=False)</p>
     </div>
     
@@ -1558,8 +1700,8 @@ def write(filePath, data, mkdir=False):
 <p>Returns:
     True in case of success.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.writeToFile', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.writeToFile" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.writeToFile', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.writeToFile" class="source">
     <pre><code>def writeToFile(self, targetFolder, projectName, radFiles=None,
                 useRelativePath=False):
     """Write analysis files to target folder.
@@ -1591,6 +1733,9 @@ def write(filePath, data, mkdir=False):
     _path = os.path.join(_basePath, self.subFolder)
     _ispath = preparedir(_path)
     assert _ispath, "Failed to create %s. Try a different path!" % _path
+    # Check if anything has changed
+    # if not self.isChanged:
+    #     print "Inputs has not changed! Check files at %s" % _path
     # 1.write sky file
     skyFile = self.sky.writeToFile(_path)
     # 2.write points
@@ -1606,7 +1751,9 @@ def write(filePath, data, mkdir=False):
     oc = Oconv(projectName)
     oc.inputFiles = [skyFile, matFile, geoFile]
     # # 4.2.prepare rtrace
-    rt = Rtrace(projectName)
+    rt = Rtrace(projectName,
+                simulationType=self.simulationType,
+                radianceParameters=self.radianceParameters)
     rt.octFile = os.path.join(_path, projectName + ".oct")
     rt.pointFile = pointsFile
     # # 4.3 write batch file
@@ -1614,7 +1761,7 @@ def write(filePath, data, mkdir=False):
     batchFileLines.append(rt.toRadString())
     batchFile = os.path.join(_path, projectName + ".bat")
     self.write(batchFile, "\n".join(batchFileLines))
-    self.batchFile = batchFile
+    self.__batchFile = batchFile
     print "Files are written to: %s" % _path
     return _path
 </code></pre>

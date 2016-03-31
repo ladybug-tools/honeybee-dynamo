@@ -3,7 +3,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 
-    <title>honeybeegrasshopper.honeybee.radiance.recipe.gridbased API documentation</title>
+    <title>honeybeex.honeybee.radiance.recipe.gridbased API documentation</title>
     <meta name="description" content="Radiance Analysis Recipes." />
 
   <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300' rel='stylesheet' type='text/css'>
@@ -989,19 +989,22 @@ table {
     <li class="set"><h3><a href="#header-classes">Classes</a></h3>
       <ul>
         <li class="mono">
-        <span class="class_name"><a href="#honeybeegrasshopper.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe">HBGridBasedAnalysisRecipe</a></span>
+        <span class="class_name"><a href="#honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe">HBGridBasedAnalysisRecipe</a></span>
         
           
   <ul>
-    <li class="mono"><a href="#honeybeegrasshopper.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.write">write</a></li>
-    <li class="mono"><a href="#honeybeegrasshopper.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.__init__">__init__</a></li>
-    <li class="mono"><a href="#honeybeegrasshopper.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.createAnalysisPointGroups">createAnalysisPointGroups</a></li>
-    <li class="mono"><a href="#honeybeegrasshopper.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.hbObjectsToRadString">hbObjectsToRadString</a></li>
-    <li class="mono"><a href="#honeybeegrasshopper.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.run">run</a></li>
-    <li class="mono"><a href="#honeybeegrasshopper.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.toRadString">toRadString</a></li>
-    <li class="mono"><a href="#honeybeegrasshopper.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.writeHBObjectsToFile">writeHBObjectsToFile</a></li>
-    <li class="mono"><a href="#honeybeegrasshopper.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.writePointsToFile">writePointsToFile</a></li>
-    <li class="mono"><a href="#honeybeegrasshopper.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.writeToFile">writeToFile</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.write">write</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.__init__">__init__</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.createAnalysisPointGroups">createAnalysisPointGroups</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.flatten">flatten</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.hbObjectsToRadString">hbObjectsToRadString</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.results">results</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.run">run</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.toRadString">toRadString</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.updatePointGroups">updatePointGroups</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.writeHBObjectsToFile">writeHBObjectsToFile</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.writePointsToFile">writePointsToFile</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.writeToFile">writeToFile</a></li>
   </ul>
 
         </li>
@@ -1019,22 +1022,24 @@ table {
 
 
   <header id="section-intro">
-  <h1 class="title"><span class="name">honeybeegrasshopper.honeybee.radiance.recipe.gridbased</span> module</h1>
+  <h1 class="title"><span class="name">honeybeex.honeybee.radiance.recipe.gridbased</span> module</h1>
   <p>Radiance Analysis Recipes.</p>
   
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.radiance.recipe.gridbased', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.honeybee.radiance.recipe.gridbased" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.recipe.gridbased', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.recipe.gridbased" class="source">
     <pre><code>"""Radiance Analysis Recipes."""
 
+from ..postprocess.gridbasedresults import LoadGridBasedDLAnalysisResults
 from ...hbpointgroup import AnalysisPointGroup
 from .recipeBase import HBDaylightAnalysisRecipe
-from collections import Iterable
 from ..command.oconv import Oconv
 from ..command.rtrace import Rtrace
 from ...helper import preparedir
+
 import os
-from collections import namedtuple
+from collections import namedtuple, Iterable
 import subprocess
+
 
 class HBGridBasedAnalysisRecipe(HBDaylightAnalysisRecipe):
     """Grid base analysis base class.
@@ -1047,23 +1052,64 @@ class HBGridBasedAnalysisRecipe(HBDaylightAnalysisRecipe):
         vectorGroups: An optional list of (x, y, z) vectors. Each vector represents direction
             of corresponding point in testPts. If the vector is not provided (0, 0, 1)
             will be assigned.
-        hbObjects: An optional list of Honeybee surfaces or zones (Default: None).
+        simulationType: 0: Illuminance(lux), 1: Radiation (kWh), 2: Luminance (Candela)
+            (Default: 0)
         radParameters: Radiance parameters for this analysis.
             (Default: RadianceParameters.LowQuality)
+        hbObjects: An optional list of Honeybee surfaces or zones (Default: None).
+        subFolder: Analysis subfolder for this recipe. (Default: "gridbased")
     """
 
-    def __init__(self, sky, pointGroups, vectorGroups=[], radParameters=None,
-                 hbObjects=None, subFolder="gridbased"):
+    # TODO: implemnt isChanged at HBDaylightAnalysisRecipe level to reload the results
+    # if there has been no changes in inputs.
+    def __init__(self, sky, pointGroups, vectorGroups=[], simulationType=0,
+                 radParameters=None, hbObjects=None, subFolder="gridbased"):
         """Create grid-based recipe."""
-        HBDaylightAnalysisRecipe.__init__(self, sky=sky, radParameters=radParameters,
-                                          hbObjects=hbObjects, subFolder=subFolder)
-        self.batchFile = None
+        HBDaylightAnalysisRecipe.__init__(self, sky=sky,
+                                          simulationType=simulationType,
+                                          radParameters=radParameters,
+                                          hbObjects=hbObjects,
+                                          subFolder=subFolder)
+
+        self.__batchFile = None
+        self.resultsFile = []
+
+        # create a result loader to load the results once the analysis is done.
+        self.loader = LoadGridBasedDLAnalysisResults(self.simulationType,
+                                                     self.resultsFile)
+
+        # create analysisi point groups
+        self.createAnalysisPointGroups(pointGroups, vectorGroups)
+
+    @property
+    def pointGroups(self):
+        """Return analysis point groups."""
+        return self.analysisPointsGroups
+
+    @pointGroups.setter
+    def pointGroups(self):
+        """Return analysis point groups."""
+        raise ValueError("You can't set pointGroups directly. " +
+                         "Use updatePointGroups method instead.")
+
+    def updatePointGroups(self, pointGroups, vectorGroups=[]):
+        """Update point groups.
+
+        Args:
+            pointGroups: A list of (x, y, z) test points or lists of (x, y, z)
+                test points. Each list of test points will be converted to a
+                TestPointGroup. If testPts is a single flattened list only one
+                TestPointGroup will be created.
+            vectorGroups: An optional list of (x, y, z) vectors. Each vector
+                represents direction of corresponding point in testPts. If the
+                vector is not provided (0, 0, 1) will be assigned.
+        """
         self.createAnalysisPointGroups(pointGroups, vectorGroups)
 
     @property
     def points(self):
         """Return nested list of points."""
-        return [ap.poins for ap in self.analysisPointsGroups]
+        return [ap.points for ap in self.analysisPointsGroups]
 
     @property
     def numOfPointGroups(self):
@@ -1091,9 +1137,10 @@ class HBGridBasedAnalysisRecipe(HBDaylightAnalysisRecipe):
         You can acces AnalysisPointGroups using self.analysisPointsGroups property.
         """
         self.__analysisPointGroups = []
+
         if len(pointGroups) == 0:
             return
-        # input is single point! Create a single group but seriously!
+        # input is single point! Create a single group but seriously!?
         elif not isinstance(pointGroups[0], Iterable):
             pointGroups = [[pointGroups]]
             vectorGroups = [[vectorGroups]]
@@ -1113,9 +1160,26 @@ class HBGridBasedAnalysisRecipe(HBDaylightAnalysisRecipe):
             finally:
                 # last check for vectors in case user input is a flatten lists
                 # for nested group of points.
-                if not isinstance(vectors[0], Iterable):
+                if not isinstance(vectors[0], Iterable) and not hasattr(vectors[0], 'X'):
                     vectors = [vectors]
+
                 self.__analysisPointGroups.append(AnalysisPointGroup(pts, vectors))
+
+    def flatten(self, inputList):
+        """Return a flattened genertor from an input list.
+
+        Usage:
+
+            inputList = [['a'], ['b', 'c', 'd'], [['e']], ['f']]
+            list(flatten(inputList))
+            >> ['a', 'b', 'c', 'd', 'e', 'f']
+        """
+        for el in inputList:
+            if isinstance(el, Iterable) and not isinstance(el, basestring):
+                for sub in self.flatten(el):
+                    yield sub
+            else:
+                yield el
 
     def toRadString(self, hbObjects=False, points=False):
         """Return a tuple of multiline string radiance definition.
@@ -1237,6 +1301,10 @@ class HBGridBasedAnalysisRecipe(HBDaylightAnalysisRecipe):
 
         assert _ispath, "Failed to create %s. Try a different path!" % _path
 
+        # Check if anything has changed
+        # if not self.isChanged:
+        #     print "Inputs has not changed! Check files at %s" % _path
+
         # 1.write sky file
         skyFile = self.sky.writeToFile(_path)
 
@@ -1258,7 +1326,9 @@ class HBGridBasedAnalysisRecipe(HBDaylightAnalysisRecipe):
         oc.inputFiles = [skyFile, matFile, geoFile]
 
         # # 4.2.prepare rtrace
-        rt = Rtrace(projectName)
+        rt = Rtrace(projectName,
+                    simulationType=self.simulationType,
+                    radianceParameters=self.radianceParameters)
         rt.octFile = os.path.join(_path, projectName + ".oct")
         rt.pointFile = pointsFile
 
@@ -1269,7 +1339,7 @@ class HBGridBasedAnalysisRecipe(HBDaylightAnalysisRecipe):
 
         self.write(batchFile, "\n".join(batchFileLines))
 
-        self.batchFile = batchFile
+        self.__batchFile = batchFile
 
         print "Files are written to: %s" % _path
         return _path
@@ -1277,21 +1347,39 @@ class HBGridBasedAnalysisRecipe(HBDaylightAnalysisRecipe):
     # TODO: Update the method to batch run and move it to baseclass
     def run(self, debug=False):
         """Run the analysis."""
-        if self.batchFile:
+        if self.__batchFile:
             if debug:
-                with open(self.batchFile, "a") as bf:
+                with open(self.__batchFile, "a") as bf:
                     bf.write("\npause")
 
-            subprocess.call(self.batchFile)
-            return self.batchFile.replace(".bat", ".res")
-            # subprocess.Popen(['cmd', self.batchFile], shell=minimize)
+            subprocess.call(self.__batchFile)
+
+            self.isCalculated = True
+            # self.isChanged = False
+
+            self.resultsFile = [self.__batchFile.replace(".bat", ".res")]
+            return True
         else:
             raise Exception("You need to write the files before running the recipe.")
 
+    def results(self, flattenResults=True):
+        """Return results for this analysis."""
+        assert self.isCalculated, \
+            "You haven't run the Recipe yet. Use self.run " + \
+            "to run the analysis before loading the results."
+
+        self.loader.simulationType = self.simulationType
+        self.loader.resultFiles = self.resultsFile
+        return self.loader.results
+
     def __repr__(self):
         """Represent grid based recipe."""
-        return "%s #PointGroup: %d #Points: %d" % \
+        _analysisType = {
+            0: "Illuminance", 1: "Radiation", 2: "Luminance"
+        }
+        return "%s: %s\n#PointGroups: %d #Points: %d" % \
             (self.__class__.__name__,
+             _analysisType[self.simulationType],
              self.numOfPointGroups,
              self.numOfTotalPoints)
 
@@ -1318,7 +1406,7 @@ if __name__ == "__main__":
     <h2 class="section-title" id="header-classes">Classes</h2>
       
       <div class="item">
-      <p id="honeybeegrasshopper.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe" class="name">class <span class="ident">HBGridBasedAnalysisRecipe</span></p>
+      <p id="honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe" class="name">class <span class="ident">HBGridBasedAnalysisRecipe</span></p>
       
   
     <div class="desc"><p>Grid base analysis base class.</p>
@@ -1330,12 +1418,15 @@ if __name__ == "__main__":
     vectorGroups: An optional list of (x, y, z) vectors. Each vector represents direction
         of corresponding point in testPts. If the vector is not provided (0, 0, 1)
         will be assigned.
-    hbObjects: An optional list of Honeybee surfaces or zones (Default: None).
+    simulationType: 0: Illuminance(lux), 1: Radiation (kWh), 2: Luminance (Candela)
+        (Default: 0)
     radParameters: Radiance parameters for this analysis.
-        (Default: RadianceParameters.LowQuality)</p></div>
+        (Default: RadianceParameters.LowQuality)
+    hbObjects: An optional list of Honeybee surfaces or zones (Default: None).
+    subFolder: Analysis subfolder for this recipe. (Default: "gridbased")</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe" class="source">
     <pre><code>class HBGridBasedAnalysisRecipe(HBDaylightAnalysisRecipe):
     """Grid base analysis base class.
 
@@ -1347,23 +1438,64 @@ if __name__ == "__main__":
         vectorGroups: An optional list of (x, y, z) vectors. Each vector represents direction
             of corresponding point in testPts. If the vector is not provided (0, 0, 1)
             will be assigned.
-        hbObjects: An optional list of Honeybee surfaces or zones (Default: None).
+        simulationType: 0: Illuminance(lux), 1: Radiation (kWh), 2: Luminance (Candela)
+            (Default: 0)
         radParameters: Radiance parameters for this analysis.
             (Default: RadianceParameters.LowQuality)
+        hbObjects: An optional list of Honeybee surfaces or zones (Default: None).
+        subFolder: Analysis subfolder for this recipe. (Default: "gridbased")
     """
 
-    def __init__(self, sky, pointGroups, vectorGroups=[], radParameters=None,
-                 hbObjects=None, subFolder="gridbased"):
+    # TODO: implemnt isChanged at HBDaylightAnalysisRecipe level to reload the results
+    # if there has been no changes in inputs.
+    def __init__(self, sky, pointGroups, vectorGroups=[], simulationType=0,
+                 radParameters=None, hbObjects=None, subFolder="gridbased"):
         """Create grid-based recipe."""
-        HBDaylightAnalysisRecipe.__init__(self, sky=sky, radParameters=radParameters,
-                                          hbObjects=hbObjects, subFolder=subFolder)
-        self.batchFile = None
+        HBDaylightAnalysisRecipe.__init__(self, sky=sky,
+                                          simulationType=simulationType,
+                                          radParameters=radParameters,
+                                          hbObjects=hbObjects,
+                                          subFolder=subFolder)
+
+        self.__batchFile = None
+        self.resultsFile = []
+
+        # create a result loader to load the results once the analysis is done.
+        self.loader = LoadGridBasedDLAnalysisResults(self.simulationType,
+                                                     self.resultsFile)
+
+        # create analysisi point groups
+        self.createAnalysisPointGroups(pointGroups, vectorGroups)
+
+    @property
+    def pointGroups(self):
+        """Return analysis point groups."""
+        return self.analysisPointsGroups
+
+    @pointGroups.setter
+    def pointGroups(self):
+        """Return analysis point groups."""
+        raise ValueError("You can't set pointGroups directly. " +
+                         "Use updatePointGroups method instead.")
+
+    def updatePointGroups(self, pointGroups, vectorGroups=[]):
+        """Update point groups.
+
+        Args:
+            pointGroups: A list of (x, y, z) test points or lists of (x, y, z)
+                test points. Each list of test points will be converted to a
+                TestPointGroup. If testPts is a single flattened list only one
+                TestPointGroup will be created.
+            vectorGroups: An optional list of (x, y, z) vectors. Each vector
+                represents direction of corresponding point in testPts. If the
+                vector is not provided (0, 0, 1) will be assigned.
+        """
         self.createAnalysisPointGroups(pointGroups, vectorGroups)
 
     @property
     def points(self):
         """Return nested list of points."""
-        return [ap.poins for ap in self.analysisPointsGroups]
+        return [ap.points for ap in self.analysisPointsGroups]
 
     @property
     def numOfPointGroups(self):
@@ -1391,9 +1523,10 @@ if __name__ == "__main__":
         You can acces AnalysisPointGroups using self.analysisPointsGroups property.
         """
         self.__analysisPointGroups = []
+
         if len(pointGroups) == 0:
             return
-        # input is single point! Create a single group but seriously!
+        # input is single point! Create a single group but seriously!?
         elif not isinstance(pointGroups[0], Iterable):
             pointGroups = [[pointGroups]]
             vectorGroups = [[vectorGroups]]
@@ -1413,9 +1546,26 @@ if __name__ == "__main__":
             finally:
                 # last check for vectors in case user input is a flatten lists
                 # for nested group of points.
-                if not isinstance(vectors[0], Iterable):
+                if not isinstance(vectors[0], Iterable) and not hasattr(vectors[0], 'X'):
                     vectors = [vectors]
+
                 self.__analysisPointGroups.append(AnalysisPointGroup(pts, vectors))
+
+    def flatten(self, inputList):
+        """Return a flattened genertor from an input list.
+
+        Usage:
+
+            inputList = [['a'], ['b', 'c', 'd'], [['e']], ['f']]
+            list(flatten(inputList))
+            >> ['a', 'b', 'c', 'd', 'e', 'f']
+        """
+        for el in inputList:
+            if isinstance(el, Iterable) and not isinstance(el, basestring):
+                for sub in self.flatten(el):
+                    yield sub
+            else:
+                yield el
 
     def toRadString(self, hbObjects=False, points=False):
         """Return a tuple of multiline string radiance definition.
@@ -1537,6 +1687,10 @@ if __name__ == "__main__":
 
         assert _ispath, "Failed to create %s. Try a different path!" % _path
 
+        # Check if anything has changed
+        # if not self.isChanged:
+        #     print "Inputs has not changed! Check files at %s" % _path
+
         # 1.write sky file
         skyFile = self.sky.writeToFile(_path)
 
@@ -1558,7 +1712,9 @@ if __name__ == "__main__":
         oc.inputFiles = [skyFile, matFile, geoFile]
 
         # # 4.2.prepare rtrace
-        rt = Rtrace(projectName)
+        rt = Rtrace(projectName,
+                    simulationType=self.simulationType,
+                    radianceParameters=self.radianceParameters)
         rt.octFile = os.path.join(_path, projectName + ".oct")
         rt.pointFile = pointsFile
 
@@ -1569,7 +1725,7 @@ if __name__ == "__main__":
 
         self.write(batchFile, "\n".join(batchFileLines))
 
-        self.batchFile = batchFile
+        self.__batchFile = batchFile
 
         print "Files are written to: %s" % _path
         return _path
@@ -1577,21 +1733,39 @@ if __name__ == "__main__":
     # TODO: Update the method to batch run and move it to baseclass
     def run(self, debug=False):
         """Run the analysis."""
-        if self.batchFile:
+        if self.__batchFile:
             if debug:
-                with open(self.batchFile, "a") as bf:
+                with open(self.__batchFile, "a") as bf:
                     bf.write("\npause")
 
-            subprocess.call(self.batchFile)
-            return self.batchFile.replace(".bat", ".res")
-            # subprocess.Popen(['cmd', self.batchFile], shell=minimize)
+            subprocess.call(self.__batchFile)
+
+            self.isCalculated = True
+            # self.isChanged = False
+
+            self.resultsFile = [self.__batchFile.replace(".bat", ".res")]
+            return True
         else:
             raise Exception("You need to write the files before running the recipe.")
 
+    def results(self, flattenResults=True):
+        """Return results for this analysis."""
+        assert self.isCalculated, \
+            "You haven't run the Recipe yet. Use self.run " + \
+            "to run the analysis before loading the results."
+
+        self.loader.simulationType = self.simulationType
+        self.loader.resultFiles = self.resultsFile
+        return self.loader.results
+
     def __repr__(self):
         """Represent grid based recipe."""
-        return "%s #PointGroup: %d #Points: %d" % \
+        _analysisType = {
+            0: "Illuminance", 1: "Radiation", 2: "Luminance"
+        }
+        return "%s: %s\n#PointGroups: %d #Points: %d" % \
             (self.__class__.__name__,
+             _analysisType[self.simulationType],
              self.numOfPointGroups,
              self.numOfTotalPoints)
 </code></pre>
@@ -1602,14 +1776,14 @@ if __name__ == "__main__":
       <div class="class">
           <h3>Ancestors (in MRO)</h3>
           <ul class="class_list">
-          <li><a href="#honeybeegrasshopper.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe">HBGridBasedAnalysisRecipe</a></li>
-          <li>honeybeegrasshopper.honeybee.radiance.recipe.recipeBase.HBDaylightAnalysisRecipe</li>
+          <li><a href="#honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe">HBGridBasedAnalysisRecipe</a></li>
+          <li>honeybeex.honeybee.radiance.recipe.recipeBase.HBDaylightAnalysisRecipe</li>
           <li>__builtin__.object</li>
           </ul>
           <h3>Static methods</h3>
             
   <div class="item">
-    <div class="name def" id="honeybeegrasshopper.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.write">
+    <div class="name def" id="honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.write">
     <p>def <span class="ident">write</span>(</p><p>filePath, data, mkdir=False)</p>
     </div>
     
@@ -1622,8 +1796,8 @@ if __name__ == "__main__":
     data: Any data as string
     mkdir: Set to True to create the directory if doesn't exist (Default: False)</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.write', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.write" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.write', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.write" class="source">
     <pre><code>@staticmethod
 def write(filePath, data, mkdir=False):
     """Write a string of data to file.
@@ -1653,7 +1827,7 @@ def write(filePath, data, mkdir=False):
   
           <h3>Instance variables</h3>
             <div class="item">
-            <p id="honeybeegrasshopper.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.analysisPointsGroups" class="name">var <span class="ident">analysisPointsGroups</span></p>
+            <p id="honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.analysisPointsGroups" class="name">var <span class="ident">analysisPointsGroups</span></p>
             
 
             
@@ -1664,17 +1838,7 @@ def write(filePath, data, mkdir=False):
 
             </div>
             <div class="item">
-            <p id="honeybeegrasshopper.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.batchFile" class="name">var <span class="ident">batchFile</span></p>
-            
-
-            
-  
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="honeybeegrasshopper.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.hbObjects" class="name">var <span class="ident">hbObjects</span></p>
+            <p id="honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.hbObjects" class="name">var <span class="ident">hbObjects</span></p>
             
 
             
@@ -1685,7 +1849,28 @@ def write(filePath, data, mkdir=False):
 
             </div>
             <div class="item">
-            <p id="honeybeegrasshopper.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.numOfPointGroups" class="name">var <span class="ident">numOfPointGroups</span></p>
+            <p id="honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.isAnalysisRecipe" class="name">var <span class="ident">isAnalysisRecipe</span></p>
+            
+
+            
+  
+    <div class="desc"><p>Return true to indicate it is an analysis recipe.</p></div>
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.loader" class="name">var <span class="ident">loader</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.numOfPointGroups" class="name">var <span class="ident">numOfPointGroups</span></p>
             
 
             
@@ -1696,7 +1881,7 @@ def write(filePath, data, mkdir=False):
 
             </div>
             <div class="item">
-            <p id="honeybeegrasshopper.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.numOfTotalPoints" class="name">var <span class="ident">numOfTotalPoints</span></p>
+            <p id="honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.numOfTotalPoints" class="name">var <span class="ident">numOfTotalPoints</span></p>
             
 
             
@@ -1707,7 +1892,18 @@ def write(filePath, data, mkdir=False):
 
             </div>
             <div class="item">
-            <p id="honeybeegrasshopper.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.points" class="name">var <span class="ident">points</span></p>
+            <p id="honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.pointGroups" class="name">var <span class="ident">pointGroups</span></p>
+            
+
+            
+  
+    <div class="desc"><p>Return analysis point groups.</p></div>
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.points" class="name">var <span class="ident">points</span></p>
             
 
             
@@ -1718,7 +1914,7 @@ def write(filePath, data, mkdir=False):
 
             </div>
             <div class="item">
-            <p id="honeybeegrasshopper.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.radianceParameters" class="name">var <span class="ident">radianceParameters</span></p>
+            <p id="honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.radianceParameters" class="name">var <span class="ident">radianceParameters</span></p>
             
 
             
@@ -1729,7 +1925,29 @@ def write(filePath, data, mkdir=False):
 
             </div>
             <div class="item">
-            <p id="honeybeegrasshopper.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.sky" class="name">var <span class="ident">sky</span></p>
+            <p id="honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.resultsFile" class="name">var <span class="ident">resultsFile</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.simulationType" class="name">var <span class="ident">simulationType</span></p>
+            
+
+            
+  
+    <div class="desc"><p>Get/set simulation Type.</p>
+<p>0: Illuminance(lux), 1: Radiation (kWh), 2: Luminance (Candela) (Default: 0)</p></div>
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.sky" class="name">var <span class="ident">sky</span></p>
             
 
             
@@ -1740,7 +1958,7 @@ def write(filePath, data, mkdir=False):
 
             </div>
             <div class="item">
-            <p id="honeybeegrasshopper.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.subFolder" class="name">var <span class="ident">subFolder</span></p>
+            <p id="honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.subFolder" class="name">var <span class="ident">subFolder</span></p>
             
 
             
@@ -1751,7 +1969,7 @@ def write(filePath, data, mkdir=False):
 
             </div>
             <div class="item">
-            <p id="honeybeegrasshopper.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.vectors" class="name">var <span class="ident">vectors</span></p>
+            <p id="honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.vectors" class="name">var <span class="ident">vectors</span></p>
             
 
             
@@ -1764,8 +1982,8 @@ def write(filePath, data, mkdir=False):
           <h3>Methods</h3>
             
   <div class="item">
-    <div class="name def" id="honeybeegrasshopper.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.__init__">
-    <p>def <span class="ident">__init__</span>(</p><p>self, sky, pointGroups, vectorGroups=[], radParameters=None, hbObjects=None, subFolder=&#39;gridbased&#39;)</p>
+    <div class="name def" id="honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.__init__">
+    <p>def <span class="ident">__init__</span>(</p><p>self, sky, pointGroups, vectorGroups=[], simulationType=0, radParameters=None, hbObjects=None, subFolder=&#39;gridbased&#39;)</p>
     </div>
     
 
@@ -1773,14 +1991,22 @@ def write(filePath, data, mkdir=False):
   
     <div class="desc"><p>Create grid-based recipe.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.__init__', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.__init__" class="source">
-    <pre><code>def __init__(self, sky, pointGroups, vectorGroups=[], radParameters=None,
-             hbObjects=None, subFolder="gridbased"):
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.__init__', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.__init__" class="source">
+    <pre><code>def __init__(self, sky, pointGroups, vectorGroups=[], simulationType=0,
+             radParameters=None, hbObjects=None, subFolder="gridbased"):
     """Create grid-based recipe."""
-    HBDaylightAnalysisRecipe.__init__(self, sky=sky, radParameters=radParameters,
-                                      hbObjects=hbObjects, subFolder=subFolder)
-    self.batchFile = None
+    HBDaylightAnalysisRecipe.__init__(self, sky=sky,
+                                      simulationType=simulationType,
+                                      radParameters=radParameters,
+                                      hbObjects=hbObjects,
+                                      subFolder=subFolder)
+    self.__batchFile = None
+    self.resultsFile = []
+    # create a result loader to load the results once the analysis is done.
+    self.loader = LoadGridBasedDLAnalysisResults(self.simulationType,
+                                                 self.resultsFile)
+    # create analysisi point groups
     self.createAnalysisPointGroups(pointGroups, vectorGroups)
 </code></pre>
   </div>
@@ -1790,7 +2016,7 @@ def write(filePath, data, mkdir=False):
   
             
   <div class="item">
-    <div class="name def" id="honeybeegrasshopper.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.createAnalysisPointGroups">
+    <div class="name def" id="honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.createAnalysisPointGroups">
     <p>def <span class="ident">createAnalysisPointGroups</span>(</p><p>self, pointGroups, vectorGroups)</p>
     </div>
     
@@ -1800,8 +2026,8 @@ def write(filePath, data, mkdir=False):
     <div class="desc"><p>Create AnalysisPointGroups from input points and vectors.</p>
 <p>You can acces AnalysisPointGroups using self.analysisPointsGroups property.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.createAnalysisPointGroups', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.createAnalysisPointGroups" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.createAnalysisPointGroups', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.createAnalysisPointGroups" class="source">
     <pre><code>def createAnalysisPointGroups(self, pointGroups, vectorGroups):
     """Create AnalysisPointGroups from input points and vectors.
     You can acces AnalysisPointGroups using self.analysisPointsGroups property.
@@ -1809,7 +2035,7 @@ def write(filePath, data, mkdir=False):
     self.__analysisPointGroups = []
     if len(pointGroups) == 0:
         return
-    # input is single point! Create a single group but seriously!
+    # input is single point! Create a single group but seriously!?
     elif not isinstance(pointGroups[0], Iterable):
         pointGroups = [[pointGroups]]
         vectorGroups = [[vectorGroups]]
@@ -1828,7 +2054,7 @@ def write(filePath, data, mkdir=False):
         finally:
             # last check for vectors in case user input is a flatten lists
             # for nested group of points.
-            if not isinstance(vectors[0], Iterable):
+            if not isinstance(vectors[0], Iterable) and not hasattr(vectors[0], 'X'):
                 vectors = [vectors]
             self.__analysisPointGroups.append(AnalysisPointGroup(pts, vectors))
 </code></pre>
@@ -1839,7 +2065,44 @@ def write(filePath, data, mkdir=False):
   
             
   <div class="item">
-    <div class="name def" id="honeybeegrasshopper.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.hbObjectsToRadString">
+    <div class="name def" id="honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.flatten">
+    <p>def <span class="ident">flatten</span>(</p><p>self, inputList)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Return a flattened genertor from an input list.</p>
+<p>Usage:</p>
+<pre><code>inputList = [['a'], ['b', 'c', 'd'], [['e']], ['f']]
+list(flatten(inputList))
+&gt;&gt; ['a', 'b', 'c', 'd', 'e', 'f']
+</code></pre></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.flatten', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.flatten" class="source">
+    <pre><code>def flatten(self, inputList):
+    """Return a flattened genertor from an input list.
+    Usage:
+        inputList = [['a'], ['b', 'c', 'd'], [['e']], ['f']]
+        list(flatten(inputList))
+        >> ['a', 'b', 'c', 'd', 'e', 'f']
+    """
+    for el in inputList:
+        if isinstance(el, Iterable) and not isinstance(el, basestring):
+            for sub in self.flatten(el):
+                yield sub
+        else:
+            yield el
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.hbObjectsToRadString">
     <p>def <span class="ident">hbObjectsToRadString</span>(</p><p>self)</p>
     </div>
     
@@ -1857,8 +2120,8 @@ def write(filePath, data, mkdir=False):
     s = self.hbObjectsToRadString()
     matString, geoString = s</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.hbObjectsToRadString', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.hbObjectsToRadString" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.hbObjectsToRadString', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.hbObjectsToRadString" class="source">
     <pre><code>def hbObjectsToRadString(self):
     """Return geometries and materials as a tuple of multiline string.
     Returns:
@@ -1903,7 +2166,34 @@ def write(filePath, data, mkdir=False):
   
             
   <div class="item">
-    <div class="name def" id="honeybeegrasshopper.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.run">
+    <div class="name def" id="honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.results">
+    <p>def <span class="ident">results</span>(</p><p>self, flattenResults=True)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Return results for this analysis.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.results', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.results" class="source">
+    <pre><code>def results(self, flattenResults=True):
+    """Return results for this analysis."""
+    assert self.isCalculated, \
+        "You haven't run the Recipe yet. Use self.run " + \
+        "to run the analysis before loading the results."
+    self.loader.simulationType = self.simulationType
+    self.loader.resultFiles = self.resultsFile
+    return self.loader.results
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.run">
     <p>def <span class="ident">run</span>(</p><p>self, debug=False)</p>
     </div>
     
@@ -1912,17 +2202,19 @@ def write(filePath, data, mkdir=False):
   
     <div class="desc"><p>Run the analysis.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.run', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.run" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.run', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.run" class="source">
     <pre><code>def run(self, debug=False):
     """Run the analysis."""
-    if self.batchFile:
+    if self.__batchFile:
         if debug:
-            with open(self.batchFile, "a") as bf:
+            with open(self.__batchFile, "a") as bf:
                 bf.write("\npause")
-        subprocess.call(self.batchFile)
-        return self.batchFile.replace(".bat", ".res")
-        # subprocess.Popen(['cmd', self.batchFile], shell=minimize)
+        subprocess.call(self.__batchFile)
+        self.isCalculated = True
+        # self.isChanged = False
+        self.resultsFile = [self.__batchFile.replace(".bat", ".res")]
+        return True
     else:
         raise Exception("You need to write the files before running the recipe.")
 </code></pre>
@@ -1933,7 +2225,7 @@ def write(filePath, data, mkdir=False):
   
             
   <div class="item">
-    <div class="name def" id="honeybeegrasshopper.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.toRadString">
+    <div class="name def" id="honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.toRadString">
     <p>def <span class="ident">toRadString</span>(</p><p>self, hbObjects=False, points=False)</p>
     </div>
     
@@ -1953,8 +2245,8 @@ def write(filePath, data, mkdir=False):
     s = self.toRadString(points=True)
     ptsString = s.points</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.toRadString', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.toRadString" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.toRadString', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.toRadString" class="source">
     <pre><code>def toRadString(self, hbObjects=False, points=False):
     """Return a tuple of multiline string radiance definition.
     Args:
@@ -1986,7 +2278,46 @@ def write(filePath, data, mkdir=False):
   
             
   <div class="item">
-    <div class="name def" id="honeybeegrasshopper.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.writeHBObjectsToFile">
+    <div class="name def" id="honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.updatePointGroups">
+    <p>def <span class="ident">updatePointGroups</span>(</p><p>self, pointGroups, vectorGroups=[])</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Update point groups.</p>
+<p>Args:
+    pointGroups: A list of (x, y, z) test points or lists of (x, y, z)
+        test points. Each list of test points will be converted to a
+        TestPointGroup. If testPts is a single flattened list only one
+        TestPointGroup will be created.
+    vectorGroups: An optional list of (x, y, z) vectors. Each vector
+        represents direction of corresponding point in testPts. If the
+        vector is not provided (0, 0, 1) will be assigned.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.updatePointGroups', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.updatePointGroups" class="source">
+    <pre><code>def updatePointGroups(self, pointGroups, vectorGroups=[]):
+    """Update point groups.
+    Args:
+        pointGroups: A list of (x, y, z) test points or lists of (x, y, z)
+            test points. Each list of test points will be converted to a
+            TestPointGroup. If testPts is a single flattened list only one
+            TestPointGroup will be created.
+        vectorGroups: An optional list of (x, y, z) vectors. Each vector
+            represents direction of corresponding point in testPts. If the
+            vector is not provided (0, 0, 1) will be assigned.
+    """
+    self.createAnalysisPointGroups(pointGroups, vectorGroups)
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.writeHBObjectsToFile">
     <p>def <span class="ident">writeHBObjectsToFile</span>(</p><p>self, targetDir, projectName, mkdir=False, writeMaterial=True, writeGeometry=True)</p>
     </div>
     
@@ -2004,8 +2335,8 @@ def write(filePath, data, mkdir=False):
 <p>Exceptions:
     ValueError if targetDir doesn't exist and mkdir is False.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.writeHBObjectsToFile', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.writeHBObjectsToFile" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.writeHBObjectsToFile', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.writeHBObjectsToFile" class="source">
     <pre><code>def writeHBObjectsToFile(self, targetDir, projectName, mkdir=False,
                          writeMaterial=True, writeGeometry=True):
     """Write HBobjects to *.rad and .mat files.
@@ -2035,7 +2366,7 @@ def write(filePath, data, mkdir=False):
   
             
   <div class="item">
-    <div class="name def" id="honeybeegrasshopper.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.writePointsToFile">
+    <div class="name def" id="honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.writePointsToFile">
     <p>def <span class="ident">writePointsToFile</span>(</p><p>self, targetDir, projectName, mkdir=False)</p>
     </div>
     
@@ -2052,8 +2383,8 @@ def write(filePath, data, mkdir=False):
 <p>Exceptions:
     ValueError if targetDir doesn't exist and mkdir is False.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.writePointsToFile', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.writePointsToFile" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.writePointsToFile', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.writePointsToFile" class="source">
     <pre><code>def writePointsToFile(self, targetDir, projectName, mkdir=False):
     """Write point groups to file.
     Args:
@@ -2079,7 +2410,7 @@ def write(filePath, data, mkdir=False):
   
             
   <div class="item">
-    <div class="name def" id="honeybeegrasshopper.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.writeToFile">
+    <div class="name def" id="honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.writeToFile">
     <p>def <span class="ident">writeToFile</span>(</p><p>self, targetFolder, projectName, radFiles=None, useRelativePath=False)</p>
     </div>
     
@@ -2106,8 +2437,8 @@ def write(filePath, data, mkdir=False):
 <p>Returns:
     True in case of success.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.writeToFile', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.writeToFile" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.writeToFile', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.writeToFile" class="source">
     <pre><code>def writeToFile(self, targetFolder, projectName, radFiles=None,
                 useRelativePath=False):
     """Write analysis files to target folder.
@@ -2139,6 +2470,9 @@ def write(filePath, data, mkdir=False):
     _path = os.path.join(_basePath, self.subFolder)
     _ispath = preparedir(_path)
     assert _ispath, "Failed to create %s. Try a different path!" % _path
+    # Check if anything has changed
+    # if not self.isChanged:
+    #     print "Inputs has not changed! Check files at %s" % _path
     # 1.write sky file
     skyFile = self.sky.writeToFile(_path)
     # 2.write points
@@ -2154,7 +2488,9 @@ def write(filePath, data, mkdir=False):
     oc = Oconv(projectName)
     oc.inputFiles = [skyFile, matFile, geoFile]
     # # 4.2.prepare rtrace
-    rt = Rtrace(projectName)
+    rt = Rtrace(projectName,
+                simulationType=self.simulationType,
+                radianceParameters=self.radianceParameters)
     rt.octFile = os.path.join(_path, projectName + ".oct")
     rt.pointFile = pointsFile
     # # 4.3 write batch file
@@ -2162,7 +2498,7 @@ def write(filePath, data, mkdir=False):
     batchFileLines.append(rt.toRadString())
     batchFile = os.path.join(_path, projectName + ".bat")
     self.write(batchFile, "\n".join(batchFileLines))
-    self.batchFile = batchFile
+    self.__batchFile = batchFile
     print "Files are written to: %s" % _path
     return _path
 </code></pre>

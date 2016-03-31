@@ -3,7 +3,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 
-    <title>honeybeegrasshopper API documentation</title>
+    <title>honeybeex API documentation</title>
     <meta name="description" content="Honeybee Grasshopper library." />
 
   <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300' rel='stylesheet' type='text/css'>
@@ -989,17 +989,15 @@ table {
 
     <li class="set"><h3><a href="#header-submodules">Sub-modules</a></h3>
       <ul>
-        <li class="mono"><a href="dataoperation.m.html">honeybeegrasshopper.dataoperation</a></li>
-        <li class="mono"><a href="geometryoperation.m.html">honeybeegrasshopper.geometryoperation</a></li>
-        <li class="mono"><a href="hbsurface.m.html">honeybeegrasshopper.hbsurface</a></li>
-        <li class="mono"><a href="hbzone.m.html">honeybeegrasshopper.hbzone</a></li>
-        <li class="mono"><a href="honeybee/index.html">honeybeegrasshopper.honeybee</a></li>
-        <li class="mono"><a href="radiance/index.html">honeybeegrasshopper.radiance</a></li>
-        <li class="mono"><a href="settings.m.html">honeybeegrasshopper.settings</a></li>
-        <li class="mono"><a href="surfacetype.m.html">honeybeegrasshopper.surfacetype</a></li>
-        <li class="mono"><a href="test.m.html">honeybeegrasshopper.test</a></li>
-        <li class="mono"><a href="vectormath/index.html">honeybeegrasshopper.vectormath</a></li>
-        <li class="mono"><a href="wrapper.m.html">honeybeegrasshopper.wrapper</a></li>
+        <li class="mono"><a href="config.m.html">honeybeex.config</a></li>
+        <li class="mono"><a href="dataoperation.m.html">honeybeex.dataoperation</a></li>
+        <li class="mono"><a href="geometryoperation.m.html">honeybeex.geometryoperation</a></li>
+        <li class="mono"><a href="hbsurface.m.html">honeybeex.hbsurface</a></li>
+        <li class="mono"><a href="hbzone.m.html">honeybeex.hbzone</a></li>
+        <li class="mono"><a href="honeybee/index.html">honeybeex.honeybee</a></li>
+        <li class="mono"><a href="radiance/index.html">honeybeex.radiance</a></li>
+        <li class="mono"><a href="test.m.html">honeybeex.test</a></li>
+        <li class="mono"><a href="wrapper.m.html">honeybeex.wrapper</a></li>
       </ul>
     </li>
     </ul>
@@ -1013,16 +1011,15 @@ table {
 
 
   <header id="section-intro">
-  <h1 class="title"><span class="name">honeybeegrasshopper</span> module</h1>
+  <h1 class="title"><span class="name">honeybeex</span> module</h1>
   <p>Honeybee Grasshopper library.</p>
   
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex" class="source">
     <pre><code>"""Honeybee Grasshopper library."""
-__all__ = ["hbzone", "hbsurface", "radiance", "surfacetype", "wrapper",
-    "settings", "dataoperation"]
+__all__ = ["config", "hbzone", "hbsurface", "radiance", "wrapper", "dataoperation"]
 
-import hbzone, hbsurface, radiance, surfacetype, wrapper, settings, dataoperation
+import config, hbzone, hbsurface, radiance, wrapper, dataoperation
 </code></pre>
   </div>
 
@@ -1034,75 +1031,71 @@ import hbzone, hbsurface, radiance, surfacetype, wrapper, settings, dataoperatio
 
     <h2 class="section-title" id="header-submodules">Sub-modules</h2>
       <div class="item">
-      <p class="name"><a href="dataoperation.m.html">honeybeegrasshopper.dataoperation</a></p>
+      <p class="name"><a href="config.m.html">honeybeex.config</a></p>
+      
+  
+    <div class="desc"><p>Honeybee configurations.</p>
+<p>Import this module in every module that you need to access Honeybee configurations.</p>
+<p>Usage:</p>
+<pre><code>import config
+print config.radlibPath
+print config.radbinPath
+print config.platform
+config.radbinPath = "c:/radiance/bin"
+</code></pre></div>
+
+      </div>
+      <div class="item">
+      <p class="name"><a href="dataoperation.m.html">honeybeex.dataoperation</a></p>
       
   
     <div class="desc"><p>Collection of methods for data operation.</p></div>
 
       </div>
       <div class="item">
-      <p class="name"><a href="geometryoperation.m.html">honeybeegrasshopper.geometryoperation</a></p>
+      <p class="name"><a href="geometryoperation.m.html">honeybeex.geometryoperation</a></p>
       
   
     <div class="desc"><p>Collection of methods for Honeybee geometry operations in Grasshopper.</p></div>
 
       </div>
       <div class="item">
-      <p class="name"><a href="hbsurface.m.html">honeybeegrasshopper.hbsurface</a></p>
+      <p class="name"><a href="hbsurface.m.html">honeybeex.hbsurface</a></p>
       
   
 
       </div>
       <div class="item">
-      <p class="name"><a href="hbzone.m.html">honeybeegrasshopper.hbzone</a></p>
+      <p class="name"><a href="hbzone.m.html">honeybeex.hbzone</a></p>
       
   
 
       </div>
       <div class="item">
-      <p class="name"><a href="honeybee/index.html">honeybeegrasshopper.honeybee</a></p>
+      <p class="name"><a href="honeybee/index.html">honeybeex.honeybee</a></p>
       
   
     <div class="desc"><p>Honeybee core library.</p></div>
 
       </div>
       <div class="item">
-      <p class="name"><a href="radiance/index.html">honeybeegrasshopper.radiance</a></p>
+      <p class="name"><a href="radiance/index.html">honeybeex.radiance</a></p>
       
   
     <div class="desc"><p>Honeybee Radiance libraries for Grasshopper.</p></div>
 
       </div>
       <div class="item">
-      <p class="name"><a href="settings.m.html">honeybeegrasshopper.settings</a></p>
-      
-  
-    <div class="desc"><p>Honeybee system setting.</p></div>
-
-      </div>
-      <div class="item">
-      <p class="name"><a href="surfacetype.m.html">honeybeegrasshopper.surfacetype</a></p>
-      
-  
-    <div class="desc"><p>Honeybee surface types (e.g. wall, roof, etc.).</p></div>
-
-      </div>
-      <div class="item">
-      <p class="name"><a href="test.m.html">honeybeegrasshopper.test</a></p>
+      <p class="name"><a href="test.m.html">honeybeex.test</a></p>
       
   
 
       </div>
       <div class="item">
-      <p class="name"><a href="vectormath/index.html">honeybeegrasshopper.vectormath</a></p>
+      <p class="name"><a href="wrapper.m.html">honeybeex.wrapper</a></p>
       
   
-
-      </div>
-      <div class="item">
-      <p class="name"><a href="wrapper.m.html">honeybeegrasshopper.wrapper</a></p>
-      
-  
+    <div class="desc"><p>Wrapper class for outputs in Grasshopper and Dynamo.</p></div>
 
       </div>
   </section>

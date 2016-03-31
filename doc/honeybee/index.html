@@ -3,7 +3,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 
-    <title>honeybeegrasshopper.honeybee API documentation</title>
+    <title>honeybeex.honeybee API documentation</title>
     <meta name="description" content="Honeybee core library." />
 
   <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300' rel='stylesheet' type='text/css'>
@@ -989,18 +989,17 @@ table {
 
     <li class="set"><h3><a href="#header-submodules">Sub-modules</a></h3>
       <ul>
-        <li class="mono"><a href="dataoperation.m.html">honeybeegrasshopper.honeybee.dataoperation</a></li>
-        <li class="mono"><a href="geometryoperation.m.html">honeybeegrasshopper.honeybee.geometryoperation</a></li>
-        <li class="mono"><a href="hbobject.m.html">honeybeegrasshopper.honeybee.hbobject</a></li>
-        <li class="mono"><a href="hbpointgroup.m.html">honeybeegrasshopper.honeybee.hbpointgroup</a></li>
-        <li class="mono"><a href="hbsurface.m.html">honeybeegrasshopper.honeybee.hbsurface</a></li>
-        <li class="mono"><a href="hbzone.m.html">honeybeegrasshopper.honeybee.hbzone</a></li>
-        <li class="mono"><a href="helper.m.html">honeybeegrasshopper.honeybee.helper</a></li>
-        <li class="mono"><a href="radiance/index.html">honeybeegrasshopper.honeybee.radiance</a></li>
-        <li class="mono"><a href="settings.m.html">honeybeegrasshopper.honeybee.settings</a></li>
-        <li class="mono"><a href="surfacetype.m.html">honeybeegrasshopper.honeybee.surfacetype</a></li>
-        <li class="mono"><a href="vectormath/index.html">honeybeegrasshopper.honeybee.vectormath</a></li>
-        <li class="mono"><a href="wrapper.m.html">honeybeegrasshopper.honeybee.wrapper</a></li>
+        <li class="mono"><a href="config.m.html">honeybeex.honeybee.config</a></li>
+        <li class="mono"><a href="dataoperation.m.html">honeybeex.honeybee.dataoperation</a></li>
+        <li class="mono"><a href="geometryoperation.m.html">honeybeex.honeybee.geometryoperation</a></li>
+        <li class="mono"><a href="hbobject.m.html">honeybeex.honeybee.hbobject</a></li>
+        <li class="mono"><a href="hbpointgroup.m.html">honeybeex.honeybee.hbpointgroup</a></li>
+        <li class="mono"><a href="hbsurface.m.html">honeybeex.honeybee.hbsurface</a></li>
+        <li class="mono"><a href="hbzone.m.html">honeybeex.honeybee.hbzone</a></li>
+        <li class="mono"><a href="helper.m.html">honeybeex.honeybee.helper</a></li>
+        <li class="mono"><a href="radiance/index.html">honeybeex.honeybee.radiance</a></li>
+        <li class="mono"><a href="surfacetype.m.html">honeybeex.honeybee.surfacetype</a></li>
+        <li class="mono"><a href="vectormath/index.html">honeybeex.honeybee.vectormath</a></li>
       </ul>
     </li>
     </ul>
@@ -1014,16 +1013,16 @@ table {
 
 
   <header id="section-intro">
-  <h1 class="title"><span class="name">honeybeegrasshopper.honeybee</span> module</h1>
+  <h1 class="title"><span class="name">honeybeex.honeybee</span> module</h1>
   <p>Honeybee core library.</p>
   
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.honeybee" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee" class="source">
     <pre><code>"""Honeybee core library."""
-__all__ = ["hbzone", "hbsurface", "surfacetype", "wrapper", "settings",
+__all__ = ["config", "hbzone", "hbsurface", "surfacetype",
            "radiance", "hbpointgroup"]
 
-import hbzone, hbsurface, hbpointgroup, surfacetype, wrapper, settings, radiance
+import config, hbzone, hbsurface, hbpointgroup, surfacetype, radiance
 </code></pre>
   </div>
 
@@ -1035,80 +1034,82 @@ import hbzone, hbsurface, hbpointgroup, surfacetype, wrapper, settings, radiance
 
     <h2 class="section-title" id="header-submodules">Sub-modules</h2>
       <div class="item">
-      <p class="name"><a href="dataoperation.m.html">honeybeegrasshopper.honeybee.dataoperation</a></p>
+      <p class="name"><a href="config.m.html">honeybeex.honeybee.config</a></p>
+      
+  
+    <div class="desc"><p>Honeybee configurations.</p>
+<p>Import this module in every module that you need to access Honeybee configurations.</p>
+<p>Usage:</p>
+<pre><code>import config
+print config.radlibPath
+print config.radbinPath
+print config.platform
+config.radbinPath = "c:/radiance/bin"
+</code></pre></div>
+
+      </div>
+      <div class="item">
+      <p class="name"><a href="dataoperation.m.html">honeybeex.honeybee.dataoperation</a></p>
       
   
     <div class="desc"><p>Collection of functions for data operation.</p></div>
 
       </div>
       <div class="item">
-      <p class="name"><a href="geometryoperation.m.html">honeybeegrasshopper.honeybee.geometryoperation</a></p>
+      <p class="name"><a href="geometryoperation.m.html">honeybeex.honeybee.geometryoperation</a></p>
       
   
     <div class="desc"><p>Collection of methods for geometrical operations.</p></div>
 
       </div>
       <div class="item">
-      <p class="name"><a href="hbobject.m.html">honeybeegrasshopper.honeybee.hbobject</a></p>
+      <p class="name"><a href="hbobject.m.html">honeybeex.honeybee.hbobject</a></p>
       
   
 
       </div>
       <div class="item">
-      <p class="name"><a href="hbpointgroup.m.html">honeybeegrasshopper.honeybee.hbpointgroup</a></p>
+      <p class="name"><a href="hbpointgroup.m.html">honeybeex.honeybee.hbpointgroup</a></p>
       
   
     <div class="desc"><p>Honeybee PointGroup and TestPointGroup.</p></div>
 
       </div>
       <div class="item">
-      <p class="name"><a href="hbsurface.m.html">honeybeegrasshopper.honeybee.hbsurface</a></p>
+      <p class="name"><a href="hbsurface.m.html">honeybeex.honeybee.hbsurface</a></p>
       
   
 
       </div>
       <div class="item">
-      <p class="name"><a href="hbzone.m.html">honeybeegrasshopper.honeybee.hbzone</a></p>
+      <p class="name"><a href="hbzone.m.html">honeybeex.honeybee.hbzone</a></p>
       
   
 
       </div>
       <div class="item">
-      <p class="name"><a href="helper.m.html">honeybeegrasshopper.honeybee.helper</a></p>
+      <p class="name"><a href="helper.m.html">honeybeex.honeybee.helper</a></p>
       
   
     <div class="desc"><p>A collection of auxiliary funtions for working with files and directories.</p></div>
 
       </div>
       <div class="item">
-      <p class="name"><a href="radiance/index.html">honeybeegrasshopper.honeybee.radiance</a></p>
+      <p class="name"><a href="radiance/index.html">honeybeex.honeybee.radiance</a></p>
       
   
     <div class="desc"><p>Honeybee Radiance libraries.</p></div>
 
       </div>
       <div class="item">
-      <p class="name"><a href="settings.m.html">honeybeegrasshopper.honeybee.settings</a></p>
-      
-  
-    <div class="desc"><p>Honeybee system setting.</p></div>
-
-      </div>
-      <div class="item">
-      <p class="name"><a href="surfacetype.m.html">honeybeegrasshopper.honeybee.surfacetype</a></p>
+      <p class="name"><a href="surfacetype.m.html">honeybeex.honeybee.surfacetype</a></p>
       
   
     <div class="desc"><p>Honeybee surface types (e.g. wall, roof, etc.).</p></div>
 
       </div>
       <div class="item">
-      <p class="name"><a href="vectormath/index.html">honeybeegrasshopper.honeybee.vectormath</a></p>
-      
-  
-
-      </div>
-      <div class="item">
-      <p class="name"><a href="wrapper.m.html">honeybeegrasshopper.honeybee.wrapper</a></p>
+      <p class="name"><a href="vectormath/index.html">honeybeex.honeybee.vectormath</a></p>
       
   
 

@@ -3,7 +3,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 
-    <title>honeybeegrasshopper.honeybee.radiance.sky.skyBase API documentation</title>
+    <title>honeybeex.honeybee.radiance.sky.skyBase API documentation</title>
     <meta name="description" content="" />
 
   <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300' rel='stylesheet' type='text/css'>
@@ -989,14 +989,14 @@ table {
     <li class="set"><h3><a href="#header-classes">Classes</a></h3>
       <ul>
         <li class="mono">
-        <span class="class_name"><a href="#honeybeegrasshopper.honeybee.radiance.sky.skyBase.RadianceSky">RadianceSky</a></span>
+        <span class="class_name"><a href="#honeybeex.honeybee.radiance.sky.skyBase.RadianceSky">RadianceSky</a></span>
         
           
   <ul>
-    <li class="mono"><a href="#honeybeegrasshopper.honeybee.radiance.sky.skyBase.RadianceSky.__init__">__init__</a></li>
-    <li class="mono"><a href="#honeybeegrasshopper.honeybee.radiance.sky.skyBase.RadianceSky.genRadianceSkyLine">genRadianceSkyLine</a></li>
-    <li class="mono"><a href="#honeybeegrasshopper.honeybee.radiance.sky.skyBase.RadianceSky.toRadString">toRadString</a></li>
-    <li class="mono"><a href="#honeybeegrasshopper.honeybee.radiance.sky.skyBase.RadianceSky.writeToFile">writeToFile</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.radiance.sky.skyBase.RadianceSky.__init__">__init__</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.radiance.sky.skyBase.RadianceSky.genRadianceSkyLine">genRadianceSkyLine</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.radiance.sky.skyBase.RadianceSky.toRadString">toRadString</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.radiance.sky.skyBase.RadianceSky.writeToFile">writeToFile</a></li>
   </ul>
 
         </li>
@@ -1014,12 +1014,12 @@ table {
 
 
   <header id="section-intro">
-  <h1 class="title"><span class="name">honeybeegrasshopper.honeybee.radiance.sky.skyBase</span> module</h1>
+  <h1 class="title"><span class="name">honeybeex.honeybee.radiance.sky.skyBase</span> module</h1>
   
   
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.radiance.sky.skyBase', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.honeybee.radiance.sky.skyBase" class="source">
-    <pre><code>from abc import ABCMeta, abstractmethod
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.sky.skyBase', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.sky.skyBase" class="source">
+    <pre><code>from abc import ABCMeta, abstractmethod, abstractproperty
 import os
 
 
@@ -1055,6 +1055,16 @@ class RadianceSky:
             "0\n" + \
             "4\n" + \
             "0 0 -1 180\n"
+
+    @property
+    def isRadianceSky(self):
+        """Return True for skies."""
+        return True
+
+    @abstractproperty
+    def isClimateBased(self):
+        """Return True if the sky is created based on values from weather file."""
+        pass
 
     @property
     def main(self):
@@ -1105,13 +1115,13 @@ class RadianceSky:
     <h2 class="section-title" id="header-classes">Classes</h2>
       
       <div class="item">
-      <p id="honeybeegrasshopper.honeybee.radiance.sky.skyBase.RadianceSky" class="name">class <span class="ident">RadianceSky</span></p>
+      <p id="honeybeex.honeybee.radiance.sky.skyBase.RadianceSky" class="name">class <span class="ident">RadianceSky</span></p>
       
   
     <div class="desc"><p>Base class for Honeybee Skies.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.radiance.sky.skyBase.RadianceSky', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.honeybee.radiance.sky.skyBase.RadianceSky" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.sky.skyBase.RadianceSky', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.sky.skyBase.RadianceSky" class="source">
     <pre><code>class RadianceSky:
     """Base class for Honeybee Skies."""
 
@@ -1143,6 +1153,16 @@ class RadianceSky:
             "0\n" + \
             "4\n" + \
             "0 0 -1 180\n"
+
+    @property
+    def isRadianceSky(self):
+        """Return True for skies."""
+        return True
+
+    @abstractproperty
+    def isClimateBased(self):
+        """Return True if the sky is created based on values from weather file."""
+        pass
 
     @property
     def main(self):
@@ -1190,12 +1210,34 @@ class RadianceSky:
       <div class="class">
           <h3>Ancestors (in MRO)</h3>
           <ul class="class_list">
-          <li><a href="#honeybeegrasshopper.honeybee.radiance.sky.skyBase.RadianceSky">RadianceSky</a></li>
+          <li><a href="#honeybeex.honeybee.radiance.sky.skyBase.RadianceSky">RadianceSky</a></li>
           <li>__builtin__.object</li>
           </ul>
           <h3>Instance variables</h3>
             <div class="item">
-            <p id="honeybeegrasshopper.honeybee.radiance.sky.skyBase.RadianceSky.main" class="name">var <span class="ident">main</span></p>
+            <p id="honeybeex.honeybee.radiance.sky.skyBase.RadianceSky.isClimateBased" class="name">var <span class="ident">isClimateBased</span></p>
+            
+
+            
+  
+    <div class="desc"><p>Return True if the sky is created based on values from weather file.</p></div>
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.sky.skyBase.RadianceSky.isRadianceSky" class="name">var <span class="ident">isRadianceSky</span></p>
+            
+
+            
+  
+    <div class="desc"><p>Return True for skies.</p></div>
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.sky.skyBase.RadianceSky.main" class="name">var <span class="ident">main</span></p>
             
 
             
@@ -1208,7 +1250,7 @@ class RadianceSky:
           <h3>Methods</h3>
             
   <div class="item">
-    <div class="name def" id="honeybeegrasshopper.honeybee.radiance.sky.skyBase.RadianceSky.__init__">
+    <div class="name def" id="honeybeex.honeybee.radiance.sky.skyBase.RadianceSky.__init__">
     <p>def <span class="ident">__init__</span>(</p><p>self)</p>
     </div>
     
@@ -1217,8 +1259,8 @@ class RadianceSky:
   
     <div class="desc"><p>Initiate Radiance Sky.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.radiance.sky.skyBase.RadianceSky.__init__', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.honeybee.radiance.sky.skyBase.RadianceSky.__init__" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.sky.skyBase.RadianceSky.__init__', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.sky.skyBase.RadianceSky.__init__" class="source">
     <pre><code>def __init__(self):
     """Initiate Radiance Sky."""
     self.__head = "# Generated by Honeybee\n"
@@ -1253,7 +1295,7 @@ class RadianceSky:
   
             
   <div class="item">
-    <div class="name def" id="honeybeegrasshopper.honeybee.radiance.sky.skyBase.RadianceSky.genRadianceSkyLine">
+    <div class="name def" id="honeybeex.honeybee.radiance.sky.skyBase.RadianceSky.genRadianceSkyLine">
     <p>def <span class="ident">genRadianceSkyLine</span>(</p><p>self)</p>
     </div>
     
@@ -1264,8 +1306,8 @@ class RadianceSky:
 <p>The value should be assigned to self.main
 self.main = "!gensky 12 6 12:00 -u -B %.3f" % (self.illuminanceValue / 179)</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.radiance.sky.skyBase.RadianceSky.genRadianceSkyLine', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.honeybee.radiance.sky.skyBase.RadianceSky.genRadianceSkyLine" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.sky.skyBase.RadianceSky.genRadianceSkyLine', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.sky.skyBase.RadianceSky.genRadianceSkyLine" class="source">
     <pre><code>@abstractmethod
 def genRadianceSkyLine(self):
     """Generate Radiance's line for each sky.
@@ -1281,7 +1323,7 @@ def genRadianceSkyLine(self):
   
             
   <div class="item">
-    <div class="name def" id="honeybeegrasshopper.honeybee.radiance.sky.skyBase.RadianceSky.toRadString">
+    <div class="name def" id="honeybeex.honeybee.radiance.sky.skyBase.RadianceSky.toRadString">
     <p>def <span class="ident">toRadString</span>(</p><p>self)</p>
     </div>
     
@@ -1290,8 +1332,8 @@ def genRadianceSkyLine(self):
   
     <div class="desc"><p>Return radiance definition as a string.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.radiance.sky.skyBase.RadianceSky.toRadString', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.honeybee.radiance.sky.skyBase.RadianceSky.toRadString" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.sky.skyBase.RadianceSky.toRadString', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.sky.skyBase.RadianceSky.toRadString" class="source">
     <pre><code>def toRadString(self):
     """Return radiance definition as a string."""
     return self.__head + self.main + self.__tale
@@ -1303,7 +1345,7 @@ def genRadianceSkyLine(self):
   
             
   <div class="item">
-    <div class="name def" id="honeybeegrasshopper.honeybee.radiance.sky.skyBase.RadianceSky.writeToFile">
+    <div class="name def" id="honeybeex.honeybee.radiance.sky.skyBase.RadianceSky.writeToFile">
     <p>def <span class="ident">writeToFile</span>(</p><p>self, targetFolder, name=None)</p>
     </div>
     
@@ -1312,8 +1354,8 @@ def genRadianceSkyLine(self):
   
     <div class="desc"><p>Save sky definition to a file.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.radiance.sky.skyBase.RadianceSky.writeToFile', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.honeybee.radiance.sky.skyBase.RadianceSky.writeToFile" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.sky.skyBase.RadianceSky.writeToFile', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.sky.skyBase.RadianceSky.writeToFile" class="source">
     <pre><code>def writeToFile(self, targetFolder, name=None):
     """Save sky definition to a file."""
     assert os.path.exists(targetFolder), \

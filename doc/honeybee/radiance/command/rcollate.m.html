@@ -3,7 +3,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 
-    <title>honeybeegrasshopper.honeybee.wrapper API documentation</title>
+    <title>honeybeex.honeybee.radiance.command.rcollate API documentation</title>
     <meta name="description" content="" />
 
   <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300' rel='stylesheet' type='text/css'>
@@ -989,12 +989,14 @@ table {
     <li class="set"><h3><a href="#header-classes">Classes</a></h3>
       <ul>
         <li class="mono">
-        <span class="class_name"><a href="#honeybeegrasshopper.honeybee.wrapper.Wrapper">Wrapper</a></span>
+        <span class="class_name"><a href="#honeybeex.honeybee.radiance.command.rcollate.Rcollate">Rcollate</a></span>
         
           
   <ul>
-    <li class="mono"><a href="#honeybeegrasshopper.honeybee.wrapper.Wrapper.__init__">__init__</a></li>
-    <li class="mono"><a href="#honeybeegrasshopper.honeybee.wrapper.Wrapper.unwrap">unwrap</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.radiance.command.rcollate.Rcollate.__init__">__init__</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.radiance.command.rcollate.Rcollate.execute">execute</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.radiance.command.rcollate.Rcollate.inputFiles">inputFiles</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.radiance.command.rcollate.Rcollate.toRadString">toRadString</a></li>
   </ul>
 
         </li>
@@ -1012,36 +1014,112 @@ table {
 
 
   <header id="section-intro">
-  <h1 class="title"><span class="name">honeybeegrasshopper.honeybee.wrapper</span> module</h1>
+  <h1 class="title"><span class="name">honeybeex.honeybee.radiance.command.rcollate</span> module</h1>
   
   
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.wrapper', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.honeybee.wrapper" class="source">
-    <pre><code>class Wrapper():
-    """A Wrapper class to overwrite object __clrtype__ in Ladybug objects.
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.command.rcollate', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.command.rcollate" class="source">
+    <pre><code># coding=utf-8
+from commandBase import RadianceCommand
+import os
+import sys
+from ..datatype import *
+from ..datatype import RadInputStringFormatter as Rfmt
 
-        Wrapper makes the outputs to be human readable and doesn't have any
-        technical value.
 
-        Attributes:
-            data: The class to be wrapped. check __repr__ method of class to
-                be set to a human readable string
+class Rcollate(RadianceCommand):
+    u"""
+    rcollate - resize or transpose matrix data
 
-        Usage:
-            # wrap legend parameters class
-            OUT = wrapper(legendpar.LegendParameters())
+    Attributes:
 
-            # unwarp a wrapped legend parameter
-            lp = IN[0].unwarp()
     """
-    def __init__(self, data):
-        self.__data = data
+    h = RadianceBoolFlag('h', 'header information',
+                         acceptedInputs=(True, 'i', 'o'))
+    w = RadianceBoolFlag('w', 'warning messages', acceptedInputs=(True,))
+    t = RadianceBoolFlag('t', 'transpose', acceptedInputs=(True,))
+    ic = RadianceNumber('ic', 'input columns', numType=int)
+    ir = RadianceNumber('ir', 'input rows', numType=int)
+    oc = RadianceNumber('ic', 'ouput columns', numType=int)
+    orX = RadianceNumber('orX', 'output rows', numType=int)
+    matrixFile = RadiancePath('matrixFile', 'matrix file', expandRelative=True,
+                              checkExists=True)
 
-    def unwrap(self):
-        return self.__data
+    def __init__(self, h=None, w=None, t=None, ic=None, ir=None, oc=None,
+                 orX=None,
+                 f=None, matrixFile=None, outputName=None):
+        RadianceCommand.__init__(self)
+        self.h = h
+        self.w = w
+        self.t = t
+        self.ic = ic
+        self.ir = ir
+        self.oc = oc
+        self.orX = orX
+        self.matrixFile = matrixFile
+        self.f = f
+        self.outputName = outputName
 
-    def __repr__(self):
-        return self.__data.__repr__()
+    @property
+    def f(self):
+        return self._f
+
+    @f.setter
+    def f(self, value):
+        varName = "f (input format)"
+        assert value[0] in ('a', 'f', 'd', 'b'), "The first value for %s " \
+                                                 "should be either a,f,d or" \
+                                                 "b. %s was provided" \
+                                                 "insted" % (varName, value)
+        if len(value) > 1:
+            try:
+                dataRecords = int(value[1:])
+            except ValueError:
+                raise ValueError("The input for %s should be in the format"
+                                 "[afdb]N .e.g f3. The value provided was %s"
+                                 % (varName, value))
+        self._f = value
+
+    def toRadString(self, relativePath=False):
+        """Return full command as a string."""
+        fmtBool = Rfmt.boolean
+        fmtJoin = Rfmt.joined
+        fmtNormal = Rfmt.normal
+
+        fmtDict = {'h': ('h', fmtBool),
+                   'w': ('w', fmtBool),
+                   't': ('t', fmtBool),
+                   'ic': ('ic', fmtNormal),
+                   'ir': ('ir', fmtNormal),
+                   'oc': ('oc', fmtNormal),
+                   'orX': ('or', fmtNormal),
+                   'f': ('f', fmtJoin)}
+
+        commandInputs = ""
+        for key, value in fmtDict.items():
+            try:
+                currentValue = getattr(self, key)
+                currentFlag, currentFormatter = value
+                commandInputs += currentFormatter(currentFlag, currentValue)
+            except AttributeError:
+                pass
+
+        outputFileName = self.outputName
+        if not self.outputName:
+            outputFileName = os.path.splitext(self.inputFiles[0])[0] + '.dat'
+
+        radString = "%s %s %s > %s" % (
+            os.path.join(self.radbinPath, 'rcollate'),
+            commandInputs,
+            self.inputFiles[0],
+            outputFileName
+        )
+
+        return radString
+
+    def inputFiles(self):
+        """Input files for this command."""
+        return self.matrixFile
 </code></pre>
   </div>
 
@@ -1053,49 +1131,107 @@ table {
     <h2 class="section-title" id="header-classes">Classes</h2>
       
       <div class="item">
-      <p id="honeybeegrasshopper.honeybee.wrapper.Wrapper" class="name">class <span class="ident">Wrapper</span></p>
+      <p id="honeybeex.honeybee.radiance.command.rcollate.Rcollate" class="name">class <span class="ident">Rcollate</span></p>
       
   
-    <div class="desc"><p>A Wrapper class to overwrite object <strong>clrtype</strong> in Ladybug objects.</p>
-<p>Wrapper makes the outputs to be human readable and doesn't have any
-technical value.</p>
-<p>Attributes:
-    data: The class to be wrapped. check <strong>repr</strong> method of class to
-        be set to a human readable string</p>
-<p>Usage:
-    # wrap legend parameters class
-    OUT = wrapper(legendpar.LegendParameters())</p>
-<pre><code># unwarp a wrapped legend parameter
-lp = IN[0].unwarp()
-</code></pre></div>
+    <div class="desc"><p>rcollate - resize or transpose matrix data</p>
+<p>Attributes:</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.wrapper.Wrapper', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.honeybee.wrapper.Wrapper" class="source">
-    <pre><code>class Wrapper():
-    """A Wrapper class to overwrite object __clrtype__ in Ladybug objects.
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.command.rcollate.Rcollate', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.command.rcollate.Rcollate" class="source">
+    <pre><code>class Rcollate(RadianceCommand):
+    u"""
+    rcollate - resize or transpose matrix data
 
-        Wrapper makes the outputs to be human readable and doesn't have any
-        technical value.
+    Attributes:
 
-        Attributes:
-            data: The class to be wrapped. check __repr__ method of class to
-                be set to a human readable string
-
-        Usage:
-            # wrap legend parameters class
-            OUT = wrapper(legendpar.LegendParameters())
-
-            # unwarp a wrapped legend parameter
-            lp = IN[0].unwarp()
     """
-    def __init__(self, data):
-        self.__data = data
+    h = RadianceBoolFlag('h', 'header information',
+                         acceptedInputs=(True, 'i', 'o'))
+    w = RadianceBoolFlag('w', 'warning messages', acceptedInputs=(True,))
+    t = RadianceBoolFlag('t', 'transpose', acceptedInputs=(True,))
+    ic = RadianceNumber('ic', 'input columns', numType=int)
+    ir = RadianceNumber('ir', 'input rows', numType=int)
+    oc = RadianceNumber('ic', 'ouput columns', numType=int)
+    orX = RadianceNumber('orX', 'output rows', numType=int)
+    matrixFile = RadiancePath('matrixFile', 'matrix file', expandRelative=True,
+                              checkExists=True)
 
-    def unwrap(self):
-        return self.__data
+    def __init__(self, h=None, w=None, t=None, ic=None, ir=None, oc=None,
+                 orX=None,
+                 f=None, matrixFile=None, outputName=None):
+        RadianceCommand.__init__(self)
+        self.h = h
+        self.w = w
+        self.t = t
+        self.ic = ic
+        self.ir = ir
+        self.oc = oc
+        self.orX = orX
+        self.matrixFile = matrixFile
+        self.f = f
+        self.outputName = outputName
 
-    def __repr__(self):
-        return self.__data.__repr__()
+    @property
+    def f(self):
+        return self._f
+
+    @f.setter
+    def f(self, value):
+        varName = "f (input format)"
+        assert value[0] in ('a', 'f', 'd', 'b'), "The first value for %s " \
+                                                 "should be either a,f,d or" \
+                                                 "b. %s was provided" \
+                                                 "insted" % (varName, value)
+        if len(value) > 1:
+            try:
+                dataRecords = int(value[1:])
+            except ValueError:
+                raise ValueError("The input for %s should be in the format"
+                                 "[afdb]N .e.g f3. The value provided was %s"
+                                 % (varName, value))
+        self._f = value
+
+    def toRadString(self, relativePath=False):
+        """Return full command as a string."""
+        fmtBool = Rfmt.boolean
+        fmtJoin = Rfmt.joined
+        fmtNormal = Rfmt.normal
+
+        fmtDict = {'h': ('h', fmtBool),
+                   'w': ('w', fmtBool),
+                   't': ('t', fmtBool),
+                   'ic': ('ic', fmtNormal),
+                   'ir': ('ir', fmtNormal),
+                   'oc': ('oc', fmtNormal),
+                   'orX': ('or', fmtNormal),
+                   'f': ('f', fmtJoin)}
+
+        commandInputs = ""
+        for key, value in fmtDict.items():
+            try:
+                currentValue = getattr(self, key)
+                currentFlag, currentFormatter = value
+                commandInputs += currentFormatter(currentFlag, currentValue)
+            except AttributeError:
+                pass
+
+        outputFileName = self.outputName
+        if not self.outputName:
+            outputFileName = os.path.splitext(self.inputFiles[0])[0] + '.dat'
+
+        radString = "%s %s %s > %s" % (
+            os.path.join(self.radbinPath, 'rcollate'),
+            commandInputs,
+            self.inputFiles[0],
+            outputFileName
+        )
+
+        return radString
+
+    def inputFiles(self):
+        """Input files for this command."""
+        return self.matrixFile
 </code></pre>
   </div>
 </div>
@@ -1104,23 +1240,243 @@ lp = IN[0].unwarp()
       <div class="class">
           <h3>Ancestors (in MRO)</h3>
           <ul class="class_list">
-          <li><a href="#honeybeegrasshopper.honeybee.wrapper.Wrapper">Wrapper</a></li>
+          <li><a href="#honeybeex.honeybee.radiance.command.rcollate.Rcollate">Rcollate</a></li>
+          <li>honeybeex.honeybee.radiance.command.commandBase.RadianceCommand</li>
+          <li>__builtin__.object</li>
           </ul>
+          <h3>Class variables</h3>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.rcollate.Rcollate.h" class="name">var <span class="ident">h</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.rcollate.Rcollate.ic" class="name">var <span class="ident">ic</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.rcollate.Rcollate.ir" class="name">var <span class="ident">ir</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.rcollate.Rcollate.matrixFile" class="name">var <span class="ident">matrixFile</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.rcollate.Rcollate.oc" class="name">var <span class="ident">oc</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.rcollate.Rcollate.orX" class="name">var <span class="ident">orX</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.rcollate.Rcollate.t" class="name">var <span class="ident">t</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.rcollate.Rcollate.w" class="name">var <span class="ident">w</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+          <h3>Instance variables</h3>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.rcollate.Rcollate.f" class="name">var <span class="ident">f</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.rcollate.Rcollate.h" class="name">var <span class="ident">h</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.rcollate.Rcollate.ic" class="name">var <span class="ident">ic</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.rcollate.Rcollate.ir" class="name">var <span class="ident">ir</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.rcollate.Rcollate.matrixFile" class="name">var <span class="ident">matrixFile</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.rcollate.Rcollate.oc" class="name">var <span class="ident">oc</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.rcollate.Rcollate.orX" class="name">var <span class="ident">orX</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.rcollate.Rcollate.outputName" class="name">var <span class="ident">outputName</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.rcollate.Rcollate.radbinPath" class="name">var <span class="ident">radbinPath</span></p>
+            
+
+            
+  
+    <div class="desc"><p>Get and set path to radiance binaries.</p>
+<p>If you set a new value the value will be changed globally.</p></div>
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.rcollate.Rcollate.radlibPath" class="name">var <span class="ident">radlibPath</span></p>
+            
+
+            
+  
+    <div class="desc"><p>Get and set path to radiance libraries.</p>
+<p>If you set a new value the value will be changed globally.</p></div>
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.rcollate.Rcollate.t" class="name">var <span class="ident">t</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.rcollate.Rcollate.w" class="name">var <span class="ident">w</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
           <h3>Methods</h3>
             
   <div class="item">
-    <div class="name def" id="honeybeegrasshopper.honeybee.wrapper.Wrapper.__init__">
-    <p>def <span class="ident">__init__</span>(</p><p>self, data)</p>
+    <div class="name def" id="honeybeex.honeybee.radiance.command.rcollate.Rcollate.__init__">
+    <p>def <span class="ident">__init__</span>(</p><p>self, h=None, w=None, t=None, ic=None, ir=None, oc=None, orX=None, f=None, matrixFile=None, outputName=None)</p>
     </div>
     
 
     
   
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.wrapper.Wrapper.__init__', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.honeybee.wrapper.Wrapper.__init__" class="source">
-    <pre><code>def __init__(self, data):
-    self.__data = data
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.command.rcollate.Rcollate.__init__', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.command.rcollate.Rcollate.__init__" class="source">
+    <pre><code>def __init__(self, h=None, w=None, t=None, ic=None, ir=None, oc=None,
+             orX=None,
+             f=None, matrixFile=None, outputName=None):
+    RadianceCommand.__init__(self)
+    self.h = h
+    self.w = w
+    self.t = t
+    self.ic = ic
+    self.ir = ir
+    self.oc = oc
+    self.orX = orX
+    self.matrixFile = matrixFile
+    self.f = f
+    self.outputName = outputName
 </code></pre>
   </div>
 </div>
@@ -1129,18 +1485,98 @@ lp = IN[0].unwarp()
   
             
   <div class="item">
-    <div class="name def" id="honeybeegrasshopper.honeybee.wrapper.Wrapper.unwrap">
-    <p>def <span class="ident">unwrap</span>(</p><p>self)</p>
+    <div class="name def" id="honeybeex.honeybee.radiance.command.rcollate.Rcollate.execute">
+    <p>def <span class="ident">execute</span>(</p><p>self)</p>
     </div>
     
 
     
   
+    <div class="desc"><p>Execute the command.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.wrapper.Wrapper.unwrap', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.honeybee.wrapper.Wrapper.unwrap" class="source">
-    <pre><code>def unwrap(self):
-    return self.__data
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.command.rcollate.Rcollate.execute', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.command.rcollate.Rcollate.execute" class="source">
+    <pre><code>def execute(self):
+    """Execute the command."""
+    # check if the files exist on the computer
+    self.__checkFiles()
+    p = subprocess.Popen(self.toRadString(), shell=True,
+                         stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    for line in p.stdout.readlines():
+        print line,
+    p.wait()
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="honeybeex.honeybee.radiance.command.rcollate.Rcollate.inputFiles">
+    <p>def <span class="ident">inputFiles</span>(</p><p>self)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Input files for this command.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.command.rcollate.Rcollate.inputFiles', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.command.rcollate.Rcollate.inputFiles" class="source">
+    <pre><code>def inputFiles(self):
+    """Input files for this command."""
+    return self.matrixFile
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="honeybeex.honeybee.radiance.command.rcollate.Rcollate.toRadString">
+    <p>def <span class="ident">toRadString</span>(</p><p>self, relativePath=False)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Return full command as a string.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.command.rcollate.Rcollate.toRadString', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.command.rcollate.Rcollate.toRadString" class="source">
+    <pre><code>def toRadString(self, relativePath=False):
+    """Return full command as a string."""
+    fmtBool = Rfmt.boolean
+    fmtJoin = Rfmt.joined
+    fmtNormal = Rfmt.normal
+    fmtDict = {'h': ('h', fmtBool),
+               'w': ('w', fmtBool),
+               't': ('t', fmtBool),
+               'ic': ('ic', fmtNormal),
+               'ir': ('ir', fmtNormal),
+               'oc': ('oc', fmtNormal),
+               'orX': ('or', fmtNormal),
+               'f': ('f', fmtJoin)}
+    commandInputs = ""
+    for key, value in fmtDict.items():
+        try:
+            currentValue = getattr(self, key)
+            currentFlag, currentFormatter = value
+            commandInputs += currentFormatter(currentFlag, currentValue)
+        except AttributeError:
+            pass
+    outputFileName = self.outputName
+    if not self.outputName:
+        outputFileName = os.path.splitext(self.inputFiles[0])[0] + '.dat'
+    radString = "%s %s %s > %s" % (
+        os.path.join(self.radbinPath, 'rcollate'),
+        commandInputs,
+        self.inputFiles[0],
+        outputFileName
+    )
+    return radString
 </code></pre>
   </div>
 </div>

@@ -3,7 +3,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 
-    <title>honeybeegrasshopper.dataoperation API documentation</title>
+    <title>honeybeex.dataoperation API documentation</title>
     <meta name="description" content="Collection of methods for data operation." />
 
   <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300' rel='stylesheet' type='text/css'>
@@ -988,9 +988,9 @@ table {
     <li class="set"><h3><a href="#header-functions">Functions</a></h3>
       
   <ul>
-    <li class="mono"><a href="#honeybeegrasshopper.dataoperation.dataTreeToList">dataTreeToList</a></li>
-    <li class="mono"><a href="#honeybeegrasshopper.dataoperation.flattenDataTree">flattenDataTree</a></li>
-    <li class="mono"><a href="#honeybeegrasshopper.dataoperation.unflattenToDataTree">unflattenToDataTree</a></li>
+    <li class="mono"><a href="#honeybeex.dataoperation.dataTreeToList">dataTreeToList</a></li>
+    <li class="mono"><a href="#honeybeex.dataoperation.flattenDataTree">flattenDataTree</a></li>
+    <li class="mono"><a href="#honeybeex.dataoperation.unflattenToDataTree">unflattenToDataTree</a></li>
   </ul>
 
     </li>
@@ -1007,11 +1007,11 @@ table {
 
 
   <header id="section-intro">
-  <h1 class="title"><span class="name">honeybeegrasshopper.dataoperation</span> module</h1>
+  <h1 class="title"><span class="name">honeybeex.dataoperation</span> module</h1>
   <p>Collection of methods for data operation.</p>
   
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.dataoperation', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.dataoperation" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.dataoperation', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.dataoperation" class="source">
     <pre><code>"""Collection of methods for data operation."""
 from collections import namedtuple
 try:
@@ -1107,7 +1107,7 @@ def dataTreeToList(input):
     <h2 class="section-title" id="header-functions">Functions</h2>
       
   <div class="item">
-    <div class="name def" id="honeybeegrasshopper.dataoperation.dataTreeToList">
+    <div class="name def" id="honeybeex.dataoperation.dataTreeToList">
     <p>def <span class="ident">dataTreeToList</span>(</p><p>input)</p>
     </div>
     
@@ -1120,8 +1120,8 @@ def dataTreeToList(input):
 <p>Returns:
     listData: A list of namedtuples (path, dataList)</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.dataoperation.dataTreeToList', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.dataoperation.dataTreeToList" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.dataoperation.dataTreeToList', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.dataoperation.dataTreeToList" class="source">
     <pre><code>def dataTreeToList(input):
     """Convert a grasshopper DataTree to list.
 
@@ -1153,7 +1153,7 @@ def dataTreeToList(input):
   
       
   <div class="item">
-    <div class="name def" id="honeybeegrasshopper.dataoperation.flattenDataTree">
+    <div class="name def" id="honeybeex.dataoperation.flattenDataTree">
     <p>def <span class="ident">flattenDataTree</span>(</p><p>input)</p>
     </div>
     
@@ -1169,8 +1169,8 @@ def dataTreeToList(input):
     on this path, path Count). Pattern is useful to unflatten the list back
     to DataTree.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.dataoperation.flattenDataTree', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.dataoperation.flattenDataTree" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.dataoperation.flattenDataTree', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.dataoperation.flattenDataTree" class="source">
     <pre><code>def flattenDataTree(input):
     """Flatten and clean a grasshopper DataTree.
 
@@ -1208,7 +1208,7 @@ def dataTreeToList(input):
   
       
   <div class="item">
-    <div class="name def" id="honeybeegrasshopper.dataoperation.unflattenToDataTree">
+    <div class="name def" id="honeybeex.dataoperation.unflattenToDataTree">
     <p>def <span class="ident">unflattenToDataTree</span>(</p><p>allData, pattern)</p>
     </div>
     
@@ -1223,8 +1223,8 @@ def dataTreeToList(input):
 <p>Returns:
     dataTree: A Grasshopper DataTree.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.dataoperation.unflattenToDataTree', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.dataoperation.unflattenToDataTree" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.dataoperation.unflattenToDataTree', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.dataoperation.unflattenToDataTree" class="source">
     <pre><code>def unflattenToDataTree(allData, pattern):
     """Create DataTree from a flattrn list based on the pattern.
 

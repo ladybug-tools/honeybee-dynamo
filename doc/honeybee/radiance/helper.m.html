@@ -3,7 +3,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 
-    <title>honeybeegrasshopper.honeybee.radiance.helper API documentation</title>
+    <title>honeybeex.honeybee.radiance.helper API documentation</title>
     <meta name="description" content="A collection of auxiliary funtions for working with radiance files and objects." />
 
   <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300' rel='stylesheet' type='text/css'>
@@ -988,9 +988,9 @@ table {
     <li class="set"><h3><a href="#header-functions">Functions</a></h3>
       
   <ul>
-    <li class="mono"><a href="#honeybeegrasshopper.honeybee.radiance.helper.getRadianceObjectsFromFile">getRadianceObjectsFromFile</a></li>
-    <li class="mono"><a href="#honeybeegrasshopper.honeybee.radiance.helper.getRadianceObjectsFromString">getRadianceObjectsFromString</a></li>
-    <li class="mono"><a href="#honeybeegrasshopper.honeybee.radiance.helper.importRadianceMaterialsFromFile">importRadianceMaterialsFromFile</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.radiance.helper.getRadianceObjectsFromFile">getRadianceObjectsFromFile</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.radiance.helper.getRadianceObjectsFromString">getRadianceObjectsFromString</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.radiance.helper.importRadianceMaterialsFromFile">importRadianceMaterialsFromFile</a></li>
   </ul>
 
     </li>
@@ -1007,11 +1007,11 @@ table {
 
 
   <header id="section-intro">
-  <h1 class="title"><span class="name">honeybeegrasshopper.honeybee.radiance.helper</span> module</h1>
+  <h1 class="title"><span class="name">honeybeex.honeybee.radiance.helper</span> module</h1>
   <p>A collection of auxiliary funtions for working with radiance files and objects.</p>
   
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.radiance.helper', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.honeybee.radiance.helper" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.helper', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.helper" class="source">
     <pre><code>"""A collection of auxiliary funtions for working with radiance files and objects."""
 from material.custom import CustomMaterial
 import re
@@ -1075,7 +1075,7 @@ def importRadianceMaterialsFromFile(filePath):
     <h2 class="section-title" id="header-functions">Functions</h2>
       
   <div class="item">
-    <div class="name def" id="honeybeegrasshopper.honeybee.radiance.helper.getRadianceObjectsFromFile">
+    <div class="name def" id="honeybeex.honeybee.radiance.helper.getRadianceObjectsFromFile">
     <p>def <span class="ident">getRadianceObjectsFromFile</span>(</p><p>filePath)</p>
     </div>
     
@@ -1090,8 +1090,8 @@ def importRadianceMaterialsFromFile(filePath):
 <p>Usage:
     getRadianceObjectsFromFile("C:/ladybug/21MAR900/imageBasedSimulation/21MAR900.rad")</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.radiance.helper.getRadianceObjectsFromFile', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.honeybee.radiance.helper.getRadianceObjectsFromFile" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.helper.getRadianceObjectsFromFile', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.helper.getRadianceObjectsFromFile" class="source">
     <pre><code>def getRadianceObjectsFromFile(filePath):
     """
     Parse Radinace file and return a list of radiance objects as separate strings.
@@ -1117,7 +1117,7 @@ def importRadianceMaterialsFromFile(filePath):
   
       
   <div class="item">
-    <div class="name def" id="honeybeegrasshopper.honeybee.radiance.helper.getRadianceObjectsFromString">
+    <div class="name def" id="honeybeex.honeybee.radiance.helper.getRadianceObjectsFromString">
     <p>def <span class="ident">getRadianceObjectsFromString</span>(</p><p>fullString)</p>
     </div>
     
@@ -1130,8 +1130,8 @@ def importRadianceMaterialsFromFile(filePath):
 <p>Returns:
     A list of strings. Each string represents a differnt Rdiance Object</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.radiance.helper.getRadianceObjectsFromString', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.honeybee.radiance.helper.getRadianceObjectsFromString" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.helper.getRadianceObjectsFromString', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.helper.getRadianceObjectsFromString" class="source">
     <pre><code>def getRadianceObjectsFromString(fullString):
     """
     separate a Radinace file string into multiple strings for each object.
@@ -1153,7 +1153,7 @@ def importRadianceMaterialsFromFile(filePath):
   
       
   <div class="item">
-    <div class="name def" id="honeybeegrasshopper.honeybee.radiance.helper.importRadianceMaterialsFromFile">
+    <div class="name def" id="honeybeex.honeybee.radiance.helper.importRadianceMaterialsFromFile">
     <p>def <span class="ident">importRadianceMaterialsFromFile</span>(</p><p>filePath)</p>
     </div>
     
@@ -1164,8 +1164,8 @@ def importRadianceMaterialsFromFile(filePath):
 <p>Args:
     filePath: Path to a radiance file</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.radiance.helper.importRadianceMaterialsFromFile', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.honeybee.radiance.helper.importRadianceMaterialsFromFile" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.helper.importRadianceMaterialsFromFile', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.helper.importRadianceMaterialsFromFile" class="source">
     <pre><code>def importRadianceMaterialsFromFile(filePath):
     """
     Parse Radinace file and add return available radiance materials in file.

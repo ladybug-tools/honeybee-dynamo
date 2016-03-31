@@ -3,7 +3,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 
-    <title>honeybeegrasshopper.honeybee.radiance.properties API documentation</title>
+    <title>honeybeex.honeybee.radiance.properties API documentation</title>
     <meta name="description" content="Radiance Properties for HBSurfaces." />
 
   <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300' rel='stylesheet' type='text/css'>
@@ -989,11 +989,11 @@ table {
     <li class="set"><h3><a href="#header-classes">Classes</a></h3>
       <ul>
         <li class="mono">
-        <span class="class_name"><a href="#honeybeegrasshopper.honeybee.radiance.properties.RadianceProperties">RadianceProperties</a></span>
+        <span class="class_name"><a href="#honeybeex.honeybee.radiance.properties.RadianceProperties">RadianceProperties</a></span>
         
           
   <ul>
-    <li class="mono"><a href="#honeybeegrasshopper.honeybee.radiance.properties.RadianceProperties.__init__">__init__</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.radiance.properties.RadianceProperties.__init__">__init__</a></li>
   </ul>
 
         </li>
@@ -1011,11 +1011,11 @@ table {
 
 
   <header id="section-intro">
-  <h1 class="title"><span class="name">honeybeegrasshopper.honeybee.radiance.properties</span> module</h1>
+  <h1 class="title"><span class="name">honeybeex.honeybee.radiance.properties</span> module</h1>
   <p>Radiance Properties for HBSurfaces.</p>
   
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.radiance.properties', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.honeybee.radiance.properties" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.properties', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.properties" class="source">
     <pre><code>"""Radiance Properties for HBSurfaces."""
 from material.materialBase import RadianceMaterial
 
@@ -1035,6 +1035,11 @@ class RadianceProperties(object):
     def __init__(self, radianceMaterial=None, isMaterialSetByUser=False):
         """Create radiance properties for surface."""
         self.radianceMaterial = (radianceMaterial, isMaterialSetByUser)
+
+    @property
+    def isRadianceProperties(self):
+        """Indicate this object is RadianceProperties."""
+        return True
 
     @property
     def radianceMaterial(self):
@@ -1077,7 +1082,7 @@ class RadianceProperties(object):
         if __newMaterial is None:
             self.__radianceMaterial = None
         else:
-            assert isinstance(__newMaterial, RadianceMaterial), \
+            assert hasattr(__newMaterial, 'isRadianceMaterial'), \
                 "%s is not a valid Radiance material" % __newMaterial
 
             self.__radianceMaterial = __newMaterial
@@ -1109,7 +1114,7 @@ if __name__ == "__main__":
     <h2 class="section-title" id="header-classes">Classes</h2>
       
       <div class="item">
-      <p id="honeybeegrasshopper.honeybee.radiance.properties.RadianceProperties" class="name">class <span class="ident">RadianceProperties</span></p>
+      <p id="honeybeex.honeybee.radiance.properties.RadianceProperties" class="name">class <span class="ident">RadianceProperties</span></p>
       
   
     <div class="desc"><p>Radiance properties for HBSurface.</p>
@@ -1119,8 +1124,8 @@ if __name__ == "__main__":
     isMaterialSetByUser: Set to True if you don't want material automatically
         overwritten by honeybee in cases like solve adjacencies.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.radiance.properties.RadianceProperties', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.honeybee.radiance.properties.RadianceProperties" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.properties.RadianceProperties', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.properties.RadianceProperties" class="source">
     <pre><code>class RadianceProperties(object):
     """Radiance properties for HBSurface.
 
@@ -1134,6 +1139,11 @@ if __name__ == "__main__":
     def __init__(self, radianceMaterial=None, isMaterialSetByUser=False):
         """Create radiance properties for surface."""
         self.radianceMaterial = (radianceMaterial, isMaterialSetByUser)
+
+    @property
+    def isRadianceProperties(self):
+        """Indicate this object is RadianceProperties."""
+        return True
 
     @property
     def radianceMaterial(self):
@@ -1176,7 +1186,7 @@ if __name__ == "__main__":
         if __newMaterial is None:
             self.__radianceMaterial = None
         else:
-            assert isinstance(__newMaterial, RadianceMaterial), \
+            assert hasattr(__newMaterial, 'isRadianceMaterial'), \
                 "%s is not a valid Radiance material" % __newMaterial
 
             self.__radianceMaterial = __newMaterial
@@ -1200,12 +1210,12 @@ if __name__ == "__main__":
       <div class="class">
           <h3>Ancestors (in MRO)</h3>
           <ul class="class_list">
-          <li><a href="#honeybeegrasshopper.honeybee.radiance.properties.RadianceProperties">RadianceProperties</a></li>
+          <li><a href="#honeybeex.honeybee.radiance.properties.RadianceProperties">RadianceProperties</a></li>
           <li>__builtin__.object</li>
           </ul>
           <h3>Instance variables</h3>
             <div class="item">
-            <p id="honeybeegrasshopper.honeybee.radiance.properties.RadianceProperties.isMaterialSetByUser" class="name">var <span class="ident">isMaterialSetByUser</span></p>
+            <p id="honeybeex.honeybee.radiance.properties.RadianceProperties.isMaterialSetByUser" class="name">var <span class="ident">isMaterialSetByUser</span></p>
             
 
             
@@ -1216,7 +1226,18 @@ if __name__ == "__main__":
 
             </div>
             <div class="item">
-            <p id="honeybeegrasshopper.honeybee.radiance.properties.RadianceProperties.radianceMaterial" class="name">var <span class="ident">radianceMaterial</span></p>
+            <p id="honeybeex.honeybee.radiance.properties.RadianceProperties.isRadianceProperties" class="name">var <span class="ident">isRadianceProperties</span></p>
+            
+
+            
+  
+    <div class="desc"><p>Indicate this object is RadianceProperties.</p></div>
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.properties.RadianceProperties.radianceMaterial" class="name">var <span class="ident">radianceMaterial</span></p>
             
 
             
@@ -1228,7 +1249,7 @@ if __name__ == "__main__":
           <h3>Methods</h3>
             
   <div class="item">
-    <div class="name def" id="honeybeegrasshopper.honeybee.radiance.properties.RadianceProperties.__init__">
+    <div class="name def" id="honeybeex.honeybee.radiance.properties.RadianceProperties.__init__">
     <p>def <span class="ident">__init__</span>(</p><p>self, radianceMaterial=None, isMaterialSetByUser=False)</p>
     </div>
     
@@ -1237,8 +1258,8 @@ if __name__ == "__main__":
   
     <div class="desc"><p>Create radiance properties for surface.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.radiance.properties.RadianceProperties.__init__', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.honeybee.radiance.properties.RadianceProperties.__init__" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.properties.RadianceProperties.__init__', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.properties.RadianceProperties.__init__" class="source">
     <pre><code>def __init__(self, radianceMaterial=None, isMaterialSetByUser=False):
     """Create radiance properties for surface."""
     self.radianceMaterial = (radianceMaterial, isMaterialSetByUser)

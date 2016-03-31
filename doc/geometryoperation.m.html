@@ -3,7 +3,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 
-    <title>honeybeegrasshopper.geometryoperation API documentation</title>
+    <title>honeybeex.geometryoperation API documentation</title>
     <meta name="description" content="Collection of methods for Honeybee geometry operations in Grasshopper." />
 
   <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300' rel='stylesheet' type='text/css'>
@@ -988,13 +988,12 @@ table {
     <li class="set"><h3><a href="#header-functions">Functions</a></h3>
       
   <ul>
-    <li class="mono"><a href="#honeybeegrasshopper.geometryoperation.checkForInternalEdge">checkForInternalEdge</a></li>
-    <li class="mono"><a href="#honeybeegrasshopper.geometryoperation.checkPlanarity">checkPlanarity</a></li>
-    <li class="mono"><a href="#honeybeegrasshopper.geometryoperation.extractSurfacePoints">extractSurfacePoints</a></li>
-    <li class="mono"><a href="#honeybeegrasshopper.geometryoperation.getSurfaceCenterPtNormalandBasePlane">getSurfaceCenterPtNormalandBasePlane</a></li>
-    <li class="mono"><a href="#honeybeegrasshopper.geometryoperation.getSurfaceCenterPtandNormal">getSurfaceCenterPtandNormal</a></li>
-    <li class="mono"><a href="#honeybeegrasshopper.geometryoperation.isPointsSortedAntiClockwise">isPointsSortedAntiClockwise</a></li>
-    <li class="mono"><a href="#honeybeegrasshopper.geometryoperation.vectorsCrossProduct">vectorsCrossProduct</a></li>
+    <li class="mono"><a href="#honeybeex.geometryoperation.checkForInternalEdge">checkForInternalEdge</a></li>
+    <li class="mono"><a href="#honeybeex.geometryoperation.checkPlanarity">checkPlanarity</a></li>
+    <li class="mono"><a href="#honeybeex.geometryoperation.extractSurfacePoints">extractSurfacePoints</a></li>
+    <li class="mono"><a href="#honeybeex.geometryoperation.getSurfaceCenterPtandNormal">getSurfaceCenterPtandNormal</a></li>
+    <li class="mono"><a href="#honeybeex.geometryoperation.isPointsSortedAntiClockwise">isPointsSortedAntiClockwise</a></li>
+    <li class="mono"><a href="#honeybeex.geometryoperation.vectorsCrossProduct">vectorsCrossProduct</a></li>
   </ul>
 
     </li>
@@ -1011,35 +1010,61 @@ table {
 
 
   <header id="section-intro">
-  <h1 class="title"><span class="name">honeybeegrasshopper.geometryoperation</span> module</h1>
+  <h1 class="title"><span class="name">honeybeex.geometryoperation</span> module</h1>
   <p>Collection of methods for Honeybee geometry operations in Grasshopper.</p>
   
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.geometryoperation', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.geometryoperation" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.geometryoperation', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.geometryoperation" class="source">
     <pre><code>"""Collection of methods for Honeybee geometry operations in Grasshopper."""
+import config
 
-from honeybee.geometryoperation import *
-try:
-    import Rhino as rc
-except ImportError:
-    print "Failed to import Rhino. Make sure the path is added to sys.path."
+
+def extractSurfacePoints(HBSurface, *args, **kwargs):
+    """Calculate list of points for a HBSurface.
+
+    Args:
+        HBSurface: A HBSurface
+        --- Grasshopper ---
+        triangulate: If set to True the function returns the points for triangulated
+            surfaces (Default: False)
+        meshingParameters: Optional Rhino meshingParameters. This will only be used
+            if the surrface is non-planar or has an internal edge and needs to be meshed.
+            Default:
+                Rhino.Geometry.MeshingParameters.Coarse; SimplePlanes = True for planar surfaces
+                Rhino.Geometry.MeshingParameters.Smooth for non-planar surfaces
+        --- Dynamo ---
+            maxTessellationDivisions: Maximum number of divisions for surface tessellation.
+    Returns:
+        A list of point lists. For planar surfaces the length of the list will be
+        only 1. For non-planar surfaces or surfaces with internal edges it will be
+        a number of lists.
+    """
+    assert hasattr(HBSurface, 'isHBObject'), "Surface input is not a HBSurface."
+
+    if config.platform == 'gh':
+        return __extractSurfacePointsGH(HBSurface.geometry, HBSurface.normal,
+                                        *args, **kwargs)
+    elif config.platform == 'ds' or config.platform == 'rvt':
+        return __extractSurfacePointsDS(HBSurface.geometry, *args, **kwargs)
 
 
 # TODO: Add support for non-planar surfaces. The current implementation is a simple
 # implementation to prototype the workflow
 # TODO: Extract point should support mesh as well as brep surfaces. Currently we have
 # two alternative solutions which is not preferred. Currently it only works for Breps.
-def extractSurfacePoints(HBSurface, triangulate=False, meshingParameters=None):
+def __extractSurfacePointsGH(geometry, normalVector=None, triangulate=False,
+                             meshingParameters=None):
     """Calculate list of points for a HBSurface.
 
     For planar surfaces the length of the list will be only 1. For non-planar
     surfaces or surfaces with internal edges it will be a number of lists.
 
     Args:
-        HBSurface: A HBSurface
+        geometry: A Mesh or Brep
+        normalVector: Mesh or Brep normal vector
         triangulate: If set to True the function returns the points for triangulated
             surfaces (Default: False)
-        meshingParameters: Optional Rhino meshingParameters. This will only be uses if the
+        meshingParameters: Optional Rhino meshingParameters. This will only be used if the
             surface is non-planar or has an internal edge and needs to be meshed.
             Default:
                 Rhino.Geometry.MeshingParameters.Coarse; SimplePlanes = True for planar surfaces
@@ -1049,29 +1074,67 @@ def extractSurfacePoints(HBSurface, triangulate=False, meshingParameters=None):
         only 1. For non-planar surfaces or surfaces with internal edges it will be
         a number of lists.
     """
-    try:
-        pts = HBSurface.geometry.DuplicateVertices()
-    except AttributeError as e:
-        raise TypeError("Input is not a HBSurface: %s" % str(e))
-    else:
-        # sort points anti clockwise
-        # this is only important for energy simulation and won't make a difference
-        # for Radiance
+    assert isinstance(geometry, config.libs.Rhino.Geometry.GeometryBase), \
+        "Input surface should be a Mesh or a Brep."
 
-        # To sort the points we find border of the surface and evaluate points
-        # on border and use the parameter value to sort them
-        border = rc.Geometry.Curve.JoinCurves(
-            HBSurface.geometry.DuplicateEdgeCurves(True))[0]
+    assert not isinstance(geometry, config.libs.Rhino.Geometry.Mesh), \
+        "Extracting points for mesh surfaces hasn't been implemented."
 
-        pointsSorted = sorted(pts, key=lambda pt: border.ClosestPoint(pt)[1])
+    pts = geometry.DuplicateVertices()
+    # sort points anti clockwise
+    # this is only important for energy simulation and won't make a difference
+    # for Radiance
 
-        # make sure points are anti clockwise
-        if not isPointsSortedAntiClockwise(pointsSorted, HBSurface.normal):
-            return pointsSorted.reverse()
+    # To sort the points we find border of the surface and evaluate points
+    # on border and use the parameter value to sort them
+    border = config.libs.Rhino.Geometry.Curve.JoinCurves(
+        geometry.DuplicateEdgeCurves(True))[0]
 
-        # return sorted points
-        # Wrap in a list as Honeybee accepts list of list of points
-        return [pointsSorted]
+    pointsSorted = sorted(pts, key=lambda pt: border.ClosestPoint(pt)[1])
+
+    # make sure points are anti clockwise
+    if not isPointsSortedAntiClockwise(pointsSorted, normalVector):
+        return pointsSorted.reverse()
+
+    # return sorted points
+    # Wrap in a list as Honeybee accepts list of list of points
+    return [pointsSorted]
+
+
+def __extractSurfacePointsDS(geometry, maxTessellationDivisions=25):
+    """Extract points from a surface in Dynamo.
+
+    Args:
+        geometry: A Dynamo geometry.
+        maxTessellationDivisions: Maximum number of divisions for surface tessellation.
+
+    Returns:
+        A list of point lists.
+    """
+    def splitList(li, step=3):
+        return [li[x:x + step] for x in range(0, len(li), step)]
+
+    def __getPoints(rp):
+        pts = list(rp.MeshVertices)
+        # split values in xyz
+        xyz = splitList(splitList(pts))
+        del(pts)
+        return xyz
+
+    rpFactory = config.libs.Dynamo.Visualization.DefaultRenderPackageFactory()
+    tp = config.libs.DesignScript.Interfaces.TessellationParameters()
+    tp.MaxTessellationDivisions = maxTessellationDivisions
+    tp.Tolerance = -1
+    rp = rpFactory.CreateRenderPackage()
+    geometry.Tessellate(rp, tp)
+    pts = __getPoints(rp)
+
+    # clean Dynamo objects
+    del(rpFactory)
+    del(rp)
+    del(tp)
+
+    return pts
 
 
 def vectorsCrossProduct(vector1, vector2):
@@ -1082,9 +1145,19 @@ def vectorsCrossProduct(vector1, vector2):
 
 def isPointsSortedAntiClockwise(sortedPoints, normal):
     """Check if an ordered list of points are anti-clockwise."""
-    vector0 = rc.Geometry.Vector3d(sortedPoints[1] - sortedPoints[0])
-    vector1 = rc.Geometry.Vector3d(sortedPoints[-1] - sortedPoints[0])
-    ptsNormal = rc.Geometry.Vector3d.CrossProduct(vector0, vector1)
+    if not config.platform:
+        raise Exception("This function can only be called from inside Grasshopper " +
+                        "or Dynamo")
+
+    if config.platform == "gh":
+        vector0 = config.libs.Rhino.Geometry.Vector3d(sortedPoints[1] - sortedPoints[0])
+        vector1 = config.libs.Rhino.Geometry.Vector3d(sortedPoints[-1] - sortedPoints[0])
+        ptsNormal = config.libs.Rhino.Geometry.Vector3d.CrossProduct(vector0, vector1)
+
+    elif config.platform == "ds" or config.platform == "rvt":
+        vector0 = config.libs.DesignScript.Geometry.Vector.ByTwoPoints(sortedPoints[0], sortedPoints[1])
+        vector1 = config.libs.DesignScript.Geometry.Vector.ByTwoPoints(sortedPoints[0], sortedPoints[-1])
+        ptsNormal = config.libs.DesignScript.Geometry.Vector.Cross(vector0, vector1)
 
     # in case points are anti-clockwise then normals should be parallel
     if vectorsCrossProduct(ptsNormal, normal) > 0:
@@ -1103,10 +1176,12 @@ def getSurfaceCenterPtandNormal(HBSurface):
         Returns a tuple as (centerPt, normalVector)
     """
     try:
-        brepFace = HBSurface.geometry.Faces[0]
+        geometry = HBSurface.geometry
     except AttributeError as e:
         raise TypeError("Input is not a HBSurface: %s" % str(e))
-    else:
+
+    if config.platform == 'gh':
+        brepFace = geometry.Faces[0]
         if brepFace.IsPlanar and brepFace.IsSurface:
             u_domain = brepFace.Domain(0)
             v_domain = brepFace.Domain(1)
@@ -1116,27 +1191,17 @@ def getSurfaceCenterPtandNormal(HBSurface):
             centerPt = brepFace.PointAt(centerU, centerV)
             normalVector = brepFace.NormalAt(centerU, centerV)
         else:
-            centroid = rc.Geometry.AreaMassProperties.Compute(brepFace).Centroid
+            centroid = config.libs.Rhino.Geometry.AreaMassProperties.Compute(brepFace).Centroid
             uv = brepFace.ClosestPoint(centroid)
             centerPt = brepFace.PointAt(uv[1], uv[2])
             normalVector = brepFace.NormalAt(uv[1], uv[2])
 
-        return centerPt, normalVector
+    elif config.platform == "ds" or config.platform == "rvt":
+        uv = config.libs.DesignScript.Geometry.UV.ByCoordinates(0.5, 0.5)
+        centerPt = geometry.PointAtParameter(uv.U, uv.V)
+        normalVector = geometry.NormalAtParameter(uv.U, uv.V).Normalized()
 
-
-def getSurfaceCenterPtNormalandBasePlane(HBSurface):
-    """Calculate center point, normal and basePlane for a HBSurface.
-
-    Args:
-        HBSurface: A Honeybee surface
-
-    Returns:
-        Returns a tuple as (centerPt, normalVector, basePlane)
-    """
-    centerPt, normalVector = getSurfaceCenterPtandNormal(HBSurface)
-    basePlane = rc.Geometry.Plane(centerPt, normalVector)
-
-    return centerPt, normalVector, basePlane
+    return centerPt, normalVector
 
 
 def checkPlanarity(HBSurface, tolerance=1e-3):
@@ -1149,6 +1214,8 @@ def checkPlanarity(HBSurface, tolerance=1e-3):
     Returns:
         True is the surface is planar, otherwise return False.
     """
+    assert config.platform == 'gh', "This function only works within Grasshopper."
+
     try:
         return HBSurface.geometry.Faces[0].IsPlanar(tolerance)
     except AttributeError as e:
@@ -1167,6 +1234,8 @@ def checkForInternalEdge(HBSurface):
         True is the surface has an internal edge, otherwise return False.
 
     """
+    assert config.platform == 'gh', "This function only works within Grasshopper."
+
     # I believe there should be a direct method in RhinoCommon to indicate if a
     # surface is an open brep but since I couldn't find it I'm using this method
     # if Surface has no intenal edges the length of joined border is 1
@@ -1175,7 +1244,7 @@ def checkForInternalEdge(HBSurface):
     except AttributeError as e:
         raise TypeError("Input is not a HBSurface: %s" % str(e))
     else:
-        border = rc.Geometry.Curve.JoinCurves(edges)
+        border = config.libs.Rhino.Geometry.Curve.JoinCurves(edges)
         if len(border) > 1:
             return True
         else:
@@ -1190,7 +1259,7 @@ def checkForInternalEdge(HBSurface):
     <h2 class="section-title" id="header-functions">Functions</h2>
       
   <div class="item">
-    <div class="name def" id="honeybeegrasshopper.geometryoperation.checkForInternalEdge">
+    <div class="name def" id="honeybeex.geometryoperation.checkForInternalEdge">
     <p>def <span class="ident">checkForInternalEdge</span>(</p><p>HBSurface)</p>
     </div>
     
@@ -1204,8 +1273,8 @@ def checkForInternalEdge(HBSurface):
 <p>Returns:
     True is the surface has an internal edge, otherwise return False.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.geometryoperation.checkForInternalEdge', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.geometryoperation.checkForInternalEdge" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.geometryoperation.checkForInternalEdge', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.geometryoperation.checkForInternalEdge" class="source">
     <pre><code>def checkForInternalEdge(HBSurface):
     """Check if the surface has an internal edge.
 
@@ -1218,6 +1287,8 @@ def checkForInternalEdge(HBSurface):
         True is the surface has an internal edge, otherwise return False.
 
     """
+    assert config.platform == 'gh', "This function only works within Grasshopper."
+
     # I believe there should be a direct method in RhinoCommon to indicate if a
     # surface is an open brep but since I couldn't find it I'm using this method
     # if Surface has no intenal edges the length of joined border is 1
@@ -1226,7 +1297,7 @@ def checkForInternalEdge(HBSurface):
     except AttributeError as e:
         raise TypeError("Input is not a HBSurface: %s" % str(e))
     else:
-        border = rc.Geometry.Curve.JoinCurves(edges)
+        border = config.libs.Rhino.Geometry.Curve.JoinCurves(edges)
         if len(border) > 1:
             return True
         else:
@@ -1239,7 +1310,7 @@ def checkForInternalEdge(HBSurface):
   
       
   <div class="item">
-    <div class="name def" id="honeybeegrasshopper.geometryoperation.checkPlanarity">
+    <div class="name def" id="honeybeex.geometryoperation.checkPlanarity">
     <p>def <span class="ident">checkPlanarity</span>(</p><p>HBSurface, tolerance=0.001)</p>
     </div>
     
@@ -1253,8 +1324,8 @@ def checkForInternalEdge(HBSurface):
 <p>Returns:
     True is the surface is planar, otherwise return False.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.geometryoperation.checkPlanarity', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.geometryoperation.checkPlanarity" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.geometryoperation.checkPlanarity', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.geometryoperation.checkPlanarity" class="source">
     <pre><code>def checkPlanarity(HBSurface, tolerance=1e-3):
     """Check planarity of a HBSurface.
 
@@ -1265,6 +1336,8 @@ def checkForInternalEdge(HBSurface):
     Returns:
         True is the surface is planar, otherwise return False.
     """
+    assert config.platform == 'gh', "This function only works within Grasshopper."
+
     try:
         return HBSurface.geometry.Faces[0].IsPlanar(tolerance)
     except AttributeError as e:
@@ -1277,75 +1350,60 @@ def checkForInternalEdge(HBSurface):
   
       
   <div class="item">
-    <div class="name def" id="honeybeegrasshopper.geometryoperation.extractSurfacePoints">
-    <p>def <span class="ident">extractSurfacePoints</span>(</p><p>HBSurface, triangulate=False, meshingParameters=None)</p>
+    <div class="name def" id="honeybeex.geometryoperation.extractSurfacePoints">
+    <p>def <span class="ident">extractSurfacePoints</span>(</p><p>HBSurface, *args, **kwargs)</p>
     </div>
     
 
     
   
     <div class="desc"><p>Calculate list of points for a HBSurface.</p>
-<p>For planar surfaces the length of the list will be only 1. For non-planar
-surfaces or surfaces with internal edges it will be a number of lists.</p>
 <p>Args:
     HBSurface: A HBSurface
+    --- Grasshopper ---
     triangulate: If set to True the function returns the points for triangulated
         surfaces (Default: False)
-    meshingParameters: Optional Rhino meshingParameters. This will only be uses if the
-        surface is non-planar or has an internal edge and needs to be meshed.
+    meshingParameters: Optional Rhino meshingParameters. This will only be used
+        if the surrface is non-planar or has an internal edge and needs to be meshed.
         Default:
             Rhino.Geometry.MeshingParameters.Coarse; SimplePlanes = True for planar surfaces
             Rhino.Geometry.MeshingParameters.Smooth for non-planar surfaces
+    --- Dynamo ---
+        maxTessellationDivisions: Maximum number of divisions for surface tessellation.
 Returns:
     A list of point lists. For planar surfaces the length of the list will be
     only 1. For non-planar surfaces or surfaces with internal edges it will be
     a number of lists.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.geometryoperation.extractSurfacePoints', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.geometryoperation.extractSurfacePoints" class="source">
-    <pre><code>def extractSurfacePoints(HBSurface, triangulate=False, meshingParameters=None):
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.geometryoperation.extractSurfacePoints', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.geometryoperation.extractSurfacePoints" class="source">
+    <pre><code>def extractSurfacePoints(HBSurface, *args, **kwargs):
     """Calculate list of points for a HBSurface.
-
-    For planar surfaces the length of the list will be only 1. For non-planar
-    surfaces or surfaces with internal edges it will be a number of lists.
 
     Args:
         HBSurface: A HBSurface
+        --- Grasshopper ---
         triangulate: If set to True the function returns the points for triangulated
             surfaces (Default: False)
-        meshingParameters: Optional Rhino meshingParameters. This will only be uses if the
-            surface is non-planar or has an internal edge and needs to be meshed.
+        meshingParameters: Optional Rhino meshingParameters. This will only be used
+            if the surrface is non-planar or has an internal edge and needs to be meshed.
             Default:
                 Rhino.Geometry.MeshingParameters.Coarse; SimplePlanes = True for planar surfaces
                 Rhino.Geometry.MeshingParameters.Smooth for non-planar surfaces
+        --- Dynamo ---
+            maxTessellationDivisions: Maximum number of divisions for surface tessellation.
     Returns:
         A list of point lists. For planar surfaces the length of the list will be
         only 1. For non-planar surfaces or surfaces with internal edges it will be
         a number of lists.
     """
-    try:
-        pts = HBSurface.geometry.DuplicateVertices()
-    except AttributeError as e:
-        raise TypeError("Input is not a HBSurface: %s" % str(e))
-    else:
-        # sort points anti clockwise
-        # this is only important for energy simulation and won't make a difference
-        # for Radiance
+    assert hasattr(HBSurface, 'isHBObject'), "Surface input is not a HBSurface."
 
-        # To sort the points we find border of the surface and evaluate points
-        # on border and use the parameter value to sort them
-        border = rc.Geometry.Curve.JoinCurves(
-            HBSurface.geometry.DuplicateEdgeCurves(True))[0]
-
-        pointsSorted = sorted(pts, key=lambda pt: border.ClosestPoint(pt)[1])
-
-        # make sure points are anti clockwise
-        if not isPointsSortedAntiClockwise(pointsSorted, HBSurface.normal):
-            return pointsSorted.reverse()
-
-        # return sorted points
-        # Wrap in a list as Honeybee accepts list of list of points
-        return [pointsSorted]
+    if config.platform == 'gh':
+        return __extractSurfacePointsGH(HBSurface.geometry, HBSurface.normal,
+                                        *args, **kwargs)
+    elif config.platform == 'ds' or config.platform == 'rvt':
+        return __extractSurfacePointsDS(HBSurface.geometry, *args, **kwargs)
 </code></pre>
   </div>
 </div>
@@ -1354,43 +1412,7 @@ Returns:
   
       
   <div class="item">
-    <div class="name def" id="honeybeegrasshopper.geometryoperation.getSurfaceCenterPtNormalandBasePlane">
-    <p>def <span class="ident">getSurfaceCenterPtNormalandBasePlane</span>(</p><p>HBSurface)</p>
-    </div>
-    
-
-    
-  
-    <div class="desc"><p>Calculate center point, normal and basePlane for a HBSurface.</p>
-<p>Args:
-    HBSurface: A Honeybee surface</p>
-<p>Returns:
-    Returns a tuple as (centerPt, normalVector, basePlane)</p></div>
-  <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.geometryoperation.getSurfaceCenterPtNormalandBasePlane', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.geometryoperation.getSurfaceCenterPtNormalandBasePlane" class="source">
-    <pre><code>def getSurfaceCenterPtNormalandBasePlane(HBSurface):
-    """Calculate center point, normal and basePlane for a HBSurface.
-
-    Args:
-        HBSurface: A Honeybee surface
-
-    Returns:
-        Returns a tuple as (centerPt, normalVector, basePlane)
-    """
-    centerPt, normalVector = getSurfaceCenterPtandNormal(HBSurface)
-    basePlane = rc.Geometry.Plane(centerPt, normalVector)
-
-    return centerPt, normalVector, basePlane
-</code></pre>
-  </div>
-</div>
-
-  </div>
-  
-      
-  <div class="item">
-    <div class="name def" id="honeybeegrasshopper.geometryoperation.getSurfaceCenterPtandNormal">
+    <div class="name def" id="honeybeex.geometryoperation.getSurfaceCenterPtandNormal">
     <p>def <span class="ident">getSurfaceCenterPtandNormal</span>(</p><p>HBSurface)</p>
     </div>
     
@@ -1403,8 +1425,8 @@ Returns:
 <p>Returns:
     Returns a tuple as (centerPt, normalVector)</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.geometryoperation.getSurfaceCenterPtandNormal', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.geometryoperation.getSurfaceCenterPtandNormal" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.geometryoperation.getSurfaceCenterPtandNormal', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.geometryoperation.getSurfaceCenterPtandNormal" class="source">
     <pre><code>def getSurfaceCenterPtandNormal(HBSurface):
     """Calculate center point and normal for a HBSurface.
 
@@ -1415,10 +1437,12 @@ Returns:
         Returns a tuple as (centerPt, normalVector)
     """
     try:
-        brepFace = HBSurface.geometry.Faces[0]
+        geometry = HBSurface.geometry
     except AttributeError as e:
         raise TypeError("Input is not a HBSurface: %s" % str(e))
-    else:
+
+    if config.platform == 'gh':
+        brepFace = geometry.Faces[0]
         if brepFace.IsPlanar and brepFace.IsSurface:
             u_domain = brepFace.Domain(0)
             v_domain = brepFace.Domain(1)
@@ -1428,12 +1452,17 @@ Returns:
             centerPt = brepFace.PointAt(centerU, centerV)
             normalVector = brepFace.NormalAt(centerU, centerV)
         else:
-            centroid = rc.Geometry.AreaMassProperties.Compute(brepFace).Centroid
+            centroid = config.libs.Rhino.Geometry.AreaMassProperties.Compute(brepFace).Centroid
             uv = brepFace.ClosestPoint(centroid)
             centerPt = brepFace.PointAt(uv[1], uv[2])
             normalVector = brepFace.NormalAt(uv[1], uv[2])
 
-        return centerPt, normalVector
+    elif config.platform == "ds" or config.platform == "rvt":
+        uv = config.libs.DesignScript.Geometry.UV.ByCoordinates(0.5, 0.5)
+        centerPt = geometry.PointAtParameter(uv.U, uv.V)
+        normalVector = geometry.NormalAtParameter(uv.U, uv.V).Normalized()
+
+    return centerPt, normalVector
 </code></pre>
   </div>
 </div>
@@ -1442,7 +1471,7 @@ Returns:
   
       
   <div class="item">
-    <div class="name def" id="honeybeegrasshopper.geometryoperation.isPointsSortedAntiClockwise">
+    <div class="name def" id="honeybeex.geometryoperation.isPointsSortedAntiClockwise">
     <p>def <span class="ident">isPointsSortedAntiClockwise</span>(</p><p>sortedPoints, normal)</p>
     </div>
     
@@ -1451,13 +1480,23 @@ Returns:
   
     <div class="desc"><p>Check if an ordered list of points are anti-clockwise.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.geometryoperation.isPointsSortedAntiClockwise', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.geometryoperation.isPointsSortedAntiClockwise" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.geometryoperation.isPointsSortedAntiClockwise', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.geometryoperation.isPointsSortedAntiClockwise" class="source">
     <pre><code>def isPointsSortedAntiClockwise(sortedPoints, normal):
     """Check if an ordered list of points are anti-clockwise."""
-    vector0 = rc.Geometry.Vector3d(sortedPoints[1] - sortedPoints[0])
-    vector1 = rc.Geometry.Vector3d(sortedPoints[-1] - sortedPoints[0])
-    ptsNormal = rc.Geometry.Vector3d.CrossProduct(vector0, vector1)
+    if not config.platform:
+        raise Exception("This function can only be called from inside Grasshopper " +
+                        "or Dynamo")
+
+    if config.platform == "gh":
+        vector0 = config.libs.Rhino.Geometry.Vector3d(sortedPoints[1] - sortedPoints[0])
+        vector1 = config.libs.Rhino.Geometry.Vector3d(sortedPoints[-1] - sortedPoints[0])
+        ptsNormal = config.libs.Rhino.Geometry.Vector3d.CrossProduct(vector0, vector1)
+
+    elif config.platform == "ds" or config.platform == "rvt":
+        vector0 = config.libs.DesignScript.Geometry.Vector.ByTwoPoints(sortedPoints[0], sortedPoints[1])
+        vector1 = config.libs.DesignScript.Geometry.Vector.ByTwoPoints(sortedPoints[0], sortedPoints[-1])
+        ptsNormal = config.libs.DesignScript.Geometry.Vector.Cross(vector0, vector1)
 
     # in case points are anti-clockwise then normals should be parallel
     if vectorsCrossProduct(ptsNormal, normal) > 0:
@@ -1472,7 +1511,7 @@ Returns:
   
       
   <div class="item">
-    <div class="name def" id="honeybeegrasshopper.geometryoperation.vectorsCrossProduct">
+    <div class="name def" id="honeybeex.geometryoperation.vectorsCrossProduct">
     <p>def <span class="ident">vectorsCrossProduct</span>(</p><p>vector1, vector2)</p>
     </div>
     
@@ -1481,8 +1520,8 @@ Returns:
   
     <div class="desc"><p>Calculate cross product of two vectors.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.geometryoperation.vectorsCrossProduct', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.geometryoperation.vectorsCrossProduct" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.geometryoperation.vectorsCrossProduct', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.geometryoperation.vectorsCrossProduct" class="source">
     <pre><code>def vectorsCrossProduct(vector1, vector2):
     """Calculate cross product of two vectors."""
     return vector1.X * vector2.X + \

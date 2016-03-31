@@ -3,7 +3,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 
-    <title>honeybeegrasshopper.honeybee.hbsurface API documentation</title>
+    <title>honeybeex.honeybee.hbsurface API documentation</title>
     <meta name="description" content="" />
 
   <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300' rel='stylesheet' type='text/css'>
@@ -989,17 +989,17 @@ table {
     <li class="set"><h3><a href="#header-classes">Classes</a></h3>
       <ul>
         <li class="mono">
-        <span class="class_name"><a href="#honeybeegrasshopper.honeybee.hbsurface.HBAnalysisSurface">HBAnalysisSurface</a></span>
+        <span class="class_name"><a href="#honeybeex.honeybee.hbsurface.HBAnalysisSurface">HBAnalysisSurface</a></span>
         
           
   <ul>
-    <li class="mono"><a href="#honeybeegrasshopper.honeybee.hbsurface.HBAnalysisSurface.__init__">__init__</a></li>
-    <li class="mono"><a href="#honeybeegrasshopper.honeybee.hbsurface.HBAnalysisSurface.addPoint">addPoint</a></li>
-    <li class="mono"><a href="#honeybeegrasshopper.honeybee.hbsurface.HBAnalysisSurface.addPointList">addPointList</a></li>
-    <li class="mono"><a href="#honeybeegrasshopper.honeybee.hbsurface.HBAnalysisSurface.isNameSetByUser">isNameSetByUser</a></li>
-    <li class="mono"><a href="#honeybeegrasshopper.honeybee.hbsurface.HBAnalysisSurface.radStringToFile">radStringToFile</a></li>
-    <li class="mono"><a href="#honeybeegrasshopper.honeybee.hbsurface.HBAnalysisSurface.toEPString">toEPString</a></li>
-    <li class="mono"><a href="#honeybeegrasshopper.honeybee.hbsurface.HBAnalysisSurface.toRadString">toRadString</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.hbsurface.HBAnalysisSurface.__init__">__init__</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.hbsurface.HBAnalysisSurface.addPoint">addPoint</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.hbsurface.HBAnalysisSurface.addPointList">addPointList</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.hbsurface.HBAnalysisSurface.isNameSetByUser">isNameSetByUser</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.hbsurface.HBAnalysisSurface.radStringToFile">radStringToFile</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.hbsurface.HBAnalysisSurface.toEPString">toEPString</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.hbsurface.HBAnalysisSurface.toRadString">toRadString</a></li>
   </ul>
 
         </li>
@@ -1017,11 +1017,11 @@ table {
 
 
   <header id="section-intro">
-  <h1 class="title"><span class="name">honeybeegrasshopper.honeybee.hbsurface</span> module</h1>
+  <h1 class="title"><span class="name">honeybeex.honeybee.hbsurface</span> module</h1>
   
   
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.hbsurface', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.honeybee.hbsurface" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.hbsurface', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.hbsurface" class="source">
     <pre><code>from hbobject import HBObject
 from radiance.properties import RadianceProperties
 from radiance.geometry import polygon
@@ -1241,7 +1241,7 @@ class HBAnalysisSurface(HBObject):
         if radProperties is None:
             self.__radProperties = RadianceProperties()
         else:
-            assert isinstance(radProperties, RadianceProperties), \
+            assert hasattr(radProperties, 'isRadianceProperties'), \
                 "%s is not a valid RadianceProperties" % str(radProperties)
             self.__radProperties = radProperties
 
@@ -1270,16 +1270,22 @@ class HBAnalysisSurface(HBObject):
     def radianceMaterial(self, values):
         self.radProperties.radianceMaterial = values
 
-    # TODO: Add support for multiple point list in one surface
-    # I just need to iterate through the point list
     def toRadString(self, includeMaterials=False):
         """Return Radiance definition for this surface as a string."""
-        __pgString = polygon(name=self.name,
-                             materialName=self.radianceMaterial.name,
-                             pts=self.points[0])
+        __numPtGroups = len(self.points)
+        __pgStrings = range(__numPtGroups)
 
-        return "%s\n%s" % (self.radianceMaterial, __pgString) if includeMaterials \
-            else __pgString
+        for ptCount, pts in enumerate(self.points):
+            # modify name for each sub_surface
+            _name = self.name if __numPtGroups == 1 else self.name + "_{}".format(ptCount)
+
+            # collect definition for each subsurface
+            __pgStrings[ptCount] = polygon(
+                name=_name, materialName=self.radianceMaterial.name, pts=pts
+            )
+
+        return "%s\n%s" % (self.radianceMaterial, "\n".join(__pgStrings)) if includeMaterials \
+            else "\n".join(__pgStrings)
 
     def radStringToFile(self, filePath, includeMaterials=False):
         """Write Radiance definition for this surface to a file.
@@ -1359,7 +1365,7 @@ if __name__ == "__main__":
     <h2 class="section-title" id="header-classes">Classes</h2>
       
       <div class="item">
-      <p id="honeybeegrasshopper.honeybee.hbsurface.HBAnalysisSurface" class="name">class <span class="ident">HBAnalysisSurface</span></p>
+      <p id="honeybeex.honeybee.hbsurface.HBAnalysisSurface" class="name">class <span class="ident">HBAnalysisSurface</span></p>
       
   
     <div class="desc"><p>Base class for Honeybee surface.</p>
@@ -1387,8 +1393,8 @@ if __name__ == "__main__":
     epProperties: EnergyPlus properties for this surface. If empty default
         epProperties will be assigned to surface by Honeybee.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.hbsurface.HBAnalysisSurface', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.honeybee.hbsurface.HBAnalysisSurface" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.hbsurface.HBAnalysisSurface', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.hbsurface.HBAnalysisSurface" class="source">
     <pre><code>class HBAnalysisSurface(HBObject):
     """Base class for Honeybee surface.
 
@@ -1598,7 +1604,7 @@ if __name__ == "__main__":
         if radProperties is None:
             self.__radProperties = RadianceProperties()
         else:
-            assert isinstance(radProperties, RadianceProperties), \
+            assert hasattr(radProperties, 'isRadianceProperties'), \
                 "%s is not a valid RadianceProperties" % str(radProperties)
             self.__radProperties = radProperties
 
@@ -1627,16 +1633,22 @@ if __name__ == "__main__":
     def radianceMaterial(self, values):
         self.radProperties.radianceMaterial = values
 
-    # TODO: Add support for multiple point list in one surface
-    # I just need to iterate through the point list
     def toRadString(self, includeMaterials=False):
         """Return Radiance definition for this surface as a string."""
-        __pgString = polygon(name=self.name,
-                             materialName=self.radianceMaterial.name,
-                             pts=self.points[0])
+        __numPtGroups = len(self.points)
+        __pgStrings = range(__numPtGroups)
 
-        return "%s\n%s" % (self.radianceMaterial, __pgString) if includeMaterials \
-            else __pgString
+        for ptCount, pts in enumerate(self.points):
+            # modify name for each sub_surface
+            _name = self.name if __numPtGroups == 1 else self.name + "_{}".format(ptCount)
+
+            # collect definition for each subsurface
+            __pgStrings[ptCount] = polygon(
+                name=_name, materialName=self.radianceMaterial.name, pts=pts
+            )
+
+        return "%s\n%s" % (self.radianceMaterial, "\n".join(__pgStrings)) if includeMaterials \
+            else "\n".join(__pgStrings)
 
     def radStringToFile(self, filePath, includeMaterials=False):
         """Write Radiance definition for this surface to a file.
@@ -1697,13 +1709,13 @@ if __name__ == "__main__":
       <div class="class">
           <h3>Ancestors (in MRO)</h3>
           <ul class="class_list">
-          <li><a href="#honeybeegrasshopper.honeybee.hbsurface.HBAnalysisSurface">HBAnalysisSurface</a></li>
-          <li>honeybeegrasshopper.honeybee.hbobject.HBObject</li>
+          <li><a href="#honeybeex.honeybee.hbsurface.HBAnalysisSurface">HBAnalysisSurface</a></li>
+          <li>honeybeex.honeybee.hbobject.HBObject</li>
           <li>__builtin__.object</li>
           </ul>
           <h3>Instance variables</h3>
             <div class="item">
-            <p id="honeybeegrasshopper.honeybee.hbsurface.HBAnalysisSurface.energyPlusConstruction" class="name">var <span class="ident">energyPlusConstruction</span></p>
+            <p id="honeybeex.honeybee.hbsurface.HBAnalysisSurface.energyPlusConstruction" class="name">var <span class="ident">energyPlusConstruction</span></p>
             
 
             
@@ -1714,7 +1726,7 @@ if __name__ == "__main__":
 
             </div>
             <div class="item">
-            <p id="honeybeegrasshopper.honeybee.hbsurface.HBAnalysisSurface.energyPlusMaterials" class="name">var <span class="ident">energyPlusMaterials</span></p>
+            <p id="honeybeex.honeybee.hbsurface.HBAnalysisSurface.energyPlusMaterials" class="name">var <span class="ident">energyPlusMaterials</span></p>
             
 
             
@@ -1725,7 +1737,7 @@ if __name__ == "__main__":
 
             </div>
             <div class="item">
-            <p id="honeybeegrasshopper.honeybee.hbsurface.HBAnalysisSurface.epProperties" class="name">var <span class="ident">epProperties</span></p>
+            <p id="honeybeex.honeybee.hbsurface.HBAnalysisSurface.epProperties" class="name">var <span class="ident">epProperties</span></p>
             
 
             
@@ -1737,7 +1749,7 @@ EPProperties will be assigned to surface by Honeybee.</p></div>
 
             </div>
             <div class="item">
-            <p id="honeybeegrasshopper.honeybee.hbsurface.HBAnalysisSurface.isHBObject" class="name">var <span class="ident">isHBObject</span></p>
+            <p id="honeybeex.honeybee.hbsurface.HBAnalysisSurface.isHBObject" class="name">var <span class="ident">isHBObject</span></p>
             
 
             
@@ -1748,7 +1760,7 @@ EPProperties will be assigned to surface by Honeybee.</p></div>
 
             </div>
             <div class="item">
-            <p id="honeybeegrasshopper.honeybee.hbsurface.HBAnalysisSurface.isTypeSetByUser" class="name">var <span class="ident">isTypeSetByUser</span></p>
+            <p id="honeybeex.honeybee.hbsurface.HBAnalysisSurface.isTypeSetByUser" class="name">var <span class="ident">isTypeSetByUser</span></p>
             
 
             
@@ -1759,7 +1771,7 @@ EPProperties will be assigned to surface by Honeybee.</p></div>
 
             </div>
             <div class="item">
-            <p id="honeybeegrasshopper.honeybee.hbsurface.HBAnalysisSurface.name" class="name">var <span class="ident">name</span></p>
+            <p id="honeybeex.honeybee.hbsurface.HBAnalysisSurface.name" class="name">var <span class="ident">name</span></p>
             
 
             
@@ -1770,7 +1782,7 @@ EPProperties will be assigned to surface by Honeybee.</p></div>
 
             </div>
             <div class="item">
-            <p id="honeybeegrasshopper.honeybee.hbsurface.HBAnalysisSurface.points" class="name">var <span class="ident">points</span></p>
+            <p id="honeybeex.honeybee.hbsurface.HBAnalysisSurface.points" class="name">var <span class="ident">points</span></p>
             
 
             
@@ -1783,7 +1795,7 @@ Points should be sorted. This class won't sort the points.
 
             </div>
             <div class="item">
-            <p id="honeybeegrasshopper.honeybee.hbsurface.HBAnalysisSurface.radProperties" class="name">var <span class="ident">radProperties</span></p>
+            <p id="honeybeex.honeybee.hbsurface.HBAnalysisSurface.radProperties" class="name">var <span class="ident">radProperties</span></p>
             
 
             
@@ -1795,7 +1807,7 @@ RADProperties will be assigned to surface by Honeybee.</p></div>
 
             </div>
             <div class="item">
-            <p id="honeybeegrasshopper.honeybee.hbsurface.HBAnalysisSurface.radianceMaterial" class="name">var <span class="ident">radianceMaterial</span></p>
+            <p id="honeybeex.honeybee.hbsurface.HBAnalysisSurface.radianceMaterial" class="name">var <span class="ident">radianceMaterial</span></p>
             
 
             
@@ -1813,7 +1825,7 @@ Radiance material is set by user or is based on surface type.</p>
 
             </div>
             <div class="item">
-            <p id="honeybeegrasshopper.honeybee.hbsurface.HBAnalysisSurface.surfaceType" class="name">var <span class="ident">surfaceType</span></p>
+            <p id="honeybeex.honeybee.hbsurface.HBAnalysisSurface.surfaceType" class="name">var <span class="ident">surfaceType</span></p>
             
 
             
@@ -1826,7 +1838,7 @@ Radiance material is set by user or is based on surface type.</p>
           <h3>Methods</h3>
             
   <div class="item">
-    <div class="name def" id="honeybeegrasshopper.honeybee.hbsurface.HBAnalysisSurface.__init__">
+    <div class="name def" id="honeybeex.honeybee.hbsurface.HBAnalysisSurface.__init__">
     <p>def <span class="ident">__init__</span>(</p><p>self, name, sortedPoints=[], surfaceType=None, isNameSetByUser=False, isTypeSetByUser=False, radProperties=None, epProperties=None)</p>
     </div>
     
@@ -1835,8 +1847,8 @@ Radiance material is set by user or is based on surface type.</p>
   
     <div class="desc"><p>Initialize Honeybee Surface.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.hbsurface.HBAnalysisSurface.__init__', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.honeybee.hbsurface.HBAnalysisSurface.__init__" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.hbsurface.HBAnalysisSurface.__init__', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.hbsurface.HBAnalysisSurface.__init__" class="source">
     <pre><code>def __init__(self, name, sortedPoints=[], surfaceType=None,
              isNameSetByUser=False, isTypeSetByUser=False,
              radProperties=None, epProperties=None):
@@ -1865,7 +1877,7 @@ Radiance material is set by user or is based on surface type.</p>
   
             
   <div class="item">
-    <div class="name def" id="honeybeegrasshopper.honeybee.hbsurface.HBAnalysisSurface.addPoint">
+    <div class="name def" id="honeybeex.honeybee.hbsurface.HBAnalysisSurface.addPoint">
     <p>def <span class="ident">addPoint</span>(</p><p>self, pt, subsurfaceNumber=-1)</p>
     </div>
     
@@ -1878,8 +1890,8 @@ Radiance material is set by user or is based on surface type.</p>
     subsurfaceNumber: An optional input to indicate the subsurface that
     point should be added to (Default is -1)</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.hbsurface.HBAnalysisSurface.addPoint', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.honeybee.hbsurface.HBAnalysisSurface.addPoint" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.hbsurface.HBAnalysisSurface.addPoint', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.hbsurface.HBAnalysisSurface.addPoint" class="source">
     <pre><code>def addPoint(self, pt, subsurfaceNumber=-1):
     """Add a single point to current surface points.
     Args:
@@ -1904,7 +1916,7 @@ Radiance material is set by user or is based on surface type.</p>
   
             
   <div class="item">
-    <div class="name def" id="honeybeegrasshopper.honeybee.hbsurface.HBAnalysisSurface.addPointList">
+    <div class="name def" id="honeybeex.honeybee.hbsurface.HBAnalysisSurface.addPointList">
     <p>def <span class="ident">addPointList</span>(</p><p>self, pts, removeCurrentPoints=False)</p>
     </div>
     
@@ -1919,8 +1931,8 @@ Radiance material is set by user or is based on surface type.</p>
     removeCurrentPoints: Set to True to remove current points.
         (Default: False)</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.hbsurface.HBAnalysisSurface.addPointList', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.honeybee.hbsurface.HBAnalysisSurface.addPointList" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.hbsurface.HBAnalysisSurface.addPointList', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.hbsurface.HBAnalysisSurface.addPointList" class="source">
     <pre><code>def addPointList(self, pts, removeCurrentPoints=False):
     """Add new list of points to surface points.
     Args:
@@ -1946,7 +1958,7 @@ Radiance material is set by user or is based on surface type.</p>
   
             
   <div class="item">
-    <div class="name def" id="honeybeegrasshopper.honeybee.hbsurface.HBAnalysisSurface.isNameSetByUser">
+    <div class="name def" id="honeybeex.honeybee.hbsurface.HBAnalysisSurface.isNameSetByUser">
     <p>def <span class="ident">isNameSetByUser</span>(</p><p>self)</p>
     </div>
     
@@ -1956,8 +1968,8 @@ Radiance material is set by user or is based on surface type.</p>
     <div class="desc"><p>Return if name is set by user.</p>
 <p>If name is set by user the surface will never be renamed automatically.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.hbsurface.HBAnalysisSurface.isNameSetByUser', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.honeybee.hbsurface.HBAnalysisSurface.isNameSetByUser" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.hbsurface.HBAnalysisSurface.isNameSetByUser', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.hbsurface.HBAnalysisSurface.isNameSetByUser" class="source">
     <pre><code>def isNameSetByUser(self):
     """Return if name is set by user.
     If name is set by user the surface will never be renamed automatically.
@@ -1971,7 +1983,7 @@ Radiance material is set by user or is based on surface type.</p>
   
             
   <div class="item">
-    <div class="name def" id="honeybeegrasshopper.honeybee.hbsurface.HBAnalysisSurface.radStringToFile">
+    <div class="name def" id="honeybeex.honeybee.hbsurface.HBAnalysisSurface.radStringToFile">
     <p>def <span class="ident">radStringToFile</span>(</p><p>self, filePath, includeMaterials=False)</p>
     </div>
     
@@ -1984,8 +1996,8 @@ Radiance material is set by user or is based on surface type.</p>
 <p>Returns:
     True in case of success. False in case of failure.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.hbsurface.HBAnalysisSurface.radStringToFile', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.honeybee.hbsurface.HBAnalysisSurface.radStringToFile" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.hbsurface.HBAnalysisSurface.radStringToFile', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.hbsurface.HBAnalysisSurface.radStringToFile" class="source">
     <pre><code>def radStringToFile(self, filePath, includeMaterials=False):
     """Write Radiance definition for this surface to a file.
     Args:
@@ -2010,7 +2022,7 @@ Radiance material is set by user or is based on surface type.</p>
   
             
   <div class="item">
-    <div class="name def" id="honeybeegrasshopper.honeybee.hbsurface.HBAnalysisSurface.toEPString">
+    <div class="name def" id="honeybeex.honeybee.hbsurface.HBAnalysisSurface.toEPString">
     <p>def <span class="ident">toEPString</span>(</p><p>self, includeConstruction=False, includeMaterials=False)</p>
     </div>
     
@@ -2019,8 +2031,8 @@ Radiance material is set by user or is based on surface type.</p>
   
     <div class="desc"><p>Return EnergyPlus definition for this surface.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.hbsurface.HBAnalysisSurface.toEPString', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.honeybee.hbsurface.HBAnalysisSurface.toEPString" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.hbsurface.HBAnalysisSurface.toEPString', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.hbsurface.HBAnalysisSurface.toEPString" class="source">
     <pre><code>def toEPString(self, includeConstruction=False, includeMaterials=False):
     """Return EnergyPlus definition for this surface."""
     raise NotImplementedError
@@ -2032,7 +2044,7 @@ Radiance material is set by user or is based on surface type.</p>
   
             
   <div class="item">
-    <div class="name def" id="honeybeegrasshopper.honeybee.hbsurface.HBAnalysisSurface.toRadString">
+    <div class="name def" id="honeybeex.honeybee.hbsurface.HBAnalysisSurface.toRadString">
     <p>def <span class="ident">toRadString</span>(</p><p>self, includeMaterials=False)</p>
     </div>
     
@@ -2041,15 +2053,21 @@ Radiance material is set by user or is based on surface type.</p>
   
     <div class="desc"><p>Return Radiance definition for this surface as a string.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeegrasshopper.honeybee.hbsurface.HBAnalysisSurface.toRadString', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeegrasshopper.honeybee.hbsurface.HBAnalysisSurface.toRadString" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.hbsurface.HBAnalysisSurface.toRadString', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.hbsurface.HBAnalysisSurface.toRadString" class="source">
     <pre><code>def toRadString(self, includeMaterials=False):
     """Return Radiance definition for this surface as a string."""
-    __pgString = polygon(name=self.name,
-                         materialName=self.radianceMaterial.name,
-                         pts=self.points[0])
-    return "%s\n%s" % (self.radianceMaterial, __pgString) if includeMaterials \
-        else __pgString
+    __numPtGroups = len(self.points)
+    __pgStrings = range(__numPtGroups)
+    for ptCount, pts in enumerate(self.points):
+        # modify name for each sub_surface
+        _name = self.name if __numPtGroups == 1 else self.name + "_{}".format(ptCount)
+        # collect definition for each subsurface
+        __pgStrings[ptCount] = polygon(
+            name=_name, materialName=self.radianceMaterial.name, pts=pts
+        )
+    return "%s\n%s" % (self.radianceMaterial, "\n".join(__pgStrings)) if includeMaterials \
+        else "\n".join(__pgStrings)
 </code></pre>
   </div>
 </div>
