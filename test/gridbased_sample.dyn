@@ -1,4 +1,4 @@
-<Workspace Version="0.9.1.3872" X="-93.225429451215" Y="294.936396581231" zoom="0.459282260382791" Name="Home" Description="" RunType="Automatic" RunPeriod="1000" HasRunWithoutCrash="True">
+<Workspace Version="0.9.1.3872" X="181.137020935555" Y="223.518701772993" zoom="0.346185268383954" Name="Home" Description="" RunType="Manual" RunPeriod="1000" HasRunWithoutCrash="True">
   <NamespaceResolutionMap>
     <ClassMap partialName="List" resolvedName="DSCore.List" assemblyName="DSCoreNodes.dll" />
   </NamespaceResolutionMap>
@@ -468,6 +468,6 @@ OUT = unflatten(*IN)</Script>
   </Annotations>
   <Presets />
   <Cameras>
-    <Camera Name="Background Preview" eyeX="-5.76156875887481" eyeY="9.05755878922336" eyeZ="6.42080054874499" lookX="28.3501889085104" lookY="-17.4086920881131" lookZ="-21.9990873595427" upX="0.184431479567432" upY="0.972369894324847" upZ="-0.143114536098263" />
+    <Camera Name="Background Preview" eyeX="-5.84475808351279" eyeY="10.9850826755957" eyeZ="9.85358288733426" lookX="28.433378746202" lookY="-19.336215068479" lookZ="-25.4318704888052" upX="0.186621320030945" upY="0.968147629155999" upZ="-0.166921036643478" />
   </Cameras>
 </Workspace>
