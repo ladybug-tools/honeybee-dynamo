@@ -8,8 +8,8 @@
 sys.path.extend(IN[0])
 
 try:
-	from honeybeegrasshopper.radiance.sky.certainIlluminance import SkyWithCertainIlluminanceLevel
-	from honeybeegrasshopper.wrapper import Wrapper
+	from honeybeex.radiance.sky.certainIlluminance import SkyWithCertainIlluminanceLevel
+	from honeybeex.wrapper import Wrapper
 except ImportError as e:
     raise ImportError("Failed to import Honeybee libraries.\n" + \
                       "Set-up path to Honeybee libraries in honeybee_honeybee component:\n%s"%e)
@@ -19,14 +19,14 @@ if _illuminanceValue:
     OUT = Wrapper(SkyWithCertainIlluminanceLevel(_illuminanceValue))</Script>
     </PythonNodeModels.PythonNode>
     <Dynamo.Graph.Nodes.CodeBlockNodeModel guid="742a7dd0-7f5d-4df8-a562-50495a4d41ae" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" nickname="Code Block" x="1458.45533833027" y="-206.018996389768" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" CodeText="10000;" ShouldFocus="false" />
-    <Dynamo.Graph.Nodes.CodeBlockNodeModel guid="7bcebefb-186b-42a0-a778-6b8d72385d35" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" nickname="Code Block" x="-289.386279117687" y="-353.23488865836" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" CodeText="{&quot;C:\\Users\\Administrator\\Documents\\GitHub\\honeybee-grasshopper&quot;,&#xA;&quot;C:\Program Files (x86)\IronPython 2.7\Lib&quot;};" ShouldFocus="false" />
+    <Dynamo.Graph.Nodes.CodeBlockNodeModel guid="7bcebefb-186b-42a0-a778-6b8d72385d35" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" nickname="Code Block" x="-289.386279117687" y="-353.23488865836" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" CodeText="{&quot;C:\\Users\\Administrator\\Documents\\GitHub\\honeybeex&quot;,&#xA;&quot;C:\Program Files (x86)\IronPython 2.7\Lib&quot;};" ShouldFocus="false" />
     <PythonNodeModels.PythonNode guid="ab5d7481-9ede-4111-a1e7-ac1fa56895c9" type="PythonNodeModels.PythonNode" nickname="Python Script" x="1584.58632572478" y="192.368150066834" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" inputcount="2">
       <Script>import sys
 sys.path.extend(IN[0])
 
 try:
-    from honeybeegrasshopper.radiance import parameters
-    from honeybeegrasshopper import wrapper
+    from honeybeex.radiance import parameters
+    from honeybeex import wrapper
 except ImportError:
     raise ImportError("Failed to import Honeybee libraries.\n" + \
                       "Set-up path to Honeybee libraries in honeybee_honeybee component")
@@ -44,8 +44,8 @@ if _quality:
 sys.path.extend(IN[0])
 
 try:
-    from honeybeegrasshopper.radiance.recipe.gridbased import GridBasedAnalysisRecipe
-    from honeybeegrasshopper import wrapper
+    from honeybeex.radiance.recipe.gridbased import GridBasedAnalysisRecipe
+    from honeybeex import wrapper
 except ImportError:
     raise ImportError("Failed to import Honeybee libraries.\n" + \
                       "Set-up path to Honeybee libraries in honeybee_honeybee component")
@@ -92,8 +92,8 @@ if _HBSky and _testPoints and ptsVectors_:
 sys.path.extend(IN[0])
 
 try:
-    from honeybeegrasshopper.radiance.material.glass import GlassMaterial
-    from honeybeegrasshopper.wrapper import Wrapper
+    from honeybeex.radiance.material.glass import GlassMaterial
+    from honeybeex.wrapper import Wrapper
 except ImportError:
     raise ImportError("Failed to import Honeybee libraries.\n" + \
                       "Set-up path to Honeybee libraries in honeybee_honeybee component")
@@ -116,8 +116,8 @@ if _name and _TVis:
 sys.path.extend(IN[0])
 
 try:
-    from honeybeegrasshopper.radiance.properties import RadianceProperties
-    from honeybeegrasshopper.wrapper import Wrapper
+    from honeybeex.radiance.properties import RadianceProperties
+    from honeybeex.wrapper import Wrapper
 except ImportError:
     raise ImportError("Failed to import Honeybee libraries.\n" + \
                       "Set-up path to Honeybee libraries in honeybee_honeybee component")
@@ -133,8 +133,8 @@ OUT = Wrapper(radProp)</Script>
 sys.path.extend(IN[0])
 
 try:
-    from honeybeegrasshopper.hbsurface import HBSurface
-    from honeybeegrasshopper.wrapper import Wrapper
+    from honeybeex.hbsurface import HBSurface
+    from honeybeex.wrapper import Wrapper
 except ImportError:
     raise ImportError("Failed to import Honeybee libraries.\n" + \
                       "Set-up path to Honeybee libraries in honeybee_honeybee component")
@@ -239,8 +239,8 @@ if _HBObjs and _recipe and _write:
 sys.path.extend(IN[0])
 
 try:
-    from honeybeegrasshopper.hbsurface import HBSurface
-    from honeybeegrasshopper.wrapper import Wrapper
+    from honeybeex.hbsurface import HBSurface
+    from honeybeex.wrapper import Wrapper
 except ImportError:
     raise ImportError("Failed to import Honeybee libraries.\n" + \
                       "Set-up path to Honeybee libraries in honeybee_honeybee component")

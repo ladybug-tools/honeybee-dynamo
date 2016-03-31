@@ -1,8 +1,8 @@
 #import sys
-#sys.path.append(r"C:\Users\Administrator\Documents\GitHub\honeybee-grasshopper\honeybee")
+#sys.path.append(r"C:\Users\Administrator\Documents\GitHub\honeybeex\honeybee")
 
-# import honeybeegrasshopper
-from honeybeegrasshopper.radiance import parameters
+# import honeybeex
+from honeybeex.radiance import parameters
 
 print parameters.LowQuality()
 

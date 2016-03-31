@@ -1,13 +1,13 @@
-# honeybee-grasshopper
+# honeybeex
 Honeybee plugin for Grasshopper
 
-### [API Documentation](http://ladybug-analysis-tools.github.io/honeybee-grasshopper/doc/)
+### [API Documentation](http://ladybug-analysis-tools.github.io/honeybeex/doc/)
 
 ```python
 # Here is a simple example on how to use the API
-from honeybeegrasshopper.radiance.sky.certainIlluminance import SkyWithCertainIlluminanceLevel
-from honeybeegrasshopper.radiance.recipe.gridbased import HBGridBasedAnalysisRecipe
-from honeybeegrasshopper.hbsurface import HBAnalysisSurface
+from honeybeex.radiance.sky.certainIlluminance import SkyWithCertainIlluminanceLevel
+from honeybeex.radiance.recipe.gridbased import HBGridBasedAnalysisRecipe
+from honeybeex.hbsurface import HBAnalysisSurface
 
 
 pts = [(0, 0, 0), (10, 0, 0), (10, 10, 0), (0, 10, 0)]
@@ -27,5 +27,5 @@ rp.writeToFile("c:\ladybug", "test")
 rp.run(False)
 
 # read the results
-# to be implemented
+print rp.results
 ```
