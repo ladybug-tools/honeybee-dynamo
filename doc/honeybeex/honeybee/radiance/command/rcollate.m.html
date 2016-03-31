@@ -3,8 +3,8 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 
-    <title>honeybeex.honeybee.radiance.command.commandBase API documentation</title>
-    <meta name="description" content="Radiance base command." />
+    <title>honeybeex.honeybee.radiance.command.rcollate API documentation</title>
+    <meta name="description" content="" />
 
   <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300' rel='stylesheet' type='text/css'>
 
@@ -989,13 +989,14 @@ table {
     <li class="set"><h3><a href="#header-classes">Classes</a></h3>
       <ul>
         <li class="mono">
-        <span class="class_name"><a href="#honeybeex.honeybee.radiance.command.commandBase.RadianceCommand">RadianceCommand</a></span>
+        <span class="class_name"><a href="#honeybeex.honeybee.radiance.command.rcollate.Rcollate">Rcollate</a></span>
         
           
   <ul>
-    <li class="mono"><a href="#honeybeex.honeybee.radiance.command.commandBase.RadianceCommand.__init__">__init__</a></li>
-    <li class="mono"><a href="#honeybeex.honeybee.radiance.command.commandBase.RadianceCommand.execute">execute</a></li>
-    <li class="mono"><a href="#honeybeex.honeybee.radiance.command.commandBase.RadianceCommand.toRadString">toRadString</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.radiance.command.rcollate.Rcollate.__init__">__init__</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.radiance.command.rcollate.Rcollate.execute">execute</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.radiance.command.rcollate.Rcollate.inputFiles">inputFiles</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.radiance.command.rcollate.Rcollate.toRadString">toRadString</a></li>
   </ul>
 
         </li>
@@ -1013,125 +1014,112 @@ table {
 
 
   <header id="section-intro">
-  <h1 class="title"><span class="name">honeybeex.honeybee.radiance.command.commandBase</span> module</h1>
-  <p>Radiance base command.</p>
+  <h1 class="title"><span class="name">honeybeex.honeybee.radiance.command.rcollate</span> module</h1>
   
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.command.commandBase', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeex.honeybee.radiance.command.commandBase" class="source">
-    <pre><code>"""Radiance base command."""
-from ... import config
-
-from abc import ABCMeta, abstractmethod, abstractproperty
+  
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.command.rcollate', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.command.rcollate" class="source">
+    <pre><code># coding=utf-8
+from commandBase import RadianceCommand
 import os
-import subprocess
+import sys
+from ..datatype import *
+from ..datatype import RadInputStringFormatter as Rfmt
 
 
-# TODO: Implement piping as on option
-class RadianceCommand(object):
-    """Base class for commands."""
+class Rcollate(RadianceCommand):
+    u"""
+    rcollate - resize or transpose matrix data
 
-    __metaclass__ = ABCMeta
+    Attributes:
 
-    def __init__(self):
-        """Initialize Radiance command."""
-        self.radbinPath = config.radbinPath
-        self.radlibPath = config.radlibPath
+    """
+    h = RadianceBoolFlag('h', 'header information',
+                         acceptedInputs=(True, 'i', 'o'))
+    w = RadianceBoolFlag('w', 'warning messages', acceptedInputs=(True,))
+    t = RadianceBoolFlag('t', 'transpose', acceptedInputs=(True,))
+    ic = RadianceNumber('ic', 'input columns', numType=int)
+    ir = RadianceNumber('ir', 'input rows', numType=int)
+    oc = RadianceNumber('ic', 'ouput columns', numType=int)
+    orX = RadianceNumber('orX', 'output rows', numType=int)
+    matrixFile = RadiancePath('matrixFile', 'matrix file', expandRelative=True,
+                              checkExists=True)
+
+    def __init__(self, h=None, w=None, t=None, ic=None, ir=None, oc=None,
+                 orX=None,
+                 f=None, matrixFile=None, outputName=None):
+        RadianceCommand.__init__(self)
+        self.h = h
+        self.w = w
+        self.t = t
+        self.ic = ic
+        self.ir = ir
+        self.oc = oc
+        self.orX = orX
+        self.matrixFile = matrixFile
+        self.f = f
+        self.outputName = outputName
 
     @property
-    def radbinPath(self):
-        """Get and set path to radiance binaries.
+    def f(self):
+        return self._f
 
-        If you set a new value the value will be changed globally.
-        """
-        return config.radbinPath
+    @f.setter
+    def f(self, value):
+        varName = "f (input format)"
+        assert value[0] in ('a', 'f', 'd', 'b'), "The first value for %s " \
+                                                 "should be either a,f,d or" \
+                                                 "b. %s was provided" \
+                                                 "insted" % (varName, value)
+        if len(value) > 1:
+            try:
+                dataRecords = int(value[1:])
+            except ValueError:
+                raise ValueError("The input for %s should be in the format"
+                                 "[afdb]N .e.g f3. The value provided was %s"
+                                 % (varName, value))
+        self._f = value
 
-    @radbinPath.setter
-    def radbinPath(self, path):
-        self.__checkExecutable(radbinPath=path, raiseException=True)
-        # change the path in config so user need to set it up once in a single script
-        config.radbinPath = path
-
-    @property
-    def radlibPath(self):
-        """Get and set path to radiance libraries.
-
-        If you set a new value the value will be changed globally.
-        """
-        return config.radlibPath
-
-    @radlibPath.setter
-    def radlibPath(self, path):
-        self.__checkLibs(radlibPath=path, raiseException=True)
-        # change the path in config so user need to set it up once in a single script
-        config.radlibPath = path
-
-    @abstractmethod
     def toRadString(self, relativePath=False):
         """Return full command as a string."""
-        pass
+        fmtBool = Rfmt.boolean
+        fmtJoin = Rfmt.joined
+        fmtNormal = Rfmt.normal
 
-    @abstractproperty
-    def inputFiles(self):
-        """Return list of input files for this command."""
-        pass
+        fmtDict = {'h': ('h', fmtBool),
+                   'w': ('w', fmtBool),
+                   't': ('t', fmtBool),
+                   'ic': ('ic', fmtNormal),
+                   'ir': ('ir', fmtNormal),
+                   'oc': ('oc', fmtNormal),
+                   'orX': ('or', fmtNormal),
+                   'f': ('f', fmtJoin)}
 
-    def __checkExecutable(self, radbinPath=None, raiseException=False):
-        """Check if executable file exist."""
-        radbinPath = self.radbinPath if not radbinPath else radbinPath
+        commandInputs = ""
+        for key, value in fmtDict.items():
+            try:
+                currentValue = getattr(self, key)
+                currentFlag, currentFormatter = value
+                commandInputs += currentFormatter(currentFlag, currentValue)
+            except AttributeError:
+                pass
 
-        __executable = os.path.normpath(
-            os.path.join(str(radbinPath), '{}.exe'.format(self.__class__.__name__))
+        outputFileName = self.outputName
+        if not self.outputName:
+            outputFileName = os.path.splitext(self.inputFiles[0])[0] + '.dat'
+
+        radString = "%s %s %s > %s" % (
+            os.path.join(self.radbinPath, 'rcollate'),
+            commandInputs,
+            self.inputFiles[0],
+            outputFileName
         )
 
-        if not (os.path.isfile(__executable) and os.access(__executable, os.X_OK)):
-            __err = "Can't find %s.\n" % __executable + \
-                "Use radbinPath method to set the path to " + \
-                "Radiance binaries before executing the command."
-            if raiseException:
-                raise ValueError(__err)
-            else:
-                print __err
+        return radString
 
-    def __checkLibs(self, radlibPath=None, raiseException=False):
-        """Check if path to libraries is set correctly."""
-        radlibPath = self.radlibPath if not radlibPath else radlibPath
-
-        if not os.path.isdir(radlibPath):
-            __err = "Can't find %s.\n" % radlibPath + \
-                "Use radlibPath method to set the path to " + \
-                "Radiance libraries before executing the command."
-            if raiseException:
-                raise ValueError(__err)
-            else:
-                print __err
-
-    def __checkFiles(self, raiseExceptionBin=True, raiseExceptionLib=True):
-        """Check if the input files exist on the computer."""
-        assert len(self.inputFiles) != 0, \
-            "You need at least one file to create an octree."
-
-        for f in self.inputFiles:
-            assert os.path.exists(f), "Invalid Input File: %s doesn't exist" % f
-
-        self.__checkExecutable(raiseException=True)
-        self.__checkLibs(raiseException=True)
-
-    # TODO: Add Error handling
-    def execute(self):
-        """Execute the command."""
-        # check if the files exist on the computer
-        self.__checkFiles()
-
-        p = subprocess.Popen(self.toRadString(), shell=True,
-                             stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-
-        for line in p.stdout.readlines():
-            print line,
-        p.wait()
-
-    def __repr__(self):
-        """Class representation."""
-        return self.toRadString()
+    def inputFiles(self):
+        """Input files for this command."""
+        return self.matrixFile
 </code></pre>
   </div>
 
@@ -1143,118 +1131,107 @@ class RadianceCommand(object):
     <h2 class="section-title" id="header-classes">Classes</h2>
       
       <div class="item">
-      <p id="honeybeex.honeybee.radiance.command.commandBase.RadianceCommand" class="name">class <span class="ident">RadianceCommand</span></p>
+      <p id="honeybeex.honeybee.radiance.command.rcollate.Rcollate" class="name">class <span class="ident">Rcollate</span></p>
       
   
-    <div class="desc"><p>Base class for commands.</p></div>
+    <div class="desc"><p>rcollate - resize or transpose matrix data</p>
+<p>Attributes:</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.command.commandBase.RadianceCommand', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeex.honeybee.radiance.command.commandBase.RadianceCommand" class="source">
-    <pre><code>class RadianceCommand(object):
-    """Base class for commands."""
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.command.rcollate.Rcollate', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.command.rcollate.Rcollate" class="source">
+    <pre><code>class Rcollate(RadianceCommand):
+    u"""
+    rcollate - resize or transpose matrix data
 
-    __metaclass__ = ABCMeta
+    Attributes:
 
-    def __init__(self):
-        """Initialize Radiance command."""
-        self.radbinPath = config.radbinPath
-        self.radlibPath = config.radlibPath
+    """
+    h = RadianceBoolFlag('h', 'header information',
+                         acceptedInputs=(True, 'i', 'o'))
+    w = RadianceBoolFlag('w', 'warning messages', acceptedInputs=(True,))
+    t = RadianceBoolFlag('t', 'transpose', acceptedInputs=(True,))
+    ic = RadianceNumber('ic', 'input columns', numType=int)
+    ir = RadianceNumber('ir', 'input rows', numType=int)
+    oc = RadianceNumber('ic', 'ouput columns', numType=int)
+    orX = RadianceNumber('orX', 'output rows', numType=int)
+    matrixFile = RadiancePath('matrixFile', 'matrix file', expandRelative=True,
+                              checkExists=True)
+
+    def __init__(self, h=None, w=None, t=None, ic=None, ir=None, oc=None,
+                 orX=None,
+                 f=None, matrixFile=None, outputName=None):
+        RadianceCommand.__init__(self)
+        self.h = h
+        self.w = w
+        self.t = t
+        self.ic = ic
+        self.ir = ir
+        self.oc = oc
+        self.orX = orX
+        self.matrixFile = matrixFile
+        self.f = f
+        self.outputName = outputName
 
     @property
-    def radbinPath(self):
-        """Get and set path to radiance binaries.
+    def f(self):
+        return self._f
 
-        If you set a new value the value will be changed globally.
-        """
-        return config.radbinPath
+    @f.setter
+    def f(self, value):
+        varName = "f (input format)"
+        assert value[0] in ('a', 'f', 'd', 'b'), "The first value for %s " \
+                                                 "should be either a,f,d or" \
+                                                 "b. %s was provided" \
+                                                 "insted" % (varName, value)
+        if len(value) > 1:
+            try:
+                dataRecords = int(value[1:])
+            except ValueError:
+                raise ValueError("The input for %s should be in the format"
+                                 "[afdb]N .e.g f3. The value provided was %s"
+                                 % (varName, value))
+        self._f = value
 
-    @radbinPath.setter
-    def radbinPath(self, path):
-        self.__checkExecutable(radbinPath=path, raiseException=True)
-        # change the path in config so user need to set it up once in a single script
-        config.radbinPath = path
-
-    @property
-    def radlibPath(self):
-        """Get and set path to radiance libraries.
-
-        If you set a new value the value will be changed globally.
-        """
-        return config.radlibPath
-
-    @radlibPath.setter
-    def radlibPath(self, path):
-        self.__checkLibs(radlibPath=path, raiseException=True)
-        # change the path in config so user need to set it up once in a single script
-        config.radlibPath = path
-
-    @abstractmethod
     def toRadString(self, relativePath=False):
         """Return full command as a string."""
-        pass
+        fmtBool = Rfmt.boolean
+        fmtJoin = Rfmt.joined
+        fmtNormal = Rfmt.normal
 
-    @abstractproperty
-    def inputFiles(self):
-        """Return list of input files for this command."""
-        pass
+        fmtDict = {'h': ('h', fmtBool),
+                   'w': ('w', fmtBool),
+                   't': ('t', fmtBool),
+                   'ic': ('ic', fmtNormal),
+                   'ir': ('ir', fmtNormal),
+                   'oc': ('oc', fmtNormal),
+                   'orX': ('or', fmtNormal),
+                   'f': ('f', fmtJoin)}
 
-    def __checkExecutable(self, radbinPath=None, raiseException=False):
-        """Check if executable file exist."""
-        radbinPath = self.radbinPath if not radbinPath else radbinPath
+        commandInputs = ""
+        for key, value in fmtDict.items():
+            try:
+                currentValue = getattr(self, key)
+                currentFlag, currentFormatter = value
+                commandInputs += currentFormatter(currentFlag, currentValue)
+            except AttributeError:
+                pass
 
-        __executable = os.path.normpath(
-            os.path.join(str(radbinPath), '{}.exe'.format(self.__class__.__name__))
+        outputFileName = self.outputName
+        if not self.outputName:
+            outputFileName = os.path.splitext(self.inputFiles[0])[0] + '.dat'
+
+        radString = "%s %s %s > %s" % (
+            os.path.join(self.radbinPath, 'rcollate'),
+            commandInputs,
+            self.inputFiles[0],
+            outputFileName
         )
 
-        if not (os.path.isfile(__executable) and os.access(__executable, os.X_OK)):
-            __err = "Can't find %s.\n" % __executable + \
-                "Use radbinPath method to set the path to " + \
-                "Radiance binaries before executing the command."
-            if raiseException:
-                raise ValueError(__err)
-            else:
-                print __err
+        return radString
 
-    def __checkLibs(self, radlibPath=None, raiseException=False):
-        """Check if path to libraries is set correctly."""
-        radlibPath = self.radlibPath if not radlibPath else radlibPath
-
-        if not os.path.isdir(radlibPath):
-            __err = "Can't find %s.\n" % radlibPath + \
-                "Use radlibPath method to set the path to " + \
-                "Radiance libraries before executing the command."
-            if raiseException:
-                raise ValueError(__err)
-            else:
-                print __err
-
-    def __checkFiles(self, raiseExceptionBin=True, raiseExceptionLib=True):
-        """Check if the input files exist on the computer."""
-        assert len(self.inputFiles) != 0, \
-            "You need at least one file to create an octree."
-
-        for f in self.inputFiles:
-            assert os.path.exists(f), "Invalid Input File: %s doesn't exist" % f
-
-        self.__checkExecutable(raiseException=True)
-        self.__checkLibs(raiseException=True)
-
-    # TODO: Add Error handling
-    def execute(self):
-        """Execute the command."""
-        # check if the files exist on the computer
-        self.__checkFiles()
-
-        p = subprocess.Popen(self.toRadString(), shell=True,
-                             stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-
-        for line in p.stdout.readlines():
-            print line,
-        p.wait()
-
-    def __repr__(self):
-        """Class representation."""
-        return self.toRadString()
+    def inputFiles(self):
+        """Input files for this command."""
+        return self.matrixFile
 </code></pre>
   </div>
 </div>
@@ -1263,23 +1240,94 @@ class RadianceCommand(object):
       <div class="class">
           <h3>Ancestors (in MRO)</h3>
           <ul class="class_list">
-          <li><a href="#honeybeex.honeybee.radiance.command.commandBase.RadianceCommand">RadianceCommand</a></li>
+          <li><a href="#honeybeex.honeybee.radiance.command.rcollate.Rcollate">Rcollate</a></li>
+          <li>honeybeex.honeybee.radiance.command.commandBase.RadianceCommand</li>
           <li>__builtin__.object</li>
           </ul>
+          <h3>Class variables</h3>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.rcollate.Rcollate.h" class="name">var <span class="ident">h</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.rcollate.Rcollate.ic" class="name">var <span class="ident">ic</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.rcollate.Rcollate.ir" class="name">var <span class="ident">ir</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.rcollate.Rcollate.matrixFile" class="name">var <span class="ident">matrixFile</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.rcollate.Rcollate.oc" class="name">var <span class="ident">oc</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.rcollate.Rcollate.orX" class="name">var <span class="ident">orX</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.rcollate.Rcollate.t" class="name">var <span class="ident">t</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.rcollate.Rcollate.w" class="name">var <span class="ident">w</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
           <h3>Instance variables</h3>
             <div class="item">
-            <p id="honeybeex.honeybee.radiance.command.commandBase.RadianceCommand.inputFiles" class="name">var <span class="ident">inputFiles</span></p>
-            
-
-            
-  
-    <div class="desc"><p>Return list of input files for this command.</p></div>
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="honeybeex.honeybee.radiance.command.commandBase.RadianceCommand.radbinPath" class="name">var <span class="ident">radbinPath</span></p>
+            <p id="honeybeex.honeybee.radiance.command.rcollate.Rcollate.f" class="name">var <span class="ident">f</span></p>
             
 
             
@@ -1289,7 +1337,111 @@ class RadianceCommand(object):
 
             </div>
             <div class="item">
-            <p id="honeybeex.honeybee.radiance.command.commandBase.RadianceCommand.radlibPath" class="name">var <span class="ident">radlibPath</span></p>
+            <p id="honeybeex.honeybee.radiance.command.rcollate.Rcollate.h" class="name">var <span class="ident">h</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.rcollate.Rcollate.ic" class="name">var <span class="ident">ic</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.rcollate.Rcollate.ir" class="name">var <span class="ident">ir</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.rcollate.Rcollate.matrixFile" class="name">var <span class="ident">matrixFile</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.rcollate.Rcollate.oc" class="name">var <span class="ident">oc</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.rcollate.Rcollate.orX" class="name">var <span class="ident">orX</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.rcollate.Rcollate.outputName" class="name">var <span class="ident">outputName</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.rcollate.Rcollate.radbinPath" class="name">var <span class="ident">radbinPath</span></p>
+            
+
+            
+  
+    <div class="desc"><p>Get and set path to radiance binaries.</p>
+<p>If you set a new value the value will be changed globally.</p></div>
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.rcollate.Rcollate.radlibPath" class="name">var <span class="ident">radlibPath</span></p>
+            
+
+            
+  
+    <div class="desc"><p>Get and set path to radiance libraries.</p>
+<p>If you set a new value the value will be changed globally.</p></div>
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.rcollate.Rcollate.t" class="name">var <span class="ident">t</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.rcollate.Rcollate.w" class="name">var <span class="ident">w</span></p>
             
 
             
@@ -1301,21 +1453,30 @@ class RadianceCommand(object):
           <h3>Methods</h3>
             
   <div class="item">
-    <div class="name def" id="honeybeex.honeybee.radiance.command.commandBase.RadianceCommand.__init__">
-    <p>def <span class="ident">__init__</span>(</p><p>self)</p>
+    <div class="name def" id="honeybeex.honeybee.radiance.command.rcollate.Rcollate.__init__">
+    <p>def <span class="ident">__init__</span>(</p><p>self, h=None, w=None, t=None, ic=None, ir=None, oc=None, orX=None, f=None, matrixFile=None, outputName=None)</p>
     </div>
     
 
     
   
-    <div class="desc"><p>Initialize Radiance command.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.command.commandBase.RadianceCommand.__init__', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeex.honeybee.radiance.command.commandBase.RadianceCommand.__init__" class="source">
-    <pre><code>def __init__(self):
-    """Initialize Radiance command."""
-    self.radbinPath = config.radbinPath
-    self.radlibPath = config.radlibPath
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.command.rcollate.Rcollate.__init__', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.command.rcollate.Rcollate.__init__" class="source">
+    <pre><code>def __init__(self, h=None, w=None, t=None, ic=None, ir=None, oc=None,
+             orX=None,
+             f=None, matrixFile=None, outputName=None):
+    RadianceCommand.__init__(self)
+    self.h = h
+    self.w = w
+    self.t = t
+    self.ic = ic
+    self.ir = ir
+    self.oc = oc
+    self.orX = orX
+    self.matrixFile = matrixFile
+    self.f = f
+    self.outputName = outputName
 </code></pre>
   </div>
 </div>
@@ -1324,7 +1485,7 @@ class RadianceCommand(object):
   
             
   <div class="item">
-    <div class="name def" id="honeybeex.honeybee.radiance.command.commandBase.RadianceCommand.execute">
+    <div class="name def" id="honeybeex.honeybee.radiance.command.rcollate.Rcollate.execute">
     <p>def <span class="ident">execute</span>(</p><p>self)</p>
     </div>
     
@@ -1333,8 +1494,8 @@ class RadianceCommand(object):
   
     <div class="desc"><p>Execute the command.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.command.commandBase.RadianceCommand.execute', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeex.honeybee.radiance.command.commandBase.RadianceCommand.execute" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.command.rcollate.Rcollate.execute', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.command.rcollate.Rcollate.execute" class="source">
     <pre><code>def execute(self):
     """Execute the command."""
     # check if the files exist on the computer
@@ -1352,7 +1513,29 @@ class RadianceCommand(object):
   
             
   <div class="item">
-    <div class="name def" id="honeybeex.honeybee.radiance.command.commandBase.RadianceCommand.toRadString">
+    <div class="name def" id="honeybeex.honeybee.radiance.command.rcollate.Rcollate.inputFiles">
+    <p>def <span class="ident">inputFiles</span>(</p><p>self)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Input files for this command.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.command.rcollate.Rcollate.inputFiles', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.command.rcollate.Rcollate.inputFiles" class="source">
+    <pre><code>def inputFiles(self):
+    """Input files for this command."""
+    return self.matrixFile
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="honeybeex.honeybee.radiance.command.rcollate.Rcollate.toRadString">
     <p>def <span class="ident">toRadString</span>(</p><p>self, relativePath=False)</p>
     </div>
     
@@ -1361,12 +1544,39 @@ class RadianceCommand(object):
   
     <div class="desc"><p>Return full command as a string.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.command.commandBase.RadianceCommand.toRadString', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeex.honeybee.radiance.command.commandBase.RadianceCommand.toRadString" class="source">
-    <pre><code>@abstractmethod
-def toRadString(self, relativePath=False):
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.command.rcollate.Rcollate.toRadString', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.command.rcollate.Rcollate.toRadString" class="source">
+    <pre><code>def toRadString(self, relativePath=False):
     """Return full command as a string."""
-    pass
+    fmtBool = Rfmt.boolean
+    fmtJoin = Rfmt.joined
+    fmtNormal = Rfmt.normal
+    fmtDict = {'h': ('h', fmtBool),
+               'w': ('w', fmtBool),
+               't': ('t', fmtBool),
+               'ic': ('ic', fmtNormal),
+               'ir': ('ir', fmtNormal),
+               'oc': ('oc', fmtNormal),
+               'orX': ('or', fmtNormal),
+               'f': ('f', fmtJoin)}
+    commandInputs = ""
+    for key, value in fmtDict.items():
+        try:
+            currentValue = getattr(self, key)
+            currentFlag, currentFormatter = value
+            commandInputs += currentFormatter(currentFlag, currentValue)
+        except AttributeError:
+            pass
+    outputFileName = self.outputName
+    if not self.outputName:
+        outputFileName = os.path.splitext(self.inputFiles[0])[0] + '.dat'
+    radString = "%s %s %s > %s" % (
+        os.path.join(self.radbinPath, 'rcollate'),
+        commandInputs,
+        self.inputFiles[0],
+        outputFileName
+    )
+    return radString
 </code></pre>
   </div>
 </div>

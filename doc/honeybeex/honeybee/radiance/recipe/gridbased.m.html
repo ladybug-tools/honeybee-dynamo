@@ -1001,6 +1001,7 @@ table {
     <li class="mono"><a href="#honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.results">results</a></li>
     <li class="mono"><a href="#honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.run">run</a></li>
     <li class="mono"><a href="#honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.toRadString">toRadString</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.updatePointGroups">updatePointGroups</a></li>
     <li class="mono"><a href="#honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.writeHBObjectsToFile">writeHBObjectsToFile</a></li>
     <li class="mono"><a href="#honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.writePointsToFile">writePointsToFile</a></li>
     <li class="mono"><a href="#honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.writeToFile">writeToFile</a></li>
@@ -1077,7 +1078,32 @@ class HBGridBasedAnalysisRecipe(HBDaylightAnalysisRecipe):
         self.loader = LoadGridBasedDLAnalysisResults(self.simulationType,
                                                      self.resultsFile)
 
-        # create point groups
+        # create analysisi point groups
+        self.createAnalysisPointGroups(pointGroups, vectorGroups)
+
+    @property
+    def pointGroups(self):
+        """Return analysis point groups."""
+        return self.analysisPointsGroups
+
+    @pointGroups.setter
+    def pointGroups(self):
+        """Return analysis point groups."""
+        raise ValueError("You can't set pointGroups directly. " +
+                         "Use updatePointGroups method instead.")
+
+    def updatePointGroups(self, pointGroups, vectorGroups=[]):
+        """Update point groups.
+
+        Args:
+            pointGroups: A list of (x, y, z) test points or lists of (x, y, z)
+                test points. Each list of test points will be converted to a
+                TestPointGroup. If testPts is a single flattened list only one
+                TestPointGroup will be created.
+            vectorGroups: An optional list of (x, y, z) vectors. Each vector
+                represents direction of corresponding point in testPts. If the
+                vector is not provided (0, 0, 1) will be assigned.
+        """
         self.createAnalysisPointGroups(pointGroups, vectorGroups)
 
     @property
@@ -1111,9 +1137,10 @@ class HBGridBasedAnalysisRecipe(HBDaylightAnalysisRecipe):
         You can acces AnalysisPointGroups using self.analysisPointsGroups property.
         """
         self.__analysisPointGroups = []
+
         if len(pointGroups) == 0:
             return
-        # input is single point! Create a single group but seriously!
+        # input is single point! Create a single group but seriously!?
         elif not isinstance(pointGroups[0], Iterable):
             pointGroups = [[pointGroups]]
             vectorGroups = [[vectorGroups]]
@@ -1437,7 +1464,32 @@ if __name__ == "__main__":
         self.loader = LoadGridBasedDLAnalysisResults(self.simulationType,
                                                      self.resultsFile)
 
-        # create point groups
+        # create analysisi point groups
+        self.createAnalysisPointGroups(pointGroups, vectorGroups)
+
+    @property
+    def pointGroups(self):
+        """Return analysis point groups."""
+        return self.analysisPointsGroups
+
+    @pointGroups.setter
+    def pointGroups(self):
+        """Return analysis point groups."""
+        raise ValueError("You can't set pointGroups directly. " +
+                         "Use updatePointGroups method instead.")
+
+    def updatePointGroups(self, pointGroups, vectorGroups=[]):
+        """Update point groups.
+
+        Args:
+            pointGroups: A list of (x, y, z) test points or lists of (x, y, z)
+                test points. Each list of test points will be converted to a
+                TestPointGroup. If testPts is a single flattened list only one
+                TestPointGroup will be created.
+            vectorGroups: An optional list of (x, y, z) vectors. Each vector
+                represents direction of corresponding point in testPts. If the
+                vector is not provided (0, 0, 1) will be assigned.
+        """
         self.createAnalysisPointGroups(pointGroups, vectorGroups)
 
     @property
@@ -1471,9 +1523,10 @@ if __name__ == "__main__":
         You can acces AnalysisPointGroups using self.analysisPointsGroups property.
         """
         self.__analysisPointGroups = []
+
         if len(pointGroups) == 0:
             return
-        # input is single point! Create a single group but seriously!
+        # input is single point! Create a single group but seriously!?
         elif not isinstance(pointGroups[0], Iterable):
             pointGroups = [[pointGroups]]
             vectorGroups = [[vectorGroups]]
@@ -1839,6 +1892,17 @@ def write(filePath, data, mkdir=False):
 
             </div>
             <div class="item">
+            <p id="honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.pointGroups" class="name">var <span class="ident">pointGroups</span></p>
+            
+
+            
+  
+    <div class="desc"><p>Return analysis point groups.</p></div>
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
             <p id="honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.points" class="name">var <span class="ident">points</span></p>
             
 
@@ -1942,7 +2006,7 @@ def write(filePath, data, mkdir=False):
     # create a result loader to load the results once the analysis is done.
     self.loader = LoadGridBasedDLAnalysisResults(self.simulationType,
                                                  self.resultsFile)
-    # create point groups
+    # create analysisi point groups
     self.createAnalysisPointGroups(pointGroups, vectorGroups)
 </code></pre>
   </div>
@@ -1971,7 +2035,7 @@ def write(filePath, data, mkdir=False):
     self.__analysisPointGroups = []
     if len(pointGroups) == 0:
         return
-    # input is single point! Create a single group but seriously!
+    # input is single point! Create a single group but seriously!?
     elif not isinstance(pointGroups[0], Iterable):
         pointGroups = [[pointGroups]]
         vectorGroups = [[vectorGroups]]
@@ -2206,6 +2270,45 @@ list(flatten(inputList))
     if hbObjects:
         _matStr, _geoStr = self.hbObjectsToRadString()
     return _radDefinition(_ptsStr, _matStr, _geoStr)
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.updatePointGroups">
+    <p>def <span class="ident">updatePointGroups</span>(</p><p>self, pointGroups, vectorGroups=[])</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Update point groups.</p>
+<p>Args:
+    pointGroups: A list of (x, y, z) test points or lists of (x, y, z)
+        test points. Each list of test points will be converted to a
+        TestPointGroup. If testPts is a single flattened list only one
+        TestPointGroup will be created.
+    vectorGroups: An optional list of (x, y, z) vectors. Each vector
+        represents direction of corresponding point in testPts. If the
+        vector is not provided (0, 0, 1) will be assigned.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.updatePointGroups', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe.updatePointGroups" class="source">
+    <pre><code>def updatePointGroups(self, pointGroups, vectorGroups=[]):
+    """Update point groups.
+    Args:
+        pointGroups: A list of (x, y, z) test points or lists of (x, y, z)
+            test points. Each list of test points will be converted to a
+            TestPointGroup. If testPts is a single flattened list only one
+            TestPointGroup will be created.
+        vectorGroups: An optional list of (x, y, z) vectors. Each vector
+            represents direction of corresponding point in testPts. If the
+            vector is not provided (0, 0, 1) will be assigned.
+    """
+    self.createAnalysisPointGroups(pointGroups, vectorGroups)
 </code></pre>
   </div>
 </div>

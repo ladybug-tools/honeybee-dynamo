@@ -995,6 +995,7 @@ table {
   <ul>
     <li class="mono"><a href="#honeybeex.honeybee.radiance.command.gendaymtx.Gendaymtx.__init__">__init__</a></li>
     <li class="mono"><a href="#honeybeex.honeybee.radiance.command.gendaymtx.Gendaymtx.execute">execute</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.radiance.command.gendaymtx.Gendaymtx.inputFiles">inputFiles</a></li>
     <li class="mono"><a href="#honeybeex.honeybee.radiance.command.gendaymtx.Gendaymtx.toRadString">toRadString</a></li>
   </ul>
 
@@ -1020,17 +1021,126 @@ table {
   <div id="source-honeybeex.honeybee.radiance.command.gendaymtx" class="source">
     <pre><code># coding=utf-8
 from commandBase import RadianceCommand
-import os
+import os, sys
+from ..datatype import *
+from ..datatype import RadInputStringFormatter as Rfmt
 
 
 class Gendaymtx(RadianceCommand):
     u"""
-    gendaymtx - generate an annual Perez sky matrix from a weather tape.
+    gendaymtx - Generate an annual Perez sky matrix from a weather tape.
+
+    The attributes for this class and their data descriptors are given below.
+    Please note that the first two inputs for each descriptor are for internal
+    naming purposes only.
+
+    If provided in the above descriptors:
+    acceptedInputs : stands for inputs that acceptable for that attribute. For
+                    example, if the acceptedInputs=(True,False), specifying 2.3
+                    as the input will raise an error.
+
+    numType: stands for the numeric type that is acceptable.
 
     Attributes:
+    v = RadianceBoolFlag('v', 'verbose reporting', acceptedInputs=(True,False))
+    h = RadianceBoolFlag('h', 'disable header', acceptedInputs=(True,False))
+    d = RadianceBoolFlag('d', 'sun mtx only', acceptedInputs=(True,False))
+    s = RadianceBoolFlag('s', 'sky mtx only', acceptedInputs=(True,False))
+    r = RadianceNumber('r', 'zenith rotation', numType=float)
+    m = RadianceNumber('m', 'sky patches', numType=int)
+    g = RadianceNumericTuple('g', 'ground color', validRange=(0, 1),
+                             tupleSize=3,
+                             numType=float)
+    c = RadianceNumericTuple('c', 'sky color', validRange=(0, 1), tupleSize=3,
+                             numType=float)
+    o = RadianceBoolFlag('o', 'output format', acceptedInputs=('f', 'd'))
+    O = RadianceBoolFlag('O', 'radiation type',
+                         acceptedInputs=(0, 1, "'0'", "'1'"))
+    weaFile = RadiancePath('weaFile', descriptiveName='weather file path',
+                           expandRelative=True, checkExists=True,
+                           extension='.wea')
 
+    If this docstring is being viewed through a help file, a detailed
+    description of the descriptors can be found by scrolling down to the
+    section about Data descriptors.
     """
-    pass
+    v = RadianceBoolFlag('v', 'verbose reporting', acceptedInputs=(True,False))
+    h = RadianceBoolFlag('h', 'disable header', acceptedInputs=(True,False))
+    d = RadianceBoolFlag('d', 'sun mtx only', acceptedInputs=(True,False))
+    s = RadianceBoolFlag('s', 'sky mtx only', acceptedInputs=(True,False))
+    r = RadianceNumber('r', 'zenith rotation', numType=float)
+    m = RadianceNumber('m', 'sky patches', numType=int)
+    g = RadianceNumericTuple('g', 'ground color', validRange=(0, 1),
+                             tupleSize=3,
+                             numType=float)
+    c = RadianceNumericTuple('c', 'sky color', validRange=(0, 1), tupleSize=3,
+                             numType=float)
+    o = RadianceBoolFlag('o', 'output format', acceptedInputs=('f', 'd'))
+    O = RadianceBoolFlag('O', 'radiation type',
+                         acceptedInputs=(0, 1, "'0'", "'1'"))
+    weaFile = RadiancePath('weaFile', descriptiveName='weather file path',
+                           expandRelative=True, checkExists=True,
+                           extension='.wea')
+
+    def __init__(self, weaFile=None, v=None, h=None, d=None, s=None, r=None,
+                 m=None, g=None, c=None,
+                 o=None, O=None, outputName=None):
+        RadianceCommand.__init__(self)
+        self.v = v
+        self.h = h
+        self.d = d
+        self.s = s
+        self.r = r
+        self.m = m
+        self.g = g
+        self.c = c
+        self.o = o
+        self.O = O
+        self.weaFile = weaFile
+        self.outputName = outputName
+
+    def toRadString(self, relativePath=False):
+        """Return full command as a string."""
+        fmtBool = Rfmt.boolean
+        fmtJoin = Rfmt.joined
+        fmtNormal = Rfmt.normal
+
+        fmtDict = {'v': ('v', fmtBool),
+                   'h': ('h', fmtBool),
+                   'd': ('d', fmtBool),
+                   's': ('s', fmtBool),
+                   'r': ('r', fmtNormal),
+                   'm': ('m', fmtNormal),
+                   'g': ('g', fmtNormal),
+                   'c': ('c', fmtNormal),
+                   'o': ('o', fmtJoin),
+                   'O': ('O', fmtJoin)}
+
+        commandInputs = ""
+        for key, value in fmtDict.items():
+            try:
+                currentValue = getattr(self, key)
+                currentFlag, currentFormatter = value
+                commandInputs += currentFormatter(currentFlag, currentValue)
+            except AttributeError:
+                pass
+
+        outputFileName = self.outputName
+        if not self.outputName:
+            outputFileName = os.path.splitext(self.inputFiles[0])[0] + '.mtx'
+
+        radString = "%s %s %s > %s" % (
+            os.path.join(self.radbinPath, 'gendaymtx'),
+            commandInputs,
+            self.inputFiles[0],
+            outputFileName
+        )
+
+        return radString
+
+    def inputFiles(self):
+        """Input files for this command."""
+        return self.weaFile
 </code></pre>
   </div>
 
@@ -1045,19 +1155,154 @@ class Gendaymtx(RadianceCommand):
       <p id="honeybeex.honeybee.radiance.command.gendaymtx.Gendaymtx" class="name">class <span class="ident">Gendaymtx</span></p>
       
   
-    <div class="desc"><p>gendaymtx - generate an annual Perez sky matrix from a weather tape.</p>
-<p>Attributes:</p></div>
+    <div class="desc"><p>gendaymtx - Generate an annual Perez sky matrix from a weather tape.</p>
+<p>The attributes for this class and their data descriptors are given below.
+Please note that the first two inputs for each descriptor are for internal
+naming purposes only.</p>
+<p>If provided in the above descriptors:
+acceptedInputs : stands for inputs that acceptable for that attribute. For
+                example, if the acceptedInputs=(True,False), specifying 2.3
+                as the input will raise an error.</p>
+<p>numType: stands for the numeric type that is acceptable.</p>
+<p>Attributes:
+v = RadianceBoolFlag('v', 'verbose reporting', acceptedInputs=(True,False))
+h = RadianceBoolFlag('h', 'disable header', acceptedInputs=(True,False))
+d = RadianceBoolFlag('d', 'sun mtx only', acceptedInputs=(True,False))
+s = RadianceBoolFlag('s', 'sky mtx only', acceptedInputs=(True,False))
+r = RadianceNumber('r', 'zenith rotation', numType=float)
+m = RadianceNumber('m', 'sky patches', numType=int)
+g = RadianceNumericTuple('g', 'ground color', validRange=(0, 1),
+                         tupleSize=3,
+                         numType=float)
+c = RadianceNumericTuple('c', 'sky color', validRange=(0, 1), tupleSize=3,
+                         numType=float)
+o = RadianceBoolFlag('o', 'output format', acceptedInputs=('f', 'd'))
+O = RadianceBoolFlag('O', 'radiation type',
+                     acceptedInputs=(0, 1, "'0'", "'1'"))
+weaFile = RadiancePath('weaFile', descriptiveName='weather file path',
+                       expandRelative=True, checkExists=True,
+                       extension='.wea')</p>
+<p>If this docstring is being viewed through a help file, a detailed
+description of the descriptors can be found by scrolling down to the
+section about Data descriptors.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.command.gendaymtx.Gendaymtx', this);">Show source &equiv;</a></p>
   <div id="source-honeybeex.honeybee.radiance.command.gendaymtx.Gendaymtx" class="source">
     <pre><code>class Gendaymtx(RadianceCommand):
     u"""
-    gendaymtx - generate an annual Perez sky matrix from a weather tape.
+    gendaymtx - Generate an annual Perez sky matrix from a weather tape.
+
+    The attributes for this class and their data descriptors are given below.
+    Please note that the first two inputs for each descriptor are for internal
+    naming purposes only.
+
+    If provided in the above descriptors:
+    acceptedInputs : stands for inputs that acceptable for that attribute. For
+                    example, if the acceptedInputs=(True,False), specifying 2.3
+                    as the input will raise an error.
+
+    numType: stands for the numeric type that is acceptable.
 
     Attributes:
+    v = RadianceBoolFlag('v', 'verbose reporting', acceptedInputs=(True,False))
+    h = RadianceBoolFlag('h', 'disable header', acceptedInputs=(True,False))
+    d = RadianceBoolFlag('d', 'sun mtx only', acceptedInputs=(True,False))
+    s = RadianceBoolFlag('s', 'sky mtx only', acceptedInputs=(True,False))
+    r = RadianceNumber('r', 'zenith rotation', numType=float)
+    m = RadianceNumber('m', 'sky patches', numType=int)
+    g = RadianceNumericTuple('g', 'ground color', validRange=(0, 1),
+                             tupleSize=3,
+                             numType=float)
+    c = RadianceNumericTuple('c', 'sky color', validRange=(0, 1), tupleSize=3,
+                             numType=float)
+    o = RadianceBoolFlag('o', 'output format', acceptedInputs=('f', 'd'))
+    O = RadianceBoolFlag('O', 'radiation type',
+                         acceptedInputs=(0, 1, "'0'", "'1'"))
+    weaFile = RadiancePath('weaFile', descriptiveName='weather file path',
+                           expandRelative=True, checkExists=True,
+                           extension='.wea')
 
+    If this docstring is being viewed through a help file, a detailed
+    description of the descriptors can be found by scrolling down to the
+    section about Data descriptors.
     """
-    pass
+    v = RadianceBoolFlag('v', 'verbose reporting', acceptedInputs=(True,False))
+    h = RadianceBoolFlag('h', 'disable header', acceptedInputs=(True,False))
+    d = RadianceBoolFlag('d', 'sun mtx only', acceptedInputs=(True,False))
+    s = RadianceBoolFlag('s', 'sky mtx only', acceptedInputs=(True,False))
+    r = RadianceNumber('r', 'zenith rotation', numType=float)
+    m = RadianceNumber('m', 'sky patches', numType=int)
+    g = RadianceNumericTuple('g', 'ground color', validRange=(0, 1),
+                             tupleSize=3,
+                             numType=float)
+    c = RadianceNumericTuple('c', 'sky color', validRange=(0, 1), tupleSize=3,
+                             numType=float)
+    o = RadianceBoolFlag('o', 'output format', acceptedInputs=('f', 'd'))
+    O = RadianceBoolFlag('O', 'radiation type',
+                         acceptedInputs=(0, 1, "'0'", "'1'"))
+    weaFile = RadiancePath('weaFile', descriptiveName='weather file path',
+                           expandRelative=True, checkExists=True,
+                           extension='.wea')
+
+    def __init__(self, weaFile=None, v=None, h=None, d=None, s=None, r=None,
+                 m=None, g=None, c=None,
+                 o=None, O=None, outputName=None):
+        RadianceCommand.__init__(self)
+        self.v = v
+        self.h = h
+        self.d = d
+        self.s = s
+        self.r = r
+        self.m = m
+        self.g = g
+        self.c = c
+        self.o = o
+        self.O = O
+        self.weaFile = weaFile
+        self.outputName = outputName
+
+    def toRadString(self, relativePath=False):
+        """Return full command as a string."""
+        fmtBool = Rfmt.boolean
+        fmtJoin = Rfmt.joined
+        fmtNormal = Rfmt.normal
+
+        fmtDict = {'v': ('v', fmtBool),
+                   'h': ('h', fmtBool),
+                   'd': ('d', fmtBool),
+                   's': ('s', fmtBool),
+                   'r': ('r', fmtNormal),
+                   'm': ('m', fmtNormal),
+                   'g': ('g', fmtNormal),
+                   'c': ('c', fmtNormal),
+                   'o': ('o', fmtJoin),
+                   'O': ('O', fmtJoin)}
+
+        commandInputs = ""
+        for key, value in fmtDict.items():
+            try:
+                currentValue = getattr(self, key)
+                currentFlag, currentFormatter = value
+                commandInputs += currentFormatter(currentFlag, currentValue)
+            except AttributeError:
+                pass
+
+        outputFileName = self.outputName
+        if not self.outputName:
+            outputFileName = os.path.splitext(self.inputFiles[0])[0] + '.mtx'
+
+        radString = "%s %s %s > %s" % (
+            os.path.join(self.radbinPath, 'gendaymtx'),
+            commandInputs,
+            self.inputFiles[0],
+            outputFileName
+        )
+
+        return radString
+
+    def inputFiles(self):
+        """Input files for this command."""
+        return self.weaFile
 </code></pre>
   </div>
 </div>
@@ -1070,14 +1315,204 @@ class Gendaymtx(RadianceCommand):
           <li>honeybeex.honeybee.radiance.command.commandBase.RadianceCommand</li>
           <li>__builtin__.object</li>
           </ul>
-          <h3>Instance variables</h3>
+          <h3>Class variables</h3>
             <div class="item">
-            <p id="honeybeex.honeybee.radiance.command.gendaymtx.Gendaymtx.inputFiles" class="name">var <span class="ident">inputFiles</span></p>
+            <p id="honeybeex.honeybee.radiance.command.gendaymtx.Gendaymtx.O" class="name">var <span class="ident">O</span></p>
             
 
             
   
-    <div class="desc"><p>Return list of input files for this command.</p></div>
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.gendaymtx.Gendaymtx.c" class="name">var <span class="ident">c</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.gendaymtx.Gendaymtx.d" class="name">var <span class="ident">d</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.gendaymtx.Gendaymtx.g" class="name">var <span class="ident">g</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.gendaymtx.Gendaymtx.h" class="name">var <span class="ident">h</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.gendaymtx.Gendaymtx.m" class="name">var <span class="ident">m</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.gendaymtx.Gendaymtx.o" class="name">var <span class="ident">o</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.gendaymtx.Gendaymtx.r" class="name">var <span class="ident">r</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.gendaymtx.Gendaymtx.s" class="name">var <span class="ident">s</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.gendaymtx.Gendaymtx.v" class="name">var <span class="ident">v</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.gendaymtx.Gendaymtx.weaFile" class="name">var <span class="ident">weaFile</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+          <h3>Instance variables</h3>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.gendaymtx.Gendaymtx.O" class="name">var <span class="ident">O</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.gendaymtx.Gendaymtx.c" class="name">var <span class="ident">c</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.gendaymtx.Gendaymtx.d" class="name">var <span class="ident">d</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.gendaymtx.Gendaymtx.g" class="name">var <span class="ident">g</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.gendaymtx.Gendaymtx.h" class="name">var <span class="ident">h</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.gendaymtx.Gendaymtx.m" class="name">var <span class="ident">m</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.gendaymtx.Gendaymtx.o" class="name">var <span class="ident">o</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.gendaymtx.Gendaymtx.outputName" class="name">var <span class="ident">outputName</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.gendaymtx.Gendaymtx.r" class="name">var <span class="ident">r</span></p>
+            
+
+            
+  
   <div class="source_cont">
 </div>
 
@@ -1106,24 +1541,65 @@ class Gendaymtx(RadianceCommand):
 </div>
 
             </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.gendaymtx.Gendaymtx.s" class="name">var <span class="ident">s</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.gendaymtx.Gendaymtx.v" class="name">var <span class="ident">v</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.honeybee.radiance.command.gendaymtx.Gendaymtx.weaFile" class="name">var <span class="ident">weaFile</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
           <h3>Methods</h3>
             
   <div class="item">
     <div class="name def" id="honeybeex.honeybee.radiance.command.gendaymtx.Gendaymtx.__init__">
-    <p>def <span class="ident">__init__</span>(</p><p>self)</p>
+    <p>def <span class="ident">__init__</span>(</p><p>self, weaFile=None, v=None, h=None, d=None, s=None, r=None, m=None, g=None, c=None, o=None, O=None, outputName=None)</p>
     </div>
     
 
     
   
-    <div class="desc"><p>Initialize Radiance command.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.command.gendaymtx.Gendaymtx.__init__', this);">Show source &equiv;</a></p>
   <div id="source-honeybeex.honeybee.radiance.command.gendaymtx.Gendaymtx.__init__" class="source">
-    <pre><code>def __init__(self):
-    """Initialize Radiance command."""
-    self.radbinPath = config.radbinPath
-    self.radlibPath = config.radlibPath
+    <pre><code>def __init__(self, weaFile=None, v=None, h=None, d=None, s=None, r=None,
+             m=None, g=None, c=None,
+             o=None, O=None, outputName=None):
+    RadianceCommand.__init__(self)
+    self.v = v
+    self.h = h
+    self.d = d
+    self.s = s
+    self.r = r
+    self.m = m
+    self.g = g
+    self.c = c
+    self.o = o
+    self.O = O
+    self.weaFile = weaFile
+    self.outputName = outputName
 </code></pre>
   </div>
 </div>
@@ -1133,7 +1609,7 @@ class Gendaymtx(RadianceCommand):
             
   <div class="item">
     <div class="name def" id="honeybeex.honeybee.radiance.command.gendaymtx.Gendaymtx.execute">
-    <p>def <span class="ident">execute</span>(</p><p>self, shell=True)</p>
+    <p>def <span class="ident">execute</span>(</p><p>self)</p>
     </div>
     
 
@@ -1143,11 +1619,37 @@ class Gendaymtx(RadianceCommand):
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.command.gendaymtx.Gendaymtx.execute', this);">Show source &equiv;</a></p>
   <div id="source-honeybeex.honeybee.radiance.command.gendaymtx.Gendaymtx.execute" class="source">
-    <pre><code>def execute(self, shell=True):
+    <pre><code>def execute(self):
     """Execute the command."""
     # check if the files exist on the computer
     self.__checkFiles()
-    subprocess.Popen(['cmd', self.toRadString()], shell=shell)
+    p = subprocess.Popen(self.toRadString(), shell=True,
+                         stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    for line in p.stdout.readlines():
+        print line,
+    p.wait()
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="honeybeex.honeybee.radiance.command.gendaymtx.Gendaymtx.inputFiles">
+    <p>def <span class="ident">inputFiles</span>(</p><p>self)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Input files for this command.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.command.gendaymtx.Gendaymtx.inputFiles', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.radiance.command.gendaymtx.Gendaymtx.inputFiles" class="source">
+    <pre><code>def inputFiles(self):
+    """Input files for this command."""
+    return self.weaFile
 </code></pre>
   </div>
 </div>
@@ -1167,10 +1669,39 @@ class Gendaymtx(RadianceCommand):
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.command.gendaymtx.Gendaymtx.toRadString', this);">Show source &equiv;</a></p>
   <div id="source-honeybeex.honeybee.radiance.command.gendaymtx.Gendaymtx.toRadString" class="source">
-    <pre><code>@abstractmethod
-def toRadString(self, relativePath=False):
+    <pre><code>def toRadString(self, relativePath=False):
     """Return full command as a string."""
-    pass
+    fmtBool = Rfmt.boolean
+    fmtJoin = Rfmt.joined
+    fmtNormal = Rfmt.normal
+    fmtDict = {'v': ('v', fmtBool),
+               'h': ('h', fmtBool),
+               'd': ('d', fmtBool),
+               's': ('s', fmtBool),
+               'r': ('r', fmtNormal),
+               'm': ('m', fmtNormal),
+               'g': ('g', fmtNormal),
+               'c': ('c', fmtNormal),
+               'o': ('o', fmtJoin),
+               'O': ('O', fmtJoin)}
+    commandInputs = ""
+    for key, value in fmtDict.items():
+        try:
+            currentValue = getattr(self, key)
+            currentFlag, currentFormatter = value
+            commandInputs += currentFormatter(currentFlag, currentValue)
+        except AttributeError:
+            pass
+    outputFileName = self.outputName
+    if not self.outputName:
+        outputFileName = os.path.splitext(self.inputFiles[0])[0] + '.mtx'
+    radString = "%s %s %s > %s" % (
+        os.path.join(self.radbinPath, 'gendaymtx'),
+        commandInputs,
+        self.inputFiles[0],
+        outputFileName
+    )
+    return radString
 </code></pre>
   </div>
 </div>

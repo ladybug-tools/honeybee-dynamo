@@ -1377,7 +1377,7 @@ surfaces)" (default:16384)</p></div>
             
   <div class="item">
     <div class="name def" id="honeybeex.honeybee.radiance.command.oconv.Oconv.execute">
-    <p>def <span class="ident">execute</span>(</p><p>self, shell=True)</p>
+    <p>def <span class="ident">execute</span>(</p><p>self)</p>
     </div>
     
 
@@ -1387,11 +1387,15 @@ surfaces)" (default:16384)</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.command.oconv.Oconv.execute', this);">Show source &equiv;</a></p>
   <div id="source-honeybeex.honeybee.radiance.command.oconv.Oconv.execute" class="source">
-    <pre><code>def execute(self, shell=True):
+    <pre><code>def execute(self):
     """Execute the command."""
     # check if the files exist on the computer
     self.__checkFiles()
-    subprocess.Popen(['cmd', self.toRadString()], shell=shell)
+    p = subprocess.Popen(self.toRadString(), shell=True,
+                         stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    for line in p.stdout.readlines():
+        print line,
+    p.wait()
 </code></pre>
   </div>
 </div>
