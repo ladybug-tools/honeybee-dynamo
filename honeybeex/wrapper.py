@@ -1,5 +1,5 @@
 """Wrapper class for outputs in Grasshopper and Dynamo."""
-
+import copy
 
 class Wrapper():
     """A Wrapper class to overwrite object __clrtype__ in Ladybug objects.

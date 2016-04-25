@@ -1,1 +1,2 @@
-from ...honeybee.radiance.command.oconv import *
+# coding=utf-8
+from ...honeybee.radiance.command.oconv import Oconv

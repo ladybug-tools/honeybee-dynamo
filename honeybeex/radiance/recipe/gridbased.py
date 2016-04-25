@@ -49,6 +49,8 @@ class GridBasedAnalysisRecipe(HBGridBasedAnalysisRecipe):
             pts, vec = self.__matchPointsAndVectorsGH(ptsT, vecT)
         elif config.platform == 'ds' or config.platform == 'rvt':
             pts, vec = self.__matchPointsAndVectorsDS(ptsT, vecT)
+        else:
+            return ptsT, vecT
 
         return pts, vec
 

@@ -1,10 +1,5 @@
-#import sys
-#sys.path.append(r"C:\Users\Administrator\Documents\GitHub\honeybeex\honeybee")
-
-# import honeybeex
-from honeybeex.radiance import parameters
-
-print parameters.LowQuality()
-
-#sk = SkyWithCertainIlluminanceLevel(200)
-# analysisrecipe.GridBasedAnalysisRecipe(sk, [])
+# from honeybeex.radiance.parameters.gridbased import GridBasedParameters
+#
+# radParameters = GridBasedParameters(0)
+# radParameters.ab = 20
+# radParameters.I = True

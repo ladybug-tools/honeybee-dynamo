@@ -1,8 +1,8 @@
-from honeybee.hbsurface import HBAnalysisSurface
+from honeybee.hbsurface import HBSurface as AnalysisSurface
 import geometryoperation as go
 
 
-class HBSurface(HBAnalysisSurface):
+class HBSurface(AnalysisSurface):
     """Honeybee surface for Grasshopper."""
 
     def __init__(self, name, geometry, surfaceType=None,
@@ -12,7 +12,7 @@ class HBSurface(HBAnalysisSurface):
         # Add geometry to initiate the calculations for surface normal, centroid,
         self.geometry = geometry
 
-        HBAnalysisSurface.__init__(
+        AnalysisSurface.__init__(
             self, name, sortedPoints=[], surfaceType=surfaceType,
             isNameSetByUser=isNameSetByUser, isTypeSetByUser=isTypeSetByUser,
             radProperties=radProperties, epProperties=epProperties)
@@ -40,4 +40,4 @@ class HBSurface(HBAnalysisSurface):
         # HBSurface in Grasshopper is based on geometry and not points.
         # This will create a place holder for self.__pts but won't effect the
         # outputs.
-        HBAnalysisSurface.points = pts
+        AnalysisSurface.points = pts

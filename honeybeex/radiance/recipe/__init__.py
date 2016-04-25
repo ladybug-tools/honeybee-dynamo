@@ -1,3 +1,3 @@
-__all__ = ["gridbased"]
+__all__ = ["gridbased", "sunlighthours"]
 
-import gridbased
+import gridbased, sunlighthours
