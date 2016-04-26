@@ -1,4 +1,4 @@
-<Workspace Version="0.9.2.4472" X="-1502.13903016469" Y="644.270502346813" zoom="0.680021921342289" Name="Home" Description="" RunType="Manual" RunPeriod="1000" HasRunWithoutCrash="True">
+<Workspace Version="0.9.2.4472" X="-526.979136681323" Y="418.729340908297" zoom="0.345124830292723" Name="Home" Description="" RunType="Automatic" RunPeriod="1000" HasRunWithoutCrash="True">
   <NamespaceResolutionMap>
     <ClassMap partialName="List" resolvedName="DSCore.List" assemblyName="DSCoreNodes.dll" />
   </NamespaceResolutionMap>
@@ -357,7 +357,7 @@ if _geo:
 
 OUT = unflatten(*IN)</Script>
     </PythonNodeModels.PythonNode>
-    <Dynamo.Graph.Nodes.CustomNodes.Function guid="71e532ae-3735-4c30-b1d3-94b11104fbd1" type="Dynamo.Graph.Nodes.CustomNodes.Function" nickname="Color Surface" x="3318.58028387992" y="-156.677947864776" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false">
+    <Dynamo.Graph.Nodes.CustomNodes.Function guid="71e532ae-3735-4c30-b1d3-94b11104fbd1" type="Dynamo.Graph.Nodes.CustomNodes.Function" nickname="Color Surface" x="3358.75871894634" y="-180.487390867099" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false">
       <PortInfo index="2" default="True" />
       <ID value="d3408aa8-7ebe-40b5-8754-ae621b6d9647" />
       <Name value="Color Surface" />
@@ -400,6 +400,37 @@ if _sunVectors and _testPoints and ptsVectors_:
     </PythonNodeModels.PythonNode>
     <Dynamo.Graph.Nodes.CodeBlockNodeModel guid="a3a70728-6e36-4f33-b35c-7fa2c22d6bb8" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" nickname="Code Block" x="2112.3771661699" y="-701.183976301296" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" CodeText="1;&#xA;1000;" ShouldFocus="false" />
     <Dynamo.Graph.Nodes.CodeBlockNodeModel guid="bff17c28-dcc0-4cd6-81cb-66a2a8723522" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" nickname="Code Block" x="1487.63179704363" y="-996.142011264782" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" CodeText="{{-0.810513, 0.579652, -0.084093}, {-0.67166, 0.702357, -0.235729},&#xA;                           {-0.487065, 0.798284, -0.354275}, {-0.269301, 0.8609, -0.431657},&#xA;                           {-0.033196, 0.885943, -0.462605}, {0.20517, 0.871705, -0.445013},&#xA;                           {0.429563, 0.819156, -0.380077}, {0.624703, 0.731875, -0.272221},&#xA;                           {0.777301, 0.615806, -0.128788}};" ShouldFocus="false" />
+    <Dynamo.Graph.Nodes.CustomNodes.Function guid="6d53fd87-e325-4161-9581-31014a87c8fb" type="Dynamo.Graph.Nodes.CustomNodes.Function" nickname="Legend Parameters" x="3065.75851047408" y="311.197859932236" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false">
+      <PortInfo index="0" default="True" />
+      <PortInfo index="1" default="True" />
+      <PortInfo index="2" default="True" />
+      <ID value="a61b91d2-3ce6-4d1c-905f-6fe4aa4ecd90" />
+      <Name value="Legend Parameters" />
+      <Description value="Use legend parameter to set up results visualization setting" />
+      <Inputs>
+        <Input value="_cType_" />
+        <Input value="_domain_" />
+        <Input value="_colors_" />
+      </Inputs>
+      <Outputs>
+        <Output value="legendPar" />
+        <Output value="ERRReport" />
+      </Outputs>
+    </Dynamo.Graph.Nodes.CustomNodes.Function>
+    <Dynamo.Graph.Nodes.CustomNodes.Function guid="5282bb3a-a56b-4027-87ff-b6c6e795f144" type="Dynamo.Graph.Nodes.CustomNodes.Function" nickname="LB Color Range" x="2838.97341330473" y="339.707986433526" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false">
+      <PortInfo index="0" default="True" />
+      <ID value="934e1b58-33ad-4e48-837f-357d5d61b044" />
+      <Name value="LB Color Range" />
+      <Description value="A set of color ranges for coloring analysis results" />
+      <Inputs>
+        <Input value="_index_" />
+      </Inputs>
+      <Outputs>
+        <Output value="colors" />
+        <Output value="ERRReport" />
+      </Outputs>
+    </Dynamo.Graph.Nodes.CustomNodes.Function>
+    <Dynamo.Graph.Nodes.CodeBlockNodeModel guid="7c0dde27-6f5d-43a8-8b49-334084616544" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" nickname="Code Block" x="2704.51012650129" y="342.836593638708" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" CodeText="1;" ShouldFocus="false" />
   </Elements>
   <Connectors>
     <Dynamo.Graph.Connectors.ConnectorModel start="7e6ef32f-0181-43fa-916c-913d9b63467f" start_index="0" end="d9cfd2af-8f41-4eba-bb4b-3753ca3d9e0a" end_index="0" portType="0" />
@@ -475,6 +506,8 @@ if _sunVectors and _testPoints and ptsVectors_:
     <Dynamo.Graph.Connectors.ConnectorModel start="a3a70728-6e36-4f33-b35c-7fa2c22d6bb8" start_index="0" end="6dec3861-cb36-450a-88c7-60a6df8d0e4a" end_index="4" portType="0" />
     <Dynamo.Graph.Connectors.ConnectorModel start="a3a70728-6e36-4f33-b35c-7fa2c22d6bb8" start_index="1" end="6dec3861-cb36-450a-88c7-60a6df8d0e4a" end_index="5" portType="0" />
     <Dynamo.Graph.Connectors.ConnectorModel start="bff17c28-dcc0-4cd6-81cb-66a2a8723522" start_index="0" end="6dec3861-cb36-450a-88c7-60a6df8d0e4a" end_index="1" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="5282bb3a-a56b-4027-87ff-b6c6e795f144" start_index="0" end="6d53fd87-e325-4161-9581-31014a87c8fb" end_index="2" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="7c0dde27-6f5d-43a8-8b49-334084616544" start_index="0" end="5282bb3a-a56b-4027-87ff-b6c6e795f144" end_index="0" portType="0" />
   </Connectors>
   <Notes>
     <Dynamo.Graph.Notes.NoteModel guid="735fe796-5272-47f5-97b0-e9e53d1a6cf8" text="Inputs are:&#xD;&#xA;sun vectors&#xD;&#xA;points,&#xD;&#xA;vectors,&#xD;&#xA;timestep,&#xD;&#xA;and ambient division" x="2434.87728170374" y="-749.083679903425" />

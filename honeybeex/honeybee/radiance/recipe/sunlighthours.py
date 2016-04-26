@@ -55,8 +55,6 @@ class HBSunlightHoursAnalysisRecipe(HBGenericGridBasedAnalysisRecipe):
         print analysisRecipe.results()
     """
 
-    # ad =
-
     def __init__(self, sunVectors, pointGroups, vectorGroups=[],
                  timestep=1, ambientDivisions=1000, hbObjects=None,
                  subFolder="sunlighthour"):
