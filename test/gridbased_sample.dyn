@@ -1,4 +1,4 @@
-<Workspace Version="0.9.2.4472" X="-1702.19015731863" Y="255.582976445589" zoom="0.780388653388922" Name="Home" Description="" RunType="Automatic" RunPeriod="1000" HasRunWithoutCrash="True">
+<Workspace Version="0.9.2.4472" X="-1502.13903016469" Y="644.270502346813" zoom="0.680021921342289" Name="Home" Description="" RunType="Manual" RunPeriod="1000" HasRunWithoutCrash="True">
   <NamespaceResolutionMap>
     <ClassMap partialName="List" resolvedName="DSCore.List" assemblyName="DSCoreNodes.dll" />
   </NamespaceResolutionMap>
@@ -336,7 +336,7 @@ if _geo:
     </Dynamo.Graph.Nodes.ZeroTouch.DSFunction>
     <Dynamo.Graph.Nodes.CodeBlockNodeModel guid="d84e7bfe-b398-4d5f-b65d-556807e1d1f5" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" nickname="Code Block" x="507.29310534818" y="-300.710477663405" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" CodeText="0.5;" ShouldFocus="false" />
     <Dynamo.Graph.Nodes.CodeBlockNodeModel guid="1ce1e453-a710-4c69-8c9d-92ce026d48cd" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" nickname="Code Block" x="987.28143545589" y="-7.89086580454398" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" CodeText="12;" ShouldFocus="false" />
-    <Dynamo.Graph.Nodes.CodeBlockNodeModel guid="a00eac2d-9442-4f0e-be80-ebfaab0b2470" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" nickname="Code Block" x="2099.29447433508" y="-195.523060766339" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" CodeText="0;" ShouldFocus="false" />
+    <Dynamo.Graph.Nodes.CodeBlockNodeModel guid="a00eac2d-9442-4f0e-be80-ebfaab0b2470" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" nickname="Code Block" x="2102.74734000486" y="-202.428792105892" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" CodeText="0;" ShouldFocus="false" />
     <PythonNodeModels.PythonNode guid="1c7fb340-9e53-4178-9502-c08d46305ab5" type="PythonNodeModels.PythonNode" nickname="UnflattenList" x="3063.82903006584" y="-37.9221069673515" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" inputcount="2">
       <Script>def unflatten(guide, flattenedInput):
     """Unflatten a falttened generator
@@ -376,6 +376,30 @@ OUT = unflatten(*IN)</Script>
     <CoreNodeModels.Input.BoolSelector guid="62bdcf3b-5461-43c2-acc1-aa64a8fb121c" type="CoreNodeModels.Input.BoolSelector" nickname="Boolean" x="2513.60688134568" y="188.679437002126" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="True" IsFrozen="false">
       <System.Boolean>True</System.Boolean>
     </CoreNodeModels.Input.BoolSelector>
+    <PythonNodeModels.PythonNode guid="6dec3861-cb36-450a-88c7-60a6df8d0e4a" type="PythonNodeModels.PythonNode" nickname="Analysis Recipe" x="2287.3233581849" y="-821.096814609149" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" inputcount="6">
+      <Script>import sys
+sys.path.extend(IN[0])
+
+try:
+    from honeybeex.radiance.recipe.sunlighthours import SunlightHoursAnalysisRecipe
+    from honeybeex import wrapper
+except ImportError:
+    raise ImportError("Failed to import Honeybee libraries.\n" + \
+                      "Set-up path to Honeybee libraries in honeybee_honeybee component")
+
+
+_sunVectors, _testPoints, ptsVectors_, _timestep_, _ad_ = IN[1:]
+
+if _sunVectors and _testPoints and ptsVectors_:
+    
+    analysisRecipe = SunlightHoursAnalysisRecipe(_sunVectors,
+        _testPoints, ptsVectors_, _timestep_, _ad_
+        )
+    
+    OUT = wrapper.Wrapper(analysisRecipe)</Script>
+    </PythonNodeModels.PythonNode>
+    <Dynamo.Graph.Nodes.CodeBlockNodeModel guid="a3a70728-6e36-4f33-b35c-7fa2c22d6bb8" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" nickname="Code Block" x="2112.3771661699" y="-701.183976301296" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" CodeText="1;&#xA;1000;" ShouldFocus="false" />
+    <Dynamo.Graph.Nodes.CodeBlockNodeModel guid="bff17c28-dcc0-4cd6-81cb-66a2a8723522" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" nickname="Code Block" x="1487.63179704363" y="-996.142011264782" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" CodeText="{{-0.810513, 0.579652, -0.084093}, {-0.67166, 0.702357, -0.235729},&#xA;                           {-0.487065, 0.798284, -0.354275}, {-0.269301, 0.8609, -0.431657},&#xA;                           {-0.033196, 0.885943, -0.462605}, {0.20517, 0.871705, -0.445013},&#xA;                           {0.429563, 0.819156, -0.380077}, {0.624703, 0.731875, -0.272221},&#xA;                           {0.777301, 0.615806, -0.128788}};" ShouldFocus="false" />
   </Elements>
   <Connectors>
     <Dynamo.Graph.Connectors.ConnectorModel start="7e6ef32f-0181-43fa-916c-913d9b63467f" start_index="0" end="d9cfd2af-8f41-4eba-bb4b-3753ca3d9e0a" end_index="0" portType="0" />
@@ -389,14 +413,16 @@ OUT = unflatten(*IN)</Script>
     <Dynamo.Graph.Connectors.ConnectorModel start="7bcebefb-186b-42a0-a778-6b8d72385d35" start_index="0" end="e64f82a6-ab66-41ee-9ffa-71ad8694a3b3" end_index="0" portType="0" />
     <Dynamo.Graph.Connectors.ConnectorModel start="7bcebefb-186b-42a0-a778-6b8d72385d35" start_index="0" end="ba3dca4f-8406-4a58-ae20-f51c53be632a" end_index="0" portType="0" />
     <Dynamo.Graph.Connectors.ConnectorModel start="7bcebefb-186b-42a0-a778-6b8d72385d35" start_index="0" end="d51848e8-6663-4eaf-a5f1-f164de9dec9f" end_index="0" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="7bcebefb-186b-42a0-a778-6b8d72385d35" start_index="0" end="6dec3861-cb36-450a-88c7-60a6df8d0e4a" end_index="0" portType="0" />
     <Dynamo.Graph.Connectors.ConnectorModel start="ab5d7481-9ede-4111-a1e7-ac1fa56895c9" start_index="0" end="db482029-a1e5-4167-b16f-f3dc28417864" end_index="0" portType="0" />
     <Dynamo.Graph.Connectors.ConnectorModel start="ab5d7481-9ede-4111-a1e7-ac1fa56895c9" start_index="0" end="d51848e8-6663-4eaf-a5f1-f164de9dec9f" end_index="5" portType="0" />
     <Dynamo.Graph.Connectors.ConnectorModel start="3b0b27bb-a80c-40ed-81c1-0e6e47f958f8" start_index="0" end="ab5d7481-9ede-4111-a1e7-ac1fa56895c9" end_index="1" portType="0" />
     <Dynamo.Graph.Connectors.ConnectorModel start="d51848e8-6663-4eaf-a5f1-f164de9dec9f" start_index="0" end="6b07a96b-50ab-402f-baab-4af06f1d5c96" end_index="0" portType="0" />
-    <Dynamo.Graph.Connectors.ConnectorModel start="d51848e8-6663-4eaf-a5f1-f164de9dec9f" start_index="0" end="ba3dca4f-8406-4a58-ae20-f51c53be632a" end_index="1" portType="0" />
     <Dynamo.Graph.Connectors.ConnectorModel start="f93e6b68-5605-4dfe-9062-8306a522a2ca" start_index="0" end="d51848e8-6663-4eaf-a5f1-f164de9dec9f" end_index="2" portType="0" />
     <Dynamo.Graph.Connectors.ConnectorModel start="f93e6b68-5605-4dfe-9062-8306a522a2ca" start_index="0" end="1c7fb340-9e53-4178-9502-c08d46305ab5" end_index="0" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="f93e6b68-5605-4dfe-9062-8306a522a2ca" start_index="0" end="6dec3861-cb36-450a-88c7-60a6df8d0e4a" end_index="2" portType="0" />
     <Dynamo.Graph.Connectors.ConnectorModel start="f93e6b68-5605-4dfe-9062-8306a522a2ca" start_index="1" end="d51848e8-6663-4eaf-a5f1-f164de9dec9f" end_index="3" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="f93e6b68-5605-4dfe-9062-8306a522a2ca" start_index="1" end="6dec3861-cb36-450a-88c7-60a6df8d0e4a" end_index="3" portType="0" />
     <Dynamo.Graph.Connectors.ConnectorModel start="fd8d015c-f8f9-4c05-a4b4-596135f301f6" start_index="0" end="e702b3e5-d7ce-4220-a665-9f783bb961f0" end_index="0" portType="0" />
     <Dynamo.Graph.Connectors.ConnectorModel start="fd8d015c-f8f9-4c05-a4b4-596135f301f6" start_index="0" end="8d25a3fa-1ea5-494d-ba86-80793a925f42" end_index="0" portType="0" />
     <Dynamo.Graph.Connectors.ConnectorModel start="366e171e-fe59-4bbd-9c17-a4f5e9cfff55" start_index="0" end="30054e9d-f8cd-4dfd-aab0-f9e11afcf71b" end_index="1" portType="0" />
@@ -445,8 +471,14 @@ OUT = unflatten(*IN)</Script>
     <Dynamo.Graph.Connectors.ConnectorModel start="a00eac2d-9442-4f0e-be80-ebfaab0b2470" start_index="0" end="d51848e8-6663-4eaf-a5f1-f164de9dec9f" end_index="4" portType="0" />
     <Dynamo.Graph.Connectors.ConnectorModel start="1c7fb340-9e53-4178-9502-c08d46305ab5" start_index="0" end="71e532ae-3735-4c30-b1d3-94b11104fbd1" end_index="1" portType="0" />
     <Dynamo.Graph.Connectors.ConnectorModel start="62bdcf3b-5461-43c2-acc1-aa64a8fb121c" start_index="0" end="ba3dca4f-8406-4a58-ae20-f51c53be632a" end_index="6" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="6dec3861-cb36-450a-88c7-60a6df8d0e4a" start_index="0" end="ba3dca4f-8406-4a58-ae20-f51c53be632a" end_index="1" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="a3a70728-6e36-4f33-b35c-7fa2c22d6bb8" start_index="0" end="6dec3861-cb36-450a-88c7-60a6df8d0e4a" end_index="4" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="a3a70728-6e36-4f33-b35c-7fa2c22d6bb8" start_index="1" end="6dec3861-cb36-450a-88c7-60a6df8d0e4a" end_index="5" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="bff17c28-dcc0-4cd6-81cb-66a2a8723522" start_index="0" end="6dec3861-cb36-450a-88c7-60a6df8d0e4a" end_index="1" portType="0" />
   </Connectors>
-  <Notes />
+  <Notes>
+    <Dynamo.Graph.Notes.NoteModel guid="735fe796-5272-47f5-97b0-e9e53d1a6cf8" text="Inputs are:&#xD;&#xA;sun vectors&#xD;&#xA;points,&#xD;&#xA;vectors,&#xD;&#xA;timestep,&#xD;&#xA;and ambient division" x="2434.87728170374" y="-749.083679903425" />
+  </Notes>
   <Annotations>
     <Dynamo.Graph.Annotations.AnnotationModel guid="8caf77ab-5ea5-4b0e-a81e-68d7ab8f9b92" annotationText="generate sky" left="1591.55328649509" top="-292.377701733651" width="144" height="158" fontSize="24" InitialTop="-253.377701733651" InitialHeight="149" TextblockHeight="29" backgrouund="#FFC1D676">
       <Models ModelGuid="7e6ef32f-0181-43fa-916c-913d9b63467f" />
@@ -473,9 +505,12 @@ OUT = unflatten(*IN)</Script>
     <Dynamo.Graph.Annotations.AnnotationModel guid="26dcb578-5adb-4641-8280-5634bd26e96f" annotationText="Radiance Properties" left="1655.13875293187" top="569.768621659053" width="144" height="187" fontSize="24" InitialTop="637.768621659053" InitialHeight="149" TextblockHeight="58" backgrouund="#FFC1D676">
       <Models ModelGuid="30e728a8-1092-45aa-ae25-2249c0d5053d" />
     </Dynamo.Graph.Annotations.AnnotationModel>
+    <Dynamo.Graph.Annotations.AnnotationModel guid="28e8044a-9c09-4460-9362-602bf48878dd" annotationText="sunlighthours analysis recipe" left="2277.3233581849" top="-917.096814609149" width="144" height="319" fontSize="24" InitialTop="-821.096814609149" InitialHeight="253" TextblockHeight="86" backgrouund="#FFFFAA45">
+      <Models ModelGuid="6dec3861-cb36-450a-88c7-60a6df8d0e4a" />
+    </Dynamo.Graph.Annotations.AnnotationModel>
   </Annotations>
   <Presets />
   <Cameras>
-    <Camera Name="Background Preview" eyeX="-5.84475803375244" eyeY="10.9850826263428" eyeZ="9.85358333587646" lookX="28.4333782196045" lookY="-19.3362159729004" lookZ="-25.4318714141846" upX="0.186621323227882" upY="0.9681476354599" upZ="-0.166921034455299" />
+    <Camera Name="Background Preview" eyeX="-2.5218104479925" eyeY="11.7840282221227" eyeZ="3.52976578736502" lookX="8.20561805765373" lookY="-11.5523624233532" lookZ="-7.33941021436392" upX="0.416795721367271" upY="0.829037565521411" upZ="-0.372797580032148" />
   </Cameras>
 </Workspace>
