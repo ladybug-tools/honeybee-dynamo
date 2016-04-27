@@ -66,12 +66,6 @@ class RadianceParameters(object):
         """Return list of current values."""
         return [getattr(self, key) for key in self.parameters]
 
-    # def freeze(self):
-    #     pass
-    #
-    # def unfreeze(self):
-    #     pass
-
     def tryToUnfreeze(self):
         """Try to unfreeze subclass to add a new attribute."""
         try:
