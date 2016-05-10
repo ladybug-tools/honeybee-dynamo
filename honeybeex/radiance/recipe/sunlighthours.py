@@ -19,13 +19,9 @@ class SunlightHoursAnalysisRecipe(HBSunlightHoursAnalysisRecipe):
         timestep: The number of timesteps per hour for sun vectors. This number
             should be smaller than 60 and divisible by 60. The default is set to
             1 such that one sun vector is generated for each hour (Default: 1).
-        ambientDivisions: Numbe of ambient divisions for raytracing analysis.
-            This value will set [-ad] value for radiance rtrace command
-            (Default: 10000).
     """
 
-    def __init__(self, sunVectors, pointGroupsT, vectorGroupsT=[],
-                 timestep=1, ambientDivisions=1000):
+    def __init__(self, sunVectors, pointGroupsT, vectorGroupsT=[], timestep=1):
         """Create sunlighthours recipe."""
         # convert DataTrees to lists
         pointGroups, vectorGroups = \
@@ -35,13 +31,11 @@ class SunlightHoursAnalysisRecipe(HBSunlightHoursAnalysisRecipe):
             print "No test points!"
 
         HBSunlightHoursAnalysisRecipe.__init__(self, sunVectors, pointGroups,
-                                               vectorGroups, timestep,
-                                               ambientDivisions)
+                                               vectorGroups, timestep)
 
     @classmethod
     def fromLBSuns(cls, suns, pointGroups, vectorGroups=[], timestep=1,
-                   ambientDivisions=1000, hbObjects=None,
-                   subFolder="sunlighthour"):
+                   hbObjects=None, subFolder="sunlighthour"):
         """Create sunlighthours recipe from LB sun objects.
 
         Attributes:
@@ -56,21 +50,17 @@ class SunlightHoursAnalysisRecipe(HBSunlightHoursAnalysisRecipe):
             timestep: The number of timesteps per hour for sun vectors. This number
                 should be smaller than 60 and divisible by 60. The default is set to
                 1 such that one sun vector is generated for each hour (Default: 1).
-            ambientDivisions: Numbe of ambient divisions for raytracing analysis.
-                This value will set [-ad] value for radiance rtrace command
-                (Default: 10000).
         """
         try:
             sunVectors = [s.sunVector for s in suns if s.isDuringDay]
         except AttributeError:
             raise ValueError("%s is not a valid LBSun" % s)
 
-        return cls(sunVectors, pointGroups, vectorGroups, timestep,
-                   ambientDivisions)
+        return cls(sunVectors, pointGroups, vectorGroups, timestep)
 
     @classmethod
     def fromLocationAndHoys(cls, location, HOYs, pointGroups, vectorGroups=[],
-                            timestep=1, ambientDivisions=1000):
+                            timestep=1):
         """Create sunlighthours recipe from Location and hours of year."""
         sp = LBSunpath.fromLocation(location)
 
@@ -78,13 +68,11 @@ class SunlightHoursAnalysisRecipe(HBSunlightHoursAnalysisRecipe):
 
         sunVectors = [s.sunVector for s in suns if s.isDuringDay]
 
-        return cls(sunVectors, pointGroups, vectorGroups, timestep,
-                   ambientDivisions)
+        return cls(sunVectors, pointGroups, vectorGroups, timestep)
 
     @classmethod
     def fromLocationAndAnalysisPeriod(
-        cls, location, analysisPeriod, pointGroups, vectorGroups=[],
-        ambientDivisions=1000
+        cls, location, analysisPeriod, pointGroups, vectorGroups=[]
     ):
         """Create sunlighthours recipe from Location and analysis period."""
         sp = LBSunpath.fromLocation(location)
@@ -94,4 +82,4 @@ class SunlightHoursAnalysisRecipe(HBSunlightHoursAnalysisRecipe):
         sunVectors = [s.sunVector for s in suns if s.isDuringDay]
 
         return cls(sunVectors, pointGroups, vectorGroups,
-                   analysisPeriod.timestep, ambientDivisions)
+                   analysisPeriod.timestep)
