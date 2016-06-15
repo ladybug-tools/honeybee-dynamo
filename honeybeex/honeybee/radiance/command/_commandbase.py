@@ -12,10 +12,13 @@ class RadianceCommand(object):
 
     __metaclass__ = ABCMeta
 
-    def __init__(self):
+    def __init__(self,executableName=None):
         """Initialize Radiance command."""
+        self.executableName = executableName
         self.radbinPath = config.radbinPath
         self.radlibPath = config.radlibPath
+        """Specifiy the name of the executable directly like gensky.exe or
+           genskyvec.pl etc."""
 
     @property
     def radbinPath(self):
@@ -51,7 +54,7 @@ class RadianceCommand(object):
 
         Return path with quotation marks if there is whitespace in path.
         """
-        if path.strip().find(" ") != -1:
+        if str(path).strip().find(" ") != -1:
             return "{0}{1}{0}".format(config.wrapper, path)
         else:
             return path
@@ -97,9 +100,23 @@ class RadianceCommand(object):
         """Check if executable file exist."""
         radbinPath = self.radbinPath if not radbinPath else radbinPath
 
-        __executable = os.path.normpath(
-            os.path.join(str(radbinPath), '{}.exe'.format(self.__class__.__name__))
-        )
+        #Check if the operating system is Windows or Mac/Linux. At present
+        # the naming conventions inside Mac and Linux are assumed to work the
+        # same.
+        if os.name == 'nt':
+            if self.executableName:
+                __executable = os.path.normpath(os.path.join(str(radbinPath)),
+                                                self.executableName.lower())
+            else:
+                __executable = os.path.normpath(
+                    os.path.join(str(radbinPath),
+                                 '{}.exe'.format(self.__class__.__name__.lower())))
+
+        #TODO: Check if this works with Mac too. Currently assuming it does.
+        else:
+            __executable = os.path.normpath(
+                os.path.join(str(radbinPath),self.__class__.__name__.lower()))
+
 
         if not (os.path.isfile(__executable) and os.access(__executable, os.X_OK)):
             __err = "Can't find %s.\n" % __executable + \
@@ -128,8 +145,14 @@ class RadianceCommand(object):
         if self.inputFiles is None:
             return
 
+        # In case there is only a single file and it wasn't specified as a tuple
+        # or list.
+        if isinstance(self.inputFiles, basestring)and \
+                os.path.exists(self.inputFiles):
+            return
+
         assert len(self.inputFiles) != 0, \
-            "You need at least one file to create an octree."
+            "You have not specified any input files!."
 
         for f in self.inputFiles:
             assert os.path.exists(str(f)), \
@@ -170,6 +193,10 @@ class RadianceCommand(object):
         self.__checkFiles()
 
         self.onExecution()
+
+        if os.name == 'nt':
+            os.environ['PATH'] += ';%s' % self.normspace(config.radbinPath)
+            os.environ['RAYPATH'] += ';%s' % self.normspace(config.radlibPath)
 
         p = subprocess.Popen(self.toRadString(), shell=True,
                              stdout=subprocess.PIPE, stderr=subprocess.STDOUT)

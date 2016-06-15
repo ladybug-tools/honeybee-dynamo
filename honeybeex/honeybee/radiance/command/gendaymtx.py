@@ -63,10 +63,6 @@ class Gendaymtx(RadianceCommand):
         >
     """
 
-    weaFile = RadiancePath('weaFile', descriptiveName='weather file path',
-                           relativePath=None, checkExists=False,
-                           extension='.wea')
-
     def __init__(self, outputName=None, weaFile=None, gendaymtxParameters=None):
         """Init command."""
         RadianceCommand.__init__(self)
@@ -88,18 +84,21 @@ class Gendaymtx(RadianceCommand):
         assert hasattr(self.gendaymtxParameters, "isRadianceParameters"), \
             "input gendaymtxParameters is not a valid parameters type."
 
-    def toRadString(self, relativePath=False):
-        """Return full command as a string."""
-        # generate the name from self.weaFile
-        outputFile = os.path.splitext(str(self.weaFile))[0] + ".mtx" \
+    @property
+    def outputFile(self):
+        """Output file address."""
+        return os.path.splitext(str(self.weaFile))[0] + ".mtx" \
             if self.outputName is None and self.weaFile.normpath is not None \
             else self.outputName
 
+    def toRadString(self, relativePath=False):
+        """Return full command as a string."""
+        # generate the name from self.weaFile
         radString = "%s %s %s > %s" % (
             self.normspace(os.path.join(self.radbinPath, 'gendaymtx')),
             self.gendaymtxParameters.toRadString(),
             self.normspace(self.weaFile),
-            self.normspace(outputFile)
+            self.normspace(self.outputFile)
         )
 
         # make sure input files are set by user
@@ -109,4 +108,4 @@ class Gendaymtx(RadianceCommand):
     @property
     def inputFiles(self):
         """Input files for this command."""
-        return (self.weaFile,)
+        return self.weaFile,
