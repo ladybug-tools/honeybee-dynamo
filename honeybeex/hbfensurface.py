@@ -1,9 +1,10 @@
-from honeybee.hbsurface import HBSurface as AnalysisSurface
+from honeybee.hbfensurface import HBFenSurface as FenSurface
 import geometryoperation as go
 import config
 
-class HBSurface(AnalysisSurface):
-    """Honeybee surface.
+
+class HBFenSurface(FenSurface):
+    """Honeybee fenestration surface.
 
     Args:
         name: A unique string for surface name
@@ -11,16 +12,6 @@ class HBSurface(AnalysisSurface):
             (x, y, z). Points should be sorted. This class won't sort the points.
             If surfaces has multiple subsurfaces you can pass lists of point lists
             to this function (e.g. ((0, 0, 0), (10, 0, 0), (0, 10, 0))).
-        surfaceType: Optional input for surface type. You can use any of the surface
-            types available from surfacetype libraries or use a float number to
-            indicate the type. If not indicated it will be assigned based on normal
-            angle of the surface which will be calculated from surface points.
-                0.0: Wall           0.5: UndergroundWall
-                1.0: Roof           1.5: UndergroundCeiling
-                2.0: Floor          2.25: UndergroundSlab
-                2.5: SlabOnGrade    2.75: ExposedFloor
-                3.0: Ceiling        4.0: AirWall
-                6.0: Context
         isNameSetByUser: If you want the name to be changed by honeybee any case
             set isNameSetByUser to True. Default is set to False which let Honeybee
             to rename the surface in cases like creating a newHBZone.
@@ -28,34 +19,33 @@ class HBSurface(AnalysisSurface):
             RADProperties will be assigned to surface by Honeybee.
         epProperties: EnergyPlus properties for this surface. If empty default
             epProperties will be assigned to surface by Honeybee.
+        isCreatedFromGeometry: ...
     """
 
-    def __init__(self, name, sortedPoints, surfaceType=None,
-                 isNameSetByUser=False, isTypeSetByUser=False,
+    def __init__(self, name, sortedPoints=[], isNameSetByUser=False,
                  radProperties=None, epProperties=None,
                  isCreatedFromGeometry=False):
-        """Create a honeybee surface for Grasshopper."""
-        AnalysisSurface.__init__(
-            self, name, sortedPoints=sortedPoints, surfaceType=surfaceType,
-            isNameSetByUser=isNameSetByUser, isTypeSetByUser=isTypeSetByUser,
-            radProperties=radProperties, epProperties=epProperties)
+        """Init honeybee fenestration surface."""
+        FenSurface.__init__(self, name, sortedPoints=sortedPoints,
+                            isNameSetByUser=isNameSetByUser,
+                            radProperties=radProperties,
+                            epProperties=epProperties)
 
         self.isCreatedFromGeometry = isCreatedFromGeometry
 
-    def fromGeometry(cls, name, geometry, surfaceType=None,
-                     isNameSetByUser=False, isTypeSetByUser=False,
+    def fromGeometry(cls, name, geometry, isNameSetByUser=False,
                      radProperties=None, epProperties=None,
                      isCreatedFromGeometry=True):
-        "Create a honeybee surface from Grasshopper or Dynamo geometry."
+        "Create a honeybee fenestration surface from Grasshopper or Dynamo geometry."
         self.geometry = geometry
         sortedPoints = go.extractSurfacePoints(self)
-        return cls(name, sortedPoints, surfaceType, isNameSetByUser,
-                   isTypeSetByUser, radProperties, epProperties,
-                     isCreatedFromGeometry)
+
+        return cls(name, sortedPoints, isNameSetByUser, radProperties,
+                   epProperties, isCreatedFromGeometry=True)
 
     @property
     def geometry(self):
-        """Return geometry."""
+        """return geometry."""
         if self.isCreatedFromGeometry:
             return self.__geometry
         else:

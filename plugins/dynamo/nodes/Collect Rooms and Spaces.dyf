@@ -1,0 +1,60 @@
+<Workspace Version="1.0.0.1180" X="77.1041474094356" Y="185.290610426362" zoom="0.63524834044862" Name="Collect Rooms and Spaces" Description="Collect rooms and MEP spaces in the Revit document.&#xD;&#xA;&#xD;&#xA;Use &quot;Rooms to HBZones&quot; node to convert them to Honeybee zones." ID="d5ab273a-33be-4b0a-9070-c6c03d4d2790" Category="Honeybee.Revit">
+  <NamespaceResolutionMap>
+    <ClassMap partialName="List" resolvedName="DSCore.List" assemblyName="DSCoreNodes.dll" />
+  </NamespaceResolutionMap>
+  <Elements>
+    <PythonNodeModels.PythonNode guid="fb6dc694-1948-45c0-8cdd-371faaf5a17f" type="PythonNodeModels.PythonNode" nickname="Python Script" x="383.46912859972" y="0.895180884639899" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" isPinned="false" inputcount="1">
+      <Script>import clr
+clr.AddReference("RevitAPI")
+from Autodesk.Revit.DB import FilteredElementCollector, BuiltInCategory
+
+clr.AddReference("RevitServices")
+from RevitServices.Persistence import DocumentManager
+
+def collectRooms(document=None):
+    """Collect all the rooms in the current Revit document."""
+    if not document:
+        document = DocumentManager.Instance.CurrentDBDocument
+    collector = FilteredElementCollector(document)
+    collector.OfCategory(BuiltInCategory.OST_Rooms)
+    roomIter = collector.GetElementIdIterator()
+    roomIter.Reset()
+    return tuple(document.GetElement(elId) for elId in roomIter)
+
+
+def collectMEPSpaces(document=None):
+    """Collect all the spaces in the current Revit document."""
+    if not document:
+        document = DocumentManager.Instance.CurrentDBDocument
+    collector = FilteredElementCollector(document)
+    collector.OfCategory(BuiltInCategory.OST_MEPSpaces)
+    roomIter = collector.GetElementIdIterator()
+    roomIter.Reset()
+    return tuple(document.GetElement(elId) for elId in roomIter)
+    
+
+if IN[0]:
+	doc = DocumentManager.Instance.CurrentDBDocument
+	OUT = collectRooms(doc), collectMEPSpaces(doc)</Script>
+    </PythonNodeModels.PythonNode>
+    <Dynamo.Graph.Nodes.CustomNodes.Symbol guid="2214d4e4-958e-4a2d-9ebb-933079328af4" type="Dynamo.Graph.Nodes.CustomNodes.Symbol" nickname="Input" x="-36.4553223523516" y="1.55333427210903" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="True" IsFrozen="false" isPinned="false">
+      <Symbol value="//Set to True to collect rooms and spaces.&#xD;&#xA;_collect: bool = false;" />
+    </Dynamo.Graph.Nodes.CustomNodes.Symbol>
+    <Dynamo.Graph.Nodes.CodeBlockNodeModel guid="95f5f198-1ffc-4229-ac65-28d7cacb50d3" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" nickname="Code Block" x="530.837442567021" y="4.86096302384703" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" isPinned="false" CodeText="out[0];&#xA;out[1];" ShouldFocus="false" />
+    <Dynamo.Graph.Nodes.CustomNodes.Output guid="bf33234a-0d4e-4294-a506-66d7f21fbe82" type="Dynamo.Graph.Nodes.CustomNodes.Output" nickname="Output" x="737.134070337305" y="-40.7542859356487" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" isPinned="false">
+      <Symbol value="//List of rooms&#xD;&#xA;rooms" />
+    </Dynamo.Graph.Nodes.CustomNodes.Output>
+    <Dynamo.Graph.Nodes.CustomNodes.Output guid="5ed16f4a-d953-4e62-8ba3-41fa112699c5" type="Dynamo.Graph.Nodes.CustomNodes.Output" nickname="Output" x="735.376863446696" y="24.584670422802" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" isPinned="false">
+      <Symbol value="//List of spaces&#xD;&#xA;spaces" />
+    </Dynamo.Graph.Nodes.CustomNodes.Output>
+  </Elements>
+  <Connectors>
+    <Dynamo.Graph.Connectors.ConnectorModel start="fb6dc694-1948-45c0-8cdd-371faaf5a17f" start_index="0" end="95f5f198-1ffc-4229-ac65-28d7cacb50d3" end_index="0" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="2214d4e4-958e-4a2d-9ebb-933079328af4" start_index="0" end="fb6dc694-1948-45c0-8cdd-371faaf5a17f" end_index="0" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="95f5f198-1ffc-4229-ac65-28d7cacb50d3" start_index="0" end="bf33234a-0d4e-4294-a506-66d7f21fbe82" end_index="0" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="95f5f198-1ffc-4229-ac65-28d7cacb50d3" start_index="1" end="5ed16f4a-d953-4e62-8ba3-41fa112699c5" end_index="0" portType="0" />
+  </Connectors>
+  <Notes />
+  <Annotations />
+  <Presets />
+</Workspace>

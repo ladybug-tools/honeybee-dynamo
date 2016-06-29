@@ -27,9 +27,9 @@ class SensorGroup(object):
             pts: Nested list of points
             vectors: Nested list of vectors
         """
-        if config.platform == 'gh':
+        if config.platform.isGrasshopper:
             pts, vec = self.__matchPointsAndVectorsGH(ptsT, vecT)
-        elif config.platform == 'ds' or config.platform == 'rvt':
+        elif config.platform.isRevitOrDynamo:
             pts, vec = self.__matchPointsAndVectorsDS(ptsT, vecT)
         else:
             return ptsT, vecT

@@ -13,7 +13,7 @@ Usage:
 from honeybee.config import *
 from collections import namedtuple
 import os
-
+import sys
 
 class Platform(object):
     """Identify how the script is currently executing.
@@ -89,6 +89,26 @@ class Platform(object):
 
         self.importGeometryLibraries()
 
+    @property
+    def isRevit(self):
+        """Return True if platform is Revit."""
+        return self.platform == "rvt"
+
+    @property
+    def isDynamo(self):
+        """Return True if platform is Dynamo Studio."""
+        return self.platform == "ds"
+
+    @property
+    def isGrasshopper(self):
+        """Return True if platform is Grasshopper."""
+        return self.platform == "gh"
+
+    @property
+    def isRevitOrDynamo(self):
+        """Return True if platform is Revit or Dynamo Studio."""
+        return self.isRevit or self.isDynamo
+
     def importGeometryLibraries(self):
         """
         Import geometry libraries based on platform.
@@ -137,8 +157,12 @@ class Platform(object):
                 # Assign Rhino and Grasshopper to the libraries
                 self.libs = self._Libs(None, None, dyn, ds)
 
+    def __repr__(self):
+        """Return platform."""
+        return "{}".format(self.platform)
+
+
 # expose platform and libraries as global variables
-__p = Platform(mute=False)
-platform = __p.platform
-platformId = __p.platformId
-libs = __p.libs
+platform = Platform(mute=False)
+platformId = platform.platformId
+libs = platform.libs

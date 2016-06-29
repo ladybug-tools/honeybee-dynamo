@@ -1,6 +1,6 @@
 """Collection of methods for Honeybee geometry operations in Grasshopper."""
 import config
-
+from collections import namedtuple
 
 def extractSurfacePoints(HBSurface, *args, **kwargs):
     """Calculate list of points for a HBSurface.
@@ -24,10 +24,9 @@ def extractSurfacePoints(HBSurface, *args, **kwargs):
     """
     assert hasattr(HBSurface, 'isHBObject'), "Surface input is not a HBSurface."
 
-    if config.platform == 'gh':
-        return __extractSurfacePointsGH(HBSurface.geometry, HBSurface.normal,
-                                        *args, **kwargs)
-    elif config.platform == 'ds' or config.platform == 'rvt':
+    if config.platform.isGrasshopper:
+        return __extractSurfacePointsGH(HBSurface.geometry, *args, **kwargs)
+    elif config.platform.isRevitOrDynamo:
         return __extractSurfacePointsDS(HBSurface.geometry, *args, **kwargs)
 
 
@@ -35,8 +34,7 @@ def extractSurfacePoints(HBSurface, *args, **kwargs):
 # implementation to prototype the workflow
 # TODO: Extract point should support mesh as well as brep surfaces. Currently we have
 # two alternative solutions which is not preferred. Currently it only works for Breps.
-def __extractSurfacePointsGH(geometry, normalVector=None, triangulate=False,
-                             meshingParameters=None):
+def __extractSurfacePointsGH(geometry, triangulate=False, meshingParameters=None):
     """Calculate list of points for a HBSurface.
 
     For planar surfaces the length of the list will be only 1. For non-planar
@@ -44,7 +42,6 @@ def __extractSurfacePointsGH(geometry, normalVector=None, triangulate=False,
 
     Args:
         geometry: A Mesh or Brep
-        normalVector: Mesh or Brep normal vector
         triangulate: If set to True the function returns the points for triangulated
             surfaces (Default: False)
         meshingParameters: Optional Rhino meshingParameters. This will only be used if the
@@ -75,8 +72,10 @@ def __extractSurfacePointsGH(geometry, normalVector=None, triangulate=False,
 
     pointsSorted = sorted(pts, key=lambda pt: border.ClosestPoint(pt)[1])
 
+
     # make sure points are anti clockwise
-    if not isPointsSortedAntiClockwise(pointsSorted, normalVector):
+    if not isPointsSortedAntiClockwise(pointsSorted,
+                                       getSurfaceCenterPtandNormal(geometry).normalVector):
         return pointsSorted.reverse()
 
     # return sorted points
@@ -174,7 +173,8 @@ def getSurfaceCenterPtandNormal(HBSurface):
             centerPt = brepFace.PointAt(centerU, centerV)
             normalVector = brepFace.NormalAt(centerU, centerV)
         else:
-            centroid = config.libs.Rhino.Geometry.AreaMassProperties.Compute(brepFace).Centroid
+            centroid = config.libs.Rhino.Geometry.AreaMassProperties \
+                       .Compute(brepFace).Centroid
             uv = brepFace.ClosestPoint(centroid)
             centerPt = brepFace.PointAt(uv[1], uv[2])
             normalVector = brepFace.NormalAt(uv[1], uv[2])
@@ -184,7 +184,9 @@ def getSurfaceCenterPtandNormal(HBSurface):
         centerPt = geometry.PointAtParameter(uv.U, uv.V)
         normalVector = geometry.NormalAtParameter(uv.U, uv.V).Normalized()
 
-    return centerPt, normalVector
+    SurfaceData = namedtuple('SurfaceData', 'centerPt normalVector')
+
+    return SurfaceData(centerPt, normalVector)
 
 
 def checkPlanarity(HBSurface, tolerance=1e-3):
@@ -232,3 +234,24 @@ def checkForInternalEdge(HBSurface):
             return True
         else:
             return False
+
+
+def xyzToGeometricalPoints(xyzPoints):
+    """conver a sequence of (x, y, z) values to Dynamo or Grasshopper points."""
+    for xyzList in xyzPoints:
+        for xyz in xyzList:
+            if config.platform.isRevitOrDynamo:
+                yield config.platform.libs.DesignScript.Geometry \
+                    .Point.ByCoordinates(xyz[0], xyz[1], xyz[2])
+            elif config.platform.isGrasshopper:
+                yield config.platform.libs.Rhino.Geometry.Point3d(xyz[0],
+                                                                  xyz[1],
+                                                                  xyz[2])
+
+def polygon(pointList):
+    if config.platform.isRevitOrDynamo:
+        return config.platform.libs.DesignScript.Geometry \
+            .Polygon.ByPoints(pointList)
+    elif config.platform.isGrasshopper:
+        return config.platform.libs.Rhino.Geometry \
+            .Polyline(pointList).ToNurbsCurve()
