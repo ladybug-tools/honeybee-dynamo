@@ -29,6 +29,33 @@ def extractSurfacePoints(HBSurface, *args, **kwargs):
     elif config.platform.isRevitOrDynamo:
         return __extractSurfacePointsDS(HBSurface.geometry, *args, **kwargs)
 
+def extractSurfacePointsFromGeometry(geometry, *args, **kwargs):
+    """Calculate list of points for a geometry.
+
+    Args:
+        geometry: A Grasshopper or Dynamo geometry
+        --- Grasshopper ---
+        triangulate: If set to True the function returns the points for triangulated
+            surfaces (Default: False)
+        meshingParameters: Optional Rhino meshingParameters. This will only be used
+            if the surrface is non-planar or has an internal edge and needs to be meshed.
+            Default:
+                Rhino.Geometry.MeshingParameters.Coarse; SimplePlanes = True for planar surfaces
+                Rhino.Geometry.MeshingParameters.Smooth for non-planar surfaces
+        --- Dynamo ---
+            maxTessellationDivisions: Maximum number of divisions for surface tessellation.
+    Returns:
+        A list of point lists. For planar surfaces the length of the list will be
+        only 1. For non-planar surfaces or surfaces with internal edges it will be
+        a number of lists.
+    """
+    try:
+        if config.platform.isGrasshopper:
+            return __extractSurfacePointsGH(geometry, *args, **kwargs)
+        elif config.platform.isRevitOrDynamo:
+            return __extractSurfacePointsDS(geometry, *args, **kwargs)
+    except Exception as e:
+        raise ValueError("Failed to extract points!\n%s" % e)
 
 # TODO: Add support for non-planar surfaces. The current implementation is a simple
 # implementation to prototype the workflow
@@ -83,12 +110,14 @@ def __extractSurfacePointsGH(geometry, triangulate=False, meshingParameters=None
     return [pointsSorted]
 
 
-def __extractSurfacePointsDS(geometry, maxTessellationDivisions=25):
+def __extractSurfacePointsDS(geometry, maxTessellationDivisions=25,
+                             joinCoplanarTriFaces=True):
     """Extract points from a surface in Dynamo.
 
     Args:
         geometry: A Dynamo geometry.
         maxTessellationDivisions: Maximum number of divisions for surface tessellation.
+        joinCoplanarTriFaces: Join two triangle faces if there is only two.
 
     Returns:
         A list of point lists.
@@ -111,6 +140,10 @@ def __extractSurfacePointsDS(geometry, maxTessellationDivisions=25):
     geometry.Tessellate(rp, tp)
     pts = __getPoints(rp)
 
+    # check if two faces are generated for this geometry and merge them
+    if joinCoplanarTriFaces and len(pts) == 2:
+        pts[0].insert(2, pts[1][2])
+        pts = [pts[0]]
     # clean Dynamo objects
     del(rpFactory)
     del(rp)

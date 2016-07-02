@@ -42,16 +42,17 @@ class HBSurface(AnalysisSurface):
 
         self.isCreatedFromGeometry = isCreatedFromGeometry
 
+    @classmethod
     def fromGeometry(cls, name, geometry, surfaceType=None,
                      isNameSetByUser=False, isTypeSetByUser=False,
                      radProperties=None, epProperties=None,
                      isCreatedFromGeometry=True):
         "Create a honeybee surface from Grasshopper or Dynamo geometry."
-        self.geometry = geometry
-        sortedPoints = go.extractSurfacePoints(self)
-        return cls(name, sortedPoints, surfaceType, isNameSetByUser,
-                   isTypeSetByUser, radProperties, epProperties,
-                     isCreatedFromGeometry)
+        _pts = go.extractSurfacePointsFromGeometry(geometry)
+        _srf = cls(name, _pts, surfaceType, isNameSetByUser, isTypeSetByUser,
+                   radProperties, epProperties, isCreatedFromGeometry)
+        _srf.geometry = geometry
+        return _srf
 
     @property
     def geometry(self):
@@ -59,9 +60,14 @@ class HBSurface(AnalysisSurface):
         if self.isCreatedFromGeometry:
             return self.__geometry
         else:
-            return go.polygon(tuple(go.xyzToGeometricalPoints(self.absolutePoints)))
+            return self.profile
 
     @geometry.setter
     def geometry(self, geo):
         """Set geometry."""
         self.__geometry = geo
+
+    @property
+    def profile(self):
+        """Get profile curve of this surface."""
+        return go.polygon(tuple(go.xyzToGeometricalPoints(self.absolutePoints)))

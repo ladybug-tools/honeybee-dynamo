@@ -1,4 +1,5 @@
 """Collection of methods for data operation."""
+from honeybee.dataoperation import flattenTupleList, unflatten
 from collections import namedtuple
 try:
     from Grasshopper import DataTree

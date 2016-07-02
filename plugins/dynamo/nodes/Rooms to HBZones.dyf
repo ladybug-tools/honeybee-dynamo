@@ -1,4 +1,4 @@
-<Workspace Version="1.0.0.1180" X="-239.349614433242" Y="-91.249146190587" zoom="0.695946673591597" Name="Rooms to HBZones" Description="Create Honeybee zones from Revit Rooms or MEPSpaces.&#xD;&#xA;This node currently ONLY collects geometrical data from Revit. In the future it will import constructions, materials and MEP data (e.g lighting power density)." ID="1a4d9a13-2794-4eb5-b3c1-2a49dc7a9e89" Category="Honeybee.Revit">
+<Workspace Version="1.0.0.1180" X="-755.521368529558" Y="-216.303094665462" zoom="0.794352463051348" Name="Rooms to HBZones" Description="Create Honeybee zones from Revit Rooms or MEPSpaces.&#xD;&#xA;This node currently ONLY collects geometrical data from Revit. In the future it will import constructions, materials and MEP data (e.g lighting power density)." ID="1a4d9a13-2794-4eb5-b3c1-2a49dc7a9e89" Category="Honeybee.Revit">
   <NamespaceResolutionMap />
   <Elements>
     <PythonNodeModels.PythonNode guid="cfdd0aa1-b707-4208-bf11-e0a6fe8fae99" type="PythonNodeModels.PythonNode" nickname="Error Report!" x="1512.61950975536" y="212.932025313884" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" isPinned="false" inputcount="2">
@@ -60,17 +60,17 @@ except Exception, e:
     </PythonNodeModels.PythonNode>
     <Dynamo.Graph.Nodes.CodeBlockNodeModel guid="765b8428-3889-405d-a2a9-d91b243c1b40" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" nickname="Code Block" x="307" y="214.2667539731" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" isPinned="false" CodeText="&quot;convertRoomsToHBZones_node.py&quot;;" ShouldFocus="false" />
     <Dynamo.Graph.Nodes.CustomNodes.Symbol guid="3dce4cf0-d529-4f20-a98d-ac15f973d795" type="Dynamo.Graph.Nodes.CustomNodes.Symbol" nickname="Input" x="606.123751805578" y="478.697797351448" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="True" IsFrozen="false" isPinned="false">
-      <Symbol value="//A list of rooms and MEPSpaces&#xD;&#xA;rooms;" />
+      <Symbol value="//A list of rooms and MEPSpaces&#xD;&#xA;_rooms;" />
     </Dynamo.Graph.Nodes.CustomNodes.Symbol>
     <Dynamo.Graph.Nodes.CustomNodes.Symbol guid="6b5e3b5f-d1b5-4bca-a7b8-61d48e6b5ecd" type="Dynamo.Graph.Nodes.CustomNodes.Symbol" nickname="Input" x="608.220236920251" y="554.615695712118" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="True" IsFrozen="false" isPinned="false">
-      <Symbol value="//Boundary location.&#xD;&#xA;//1 &gt; Center: Spatial element centerline. &#xD;&#xA;//2 &gt; Finish: Spatial element finish face.&#xD;&#xA;boundaryLoc: int = 1;" />
+      <Symbol value="//Boundary location.&#xD;&#xA;//1 &gt; Center: Spatial element centerline. &#xD;&#xA;//2 &gt; Finish: Spatial element finish face.&#xD;&#xA;_boundaryLoc_: int = 1;" />
     </Dynamo.Graph.Nodes.CustomNodes.Symbol>
     <Dynamo.Graph.Nodes.CustomNodes.Output guid="6e700974-863b-4762-888b-23baa1941c1f" type="Dynamo.Graph.Nodes.CustomNodes.Output" nickname="Output" x="1568.70054010823" y="454.168947037661" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" isPinned="false">
       <Symbol value="//List of Honeybee zones&#xD;&#xA;HBZones;" />
     </Dynamo.Graph.Nodes.CustomNodes.Output>
     <Dynamo.Graph.Nodes.CodeBlockNodeModel guid="4f2a9a8d-1c87-4466-a0c6-47fa3235c34b" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" nickname="Code Block" x="1369.13779343258" y="456.674834724259" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" isPinned="false" CodeText="OUT[0];&#xA;OUT[1];" ShouldFocus="false" />
     <Dynamo.Graph.Nodes.CustomNodes.Output guid="4ea662f0-02f7-40ea-8c86-48a93f512773" type="Dynamo.Graph.Nodes.CustomNodes.Output" nickname="Output" x="1569.50914636594" y="525.957924261977" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" isPinned="false">
-      <Symbol value="//List of geometries as polygons&#xD;&#xA;polylines;" />
+      <Symbol value="//List of geometries as polygons for visualization&#xD;&#xA;polylines;" />
     </Dynamo.Graph.Nodes.CustomNodes.Output>
     <Dynamo.Graph.Nodes.CustomNodes.Output guid="2f212ed8-2681-4650-8e9d-dd8c37d81d7d" type="Dynamo.Graph.Nodes.CustomNodes.Output" nickname="Output" x="1685.97632398743" y="213.017967922042" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" isPinned="false">
       <Symbol value="//Report&#xD;&#xA;ERRReport" />
@@ -96,6 +96,6 @@ except Exception, e:
   </Annotations>
   <Presets />
   <Cameras>
-    <Camera Name="Background Preview" eyeX="-45.4648168667932" eyeY="62.4997036665581" eyeZ="-10.2625654855838" lookX="-6.35620539607506" lookY="-58.472385231606" lookZ="-6.17884434826952" upX="-0.669414445006833" upY="0.358367926761724" upZ="-0.650735457267421" />
+    <Camera Name="Background Preview" eyeX="-55.6467961435549" eyeY="39.0463061287833" eyeZ="9.06490913871078" lookX="6.81857598716083" lookY="-40.9641319622356" lookZ="-27.9935026492496" upX="0.159883701496052" upY="0.737277299440681" upZ="-0.65639870711807" />
   </Cameras>
 </Workspace>

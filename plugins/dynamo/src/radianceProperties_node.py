@@ -32,14 +32,10 @@ try:
     sys.path.append(getPackagePath('Honeybee'))
 
     ###### start you code from here ###
-    from honeybeex.revit import convertRoomsToHBZones
+    from honeybeex.radiance.properties import RadianceProperties
 
-    if IN[0]:
-        if not hasattr(IN[0], '__iter__'):
-            IN[0] = [IN[0]]
-        # collect rooms
-        _hbZones = convertRoomsToHBZones(IN[0], boundaryLocation=IN[1])
-        OUT = _hbZones, tuple(zone.geometry for zone in _hbZones)
+    _material_ = IN[0]
+    OUT = RadianceProperties(_material_, True) if _material_ else RadianceProperties()
 
 except Exception, e:
     import traceback

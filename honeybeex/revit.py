@@ -134,7 +134,6 @@ def convertRoomsToHBZones(rooms, boundaryLocation=1):
         blob/master/SpatialElementGeometryCalculator/Command.cs
     """
     rooms = tuple(_getInternalElements(rooms))
-
     if not rooms:
         return []
 

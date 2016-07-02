@@ -49,9 +49,14 @@ class HBFenSurface(FenSurface):
         if self.isCreatedFromGeometry:
             return self.__geometry
         else:
-            return go.polygon(tuple(go.xyzToGeometricalPoints(self.absolutePoints)))
+            return self.profile
 
     @geometry.setter
     def geometry(self, geo):
         """Set geometry."""
         self.__geometry = geo
+
+    @property
+    def profile(self):
+        """Get profile curve of this surface."""
+        return go.polygon(tuple(go.xyzToGeometricalPoints(self.absolutePoints)))

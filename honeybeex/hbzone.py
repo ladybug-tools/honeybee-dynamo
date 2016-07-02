@@ -28,3 +28,15 @@ class HBZone(Zone):
                     _geo.append(childSurface.geometry)
 
         return _geo
+
+    @property
+    def profile(self):
+        """Return zone profile for visualization."""
+        _profile = []
+        for surface in self.surfaces:
+            _profile.append(surface.profile)
+            if surface.hasChildSurfaces:
+                for childSurface in surface.childrenSurfaces:
+                    _profile.append(childSurface.profile)
+
+        return _profile
