@@ -62,6 +62,47 @@ def getChildElemenets(hostElement, addRectOpenings=True, includeShadows=False,
     return tuple(hostElement.Document.GetElement(i) for i in ids)
 
 
+def extractPanelsVertices(hostElement, baseFace, opt):
+    """Return lists of lists of vertices for a panel grid."""
+    if not hostElement.CurtainGrid:
+        return (), ()
+
+    _panelElementIds = []
+    _panelVertices = []
+
+    for panelId in hostElement.CurtainGrid.GetPanelIds():
+
+        _geo = hostElement.Document.GetElement(panelId).get_Geometry(opt)
+
+        _outerFaces = (p.ToProtoType().Faces[1] for obj in _geo
+                  for p in obj.GetInstanceGeometry())
+
+        openings = (
+            tuple(edge.StartVertex.PointGeometry for edge in loop.CoEdges)
+            for _outerFace in _outerFaces
+            for loop in _outerFace.Loops
+            )
+
+        coordinates = (
+            tuple(
+                tuple(baseFace.ClosestPointTo(pt) for pt in opening)
+                for opening in openings
+            ))
+
+        filteredCoordinates = tuple(coorgroup if len(set(coorgroup)) > 2 else None
+            for coorgroup in coordinates)
+
+        _panelElementIds.append(panelId)
+        _panelVertices.append(filteredCoordinates)
+
+        # cleaning up
+        (pt.Dispose() for opening in openings for pt in opening)
+        (face.Dispose() for faceGroup in _outerFaces for face in faceGroup)
+
+
+    return _panelElementIds, _panelVertices
+
+
 def exctractGlazingVertices(hostElement, baseFace, opt):
     """Return glazing vertices for a window family instance.
 
@@ -128,6 +169,17 @@ def getBoundaryLocation(index=1):
     return _locations[index]
 
 
+def getParameters(el, parameter):
+    """Get the list of available parameter for an element."""
+    return tuple(p.Definition.Name for p in el.Parameters)
+
+
+def getParameter(el, parameter):
+    """Get a parameter from an element."""
+    return tuple(p.AsValueString() for p in el.Parameters \
+                 if p.Definition.Name == parameter)[0]
+
+
 def convertRoomsToHBZones(rooms, boundaryLocation=1):
     """Convert rooms to honeybee zones.
 
@@ -147,7 +199,7 @@ def convertRoomsToHBZones(rooms, boundaryLocation=1):
     calculator = SpatialElementGeometryCalculator(doc, options)
 
     opt = Options()
-    # _ids = []
+    _ids = []
     _zones = range(len(rooms))
     _surfaces = {} # collect hbSurfaces so I can set adjucent surfaces
     for zoneCount, room in enumerate(rooms):
@@ -204,14 +256,13 @@ def convertRoomsToHBZones(rooms, boundaryLocation=1):
                     # TODO: set adjacent surface
                     pass
 
-                # check if there is any child elements
-                childElements = getChildElemenets(boundaryElement)
+                # Take care of curtain wall systems
+                # I'm not sure how this will work with custom Curtain Wall
+                if getParameter(boundaryElement, 'Family') == 'Curtain Wall':
+                    _elementIds, _coordinates = \
+                        extractPanelsVertices(boundaryElement, _baseFace, opt)
 
-                if childElements:
-
-                    _coordinates = exctractGlazingVertices(boundaryElement, _baseFace, opt)
                     for count, coordinate in enumerate(_coordinates):
-
                         if not coordinate:
                             print "{} has an opening with less than " \
                                 "two coordinates. It has been removed!" \
@@ -220,13 +271,31 @@ def convertRoomsToHBZones(rooms, boundaryLocation=1):
 
                         # create honeybee surface - use element id as the name
                         _hbfenSurface = HBFenSurface(
-                            childElements[count].Id, coordinate)
-
-                        # _ids.append((childElements[count].GetType(),
-                        #              childElements[count].Category.Name))
+                            _elementIds[count], coordinate)
 
                         # add fenestration surface to base honeybee surface
                         _hbSurface.addFenestrationSurface(_hbfenSurface)
+                else:
+                    # check if there is any child elements
+                    childElements = getChildElemenets(boundaryElement)
+
+                    if childElements:
+
+                        _coordinates = exctractGlazingVertices(boundaryElement, _baseFace, opt)
+
+                        for count, coordinate in enumerate(_coordinates):
+
+                            if not coordinate:
+                                print "{} has an opening with less than " \
+                                    "two coordinates. It has been removed!" \
+                                    .format(childElements[count].Id)
+                                continue
+
+                            # create honeybee surface - use element id as the name
+                            _hbfenSurface = HBFenSurface(
+                                childElements[count].Id, coordinate)
+                            # add fenestration surface to base honeybee surface
+                            _hbSurface.addFenestrationSurface(_hbfenSurface)
 
                 # add hbsurface to honeybee zone
                 _zone.addSurface(_hbSurface)
