@@ -92,7 +92,10 @@ def exctractGlazingVertices(hostElement, baseFace, opt):
     (pt.Dispose() for opening in openings for pt in opening)
     (face.Dispose() for faceGroup in faces for face in faceGroup)
 
-    return coordinates
+    filteredCoordinates = tuple(coorgroup if len(set(coorgroup)) > 2 else None
+                                for coorgroup in coordinates)
+
+    return filteredCoordinates
 
 
 def _getInternalElements(elements):
@@ -144,10 +147,9 @@ def convertRoomsToHBZones(rooms, boundaryLocation=1):
     calculator = SpatialElementGeometryCalculator(doc, options)
 
     opt = Options()
-
+    # _ids = []
     _zones = range(len(rooms))
     _surfaces = {} # collect hbSurfaces so I can set adjucent surfaces
-
     for zoneCount, room in enumerate(rooms):
         # initiate zone based on room id
         _zone = HBZone(room.Id)
@@ -171,7 +173,15 @@ def convertRoomsToHBZones(rooms, boundaryLocation=1):
             # Revit is strange! if two roofs have a shared wall then it will be
             # duplicated! By checking the values inside the _collector
             _collector = []
-            for boundaryFace in elementsData.GetBoundaryFaceInfo(face):
+            _boundaryFaces = elementsData.GetBoundaryFaceInfo(face)
+            if len(_boundaryFaces) == 0:
+                raise ValueError(
+                    "Face {} in room {} doesn't have corresponding boundary info in Revit." \
+                    "\nThis will generate open zones. "\
+                    "Are you using offset base level in your model to create a room?" \
+                    .format(count, room.Id))
+
+            for boundaryFace in _boundaryFaces:
                 # boundaryFace is from type SpatialElementBoundarySubface
                 # get the element (Wall, Roof, etc)
                 boundaryElement = doc.GetElement(
@@ -198,12 +208,22 @@ def convertRoomsToHBZones(rooms, boundaryLocation=1):
                 childElements = getChildElemenets(boundaryElement)
 
                 if childElements:
-                    _coordinates = exctractGlazingVertices(boundaryElement, _baseFace, opt)
 
+                    _coordinates = exctractGlazingVertices(boundaryElement, _baseFace, opt)
                     for count, coordinate in enumerate(_coordinates):
+
+                        if not coordinate:
+                            print "{} has an opening with less than " \
+                                "two coordinates. It has been removed!" \
+                                .format(childElements[count].Id)
+                            continue
+
                         # create honeybee surface - use element id as the name
                         _hbfenSurface = HBFenSurface(
                             childElements[count].Id, coordinate)
+
+                        # _ids.append((childElements[count].GetType(),
+                        #              childElements[count].Category.Name))
 
                         # add fenestration surface to base honeybee surface
                         _hbSurface.addFenestrationSurface(_hbfenSurface)
@@ -213,6 +233,7 @@ def convertRoomsToHBZones(rooms, boundaryLocation=1):
                 boundaryElement.Dispose()
 
         _zones[zoneCount] = _zone
+
         # clean up!
         elementsData.Dispose()
 
