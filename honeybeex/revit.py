@@ -4,6 +4,9 @@ from hbzone import HBZone
 from hbsurface import HBSurface
 from hbfensurface import HBFenSurface
 
+import uuid
+
+
 try:
     import clr
     clr.AddReference("RevitAPI")
@@ -139,6 +142,11 @@ def exctractGlazingVertices(hostElement, baseFace, opt):
     return filteredCoordinates
 
 
+def createUUID():
+    """Return a random uuid."""
+    return str(uuid.uuid4())
+
+
 def _getInternalElements(elements):
     """Get internal element from dynamo objects.
 
@@ -225,13 +233,18 @@ def convertRoomsToHBZones(rooms, boundaryLocation=1):
             # Revit is strange! if two roofs have a shared wall then it will be
             # duplicated! By checking the values inside the _collector
             _collector = []
+
             _boundaryFaces = elementsData.GetBoundaryFaceInfo(face)
+
             if len(_boundaryFaces) == 0:
-                raise ValueError(
-                    "Face {} in room {} doesn't have corresponding boundary info in Revit." \
-                    "\nThis will generate open zones. "\
-                    "Are you using offset base level in your model to create a room?" \
-                    .format(count, room.Id))
+                # initiate honeybee surface
+                _ver = tuple(v.PointGeometry for v in _baseFace.Vertices)
+
+                _hbSurface = HBSurface("%s:%s" % (_zone.name, createUUID()),
+                                       _ver)
+
+                _zone.addSurface(_hbSurface)
+                continue
 
             for boundaryFace in _boundaryFaces:
                 # boundaryFace is from type SpatialElementBoundarySubface
@@ -242,6 +255,7 @@ def convertRoomsToHBZones(rooms, boundaryLocation=1):
 
                 # initiate honeybee surface
                 _ver = tuple(v.PointGeometry for v in _baseFace.Vertices)
+
                 if _ver in _collector:
                     continue
 
@@ -307,5 +321,4 @@ def convertRoomsToHBZones(rooms, boundaryLocation=1):
         elementsData.Dispose()
 
     calculator.Dispose()
-
     return _zones

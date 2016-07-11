@@ -280,6 +280,10 @@ def xyzToGeometricalPoints(xyzPoints):
                 yield config.platform.libs.Rhino.Geometry.Point3d(xyz[0],
                                                                   xyz[1],
                                                                   xyz[2])
+            else:
+                raise Exception("xyzToGeometricalPoints can only be called" \
+                                " from Revit, Dynamo or Grasshopper!")
+
 
 def polygon(pointList):
     if config.platform.isRevitOrDynamo:

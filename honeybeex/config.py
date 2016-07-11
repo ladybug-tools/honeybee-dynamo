@@ -82,6 +82,11 @@ class Platform(object):
             # It's running from inside Revit from a Dynamo node
             self.platform = "rvt"
             self.platformId = 3
+        elif __cwd.find("python") == -1:
+            # Revit changes the directory to where the file is, if user change
+            # the revit file but doesn't close the Dynamo window! :|
+            self.platform = "rvt"
+            self.platformId = 3
 
         if not mute:
             print "Honeybee is running from {}. platform id: {}." \
