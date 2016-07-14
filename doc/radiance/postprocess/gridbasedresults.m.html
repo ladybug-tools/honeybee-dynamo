@@ -3,8 +3,8 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 
-    <title>honeybeex.test API documentation</title>
-    <meta name="description" content="" />
+    <title>honeybeex.radiance.postprocess.gridbasedresults API documentation</title>
+    <meta name="description" content="Post process results for a Radiance Grid-based daylight analysis." />
 
   <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300' rel='stylesheet' type='text/css'>
 
@@ -998,23 +998,13 @@ table {
 
 
   <header id="section-intro">
-  <h1 class="title"><span class="name">honeybeex.test</span> module</h1>
+  <h1 class="title"><span class="name">honeybeex.radiance.postprocess.gridbasedresults</span> module</h1>
+  <p>Post process results for a Radiance Grid-based daylight analysis.</p>
   
-  
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.test', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeex.test" class="source">
-    <pre><code>from honeybee.radiance.sky.certainIlluminance import SkyWithCertainIlluminanceLevel
-from honeybee.radiance.recipe.gridbased import HBGridBasedAnalysisRecipe
-from honeybee.hbsurface import HBAnalysisSurface
-
-if __name__ == "__main__":
-	pts = [(0, 0, 0), (10, 0, 0), (10, 10, 0), (0, 10, 0)]
-	vectors = [(0, 0, 1)]
-	sky = SkyWithCertainIlluminanceLevel(2000)
-	hbsrf = HBAnalysisSurface("001", pts, surfaceType=None, isNameSetByUser=True, isTypeSetByUser=True)
-	rp = HBGridBasedAnalysisRecipe(sky, pts, vectors, None, [hbsrf])
-	rp.writeToFile("c:\ladybug", "test")
-	rp.run(False)
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.radiance.postprocess.gridbasedresults', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.radiance.postprocess.gridbasedresults" class="source">
+    <pre><code>"""Post process results for a Radiance Grid-based daylight analysis."""
+from ...honeybee.radiance.postprocess.gridbasedresults import LoadGridBasedDLAnalysisResults
 </code></pre>
   </div>
 

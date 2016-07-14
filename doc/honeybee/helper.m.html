@@ -988,6 +988,8 @@ table {
     <li class="set"><h3><a href="#header-functions">Functions</a></h3>
       
   <ul>
+    <li class="mono"><a href="#honeybeex.honeybee.helper.getRadiancePathLines">getRadiancePathLines</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.helper.normspace">normspace</a></li>
     <li class="mono"><a href="#honeybeex.honeybee.helper.nukedir">nukedir</a></li>
     <li class="mono"><a href="#honeybeex.honeybee.helper.preparedir">preparedir</a></li>
   </ul>
@@ -1013,6 +1015,28 @@ table {
   <div id="source-honeybeex.honeybee.helper" class="source">
     <pre><code>"""A collection of auxiliary funtions for working with files and directories."""
 import os
+import config
+
+
+def normspace(path):
+    """Norm white spaces in path.
+
+    Return path with quotation marks if there is whitespace in path.
+    """
+    if str(path).strip().find(" ") != -1:
+        return "{0}{1}{0}".format(config.wrapper, path)
+    else:
+        return path
+
+
+def getRadiancePathLines():
+    """Return path to radiance folders."""
+    if os.name == 'nt':
+        return "SET RAYPATH=.;{}\nPATH={};$PATH".format(
+            normspace(config.radlibPath),
+            normspace(config.radbinPath))
+    else:
+        return ""
 
 
 def preparedir(targetDir):
@@ -1071,6 +1095,62 @@ def nukedir(targetDir, rmdir=False):
   <section id="section-items">
 
     <h2 class="section-title" id="header-functions">Functions</h2>
+      
+  <div class="item">
+    <div class="name def" id="honeybeex.honeybee.helper.getRadiancePathLines">
+    <p>def <span class="ident">getRadiancePathLines</span>(</p><p>)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Return path to radiance folders.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.helper.getRadiancePathLines', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.helper.getRadiancePathLines" class="source">
+    <pre><code>def getRadiancePathLines():
+    """Return path to radiance folders."""
+    if os.name == 'nt':
+        return "SET RAYPATH=.;{}\nPATH={};$PATH".format(
+            normspace(config.radlibPath),
+            normspace(config.radbinPath))
+    else:
+        return ""
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+      
+  <div class="item">
+    <div class="name def" id="honeybeex.honeybee.helper.normspace">
+    <p>def <span class="ident">normspace</span>(</p><p>path)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Norm white spaces in path.</p>
+<p>Return path with quotation marks if there is whitespace in path.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.helper.normspace', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.helper.normspace" class="source">
+    <pre><code>def normspace(path):
+    """Norm white spaces in path.
+
+    Return path with quotation marks if there is whitespace in path.
+    """
+    if str(path).strip().find(" ") != -1:
+        return "{0}{1}{0}".format(config.wrapper, path)
+    else:
+        return path
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
       
   <div class="item">
     <div class="name def" id="honeybeex.honeybee.helper.nukedir">

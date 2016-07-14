@@ -994,6 +994,11 @@ table {
           
   <ul>
     <li class="mono"><a href="#honeybeex.hbzone.HBZone.__init__">__init__</a></li>
+    <li class="mono"><a href="#honeybeex.hbzone.HBZone.ToString">ToString</a></li>
+    <li class="mono"><a href="#honeybeex.hbzone.HBZone.addSurface">addSurface</a></li>
+    <li class="mono"><a href="#honeybeex.hbzone.HBZone.fromEPString">fromEPString</a></li>
+    <li class="mono"><a href="#honeybeex.hbzone.HBZone.radStringToFile">radStringToFile</a></li>
+    <li class="mono"><a href="#honeybeex.hbzone.HBZone.toRadString">toRadString</a></li>
   </ul>
 
         </li>
@@ -1016,10 +1021,48 @@ table {
   
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.hbzone', this);">Show source &equiv;</a></p>
   <div id="source-honeybeex.hbzone" class="source">
-    <pre><code>lass HBZone:
-   """Honeybee base class"""
-   def __init__(self, name, buildingProgram, zoneProgram, isConditioned = True):
-       pass
+    <pre><code>from honeybee.hbzone import HBZone as Zone
+import config
+
+
+class HBZone(Zone):
+    """Honeybee Zone.
+
+    Args:
+        name: Unique name for this zone.
+        origin: Zone origin point (default: 0, 0, 0)
+        geometryRules: EnergyPlus geometryRules. (default: "LowerLeftCorner";
+            "CounterClockWise"; "Absolute")
+        buildingProgram: HBZone building program.
+        zoneProgram: Specific program for this zone from the available building
+            programs.
+        isConditioned: A boolean that indicates if the zone is conditioned.
+            (default: True)
+    """
+
+    @property
+    def geometry(self):
+        """Return zone geometry for visualization."""
+        _geo = []
+        for surface in self.surfaces:
+            _geo.append(surface.geometry)
+            if surface.hasChildSurfaces:
+                for childSurface in surface.childrenSurfaces:
+                    _geo.append(childSurface.geometry)
+
+        return _geo
+
+    @property
+    def profile(self):
+        """Return zone profile for visualization."""
+        _profile = []
+        for surface in self.surfaces:
+            _profile.append(surface.profile)
+            if surface.hasChildSurfaces:
+                for childSurface in surface.childrenSurfaces:
+                    _profile.append(childSurface.profile)
+
+        return _profile
 </code></pre>
   </div>
 
@@ -1034,15 +1077,58 @@ table {
       <p id="honeybeex.hbzone.HBZone" class="name">class <span class="ident">HBZone</span></p>
       
   
-    <div class="desc"><p>Honeybee base class</p></div>
+    <div class="desc"><p>Honeybee Zone.</p>
+<p>Args:
+    name: Unique name for this zone.
+    origin: Zone origin point (default: 0, 0, 0)
+    geometryRules: EnergyPlus geometryRules. (default: "LowerLeftCorner";
+        "CounterClockWise"; "Absolute")
+    buildingProgram: HBZone building program.
+    zoneProgram: Specific program for this zone from the available building
+        programs.
+    isConditioned: A boolean that indicates if the zone is conditioned.
+        (default: True)</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.hbzone.HBZone', this);">Show source &equiv;</a></p>
   <div id="source-honeybeex.hbzone.HBZone" class="source">
-    <pre><code>class HBZone:
-    """Honeybee base class"""
+    <pre><code>class HBZone(Zone):
+    """Honeybee Zone.
 
-    def __init__(self, name, buildingProgram, zoneProgram, isConditioned = True):
-        pass
+    Args:
+        name: Unique name for this zone.
+        origin: Zone origin point (default: 0, 0, 0)
+        geometryRules: EnergyPlus geometryRules. (default: "LowerLeftCorner";
+            "CounterClockWise"; "Absolute")
+        buildingProgram: HBZone building program.
+        zoneProgram: Specific program for this zone from the available building
+            programs.
+        isConditioned: A boolean that indicates if the zone is conditioned.
+            (default: True)
+    """
+
+    @property
+    def geometry(self):
+        """Return zone geometry for visualization."""
+        _geo = []
+        for surface in self.surfaces:
+            _geo.append(surface.geometry)
+            if surface.hasChildSurfaces:
+                for childSurface in surface.childrenSurfaces:
+                    _geo.append(childSurface.geometry)
+
+        return _geo
+
+    @property
+    def profile(self):
+        """Return zone profile for visualization."""
+        _profile = []
+        for surface in self.surfaces:
+            _profile.append(surface.profile)
+            if surface.hasChildSurfaces:
+                for childSurface in surface.childrenSurfaces:
+                    _profile.append(childSurface.profile)
+
+        return _profile
 </code></pre>
   </div>
 </div>
@@ -1052,22 +1138,385 @@ table {
           <h3>Ancestors (in MRO)</h3>
           <ul class="class_list">
           <li><a href="#honeybeex.hbzone.HBZone">HBZone</a></li>
+          <li>honeybeex.honeybee.hbzone.HBZone</li>
+          <li>honeybeex.honeybee.hbobject.HBObject</li>
+          <li>__builtin__.object</li>
           </ul>
+          <h3>Instance variables</h3>
+            <div class="item">
+            <p id="honeybeex.hbzone.HBZone.ceilings" class="name">var <span class="ident">ceilings</span></p>
+            
+
+            
+  
+    <div class="desc"><p>Get ceilings surfaces.</p></div>
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.hbzone.HBZone.floors" class="name">var <span class="ident">floors</span></p>
+            
+
+            
+  
+    <div class="desc"><p>Get floor surfaces.</p></div>
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.hbzone.HBZone.geometry" class="name">var <span class="ident">geometry</span></p>
+            
+
+            
+  
+    <div class="desc"><p>Return zone geometry for visualization.</p></div>
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.hbzone.HBZone.geometryRules" class="name">var <span class="ident">geometryRules</span></p>
+            
+
+            
+  
+    <div class="desc"><p>Get and set global geometry rules for this zone.</p></div>
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.hbzone.HBZone.isHBObject" class="name">var <span class="ident">isHBObject</span></p>
+            
+
+            
+  
+    <div class="desc"><p>Return True.</p></div>
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.hbzone.HBZone.isHBZone" class="name">var <span class="ident">isHBZone</span></p>
+            
+
+            
+  
+    <div class="desc"><p>Return True if a HBZone.</p></div>
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.hbzone.HBZone.isRelativeSystem" class="name">var <span class="ident">isRelativeSystem</span></p>
+            
+
+            
+  
+    <div class="desc"><p>Return True if coordinate system is relative.</p>
+<p>To find the absolute coordinate values in a relative system you should
+add surface coordinates to zone origin.</p></div>
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.hbzone.HBZone.origin" class="name">var <span class="ident">origin</span></p>
+            
+
+            
+  
+    <div class="desc"><p>Get set origin of the zone.</p></div>
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.hbzone.HBZone.profile" class="name">var <span class="ident">profile</span></p>
+            
+
+            
+  
+    <div class="desc"><p>Return zone profile for visualization.</p></div>
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.hbzone.HBZone.radianceMaterials" class="name">var <span class="ident">radianceMaterials</span></p>
+            
+
+            
+  
+    <div class="desc"><p>Get list of Radiance materials for zone including fenestration.</p></div>
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.hbzone.HBZone.surfaces" class="name">var <span class="ident">surfaces</span></p>
+            
+
+            
+  
+    <div class="desc"><p>Get list of HBSurfaces for this zone.</p></div>
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.hbzone.HBZone.walls" class="name">var <span class="ident">walls</span></p>
+            
+
+            
+  
+    <div class="desc"><p>Get wall surfaces.</p></div>
+  <div class="source_cont">
+</div>
+
+            </div>
           <h3>Methods</h3>
             
   <div class="item">
     <div class="name def" id="honeybeex.hbzone.HBZone.__init__">
-    <p>def <span class="ident">__init__</span>(</p><p>self, name, buildingProgram, zoneProgram, isConditioned=True)</p>
+    <p>def <span class="ident">__init__</span>(</p><p>self, name, origin=(0, 0, 0), geometryRules=None, buildingProgram=None, zoneProgram=None, isConditioned=True)</p>
     </div>
     
 
     
   
+    <div class="desc"><p>Init Honeybee Zone.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.hbzone.HBZone.__init__', this);">Show source &equiv;</a></p>
   <div id="source-honeybeex.hbzone.HBZone.__init__" class="source">
-    <pre><code>def __init__(self, name, buildingProgram, zoneProgram, isConditioned = True):
-    pass
+    <pre><code>def __init__(self, name, origin=(0, 0, 0), geometryRules=None,
+             buildingProgram=None, zoneProgram=None, isConditioned=True):
+    """Init Honeybee Zone."""
+    self.name = name
+    """Zone name"""
+    self.origin = origin
+    """origin of the zone."""
+    self.geometryRules = geometryRules
+    self.buildingProgram = buildingProgram
+    self.zoneProgram = zoneProgram
+    self.__surfaces = []
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="honeybeex.hbzone.HBZone.ToString">
+    <p>def <span class="ident">ToString</span>(</p><p>self)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Overwrite .NET ToString.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.hbzone.HBZone.ToString', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.hbzone.HBZone.ToString" class="source">
+    <pre><code>def ToString(self):
+    """Overwrite .NET ToString."""
+    return self.__repr__()
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="honeybeex.hbzone.HBZone.addSurface">
+    <p>def <span class="ident">addSurface</span>(</p><p>self, HBSurface)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Add a surface to Honeybee zone.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.hbzone.HBZone.addSurface', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.hbzone.HBZone.addSurface" class="source">
+    <pre><code>def addSurface(self, HBSurface):
+    """Add a surface to Honeybee zone."""
+    assert hasattr(HBSurface, "isHBSurface"), \
+        "%s input is not a Honeybee surface." % str(HBSurface)
+    self.__surfaces.append(HBSurface)
+    # update surface parent
+    HBSurface.parent = self
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="honeybeex.hbzone.HBZone.fromEPString">
+    <p>def <span class="ident">fromEPString</span>(</p><p>cls, EPString, geometryRules=None, buildingProgram=None, zoneProgram=None, isConditioned=True)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Init Honeybee zone from an EPString.</p>
+<p>Args:
+    EPString: The full EPString for an EnergyPlus Zone.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.hbzone.HBZone.fromEPString', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.hbzone.HBZone.fromEPString" class="source">
+    <pre><code>@classmethod
+def fromEPString(cls, EPString, geometryRules=None, buildingProgram=None,
+                 zoneProgram=None, isConditioned=True):
+    """Init Honeybee zone from an EPString.
+    Args:
+        EPString: The full EPString for an EnergyPlus Zone.
+    """
+    # clean input EPString - split based on comma
+    _segments = EPString.replace("\t", "") \
+        .replace(" ", "").replace(";", "").split(",")
+    name = _segments[1]
+    try:
+        north, x, y, z = _segments[2:6]
+    except:
+        x, y, z = 0, 0, 0
+    try:
+        origin = map(float, (x, y, z))
+    except ValueError:
+        origin = 0, 0, 0
+    return cls(name, origin, geometryRules, buildingProgram, zoneProgram,
+               isConditioned)
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="honeybeex.hbzone.HBZone.radStringToFile">
+    <p>def <span class="ident">radStringToFile</span>(</p><p>self, filePath, includeMaterials=False, includeChildrenSurfaces=True)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Write HBZone Radiance definition to a file.</p>
+<p>Args:
+    filePath: Full path for a valid file path (e.g. c:/ladybug/geo.rad)</p>
+<p>Returns:
+    True in case of success. False in case of failure.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.hbzone.HBZone.radStringToFile', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.hbzone.HBZone.radStringToFile" class="source">
+    <pre><code>def radStringToFile(self, filePath, includeMaterials=False,
+                    includeChildrenSurfaces=True):
+    """Write HBZone Radiance definition to a file.
+    Args:
+        filePath: Full path for a valid file path (e.g. c:/ladybug/geo.rad)
+    Returns:
+        True in case of success. False in case of failure.
+    """
+    assert os.path.isdir(os.path.split(filePath)[0]), \
+        "Cannot find %s." % os.path.split(filePath)[0]
+    with open(filePath, "w") as outf:
+        try:
+            # The output of toRadString for a zone is a tuple
+            outf.write("\n".join(self.toRadString(includeMaterials,
+                                                  includeChildrenSurfaces)))
+            return True
+        except Exception as e:
+            print "Failed to write %s to file:\n%s" % (self.name, e)
+            return False
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="honeybeex.hbzone.HBZone.toRadString">
+    <p>def <span class="ident">toRadString</span>(</p><p>self, includeMaterials=False, includeChildrenSurfaces=True, joinOutput=True)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Return geometries and materials as a tuple of multiline string.</p>
+<p>Returns:
+    if includeMaterials = False:
+        A namedTuple of multiline data. Keys are: materials geometries
+    else:
+        A multiline string for geometries</p>
+<p>Usage:</p>
+<pre><code>s = self.toRadString()
+geoString = s.geometries
+matString = s.materials
+or
+s = self.toRadString()
+matString, geoString = s
+</code></pre></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.hbzone.HBZone.toRadString', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.hbzone.HBZone.toRadString" class="source">
+    <pre><code>def toRadString(self, includeMaterials=False, includeChildrenSurfaces=True,
+                joinOutput=True):
+    """Return geometries and materials as a tuple of multiline string.
+    Returns:
+        if includeMaterials = False:
+            A namedTuple of multiline data. Keys are: materials geometries
+        else:
+            A multiline string for geometries
+    Usage:
+        s = self.toRadString()
+        geoString = s.geometries
+        matString = s.materials
+        or
+        s = self.toRadString()
+        matString, geoString = s
+    """
+    _radDefinition = namedtuple("RadString", "materials geometries")
+    _matStr = ""
+    _geoStr = ""
+    if len(self.surfaces) > 0:
+        _materials = []
+        _geos = []
+        for hbsurface in self.surfaces:
+            # Both surface and fenestration material
+            _materials.extend(hbsurface.radianceMaterials)
+            _geos.append(hbsurface.toRadString(
+                includeMaterials=False,
+                includeChildrenSurfaces=includeChildrenSurfaces
+            )
+            )
+        # remove duplicated materials
+        _materials = set([mat.toRadString() for mat in _materials])
+        if joinOutput:
+            _matStr = "\n".join(_materials) + "\n"
+            # joing geometries
+            _geoStr = "\n".join(_geos) + "\n"
+        else:
+            _matStr = _materials
+            _geoStr = _geos
+    else:
+        print "Warning: Found no Honeybee objects."
+    if includeMaterials:
+        if joinOutput:
+            return "\n".join(_radDefinition(_matStr, _geoStr))
+        else:
+            return _radDefinition(_matStr, _geoStr)
+    else:
+        if joinOutput:
+            return "\n".join(_radDefinition("", _geoStr))
+        else:
+            return _radDefinition("", _geoStr)
 </code></pre>
   </div>
 </div>

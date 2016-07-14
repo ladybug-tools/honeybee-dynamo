@@ -991,13 +991,45 @@ table {
     <li class="mono"><a href="#honeybeex.geometryoperation.checkForInternalEdge">checkForInternalEdge</a></li>
     <li class="mono"><a href="#honeybeex.geometryoperation.checkPlanarity">checkPlanarity</a></li>
     <li class="mono"><a href="#honeybeex.geometryoperation.extractSurfacePoints">extractSurfacePoints</a></li>
+    <li class="mono"><a href="#honeybeex.geometryoperation.extractSurfacePointsFromGeometry">extractSurfacePointsFromGeometry</a></li>
     <li class="mono"><a href="#honeybeex.geometryoperation.getSurfaceCenterPtandNormal">getSurfaceCenterPtandNormal</a></li>
     <li class="mono"><a href="#honeybeex.geometryoperation.isPointsSortedAntiClockwise">isPointsSortedAntiClockwise</a></li>
+    <li class="mono"><a href="#honeybeex.geometryoperation.polygon">polygon</a></li>
     <li class="mono"><a href="#honeybeex.geometryoperation.vectorsCrossProduct">vectorsCrossProduct</a></li>
+    <li class="mono"><a href="#honeybeex.geometryoperation.xyzToGeometricalPoints">xyzToGeometricalPoints</a></li>
   </ul>
 
     </li>
 
+    <li class="set"><h3><a href="#header-classes">Classes</a></h3>
+      <ul>
+        <li class="mono">
+        <span class="class_name"><a href="#honeybeex.geometryoperation.Grid">Grid</a></span>
+        
+          
+  <ul>
+    <li class="mono"><a href="#honeybeex.geometryoperation.Grid.__init__">__init__</a></li>
+    <li class="mono"><a href="#honeybeex.geometryoperation.Grid.ToString">ToString</a></li>
+  </ul>
+
+        </li>
+        <li class="mono">
+        <span class="class_name"><a href="#honeybeex.geometryoperation.GridGenerator">GridGenerator</a></span>
+        
+          
+  <ul>
+    <li class="mono"><a href="#honeybeex.geometryoperation.GridGenerator.averagePoint">averagePoint</a></li>
+    <li class="mono"><a href="#honeybeex.geometryoperation.GridGenerator.disposeGeometries">disposeGeometries</a></li>
+    <li class="mono"><a href="#honeybeex.geometryoperation.GridGenerator.getSurfaceBorder">getSurfaceBorder</a></li>
+    <li class="mono"><a href="#honeybeex.geometryoperation.GridGenerator.__init__">__init__</a></li>
+    <li class="mono"><a href="#honeybeex.geometryoperation.GridGenerator.averagePolygonPoints">averagePolygonPoints</a></li>
+    <li class="mono"><a href="#honeybeex.geometryoperation.GridGenerator.calculatUV">calculatUV</a></li>
+    <li class="mono"><a href="#honeybeex.geometryoperation.GridGenerator.fromHBZones">fromHBZones</a></li>
+  </ul>
+
+        </li>
+      </ul>
+    </li>
 
     </ul>
   </div>
@@ -1017,7 +1049,7 @@ table {
   <div id="source-honeybeex.geometryoperation" class="source">
     <pre><code>"""Collection of methods for Honeybee geometry operations in Grasshopper."""
 import config
-
+from collections import namedtuple
 
 def extractSurfacePoints(HBSurface, *args, **kwargs):
     """Calculate list of points for a HBSurface.
@@ -1041,19 +1073,44 @@ def extractSurfacePoints(HBSurface, *args, **kwargs):
     """
     assert hasattr(HBSurface, 'isHBObject'), "Surface input is not a HBSurface."
 
-    if config.platform == 'gh':
-        return __extractSurfacePointsGH(HBSurface.geometry, HBSurface.normal,
-                                        *args, **kwargs)
-    elif config.platform == 'ds' or config.platform == 'rvt':
+    if config.platform.isGrasshopper:
+        return __extractSurfacePointsGH(HBSurface.geometry, *args, **kwargs)
+    elif config.platform.isRevitOrDynamo:
         return __extractSurfacePointsDS(HBSurface.geometry, *args, **kwargs)
 
+def extractSurfacePointsFromGeometry(geometry, *args, **kwargs):
+    """Calculate list of points for a geometry.
+
+    Args:
+        geometry: A Grasshopper or Dynamo geometry
+        --- Grasshopper ---
+        triangulate: If set to True the function returns the points for triangulated
+            surfaces (Default: False)
+        meshingParameters: Optional Rhino meshingParameters. This will only be used
+            if the surrface is non-planar or has an internal edge and needs to be meshed.
+            Default:
+                Rhino.Geometry.MeshingParameters.Coarse; SimplePlanes = True for planar surfaces
+                Rhino.Geometry.MeshingParameters.Smooth for non-planar surfaces
+        --- Dynamo ---
+            maxTessellationDivisions: Maximum number of divisions for surface tessellation.
+    Returns:
+        A list of point lists. For planar surfaces the length of the list will be
+        only 1. For non-planar surfaces or surfaces with internal edges it will be
+        a number of lists.
+    """
+    try:
+        if config.platform.isGrasshopper:
+            return __extractSurfacePointsGH(geometry, *args, **kwargs)
+        elif config.platform.isRevitOrDynamo:
+            return __extractSurfacePointsDS(geometry, *args, **kwargs)
+    except Exception as e:
+        raise ValueError("Failed to extract points!\n%s" % e)
 
 # TODO: Add support for non-planar surfaces. The current implementation is a simple
 # implementation to prototype the workflow
 # TODO: Extract point should support mesh as well as brep surfaces. Currently we have
 # two alternative solutions which is not preferred. Currently it only works for Breps.
-def __extractSurfacePointsGH(geometry, normalVector=None, triangulate=False,
-                             meshingParameters=None):
+def __extractSurfacePointsGH(geometry, triangulate=False, meshingParameters=None):
     """Calculate list of points for a HBSurface.
 
     For planar surfaces the length of the list will be only 1. For non-planar
@@ -1061,7 +1118,6 @@ def __extractSurfacePointsGH(geometry, normalVector=None, triangulate=False,
 
     Args:
         geometry: A Mesh or Brep
-        normalVector: Mesh or Brep normal vector
         triangulate: If set to True the function returns the points for triangulated
             surfaces (Default: False)
         meshingParameters: Optional Rhino meshingParameters. This will only be used if the
@@ -1092,8 +1148,10 @@ def __extractSurfacePointsGH(geometry, normalVector=None, triangulate=False,
 
     pointsSorted = sorted(pts, key=lambda pt: border.ClosestPoint(pt)[1])
 
+
     # make sure points are anti clockwise
-    if not isPointsSortedAntiClockwise(pointsSorted, normalVector):
+    if not isPointsSortedAntiClockwise(pointsSorted,
+                                       getSurfaceCenterPtandNormal(geometry).normalVector):
         return pointsSorted.reverse()
 
     # return sorted points
@@ -1101,12 +1159,14 @@ def __extractSurfacePointsGH(geometry, normalVector=None, triangulate=False,
     return [pointsSorted]
 
 
-def __extractSurfacePointsDS(geometry, maxTessellationDivisions=25):
+def __extractSurfacePointsDS(geometry, maxTessellationDivisions=25,
+                             joinCoplanarTriFaces=True):
     """Extract points from a surface in Dynamo.
 
     Args:
         geometry: A Dynamo geometry.
         maxTessellationDivisions: Maximum number of divisions for surface tessellation.
+        joinCoplanarTriFaces: Join two triangle faces if there is only two.
 
     Returns:
         A list of point lists.
@@ -1129,6 +1189,10 @@ def __extractSurfacePointsDS(geometry, maxTessellationDivisions=25):
     geometry.Tessellate(rp, tp)
     pts = __getPoints(rp)
 
+    # check if two faces are generated for this geometry and merge them
+    if joinCoplanarTriFaces and len(pts) == 2:
+        pts[0].insert(2, pts[1][2])
+        pts = [pts[0]]
     # clean Dynamo objects
     del(rpFactory)
     del(rp)
@@ -1191,7 +1255,8 @@ def getSurfaceCenterPtandNormal(HBSurface):
             centerPt = brepFace.PointAt(centerU, centerV)
             normalVector = brepFace.NormalAt(centerU, centerV)
         else:
-            centroid = config.libs.Rhino.Geometry.AreaMassProperties.Compute(brepFace).Centroid
+            centroid = config.libs.Rhino.Geometry.AreaMassProperties \
+                       .Compute(brepFace).Centroid
             uv = brepFace.ClosestPoint(centroid)
             centerPt = brepFace.PointAt(uv[1], uv[2])
             normalVector = brepFace.NormalAt(uv[1], uv[2])
@@ -1201,7 +1266,9 @@ def getSurfaceCenterPtandNormal(HBSurface):
         centerPt = geometry.PointAtParameter(uv.U, uv.V)
         normalVector = geometry.NormalAtParameter(uv.U, uv.V).Normalized()
 
-    return centerPt, normalVector
+    SurfaceData = namedtuple('SurfaceData', 'centerPt normalVector')
+
+    return SurfaceData(centerPt, normalVector)
 
 
 def checkPlanarity(HBSurface, tolerance=1e-3):
@@ -1249,6 +1316,220 @@ def checkForInternalEdge(HBSurface):
             return True
         else:
             return False
+
+
+def xyzToGeometricalPoints(xyzPoints):
+    """conver a sequence of (x, y, z) values to Dynamo or Grasshopper points."""
+    for xyzList in xyzPoints:
+        for xyz in xyzList:
+            if config.platform.isRevitOrDynamo:
+                yield config.platform.libs.DesignScript.Geometry \
+                    .Point.ByCoordinates(xyz[0], xyz[1], xyz[2])
+            elif config.platform.isGrasshopper:
+                yield config.platform.libs.Rhino.Geometry.Point3d(xyz[0],
+                                                                  xyz[1],
+                                                                  xyz[2])
+            else:
+                raise Exception("xyzToGeometricalPoints can only be called" \
+                                " from Revit, Dynamo or Grasshopper!")
+
+
+def polygon(pointList):
+    if config.platform.isRevitOrDynamo:
+        return config.platform.libs.DesignScript.Geometry \
+            .Polygon.ByPoints(pointList)
+    elif config.platform.isGrasshopper:
+        return config.platform.libs.Rhino.Geometry \
+            .Polyline(pointList).ToNurbsCurve()
+
+
+class Grid(object):
+    """Test Grid for Honeybee for Dynamo."""
+    __slots__ = ('polygon', 'uv', 'point', 'normal', 'originalPoint')
+    def __init__(self, polygon, centerPt, baseSurface, distanceFromBaseSrf=0):
+        """Init Dynamo test grid."""
+        self.originalPoint = centerPt
+        self.uv = baseSurface.UVParameterAtPoint(self.originalPoint)
+        self.normal = baseSurface.NormalAtParameter(self.uv.U, self.uv.V)
+        _movingVector = self.normal.Scale(distanceFromBaseSrf)
+        self.polygon = polygon.Translate(_movingVector)
+        self.point = centerPt.Translate(_movingVector)
+        polygon.Dispose()
+
+    def ToString(self):
+        """Overwrite .NET ToString method."""
+        return self.__repr__()
+
+    def __repr__(self):
+        """Test Grid."""
+        return 'P: {}, {}, {}; V: {}, {}, {}'.format(
+            self.point.X, self.point.Y, self.point.Z,
+            self.normal.X, self.normal.Y, self.normal.Z
+        )
+
+
+class GridGenerator(object):
+    """Grid generator for Dynamo."""
+
+    def __init__(self, surfaces, gridSize, distanceFromBaseSrf=0, borders=None):
+        """Init GridGenerator.
+
+        Args:
+            surfaces: List of Dynamo surfaces.
+            gridSize: Grid size in Revit units.
+            borders: List of closed polygons for surfaces borders. Surface border
+                will be used if not provided.
+        """
+        self.surfaces = surfaces
+        self.gridSize = gridSize
+        self.distanceFromBaseSrf = float(distanceFromBaseSrf)
+        self.borders = borders if borders else tuple(getSurfaceBorder(surface)
+                                                     for surface in surfaces)
+        assert len(self.surfaces) == len(self.borders), \
+            "Length of surfaces should be equal to length of borders."
+
+        # generate guidePts for trimming
+        self.guidePts = (border.Center() for border in self.borders)
+        self.uvs = self.calculatUV()
+
+    @classmethod
+    def fromHBZones(cls, HBZones, gridSize, distanceFromBaseSrf=0):
+        """Create grid for Honeybee zones."""
+        for HBZone in HBZones:
+            assert hasattr(HBZone, 'isHBZone'), \
+                '{} is not a Honeybee Zone.'.format(HBZone)
+
+        # get profile for floors
+        borders = tuple(floor.geometry for zone in HBZones for floor in zone.floors)
+        surfaces = tuple(border.Patch().FlipNormalDirection() for border in borders)
+
+        return cls(surfaces, gridSize, distanceFromBaseSrf, borders)
+
+    @property
+    def grids(self):
+        """Generate polygons for each surface based on (u, v)."""
+        for surface, (u, v), guidePt, border in zip(self.surfaces,
+                                                    self.uvs,
+                                                    self.guidePts,
+                                                    self.borders):
+            yield self.__createGrids(surface, u, v, guidePt, border)
+
+    def calculatUV(self):
+        """Calculate number of U, V for a surface based on a grid size.
+
+        Args:
+            surfaces: A list of Dynamo surfaces.
+            gridSize: A number in Dynamo units.
+
+        Returns:
+            A list of (u, v) tuples for surfaces
+        """
+        for surface in self.surfaces:
+            _cornerPt = surface.PointAtParameter(0,0)
+            _endUPt = surface.PointAtParameter(1,0)
+            _endVPt = surface.PointAtParameter(0,1)
+            u = int(round(_cornerPt.DistanceTo(_endUPt) / self.gridSize) + 1)
+            v = int(round(_cornerPt.DistanceTo(_endVPt) / self.gridSize) + 1)
+            _cornerPt.Dispose()
+            _endUPt.Dispose()
+            _endVPt.Dispose()
+            yield (u, v)
+
+    def __createGrids(self, surface, u, v, guidePt, border):
+        """Create grids for a single surface."""
+        _uSize = 1.0 / u
+        _vSize = 1.0 / v
+
+        for uCount in xrange(u):
+            for vCount in xrange(v):
+                _cornerPt00 = surface.PointAtParameter(uCount * _uSize, vCount * _vSize)
+                _cornerPt10 = surface.PointAtParameter((uCount + 1) * _uSize, vCount * _vSize)
+                _cornerPt11 = surface.PointAtParameter((uCount + 1) * _uSize, (vCount + 1) * _vSize)
+                _cornerPt01 = surface.PointAtParameter(uCount * _uSize, (vCount + 1) * _vSize)
+
+                _cornerPts = (_cornerPt00, _cornerPt01, _cornerPt11, _cornerPt10)
+                # create a Polygon from points
+                _pl = config.libs.DesignScript.Geometry.Polygon.ByPoints(_cornerPts)
+                _cenPoint = self.averagePoint(_cornerPts)
+                # check if the center point is inside the border
+                if border.ContainmentTest(_cenPoint):
+                    # scale pl inside to avoid intersection with border for
+                    # side polygons
+                    _plane = config.libs.DesignScript.Geometry.Plane.ByOriginNormal(
+                        _cenPoint, surface.NormalAtPoint(_cenPoint)
+                    )
+                    _scaledPl = _pl.Scale(_plane, .95, .95, .95)
+
+                    if not config.platform.libs.DesignScript.Geometry \
+                        .Polygon.Intersect(border, _scaledPl):
+                        # return plg if polygon center is inside and doesn't intersect
+                        self.disposeGeometries(_cornerPts)
+                        self.disposeGeometries((_plane, _scaledPl))
+                        yield Grid(_pl, _cenPoint, surface,
+                                   self.distanceFromBaseSrf)
+                    else:
+                        # it's inside and intersects. trim with border and return
+                        # the inside part.
+                        self.disposeGeometries((_plane, _scaledPl))
+                        self.disposeGeometries(_cornerPts)
+                        _tr = _pl.Trim(border, guidePt)[0]
+                        _cenPoint = self.averagePolygonPoints(_tr)
+                        _pl = _tr.CloseWithLine()
+                        _tr.Dispose()
+                        yield Grid(_pl, _cenPoint, surface,
+                                   self.distanceFromBaseSrf)
+
+                elif config.platform.libs.DesignScript.Geometry \
+                    .Polygon.Intersect(border, _pl):
+                    # center point is outside but still intersects
+                    _tr = _pl.Trim(border, guidePt)[0]
+                    _cenPoint = self.averagePolygonPoints(_tr)
+                    if border.ContainmentTest(_cenPoint):
+                        _pl = _tr.CloseWithLine()
+                        _tr.Dispose()
+                        self.disposeGeometries(_cornerPts)
+                        yield Grid(_pl, _cenPoint, surface,
+                                   self.distanceFromBaseSrf)
+
+    @staticmethod
+    def averagePoint(pts):
+        """Find averagePoint for a list of points."""
+        cen = [0, 0, 0]
+
+        for pt in  pts:
+            cen[0] += pt.X
+            cen[1] += pt.Y
+            cen[2] += pt.Z
+
+        return config.libs.DesignScript.Geometry.Point.ByCoordinates(*(v / len(pts) for v in cen))
+
+    def averagePolygonPoints(self, polygon):
+        """Find averagePoint for a polygon."""
+        startPt = polygon.Curves()[0].StartPoint
+        pts = tuple(c.EndPoint for c in polygon.Curves())
+        _len = len(pts)
+        cen = [startPt.X, startPt.Y, startPt.Z]
+
+        for pt in pts:
+            cen[0] += pt.X
+            cen[1] += pt.Y
+            cen[2] += pt.Z
+
+        self.disposeGeometries(pts)
+        return config.libs.DesignScript.Geometry.Point.ByCoordinates(*(v / (_len + 1) for v in cen))
+
+    @staticmethod
+    def disposeGeometries(geos):
+        for geo in geos:
+            try:
+                geo.Dispose()
+            except:
+                pass
+
+    @staticmethod
+    def getSurfaceBorder(surface):
+        crvs = surface.PerimeterCurves()
+        crv = crvs[0].Join(crvs[1:])
 </code></pre>
   </div>
 
@@ -1399,11 +1680,72 @@ Returns:
     """
     assert hasattr(HBSurface, 'isHBObject'), "Surface input is not a HBSurface."
 
-    if config.platform == 'gh':
-        return __extractSurfacePointsGH(HBSurface.geometry, HBSurface.normal,
-                                        *args, **kwargs)
-    elif config.platform == 'ds' or config.platform == 'rvt':
+    if config.platform.isGrasshopper:
+        return __extractSurfacePointsGH(HBSurface.geometry, *args, **kwargs)
+    elif config.platform.isRevitOrDynamo:
         return __extractSurfacePointsDS(HBSurface.geometry, *args, **kwargs)
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+      
+  <div class="item">
+    <div class="name def" id="honeybeex.geometryoperation.extractSurfacePointsFromGeometry">
+    <p>def <span class="ident">extractSurfacePointsFromGeometry</span>(</p><p>geometry, *args, **kwargs)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Calculate list of points for a geometry.</p>
+<p>Args:
+    geometry: A Grasshopper or Dynamo geometry
+    --- Grasshopper ---
+    triangulate: If set to True the function returns the points for triangulated
+        surfaces (Default: False)
+    meshingParameters: Optional Rhino meshingParameters. This will only be used
+        if the surrface is non-planar or has an internal edge and needs to be meshed.
+        Default:
+            Rhino.Geometry.MeshingParameters.Coarse; SimplePlanes = True for planar surfaces
+            Rhino.Geometry.MeshingParameters.Smooth for non-planar surfaces
+    --- Dynamo ---
+        maxTessellationDivisions: Maximum number of divisions for surface tessellation.
+Returns:
+    A list of point lists. For planar surfaces the length of the list will be
+    only 1. For non-planar surfaces or surfaces with internal edges it will be
+    a number of lists.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.geometryoperation.extractSurfacePointsFromGeometry', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.geometryoperation.extractSurfacePointsFromGeometry" class="source">
+    <pre><code>def extractSurfacePointsFromGeometry(geometry, *args, **kwargs):
+    """Calculate list of points for a geometry.
+
+    Args:
+        geometry: A Grasshopper or Dynamo geometry
+        --- Grasshopper ---
+        triangulate: If set to True the function returns the points for triangulated
+            surfaces (Default: False)
+        meshingParameters: Optional Rhino meshingParameters. This will only be used
+            if the surrface is non-planar or has an internal edge and needs to be meshed.
+            Default:
+                Rhino.Geometry.MeshingParameters.Coarse; SimplePlanes = True for planar surfaces
+                Rhino.Geometry.MeshingParameters.Smooth for non-planar surfaces
+        --- Dynamo ---
+            maxTessellationDivisions: Maximum number of divisions for surface tessellation.
+    Returns:
+        A list of point lists. For planar surfaces the length of the list will be
+        only 1. For non-planar surfaces or surfaces with internal edges it will be
+        a number of lists.
+    """
+    try:
+        if config.platform.isGrasshopper:
+            return __extractSurfacePointsGH(geometry, *args, **kwargs)
+        elif config.platform.isRevitOrDynamo:
+            return __extractSurfacePointsDS(geometry, *args, **kwargs)
+    except Exception as e:
+        raise ValueError("Failed to extract points!\n%s" % e)
 </code></pre>
   </div>
 </div>
@@ -1452,7 +1794,8 @@ Returns:
             centerPt = brepFace.PointAt(centerU, centerV)
             normalVector = brepFace.NormalAt(centerU, centerV)
         else:
-            centroid = config.libs.Rhino.Geometry.AreaMassProperties.Compute(brepFace).Centroid
+            centroid = config.libs.Rhino.Geometry.AreaMassProperties \
+                       .Compute(brepFace).Centroid
             uv = brepFace.ClosestPoint(centroid)
             centerPt = brepFace.PointAt(uv[1], uv[2])
             normalVector = brepFace.NormalAt(uv[1], uv[2])
@@ -1462,7 +1805,9 @@ Returns:
         centerPt = geometry.PointAtParameter(uv.U, uv.V)
         normalVector = geometry.NormalAtParameter(uv.U, uv.V).Normalized()
 
-    return centerPt, normalVector
+    SurfaceData = namedtuple('SurfaceData', 'centerPt normalVector')
+
+    return SurfaceData(centerPt, normalVector)
 </code></pre>
   </div>
 </div>
@@ -1511,6 +1856,31 @@ Returns:
   
       
   <div class="item">
+    <div class="name def" id="honeybeex.geometryoperation.polygon">
+    <p>def <span class="ident">polygon</span>(</p><p>pointList)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.geometryoperation.polygon', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.geometryoperation.polygon" class="source">
+    <pre><code>def polygon(pointList):
+    if config.platform.isRevitOrDynamo:
+        return config.platform.libs.DesignScript.Geometry \
+            .Polygon.ByPoints(pointList)
+    elif config.platform.isGrasshopper:
+        return config.platform.libs.Rhino.Geometry \
+            .Polyline(pointList).ToNurbsCurve()
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+      
+  <div class="item">
     <div class="name def" id="honeybeex.geometryoperation.vectorsCrossProduct">
     <p>def <span class="ident">vectorsCrossProduct</span>(</p><p>vector1, vector2)</p>
     </div>
@@ -1532,7 +1902,665 @@ Returns:
 
   </div>
   
+      
+  <div class="item">
+    <div class="name def" id="honeybeex.geometryoperation.xyzToGeometricalPoints">
+    <p>def <span class="ident">xyzToGeometricalPoints</span>(</p><p>xyzPoints)</p>
+    </div>
+    
 
+    
+  
+    <div class="desc"><p>conver a sequence of (x, y, z) values to Dynamo or Grasshopper points.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.geometryoperation.xyzToGeometricalPoints', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.geometryoperation.xyzToGeometricalPoints" class="source">
+    <pre><code>def xyzToGeometricalPoints(xyzPoints):
+    """conver a sequence of (x, y, z) values to Dynamo or Grasshopper points."""
+    for xyzList in xyzPoints:
+        for xyz in xyzList:
+            if config.platform.isRevitOrDynamo:
+                yield config.platform.libs.DesignScript.Geometry \
+                    .Point.ByCoordinates(xyz[0], xyz[1], xyz[2])
+            elif config.platform.isGrasshopper:
+                yield config.platform.libs.Rhino.Geometry.Point3d(xyz[0],
+                                                                  xyz[1],
+                                                                  xyz[2])
+            else:
+                raise Exception("xyzToGeometricalPoints can only be called" \
+                                " from Revit, Dynamo or Grasshopper!")
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+
+    <h2 class="section-title" id="header-classes">Classes</h2>
+      
+      <div class="item">
+      <p id="honeybeex.geometryoperation.Grid" class="name">class <span class="ident">Grid</span></p>
+      
+  
+    <div class="desc"><p>Test Grid for Honeybee for Dynamo.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.geometryoperation.Grid', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.geometryoperation.Grid" class="source">
+    <pre><code>class Grid(object):
+    """Test Grid for Honeybee for Dynamo."""
+    __slots__ = ('polygon', 'uv', 'point', 'normal', 'originalPoint')
+    def __init__(self, polygon, centerPt, baseSurface, distanceFromBaseSrf=0):
+        """Init Dynamo test grid."""
+        self.originalPoint = centerPt
+        self.uv = baseSurface.UVParameterAtPoint(self.originalPoint)
+        self.normal = baseSurface.NormalAtParameter(self.uv.U, self.uv.V)
+        _movingVector = self.normal.Scale(distanceFromBaseSrf)
+        self.polygon = polygon.Translate(_movingVector)
+        self.point = centerPt.Translate(_movingVector)
+        polygon.Dispose()
+
+    def ToString(self):
+        """Overwrite .NET ToString method."""
+        return self.__repr__()
+
+    def __repr__(self):
+        """Test Grid."""
+        return 'P: {}, {}, {}; V: {}, {}, {}'.format(
+            self.point.X, self.point.Y, self.point.Z,
+            self.normal.X, self.normal.Y, self.normal.Z
+        )
+</code></pre>
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="#honeybeex.geometryoperation.Grid">Grid</a></li>
+          <li>__builtin__.object</li>
+          </ul>
+          <h3>Instance variables</h3>
+            <div class="item">
+            <p id="honeybeex.geometryoperation.Grid.normal" class="name">var <span class="ident">normal</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.geometryoperation.Grid.originalPoint" class="name">var <span class="ident">originalPoint</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.geometryoperation.Grid.point" class="name">var <span class="ident">point</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.geometryoperation.Grid.polygon" class="name">var <span class="ident">polygon</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.geometryoperation.Grid.uv" class="name">var <span class="ident">uv</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+          <h3>Methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="honeybeex.geometryoperation.Grid.__init__">
+    <p>def <span class="ident">__init__</span>(</p><p>self, polygon, centerPt, baseSurface, distanceFromBaseSrf=0)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Init Dynamo test grid.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.geometryoperation.Grid.__init__', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.geometryoperation.Grid.__init__" class="source">
+    <pre><code>def __init__(self, polygon, centerPt, baseSurface, distanceFromBaseSrf=0):
+    """Init Dynamo test grid."""
+    self.originalPoint = centerPt
+    self.uv = baseSurface.UVParameterAtPoint(self.originalPoint)
+    self.normal = baseSurface.NormalAtParameter(self.uv.U, self.uv.V)
+    _movingVector = self.normal.Scale(distanceFromBaseSrf)
+    self.polygon = polygon.Translate(_movingVector)
+    self.point = centerPt.Translate(_movingVector)
+    polygon.Dispose()
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="honeybeex.geometryoperation.Grid.ToString">
+    <p>def <span class="ident">ToString</span>(</p><p>self)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Overwrite .NET ToString method.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.geometryoperation.Grid.ToString', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.geometryoperation.Grid.ToString" class="source">
+    <pre><code>def ToString(self):
+    """Overwrite .NET ToString method."""
+    return self.__repr__()
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+      </div>
+      </div>
+      
+      <div class="item">
+      <p id="honeybeex.geometryoperation.GridGenerator" class="name">class <span class="ident">GridGenerator</span></p>
+      
+  
+    <div class="desc"><p>Grid generator for Dynamo.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.geometryoperation.GridGenerator', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.geometryoperation.GridGenerator" class="source">
+    <pre><code>class GridGenerator(object):
+    """Grid generator for Dynamo."""
+
+    def __init__(self, surfaces, gridSize, distanceFromBaseSrf=0, borders=None):
+        """Init GridGenerator.
+
+        Args:
+            surfaces: List of Dynamo surfaces.
+            gridSize: Grid size in Revit units.
+            borders: List of closed polygons for surfaces borders. Surface border
+                will be used if not provided.
+        """
+        self.surfaces = surfaces
+        self.gridSize = gridSize
+        self.distanceFromBaseSrf = float(distanceFromBaseSrf)
+        self.borders = borders if borders else tuple(getSurfaceBorder(surface)
+                                                     for surface in surfaces)
+        assert len(self.surfaces) == len(self.borders), \
+            "Length of surfaces should be equal to length of borders."
+
+        # generate guidePts for trimming
+        self.guidePts = (border.Center() for border in self.borders)
+        self.uvs = self.calculatUV()
+
+    @classmethod
+    def fromHBZones(cls, HBZones, gridSize, distanceFromBaseSrf=0):
+        """Create grid for Honeybee zones."""
+        for HBZone in HBZones:
+            assert hasattr(HBZone, 'isHBZone'), \
+                '{} is not a Honeybee Zone.'.format(HBZone)
+
+        # get profile for floors
+        borders = tuple(floor.geometry for zone in HBZones for floor in zone.floors)
+        surfaces = tuple(border.Patch().FlipNormalDirection() for border in borders)
+
+        return cls(surfaces, gridSize, distanceFromBaseSrf, borders)
+
+    @property
+    def grids(self):
+        """Generate polygons for each surface based on (u, v)."""
+        for surface, (u, v), guidePt, border in zip(self.surfaces,
+                                                    self.uvs,
+                                                    self.guidePts,
+                                                    self.borders):
+            yield self.__createGrids(surface, u, v, guidePt, border)
+
+    def calculatUV(self):
+        """Calculate number of U, V for a surface based on a grid size.
+
+        Args:
+            surfaces: A list of Dynamo surfaces.
+            gridSize: A number in Dynamo units.
+
+        Returns:
+            A list of (u, v) tuples for surfaces
+        """
+        for surface in self.surfaces:
+            _cornerPt = surface.PointAtParameter(0,0)
+            _endUPt = surface.PointAtParameter(1,0)
+            _endVPt = surface.PointAtParameter(0,1)
+            u = int(round(_cornerPt.DistanceTo(_endUPt) / self.gridSize) + 1)
+            v = int(round(_cornerPt.DistanceTo(_endVPt) / self.gridSize) + 1)
+            _cornerPt.Dispose()
+            _endUPt.Dispose()
+            _endVPt.Dispose()
+            yield (u, v)
+
+    def __createGrids(self, surface, u, v, guidePt, border):
+        """Create grids for a single surface."""
+        _uSize = 1.0 / u
+        _vSize = 1.0 / v
+
+        for uCount in xrange(u):
+            for vCount in xrange(v):
+                _cornerPt00 = surface.PointAtParameter(uCount * _uSize, vCount * _vSize)
+                _cornerPt10 = surface.PointAtParameter((uCount + 1) * _uSize, vCount * _vSize)
+                _cornerPt11 = surface.PointAtParameter((uCount + 1) * _uSize, (vCount + 1) * _vSize)
+                _cornerPt01 = surface.PointAtParameter(uCount * _uSize, (vCount + 1) * _vSize)
+
+                _cornerPts = (_cornerPt00, _cornerPt01, _cornerPt11, _cornerPt10)
+                # create a Polygon from points
+                _pl = config.libs.DesignScript.Geometry.Polygon.ByPoints(_cornerPts)
+                _cenPoint = self.averagePoint(_cornerPts)
+                # check if the center point is inside the border
+                if border.ContainmentTest(_cenPoint):
+                    # scale pl inside to avoid intersection with border for
+                    # side polygons
+                    _plane = config.libs.DesignScript.Geometry.Plane.ByOriginNormal(
+                        _cenPoint, surface.NormalAtPoint(_cenPoint)
+                    )
+                    _scaledPl = _pl.Scale(_plane, .95, .95, .95)
+
+                    if not config.platform.libs.DesignScript.Geometry \
+                        .Polygon.Intersect(border, _scaledPl):
+                        # return plg if polygon center is inside and doesn't intersect
+                        self.disposeGeometries(_cornerPts)
+                        self.disposeGeometries((_plane, _scaledPl))
+                        yield Grid(_pl, _cenPoint, surface,
+                                   self.distanceFromBaseSrf)
+                    else:
+                        # it's inside and intersects. trim with border and return
+                        # the inside part.
+                        self.disposeGeometries((_plane, _scaledPl))
+                        self.disposeGeometries(_cornerPts)
+                        _tr = _pl.Trim(border, guidePt)[0]
+                        _cenPoint = self.averagePolygonPoints(_tr)
+                        _pl = _tr.CloseWithLine()
+                        _tr.Dispose()
+                        yield Grid(_pl, _cenPoint, surface,
+                                   self.distanceFromBaseSrf)
+
+                elif config.platform.libs.DesignScript.Geometry \
+                    .Polygon.Intersect(border, _pl):
+                    # center point is outside but still intersects
+                    _tr = _pl.Trim(border, guidePt)[0]
+                    _cenPoint = self.averagePolygonPoints(_tr)
+                    if border.ContainmentTest(_cenPoint):
+                        _pl = _tr.CloseWithLine()
+                        _tr.Dispose()
+                        self.disposeGeometries(_cornerPts)
+                        yield Grid(_pl, _cenPoint, surface,
+                                   self.distanceFromBaseSrf)
+
+    @staticmethod
+    def averagePoint(pts):
+        """Find averagePoint for a list of points."""
+        cen = [0, 0, 0]
+
+        for pt in  pts:
+            cen[0] += pt.X
+            cen[1] += pt.Y
+            cen[2] += pt.Z
+
+        return config.libs.DesignScript.Geometry.Point.ByCoordinates(*(v / len(pts) for v in cen))
+
+    def averagePolygonPoints(self, polygon):
+        """Find averagePoint for a polygon."""
+        startPt = polygon.Curves()[0].StartPoint
+        pts = tuple(c.EndPoint for c in polygon.Curves())
+        _len = len(pts)
+        cen = [startPt.X, startPt.Y, startPt.Z]
+
+        for pt in pts:
+            cen[0] += pt.X
+            cen[1] += pt.Y
+            cen[2] += pt.Z
+
+        self.disposeGeometries(pts)
+        return config.libs.DesignScript.Geometry.Point.ByCoordinates(*(v / (_len + 1) for v in cen))
+
+    @staticmethod
+    def disposeGeometries(geos):
+        for geo in geos:
+            try:
+                geo.Dispose()
+            except:
+                pass
+
+    @staticmethod
+    def getSurfaceBorder(surface):
+        crvs = surface.PerimeterCurves()
+        crv = crvs[0].Join(crvs[1:])
+</code></pre>
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="#honeybeex.geometryoperation.GridGenerator">GridGenerator</a></li>
+          <li>__builtin__.object</li>
+          </ul>
+          <h3>Static methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="honeybeex.geometryoperation.GridGenerator.averagePoint">
+    <p>def <span class="ident">averagePoint</span>(</p><p>pts)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Find averagePoint for a list of points.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.geometryoperation.GridGenerator.averagePoint', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.geometryoperation.GridGenerator.averagePoint" class="source">
+    <pre><code>@staticmethod
+def averagePoint(pts):
+    """Find averagePoint for a list of points."""
+    cen = [0, 0, 0]
+    for pt in  pts:
+        cen[0] += pt.X
+        cen[1] += pt.Y
+        cen[2] += pt.Z
+    return config.libs.DesignScript.Geometry.Point.ByCoordinates(*(v / len(pts) for v in cen))
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="honeybeex.geometryoperation.GridGenerator.disposeGeometries">
+    <p>def <span class="ident">disposeGeometries</span>(</p><p>geos)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.geometryoperation.GridGenerator.disposeGeometries', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.geometryoperation.GridGenerator.disposeGeometries" class="source">
+    <pre><code>@staticmethod
+def disposeGeometries(geos):
+    for geo in geos:
+        try:
+            geo.Dispose()
+        except:
+            pass
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="honeybeex.geometryoperation.GridGenerator.getSurfaceBorder">
+    <p>def <span class="ident">getSurfaceBorder</span>(</p><p>surface)</p>
+    </div>
+    
+
+    
+  
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.geometryoperation.GridGenerator.getSurfaceBorder', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.geometryoperation.GridGenerator.getSurfaceBorder" class="source">
+    <pre><code>@staticmethod
+def getSurfaceBorder(surface):
+    crvs = surface.PerimeterCurves()
+    crv = crvs[0].Join(crvs[1:])
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+          <h3>Instance variables</h3>
+            <div class="item">
+            <p id="honeybeex.geometryoperation.GridGenerator.borders" class="name">var <span class="ident">borders</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.geometryoperation.GridGenerator.distanceFromBaseSrf" class="name">var <span class="ident">distanceFromBaseSrf</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.geometryoperation.GridGenerator.gridSize" class="name">var <span class="ident">gridSize</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.geometryoperation.GridGenerator.grids" class="name">var <span class="ident">grids</span></p>
+            
+
+            
+  
+    <div class="desc"><p>Generate polygons for each surface based on (u, v).</p></div>
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.geometryoperation.GridGenerator.guidePts" class="name">var <span class="ident">guidePts</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.geometryoperation.GridGenerator.surfaces" class="name">var <span class="ident">surfaces</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.geometryoperation.GridGenerator.uvs" class="name">var <span class="ident">uvs</span></p>
+            
+
+            
+  
+  <div class="source_cont">
+</div>
+
+            </div>
+          <h3>Methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="honeybeex.geometryoperation.GridGenerator.__init__">
+    <p>def <span class="ident">__init__</span>(</p><p>self, surfaces, gridSize, distanceFromBaseSrf=0, borders=None)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Init GridGenerator.</p>
+<p>Args:
+    surfaces: List of Dynamo surfaces.
+    gridSize: Grid size in Revit units.
+    borders: List of closed polygons for surfaces borders. Surface border
+        will be used if not provided.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.geometryoperation.GridGenerator.__init__', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.geometryoperation.GridGenerator.__init__" class="source">
+    <pre><code>def __init__(self, surfaces, gridSize, distanceFromBaseSrf=0, borders=None):
+    """Init GridGenerator.
+    Args:
+        surfaces: List of Dynamo surfaces.
+        gridSize: Grid size in Revit units.
+        borders: List of closed polygons for surfaces borders. Surface border
+            will be used if not provided.
+    """
+    self.surfaces = surfaces
+    self.gridSize = gridSize
+    self.distanceFromBaseSrf = float(distanceFromBaseSrf)
+    self.borders = borders if borders else tuple(getSurfaceBorder(surface)
+                                                 for surface in surfaces)
+    assert len(self.surfaces) == len(self.borders), \
+        "Length of surfaces should be equal to length of borders."
+    # generate guidePts for trimming
+    self.guidePts = (border.Center() for border in self.borders)
+    self.uvs = self.calculatUV()
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="honeybeex.geometryoperation.GridGenerator.averagePolygonPoints">
+    <p>def <span class="ident">averagePolygonPoints</span>(</p><p>self, polygon)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Find averagePoint for a polygon.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.geometryoperation.GridGenerator.averagePolygonPoints', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.geometryoperation.GridGenerator.averagePolygonPoints" class="source">
+    <pre><code>def averagePolygonPoints(self, polygon):
+    """Find averagePoint for a polygon."""
+    startPt = polygon.Curves()[0].StartPoint
+    pts = tuple(c.EndPoint for c in polygon.Curves())
+    _len = len(pts)
+    cen = [startPt.X, startPt.Y, startPt.Z]
+    for pt in pts:
+        cen[0] += pt.X
+        cen[1] += pt.Y
+        cen[2] += pt.Z
+    self.disposeGeometries(pts)
+    return config.libs.DesignScript.Geometry.Point.ByCoordinates(*(v / (_len + 1) for v in cen))
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="honeybeex.geometryoperation.GridGenerator.calculatUV">
+    <p>def <span class="ident">calculatUV</span>(</p><p>self)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Calculate number of U, V for a surface based on a grid size.</p>
+<p>Args:
+    surfaces: A list of Dynamo surfaces.
+    gridSize: A number in Dynamo units.</p>
+<p>Returns:
+    A list of (u, v) tuples for surfaces</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.geometryoperation.GridGenerator.calculatUV', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.geometryoperation.GridGenerator.calculatUV" class="source">
+    <pre><code>def calculatUV(self):
+    """Calculate number of U, V for a surface based on a grid size.
+    Args:
+        surfaces: A list of Dynamo surfaces.
+        gridSize: A number in Dynamo units.
+    Returns:
+        A list of (u, v) tuples for surfaces
+    """
+    for surface in self.surfaces:
+        _cornerPt = surface.PointAtParameter(0,0)
+        _endUPt = surface.PointAtParameter(1,0)
+        _endVPt = surface.PointAtParameter(0,1)
+        u = int(round(_cornerPt.DistanceTo(_endUPt) / self.gridSize) + 1)
+        v = int(round(_cornerPt.DistanceTo(_endVPt) / self.gridSize) + 1)
+        _cornerPt.Dispose()
+        _endUPt.Dispose()
+        _endVPt.Dispose()
+        yield (u, v)
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="honeybeex.geometryoperation.GridGenerator.fromHBZones">
+    <p>def <span class="ident">fromHBZones</span>(</p><p>cls, HBZones, gridSize, distanceFromBaseSrf=0)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Create grid for Honeybee zones.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.geometryoperation.GridGenerator.fromHBZones', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.geometryoperation.GridGenerator.fromHBZones" class="source">
+    <pre><code>@classmethod
+def fromHBZones(cls, HBZones, gridSize, distanceFromBaseSrf=0):
+    """Create grid for Honeybee zones."""
+    for HBZone in HBZones:
+        assert hasattr(HBZone, 'isHBZone'), \
+            '{} is not a Honeybee Zone.'.format(HBZone)
+    # get profile for floors
+    borders = tuple(floor.geometry for zone in HBZones for floor in zone.floors)
+    surfaces = tuple(border.Patch().FlipNormalDirection() for border in borders)
+    return cls(surfaces, gridSize, distanceFromBaseSrf, borders)
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+      </div>
+      </div>
 
   </section>
 

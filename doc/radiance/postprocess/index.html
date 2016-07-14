@@ -3,10 +3,8 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 
-    <title>honeybeex.honeybee.radiance.material.materialBase API documentation</title>
-    <meta name="description" content="Radiance Materials (e.g plastic, glass, etc.).
-
-http://radsite.lbl.gov/radiance/refer/ray.html#Mater..." />
+    <title>honeybeex.radiance.postprocess API documentation</title>
+    <meta name="description" content="" />
 
   <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300' rel='stylesheet' type='text/css'>
 
@@ -988,21 +986,13 @@ table {
     <ul id="index">
 
 
-    <li class="set"><h3><a href="#header-classes">Classes</a></h3>
-      <ul>
-        <li class="mono">
-        <span class="class_name"><a href="#honeybeex.honeybee.radiance.material.materialBase.RadianceMaterial">RadianceMaterial</a></span>
-        
-          
-  <ul>
-    <li class="mono"><a href="#honeybeex.honeybee.radiance.material.materialBase.RadianceMaterial.__init__">__init__</a></li>
-    <li class="mono"><a href="#honeybeex.honeybee.radiance.material.materialBase.RadianceMaterial.toRadString">toRadString</a></li>
-  </ul>
 
-        </li>
+    <li class="set"><h3><a href="#header-submodules">Sub-modules</a></h3>
+      <ul>
+        <li class="mono"><a href="gridbasedresults.m.html">honeybeex.radiance.postprocess.gridbasedresults</a></li>
+        <li class="mono"><a href="sunlighthourresults.m.html">honeybeex.radiance.postprocess.sunlighthourresults</a></li>
       </ul>
     </li>
-
     </ul>
   </div>
 
@@ -1014,93 +1004,14 @@ table {
 
 
   <header id="section-intro">
-  <h1 class="title"><span class="name">honeybeex.honeybee.radiance.material.materialBase</span> module</h1>
-  <p>Radiance Materials (e.g plastic, glass, etc.).</p>
-<p>http://radsite.lbl.gov/radiance/refer/ray.html#Materials</p>
+  <h1 class="title"><span class="name">honeybeex.radiance.postprocess</span> module</h1>
   
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.material.materialBase', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeex.honeybee.radiance.material.materialBase" class="source">
-    <pre><code>"""Radiance Materials (e.g plastic, glass, etc.).
+  
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.radiance.postprocess', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.radiance.postprocess" class="source">
+    <pre><code>__all__ = ["gridbasedresults", "sunlighthourresults"]
 
-http://radsite.lbl.gov/radiance/refer/ray.html#Materials
-"""
-
-
-class RadianceMaterial(object):
-    """
-    Base class for Radiance materials.
-
-    Attributes:
-        name: Material name as a string. Do not use white space and special character.
-        materialType: One of Radiance standard Material types (e.g. glass, plastic, etc).
-        modifier: Material modifier (Default: "void").
-    """
-
-    # list of Radiance material types
-    __types = ["plastic", "glass", "trans", "metal", "mirror", "texfunc", "illum",
-               "mixedfunc", "dielectric", "transdata", "light", "glow", "BSDF"]
-
-    def __init__(self, name, materialType, modifier="void"):
-        """Create material base."""
-        self.name = name
-        """Material name as a string. Do not use white space and special character."""
-        self.type = materialType
-        """One of Radiance standard Material types (e.g. glass, plastic, etc)"""
-        self.modifier = modifier
-        """Material modifier. Default is void"""
-
-    @property
-    def isRadianceMaterial(self):
-        """Indicate that this object is a Radiance Material."""
-        return True
-
-    @property
-    def name(self):
-        """Get/set material name."""
-        return self.__name
-
-    @name.setter
-    def name(self, name):
-        self.__name = name.rstrip().replace(" ", "_")
-
-    @property
-    def modifier(self):
-        """Get/set material modifier."""
-        return self.__modifier
-
-    @modifier.setter
-    def modifier(self, modifier):
-        self.__modifier = modifier.rstrip().replace(" ", "_")
-
-    @property
-    def type(self):
-        """Get/set material type."""
-        return self.__type
-
-    @type.setter
-    def type(self, materialType):
-        assert materialType in self.__types, \
-            "%s is not a supported material type." % materialType + \
-            "Try one of these materials:\n%s" % str(self.__types)
-
-        self.__type = materialType
-
-    @property
-    def headLine(self):
-        """Return first line of Material definition."""
-        return "%s %s %s\n" % (self.modifier, self.type, self.name)
-
-    def toRadString(self, minimal=False):
-        """Return full radiance definition.
-
-        Args:
-            minimal: Set to True to get the definition in as single line.
-        """
-        raise NotImplementedError
-
-    def __repr__(self):
-        """Return material definition."""
-        return self.toRadString()
+import gridbasedresults, sunlighthourresults
 </code></pre>
   </div>
 
@@ -1109,220 +1020,22 @@ class RadianceMaterial(object):
   <section id="section-items">
 
 
-    <h2 class="section-title" id="header-classes">Classes</h2>
-      
+
+    <h2 class="section-title" id="header-submodules">Sub-modules</h2>
       <div class="item">
-      <p id="honeybeex.honeybee.radiance.material.materialBase.RadianceMaterial" class="name">class <span class="ident">RadianceMaterial</span></p>
+      <p class="name"><a href="gridbasedresults.m.html">honeybeex.radiance.postprocess.gridbasedresults</a></p>
       
   
-    <div class="desc"><p>Base class for Radiance materials.</p>
-<p>Attributes:
-    name: Material name as a string. Do not use white space and special character.
-    materialType: One of Radiance standard Material types (e.g. glass, plastic, etc).
-    modifier: Material modifier (Default: "void").</p></div>
-  <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.material.materialBase.RadianceMaterial', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeex.honeybee.radiance.material.materialBase.RadianceMaterial" class="source">
-    <pre><code>class RadianceMaterial(object):
-    """
-    Base class for Radiance materials.
+    <div class="desc"><p>Post process results for a Radiance Grid-based daylight analysis.</p></div>
 
-    Attributes:
-        name: Material name as a string. Do not use white space and special character.
-        materialType: One of Radiance standard Material types (e.g. glass, plastic, etc).
-        modifier: Material modifier (Default: "void").
-    """
-
-    # list of Radiance material types
-    __types = ["plastic", "glass", "trans", "metal", "mirror", "texfunc", "illum",
-               "mixedfunc", "dielectric", "transdata", "light", "glow", "BSDF"]
-
-    def __init__(self, name, materialType, modifier="void"):
-        """Create material base."""
-        self.name = name
-        """Material name as a string. Do not use white space and special character."""
-        self.type = materialType
-        """One of Radiance standard Material types (e.g. glass, plastic, etc)"""
-        self.modifier = modifier
-        """Material modifier. Default is void"""
-
-    @property
-    def isRadianceMaterial(self):
-        """Indicate that this object is a Radiance Material."""
-        return True
-
-    @property
-    def name(self):
-        """Get/set material name."""
-        return self.__name
-
-    @name.setter
-    def name(self, name):
-        self.__name = name.rstrip().replace(" ", "_")
-
-    @property
-    def modifier(self):
-        """Get/set material modifier."""
-        return self.__modifier
-
-    @modifier.setter
-    def modifier(self, modifier):
-        self.__modifier = modifier.rstrip().replace(" ", "_")
-
-    @property
-    def type(self):
-        """Get/set material type."""
-        return self.__type
-
-    @type.setter
-    def type(self, materialType):
-        assert materialType in self.__types, \
-            "%s is not a supported material type." % materialType + \
-            "Try one of these materials:\n%s" % str(self.__types)
-
-        self.__type = materialType
-
-    @property
-    def headLine(self):
-        """Return first line of Material definition."""
-        return "%s %s %s\n" % (self.modifier, self.type, self.name)
-
-    def toRadString(self, minimal=False):
-        """Return full radiance definition.
-
-        Args:
-            minimal: Set to True to get the definition in as single line.
-        """
-        raise NotImplementedError
-
-    def __repr__(self):
-        """Return material definition."""
-        return self.toRadString()
-</code></pre>
-  </div>
-</div>
-
-
-      <div class="class">
-          <h3>Ancestors (in MRO)</h3>
-          <ul class="class_list">
-          <li><a href="#honeybeex.honeybee.radiance.material.materialBase.RadianceMaterial">RadianceMaterial</a></li>
-          <li>__builtin__.object</li>
-          </ul>
-          <h3>Instance variables</h3>
-            <div class="item">
-            <p id="honeybeex.honeybee.radiance.material.materialBase.RadianceMaterial.headLine" class="name">var <span class="ident">headLine</span></p>
-            
-
-            
-  
-    <div class="desc"><p>Return first line of Material definition.</p></div>
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="honeybeex.honeybee.radiance.material.materialBase.RadianceMaterial.isRadianceMaterial" class="name">var <span class="ident">isRadianceMaterial</span></p>
-            
-
-            
-  
-    <div class="desc"><p>Indicate that this object is a Radiance Material.</p></div>
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="honeybeex.honeybee.radiance.material.materialBase.RadianceMaterial.modifier" class="name">var <span class="ident">modifier</span></p>
-            
-
-            
-  
-    <div class="desc"><p>Material modifier. Default is void</p></div>
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="honeybeex.honeybee.radiance.material.materialBase.RadianceMaterial.name" class="name">var <span class="ident">name</span></p>
-            
-
-            
-  
-    <div class="desc"><p>Material name as a string. Do not use white space and special character.</p></div>
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="honeybeex.honeybee.radiance.material.materialBase.RadianceMaterial.type" class="name">var <span class="ident">type</span></p>
-            
-
-            
-  
-    <div class="desc"><p>One of Radiance standard Material types (e.g. glass, plastic, etc)</p></div>
-  <div class="source_cont">
-</div>
-
-            </div>
-          <h3>Methods</h3>
-            
-  <div class="item">
-    <div class="name def" id="honeybeex.honeybee.radiance.material.materialBase.RadianceMaterial.__init__">
-    <p>def <span class="ident">__init__</span>(</p><p>self, name, materialType, modifier=&#39;void&#39;)</p>
-    </div>
-    
-
-    
-  
-    <div class="desc"><p>Create material base.</p></div>
-  <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.material.materialBase.RadianceMaterial.__init__', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeex.honeybee.radiance.material.materialBase.RadianceMaterial.__init__" class="source">
-    <pre><code>def __init__(self, name, materialType, modifier="void"):
-    """Create material base."""
-    self.name = name
-    """Material name as a string. Do not use white space and special character."""
-    self.type = materialType
-    """One of Radiance standard Material types (e.g. glass, plastic, etc)"""
-    self.modifier = modifier
-    """Material modifier. Default is void"""
-</code></pre>
-  </div>
-</div>
-
-  </div>
-  
-            
-  <div class="item">
-    <div class="name def" id="honeybeex.honeybee.radiance.material.materialBase.RadianceMaterial.toRadString">
-    <p>def <span class="ident">toRadString</span>(</p><p>self, minimal=False)</p>
-    </div>
-    
-
-    
-  
-    <div class="desc"><p>Return full radiance definition.</p>
-<p>Args:
-    minimal: Set to True to get the definition in as single line.</p></div>
-  <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.material.materialBase.RadianceMaterial.toRadString', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeex.honeybee.radiance.material.materialBase.RadianceMaterial.toRadString" class="source">
-    <pre><code>def toRadString(self, minimal=False):
-    """Return full radiance definition.
-    Args:
-        minimal: Set to True to get the definition in as single line.
-    """
-    raise NotImplementedError
-</code></pre>
-  </div>
-</div>
-
-  </div>
-  
       </div>
-      </div>
+      <div class="item">
+      <p class="name"><a href="sunlighthourresults.m.html">honeybeex.radiance.postprocess.sunlighthourresults</a></p>
+      
+  
+    <div class="desc"><p>Post process results for Honeybee sunlighthours analysis.</p></div>
 
+      </div>
   </section>
 
     </article>

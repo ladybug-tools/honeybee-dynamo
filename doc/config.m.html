@@ -991,10 +991,12 @@ table {
   <ul>
     <li class="mono"><a href="#honeybeex.config.epPath">epPath</a></li>
     <li class="mono"><a href="#honeybeex.config.libs">libs</a></li>
+    <li class="mono"><a href="#honeybeex.config.perlExePath">perlExePath</a></li>
     <li class="mono"><a href="#honeybeex.config.platform">platform</a></li>
     <li class="mono"><a href="#honeybeex.config.platformId">platformId</a></li>
     <li class="mono"><a href="#honeybeex.config.radbinPath">radbinPath</a></li>
     <li class="mono"><a href="#honeybeex.config.radlibPath">radlibPath</a></li>
+    <li class="mono"><a href="#honeybeex.config.wrapper">wrapper</a></li>
   </ul>
 
     </li>
@@ -1054,7 +1056,7 @@ Usage:
 from honeybee.config import *
 from collections import namedtuple
 import os
-
+import sys
 
 class Platform(object):
     """Identify how the script is currently executing.
@@ -1123,12 +1125,37 @@ class Platform(object):
             # It's running from inside Revit from a Dynamo node
             self.platform = "rvt"
             self.platformId = 3
+        elif __cwd.find("python") == -1:
+            # Revit changes the directory to where the file is, if user change
+            # the revit file but doesn't close the Dynamo window! :|
+            self.platform = "rvt"
+            self.platformId = 3
 
         if not mute:
             print "Honeybee is running from {}. platform id: {}." \
                 .format(self.platform, self.platformId)
 
         self.importGeometryLibraries()
+
+    @property
+    def isRevit(self):
+        """Return True if platform is Revit."""
+        return self.platform == "rvt"
+
+    @property
+    def isDynamo(self):
+        """Return True if platform is Dynamo Studio."""
+        return self.platform == "ds"
+
+    @property
+    def isGrasshopper(self):
+        """Return True if platform is Grasshopper."""
+        return self.platform == "gh"
+
+    @property
+    def isRevitOrDynamo(self):
+        """Return True if platform is Revit or Dynamo Studio."""
+        return self.isRevit or self.isDynamo
 
     def importGeometryLibraries(self):
         """
@@ -1178,11 +1205,15 @@ class Platform(object):
                 # Assign Rhino and Grasshopper to the libraries
                 self.libs = self._Libs(None, None, dyn, ds)
 
+    def __repr__(self):
+        """Return platform."""
+        return "{}".format(self.platform)
+
+
 # expose platform and libraries as global variables
-__p = Platform(mute=False)
-platform = __p.platform
-platformId = __p.platformId
-libs = __p.libs
+platform = Platform(mute=False)
+platformId = platform.platformId
+libs = platform.libs
 </code></pre>
   </div>
 
@@ -1200,6 +1231,14 @@ libs = __p.libs
       </div>
       <div class="item">
       <p id="honeybeex.config.libs" class="name">var <span class="ident">libs</span></p>
+      
+  
+  <div class="source_cont">
+</div>
+
+      </div>
+      <div class="item">
+      <p id="honeybeex.config.perlExePath" class="name">var <span class="ident">perlExePath</span></p>
       
   
   <div class="source_cont">
@@ -1232,6 +1271,14 @@ libs = __p.libs
       </div>
       <div class="item">
       <p id="honeybeex.config.radlibPath" class="name">var <span class="ident">radlibPath</span></p>
+      
+  
+  <div class="source_cont">
+</div>
+
+      </div>
+      <div class="item">
+      <p id="honeybeex.config.wrapper" class="name">var <span class="ident">wrapper</span></p>
       
   
   <div class="source_cont">
@@ -1329,12 +1376,37 @@ print "Platform is {} &gt; {}.".format(p, pId)
             # It's running from inside Revit from a Dynamo node
             self.platform = "rvt"
             self.platformId = 3
+        elif __cwd.find("python") == -1:
+            # Revit changes the directory to where the file is, if user change
+            # the revit file but doesn't close the Dynamo window! :|
+            self.platform = "rvt"
+            self.platformId = 3
 
         if not mute:
             print "Honeybee is running from {}. platform id: {}." \
                 .format(self.platform, self.platformId)
 
         self.importGeometryLibraries()
+
+    @property
+    def isRevit(self):
+        """Return True if platform is Revit."""
+        return self.platform == "rvt"
+
+    @property
+    def isDynamo(self):
+        """Return True if platform is Dynamo Studio."""
+        return self.platform == "ds"
+
+    @property
+    def isGrasshopper(self):
+        """Return True if platform is Grasshopper."""
+        return self.platform == "gh"
+
+    @property
+    def isRevitOrDynamo(self):
+        """Return True if platform is Revit or Dynamo Studio."""
+        return self.isRevit or self.isDynamo
 
     def importGeometryLibraries(self):
         """
@@ -1383,6 +1455,10 @@ print "Platform is {} &gt; {}.".format(p, pId)
             else:
                 # Assign Rhino and Grasshopper to the libraries
                 self.libs = self._Libs(None, None, dyn, ds)
+
+    def __repr__(self):
+        """Return platform."""
+        return "{}".format(self.platform)
 </code></pre>
   </div>
 </div>
@@ -1395,6 +1471,50 @@ print "Platform is {} &gt; {}.".format(p, pId)
           <li>__builtin__.object</li>
           </ul>
           <h3>Instance variables</h3>
+            <div class="item">
+            <p id="honeybeex.config.Platform.isDynamo" class="name">var <span class="ident">isDynamo</span></p>
+            
+
+            
+  
+    <div class="desc"><p>Return True if platform is Dynamo Studio.</p></div>
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.config.Platform.isGrasshopper" class="name">var <span class="ident">isGrasshopper</span></p>
+            
+
+            
+  
+    <div class="desc"><p>Return True if platform is Grasshopper.</p></div>
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.config.Platform.isRevit" class="name">var <span class="ident">isRevit</span></p>
+            
+
+            
+  
+    <div class="desc"><p>Return True if platform is Revit.</p></div>
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.config.Platform.isRevitOrDynamo" class="name">var <span class="ident">isRevitOrDynamo</span></p>
+            
+
+            
+  
+    <div class="desc"><p>Return True if platform is Revit or Dynamo Studio.</p></div>
+  <div class="source_cont">
+</div>
+
+            </div>
             <div class="item">
             <p id="honeybeex.config.Platform.libs" class="name">var <span class="ident">libs</span></p>
             
@@ -1496,6 +1616,11 @@ rc = config.libs.Rhino
         self.platformId = 2
     elif __cwd.find("revit") > -1:
         # It's running from inside Revit from a Dynamo node
+        self.platform = "rvt"
+        self.platformId = 3
+    elif __cwd.find("python") == -1:
+        # Revit changes the directory to where the file is, if user change
+        # the revit file but doesn't close the Dynamo window! :|
         self.platform = "rvt"
         self.platformId = 3
     if not mute:

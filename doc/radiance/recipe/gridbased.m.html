@@ -998,7 +998,6 @@ table {
     <li class="mono"><a href="#honeybeex.radiance.recipe.gridbased.GridBasedAnalysisRecipe.createAnalysisPointGroups">createAnalysisPointGroups</a></li>
     <li class="mono"><a href="#honeybeex.radiance.recipe.gridbased.GridBasedAnalysisRecipe.flatten">flatten</a></li>
     <li class="mono"><a href="#honeybeex.radiance.recipe.gridbased.GridBasedAnalysisRecipe.hbObjectsToRadString">hbObjectsToRadString</a></li>
-    <li class="mono"><a href="#honeybeex.radiance.recipe.gridbased.GridBasedAnalysisRecipe.matchPointsAndVectors">matchPointsAndVectors</a></li>
     <li class="mono"><a href="#honeybeex.radiance.recipe.gridbased.GridBasedAnalysisRecipe.results">results</a></li>
     <li class="mono"><a href="#honeybeex.radiance.recipe.gridbased.GridBasedAnalysisRecipe.run">run</a></li>
     <li class="mono"><a href="#honeybeex.radiance.recipe.gridbased.GridBasedAnalysisRecipe.toRadString">toRadString</a></li>
@@ -1029,7 +1028,7 @@ table {
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.radiance.recipe.gridbased', this);">Show source &equiv;</a></p>
   <div id="source-honeybeex.radiance.recipe.gridbased" class="source">
     <pre><code>from ...honeybee.radiance.recipe.gridbased import HBGridBasedAnalysisRecipe
-from ... import config
+from ._sensor import SensorGroup
 
 
 class GridBasedAnalysisRecipe(HBGridBasedAnalysisRecipe):
@@ -1037,9 +1036,9 @@ class GridBasedAnalysisRecipe(HBGridBasedAnalysisRecipe):
 
     Attributes:
         sky: A honeybee sky for the analysis
-        pointGroups: A Grasshopper DataTree of Point3d test points. Each branch
+        pointGroupsT: A Grasshopper DataTree of Point3d test points. Each branch
             of test points will be converted to a TestPointGroup.
-        vectorGroups: A DataTree of Vector3d vectors. Each vector represents direction
+        vectorGroupsT: A DataTree of Vector3d vectors. Each vector represents direction
             of corresponding point in testPts. If the vector is not provided (0, 0, 1)
             will be assigned.
         simulationType: 0: Illuminance(lux), 1: Radiation (kWh), 2: Luminance (Candela)
@@ -1052,7 +1051,8 @@ class GridBasedAnalysisRecipe(HBGridBasedAnalysisRecipe):
                  radParameters=None):
         """Create grid-based recipe."""
         # convert DataTrees to lists
-        pointGroups, vectorGroups = self.matchPointsAndVectors(pointGroupsT, vectorGroupsT)
+        pointGroups, vectorGroups = \
+            SensorGroup().matchPointsAndVectors(pointGroupsT, vectorGroupsT)
 
         if len(pointGroups) == 0:
             print "No test points!"
@@ -1060,137 +1060,6 @@ class GridBasedAnalysisRecipe(HBGridBasedAnalysisRecipe):
         HBGridBasedAnalysisRecipe.__init__(self, sky, pointGroups,
                                            vectorGroups, simulationType,
                                            radParameters)
-
-    def matchPointsAndVectors(self, ptsT, vecT):
-        """Convert a grasshopperDataTree to list.
-
-        Args:
-            --- Grasshopper ---
-            ptsT: A Grasshopper DataTree of test points.
-            vecT: A Grasshopper DataTree of vectors.
-            --- Dynamo ---
-                ptsT: List of lists of test points.
-                vecT: List of lists of vectors.
-        Returns:
-            pts: Nested list of points
-            vectors: Nested list of vectors
-        """
-        if config.platform == 'gh':
-            pts, vec = self.__matchPointsAndVectorsGH(ptsT, vecT)
-        elif config.platform == 'ds' or config.platform == 'rvt':
-            pts, vec = self.__matchPointsAndVectorsDS(ptsT, vecT)
-
-        return pts, vec
-
-    def __matchPointsAndVectorsGH(self, ptsT, vecT):
-        """Convert a grasshopperDataTree to list.
-
-        Args:
-            ptsT: A Grasshopper DataTree of test points.
-            vecT: A Grasshopper DataTree of vectors.
-
-        Returns:
-            pts: Nested list of points
-            vectors: Nested list of vectors
-        """
-        ptsT.SimplifyPaths()
-        vecT.SimplifyPaths()
-
-        pts = range(ptsT.BranchCount)
-        vec = range(ptsT.BranchCount)
-
-        for i, path in enumerate(ptsT.Paths):
-            p = list(ptsT.Branch(path))
-            try:
-                v = list(vecT.Branch(path))
-            except:
-                v = []
-
-            tempPts, tempVectors = self.__matchData(p, v)
-
-            if len(tempPts) > 0:
-                pts[i] = tempPts
-                vec[i] = tempVectors
-            else:
-                # empty branch
-                pts.remove(i)
-                vec.remove(i)
-
-        return pts, vec
-
-    def __matchPointsAndVectorsDS(self, ptsT, vecT):
-        """Convert a grasshopperDataTree to list.
-
-        Args:
-            ptsT: List of lists of test points.
-            vecT: List of lists of vectors.
-
-        Returns:
-            pts: Nested list of points
-            vectors: Nested list of vectors
-        """
-        pts = range(len(ptsT))
-        vec = range(len(ptsT))
-
-        for i, p in enumerate(ptsT):
-            try:
-                v = vecT[i]
-            except:
-                v = []
-
-            tempPts, tempVectors = self.__matchData(
-                list(self.flatten(p)), list(self.flatten(v))
-            )
-
-            if len(tempPts) > 0:
-                pts[i] = tempPts
-                vec[i] = tempVectors
-            else:
-                # empty branch
-                pts.remove(i)
-                vec.remove(i)
-
-        return pts, vec
-
-    # TODO: move this method to list operation library
-    @staticmethod
-    def __matchData(guide, follower, noneValue=(0, 0, 1)):
-        """Match data between two lists.
-
-        Args:
-            guide: Long list.
-            follower: Short list.
-            noneValue: Place holder for default value if shortlist is an empty lists.
-        """
-        tempPts = range(len(guide))
-        tempVectors = range(len(guide))
-
-        for c, dp in enumerate(guide):
-            if dp is not None:
-                tempPts[c] = dp
-                # match vector in vector list
-                try:
-                    # check if there is a vector with the same index
-                    dv = follower[c]
-                except IndexError:
-                    try:
-                        # try to get the last item provided (longest list match)
-                        dv = follower[-1]
-                    except IndexError:
-                        # use default value
-                        dv = noneValue
-                finally:
-                    if dv is None:
-                        # use default value
-                        dv = noneValue
-
-                    tempVectors[c] = dv
-            else:
-                # empty list
-                tempPts.remove(c)
-                tempVectors(c)
-
-        return tempPts, tempVectors
 </code></pre>
   </div>
 
@@ -1208,9 +1077,9 @@ class GridBasedAnalysisRecipe(HBGridBasedAnalysisRecipe):
     <div class="desc"><p>Grid base analysis recipe.</p>
 <p>Attributes:
     sky: A honeybee sky for the analysis
-    pointGroups: A Grasshopper DataTree of Point3d test points. Each branch
+    pointGroupsT: A Grasshopper DataTree of Point3d test points. Each branch
         of test points will be converted to a TestPointGroup.
-    vectorGroups: A DataTree of Vector3d vectors. Each vector represents direction
+    vectorGroupsT: A DataTree of Vector3d vectors. Each vector represents direction
         of corresponding point in testPts. If the vector is not provided (0, 0, 1)
         will be assigned.
     simulationType: 0: Illuminance(lux), 1: Radiation (kWh), 2: Luminance (Candela)
@@ -1225,9 +1094,9 @@ class GridBasedAnalysisRecipe(HBGridBasedAnalysisRecipe):
 
     Attributes:
         sky: A honeybee sky for the analysis
-        pointGroups: A Grasshopper DataTree of Point3d test points. Each branch
+        pointGroupsT: A Grasshopper DataTree of Point3d test points. Each branch
             of test points will be converted to a TestPointGroup.
-        vectorGroups: A DataTree of Vector3d vectors. Each vector represents direction
+        vectorGroupsT: A DataTree of Vector3d vectors. Each vector represents direction
             of corresponding point in testPts. If the vector is not provided (0, 0, 1)
             will be assigned.
         simulationType: 0: Illuminance(lux), 1: Radiation (kWh), 2: Luminance (Candela)
@@ -1240,7 +1109,8 @@ class GridBasedAnalysisRecipe(HBGridBasedAnalysisRecipe):
                  radParameters=None):
         """Create grid-based recipe."""
         # convert DataTrees to lists
-        pointGroups, vectorGroups = self.matchPointsAndVectors(pointGroupsT, vectorGroupsT)
+        pointGroups, vectorGroups = \
+            SensorGroup().matchPointsAndVectors(pointGroupsT, vectorGroupsT)
 
         if len(pointGroups) == 0:
             print "No test points!"
@@ -1248,137 +1118,6 @@ class GridBasedAnalysisRecipe(HBGridBasedAnalysisRecipe):
         HBGridBasedAnalysisRecipe.__init__(self, sky, pointGroups,
                                            vectorGroups, simulationType,
                                            radParameters)
-
-    def matchPointsAndVectors(self, ptsT, vecT):
-        """Convert a grasshopperDataTree to list.
-
-        Args:
-            --- Grasshopper ---
-            ptsT: A Grasshopper DataTree of test points.
-            vecT: A Grasshopper DataTree of vectors.
-            --- Dynamo ---
-                ptsT: List of lists of test points.
-                vecT: List of lists of vectors.
-        Returns:
-            pts: Nested list of points
-            vectors: Nested list of vectors
-        """
-        if config.platform == 'gh':
-            pts, vec = self.__matchPointsAndVectorsGH(ptsT, vecT)
-        elif config.platform == 'ds' or config.platform == 'rvt':
-            pts, vec = self.__matchPointsAndVectorsDS(ptsT, vecT)
-
-        return pts, vec
-
-    def __matchPointsAndVectorsGH(self, ptsT, vecT):
-        """Convert a grasshopperDataTree to list.
-
-        Args:
-            ptsT: A Grasshopper DataTree of test points.
-            vecT: A Grasshopper DataTree of vectors.
-
-        Returns:
-            pts: Nested list of points
-            vectors: Nested list of vectors
-        """
-        ptsT.SimplifyPaths()
-        vecT.SimplifyPaths()
-
-        pts = range(ptsT.BranchCount)
-        vec = range(ptsT.BranchCount)
-
-        for i, path in enumerate(ptsT.Paths):
-            p = list(ptsT.Branch(path))
-            try:
-                v = list(vecT.Branch(path))
-            except:
-                v = []
-
-            tempPts, tempVectors = self.__matchData(p, v)
-
-            if len(tempPts) > 0:
-                pts[i] = tempPts
-                vec[i] = tempVectors
-            else:
-                # empty branch
-                pts.remove(i)
-                vec.remove(i)
-
-        return pts, vec
-
-    def __matchPointsAndVectorsDS(self, ptsT, vecT):
-        """Convert a grasshopperDataTree to list.
-
-        Args:
-            ptsT: List of lists of test points.
-            vecT: List of lists of vectors.
-
-        Returns:
-            pts: Nested list of points
-            vectors: Nested list of vectors
-        """
-        pts = range(len(ptsT))
-        vec = range(len(ptsT))
-
-        for i, p in enumerate(ptsT):
-            try:
-                v = vecT[i]
-            except:
-                v = []
-
-            tempPts, tempVectors = self.__matchData(
-                list(self.flatten(p)), list(self.flatten(v))
-            )
-
-            if len(tempPts) > 0:
-                pts[i] = tempPts
-                vec[i] = tempVectors
-            else:
-                # empty branch
-                pts.remove(i)
-                vec.remove(i)
-
-        return pts, vec
-
-    # TODO: move this method to list operation library
-    @staticmethod
-    def __matchData(guide, follower, noneValue=(0, 0, 1)):
-        """Match data between two lists.
-
-        Args:
-            guide: Long list.
-            follower: Short list.
-            noneValue: Place holder for default value if shortlist is an empty lists.
-        """
-        tempPts = range(len(guide))
-        tempVectors = range(len(guide))
-
-        for c, dp in enumerate(guide):
-            if dp is not None:
-                tempPts[c] = dp
-                # match vector in vector list
-                try:
-                    # check if there is a vector with the same index
-                    dv = follower[c]
-                except IndexError:
-                    try:
-                        # try to get the last item provided (longest list match)
-                        dv = follower[-1]
-                    except IndexError:
-                        # use default value
-                        dv = noneValue
-                finally:
-                    if dv is None:
-                        # use default value
-                        dv = noneValue
-
-                    tempVectors[c] = dv
-            else:
-                # empty list
-                tempPts.remove(c)
-                tempVectors(c)
-
-        return tempPts, tempVectors
 </code></pre>
   </div>
 </div>
@@ -1389,7 +1128,8 @@ class GridBasedAnalysisRecipe(HBGridBasedAnalysisRecipe):
           <ul class="class_list">
           <li><a href="#honeybeex.radiance.recipe.gridbased.GridBasedAnalysisRecipe">GridBasedAnalysisRecipe</a></li>
           <li>honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe</li>
-          <li>honeybeex.honeybee.radiance.recipe.recipeBase.HBDaylightAnalysisRecipe</li>
+          <li>honeybeex.honeybee.radiance.recipe._gridbasedbase.HBGenericGridBasedAnalysisRecipe</li>
+          <li>honeybeex.honeybee.radiance.recipe._recipebase.HBDaylightAnalysisRecipe</li>
           <li>__builtin__.object</li>
           </ul>
           <h3>Static methods</h3>
@@ -1589,7 +1329,8 @@ def write(filePath, data, mkdir=False):
              radParameters=None):
     """Create grid-based recipe."""
     # convert DataTrees to lists
-    pointGroups, vectorGroups = self.matchPointsAndVectors(pointGroupsT, vectorGroupsT)
+    pointGroups, vectorGroups = \
+        SensorGroup().matchPointsAndVectors(pointGroupsT, vectorGroupsT)
     if len(pointGroups) == 0:
         print "No test points!"
     HBGridBasedAnalysisRecipe.__init__(self, sky, pointGroups,
@@ -1627,7 +1368,8 @@ def write(filePath, data, mkdir=False):
         pointGroups = [[pointGroups]]
         vectorGroups = [[vectorGroups]]
     # if point group is flatten - create a single group
-    elif not isinstance(pointGroups[0][0], Iterable) and not hasattr(pointGroups[0][0], "X"):
+    elif not isinstance(pointGroups[0][0], Iterable) \
+            and not hasattr(pointGroups[0][0], "X"):
         pointGroups = [pointGroups]
         vectorGroups = [vectorGroups]
     for groupCount, pts in enumerate(pointGroups):
@@ -1745,53 +1487,6 @@ list(flatten(inputList))
     else:
         print "Warning: Found no Honeybee objects."
     return _radDefinition(_matStr, _geoStr)
-</code></pre>
-  </div>
-</div>
-
-  </div>
-  
-            
-  <div class="item">
-    <div class="name def" id="honeybeex.radiance.recipe.gridbased.GridBasedAnalysisRecipe.matchPointsAndVectors">
-    <p>def <span class="ident">matchPointsAndVectors</span>(</p><p>self, ptsT, vecT)</p>
-    </div>
-    
-
-    
-  
-    <div class="desc"><p>Convert a grasshopperDataTree to list.</p>
-<p>Args:
-    --- Grasshopper ---
-    ptsT: A Grasshopper DataTree of test points.
-    vecT: A Grasshopper DataTree of vectors.
-    --- Dynamo ---
-        ptsT: List of lists of test points.
-        vecT: List of lists of vectors.
-Returns:
-    pts: Nested list of points
-    vectors: Nested list of vectors</p></div>
-  <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.radiance.recipe.gridbased.GridBasedAnalysisRecipe.matchPointsAndVectors', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeex.radiance.recipe.gridbased.GridBasedAnalysisRecipe.matchPointsAndVectors" class="source">
-    <pre><code>def matchPointsAndVectors(self, ptsT, vecT):
-    """Convert a grasshopperDataTree to list.
-    Args:
-        --- Grasshopper ---
-        ptsT: A Grasshopper DataTree of test points.
-        vecT: A Grasshopper DataTree of vectors.
-        --- Dynamo ---
-            ptsT: List of lists of test points.
-            vecT: List of lists of vectors.
-    Returns:
-        pts: Nested list of points
-        vectors: Nested list of vectors
-    """
-    if config.platform == 'gh':
-        pts, vec = self.__matchPointsAndVectorsGH(ptsT, vecT)
-    elif config.platform == 'ds' or config.platform == 'rvt':
-        pts, vec = self.__matchPointsAndVectorsDS(ptsT, vecT)
-    return pts, vec
 </code></pre>
   </div>
 </div>
@@ -1987,9 +1682,9 @@ Returns:
     assert type(projectName) is str, "projectName should be a string."
     _matStr, _geoStr = self.hbObjectsToRadString()
     _mat = self.write(os.path.join(targetDir, projectName + ".mat"),
-                      _matStr, mkdir) if writeMaterial else " "
+                      _matStr + "\n", mkdir) if writeMaterial else " "
     _geo = self.write(os.path.join(targetDir, projectName + ".rad"),
-                      _geoStr, mkdir) if writeMaterial else " "
+                      _geoStr + "\n", mkdir) if writeMaterial else " "
     if _mat and _geo:
         return _mat, _geo
 </code></pre>
@@ -2033,7 +1728,7 @@ Returns:
     assert type(projectName) is str, "projectName should be a string."
     projectName += ".pts"
     _pts = self.write(os.path.join(targetDir, projectName),
-                      self.toRadString(points=True).points, mkdir)
+                      self.toRadString(points=True).points + "\n", mkdir)
     if _pts:
         return _pts
 </code></pre>
@@ -2115,17 +1810,18 @@ Returns:
     matFile, geoFile = self.writeHBObjectsToFile(_path, projectName)
     # 4.write batch file
     batchFileLines = []
-    # TODO: This line won't work for in linux.
+    # TODO: This line won't work in linux.
     dirLine = "%s\ncd %s" % (os.path.splitdrive(_path)[0], _path)
     batchFileLines.append(dirLine)
     # # 4.1.prepare oconv
     oc = Oconv(projectName)
-    oc.inputFiles = [skyFile, matFile, geoFile]
+    oc.sceneFiles = [skyFile, matFile, geoFile]
     # # 4.2.prepare rtrace
     rt = Rtrace(projectName,
                 simulationType=self.simulationType,
                 radianceParameters=self.radianceParameters)
-    rt.octFile = os.path.join(_path, projectName + ".oct")
+    rt.radianceParameters.h = True
+    rt.octreeFile = os.path.join(_path, projectName + ".oct")
     rt.pointFile = pointsFile
     # # 4.3 write batch file
     batchFileLines.append(oc.toRadString())

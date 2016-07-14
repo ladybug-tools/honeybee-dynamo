@@ -3,8 +3,8 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 
-    <title>honeybeex.honeybee.radiance.recipe.imagebased API documentation</title>
-    <meta name="description" content="Radiance Analysis Recipes." />
+    <title>honeybeex.honeybee.energyplus.geometryrules API documentation</title>
+    <meta name="description" content="EnergyPlus Global Geometry Rules." />
 
   <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300' rel='stylesheet' type='text/css'>
 
@@ -989,15 +989,11 @@ table {
     <li class="set"><h3><a href="#header-classes">Classes</a></h3>
       <ul>
         <li class="mono">
-        <span class="class_name"><a href="#honeybeex.honeybee.radiance.recipe.imagebased.HBImageBasedAnalysisRecipe">HBImageBasedAnalysisRecipe</a></span>
+        <span class="class_name"><a href="#honeybeex.honeybee.energyplus.geometryrules.GlobalGeometryRules">GlobalGeometryRules</a></span>
         
           
   <ul>
-    <li class="mono"><a href="#honeybeex.honeybee.radiance.recipe.imagebased.HBImageBasedAnalysisRecipe.write">write</a></li>
-    <li class="mono"><a href="#honeybeex.honeybee.radiance.recipe.imagebased.HBImageBasedAnalysisRecipe.__init__">__init__</a></li>
-    <li class="mono"><a href="#honeybeex.honeybee.radiance.recipe.imagebased.HBImageBasedAnalysisRecipe.hbObjectsToRadString">hbObjectsToRadString</a></li>
-    <li class="mono"><a href="#honeybeex.honeybee.radiance.recipe.imagebased.HBImageBasedAnalysisRecipe.toRadString">toRadString</a></li>
-    <li class="mono"><a href="#honeybeex.honeybee.radiance.recipe.imagebased.HBImageBasedAnalysisRecipe.writeToFile">writeToFile</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.energyplus.geometryrules.GlobalGeometryRules.__init__">__init__</a></li>
   </ul>
 
         </li>
@@ -1015,22 +1011,24 @@ table {
 
 
   <header id="section-intro">
-  <h1 class="title"><span class="name">honeybeex.honeybee.radiance.recipe.imagebased</span> module</h1>
-  <p>Radiance Analysis Recipes.</p>
+  <h1 class="title"><span class="name">honeybeex.honeybee.energyplus.geometryrules</span> module</h1>
+  <p>EnergyPlus Global Geometry Rules.</p>
   
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.recipe.imagebased', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeex.honeybee.radiance.recipe.imagebased" class="source">
-    <pre><code>"""Radiance Analysis Recipes."""
-
-from recipeBase import HBDaylightAnalysisRecipe
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.energyplus.geometryrules', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.energyplus.geometryrules" class="source">
+    <pre><code>"""EnergyPlus Global Geometry Rules."""
 
 
-class HBImageBasedAnalysisRecipe(HBDaylightAnalysisRecipe):
-    """Image-based recipe."""
+class GlobalGeometryRules(object):
+    """Global Geometry Rules."""
 
-    def __init__(self):
-        """Create an Image-based recipe."""
-        raise NotImplementedError()
+    def __init__(self, startingCorner="LowerLeftCorner",
+                 direction="CounterClockWise",
+                 system="Absolute"):
+        """Init Global Geometry."""
+        self.startingCorner = startingCorner
+        self.direction = direction
+        self.system = system
 </code></pre>
   </div>
 
@@ -1042,19 +1040,23 @@ class HBImageBasedAnalysisRecipe(HBDaylightAnalysisRecipe):
     <h2 class="section-title" id="header-classes">Classes</h2>
       
       <div class="item">
-      <p id="honeybeex.honeybee.radiance.recipe.imagebased.HBImageBasedAnalysisRecipe" class="name">class <span class="ident">HBImageBasedAnalysisRecipe</span></p>
+      <p id="honeybeex.honeybee.energyplus.geometryrules.GlobalGeometryRules" class="name">class <span class="ident">GlobalGeometryRules</span></p>
       
   
-    <div class="desc"><p>Image-based recipe.</p></div>
+    <div class="desc"><p>Global Geometry Rules.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.recipe.imagebased.HBImageBasedAnalysisRecipe', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeex.honeybee.radiance.recipe.imagebased.HBImageBasedAnalysisRecipe" class="source">
-    <pre><code>class HBImageBasedAnalysisRecipe(HBDaylightAnalysisRecipe):
-    """Image-based recipe."""
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.energyplus.geometryrules.GlobalGeometryRules', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.energyplus.geometryrules.GlobalGeometryRules" class="source">
+    <pre><code>class GlobalGeometryRules(object):
+    """Global Geometry Rules."""
 
-    def __init__(self):
-        """Create an Image-based recipe."""
-        raise NotImplementedError()
+    def __init__(self, startingCorner="LowerLeftCorner",
+                 direction="CounterClockWise",
+                 system="Absolute"):
+        """Init Global Geometry."""
+        self.startingCorner = startingCorner
+        self.direction = direction
+        self.system = system
 </code></pre>
   </div>
 </div>
@@ -1063,119 +1065,36 @@ class HBImageBasedAnalysisRecipe(HBDaylightAnalysisRecipe):
       <div class="class">
           <h3>Ancestors (in MRO)</h3>
           <ul class="class_list">
-          <li><a href="#honeybeex.honeybee.radiance.recipe.imagebased.HBImageBasedAnalysisRecipe">HBImageBasedAnalysisRecipe</a></li>
-          <li>honeybeex.honeybee.radiance.recipe.recipeBase.HBDaylightAnalysisRecipe</li>
+          <li><a href="#honeybeex.honeybee.energyplus.geometryrules.GlobalGeometryRules">GlobalGeometryRules</a></li>
           <li>__builtin__.object</li>
           </ul>
-          <h3>Static methods</h3>
-            
-  <div class="item">
-    <div class="name def" id="honeybeex.honeybee.radiance.recipe.imagebased.HBImageBasedAnalysisRecipe.write">
-    <p>def <span class="ident">write</span>(</p><p>filePath, data, mkdir=False)</p>
-    </div>
-    
-
-    
-  
-    <div class="desc"><p>Write a string of data to file.</p>
-<p>Args:
-    filePath: Full path for a valid file path (e.g. c:/ladybug/testPts.pts)
-    data: Any data as string
-    mkdir: Set to True to create the directory if doesn't exist (Default: False)</p></div>
-  <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.recipe.imagebased.HBImageBasedAnalysisRecipe.write', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeex.honeybee.radiance.recipe.imagebased.HBImageBasedAnalysisRecipe.write" class="source">
-    <pre><code>@staticmethod
-def write(filePath, data, mkdir=False):
-    """Write a string of data to file.
-    Args:
-        filePath: Full path for a valid file path (e.g. c:/ladybug/testPts.pts)
-        data: Any data as string
-        mkdir: Set to True to create the directory if doesn't exist (Default: False)
-    """
-    __dir, __name = os.path.split(filePath)
-    if not os.path.isdir(__dir):
-        if mkdir:
-            preparedir(__dir)
-        else:
-            raise ValueError("Target dir doesn't exist: %s" % __dir)
-    with open(filePath, "w") as outf:
-        try:
-            outf.write(str(data))
-            return filePath
-        except Exception as e:
-            print "Failed to write points to file:\n%s" % e
-            return False
-</code></pre>
-  </div>
-</div>
-
-  </div>
-  
           <h3>Instance variables</h3>
             <div class="item">
-            <p id="honeybeex.honeybee.radiance.recipe.imagebased.HBImageBasedAnalysisRecipe.hbObjects" class="name">var <span class="ident">hbObjects</span></p>
+            <p id="honeybeex.honeybee.energyplus.geometryrules.GlobalGeometryRules.direction" class="name">var <span class="ident">direction</span></p>
             
 
             
   
-    <div class="desc"><p>Get and set Honeybee objects for this recipe.</p></div>
   <div class="source_cont">
 </div>
 
             </div>
             <div class="item">
-            <p id="honeybeex.honeybee.radiance.recipe.imagebased.HBImageBasedAnalysisRecipe.isAnalysisRecipe" class="name">var <span class="ident">isAnalysisRecipe</span></p>
+            <p id="honeybeex.honeybee.energyplus.geometryrules.GlobalGeometryRules.startingCorner" class="name">var <span class="ident">startingCorner</span></p>
             
 
             
   
-    <div class="desc"><p>Return true to indicate it is an analysis recipe.</p></div>
   <div class="source_cont">
 </div>
 
             </div>
             <div class="item">
-            <p id="honeybeex.honeybee.radiance.recipe.imagebased.HBImageBasedAnalysisRecipe.radianceParameters" class="name">var <span class="ident">radianceParameters</span></p>
+            <p id="honeybeex.honeybee.energyplus.geometryrules.GlobalGeometryRules.system" class="name">var <span class="ident">system</span></p>
             
 
             
   
-    <div class="desc"><p>Get and set Radiance parameters.</p></div>
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="honeybeex.honeybee.radiance.recipe.imagebased.HBImageBasedAnalysisRecipe.simulationType" class="name">var <span class="ident">simulationType</span></p>
-            
-
-            
-  
-    <div class="desc"><p>Get/set simulation Type.</p>
-<p>0: Illuminance(lux), 1: Radiation (kWh), 2: Luminance (Candela) (Default: 0)</p></div>
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="honeybeex.honeybee.radiance.recipe.imagebased.HBImageBasedAnalysisRecipe.sky" class="name">var <span class="ident">sky</span></p>
-            
-
-            
-  
-    <div class="desc"><p>Get and set sky definition.</p></div>
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="honeybeex.honeybee.radiance.recipe.imagebased.HBImageBasedAnalysisRecipe.subFolder" class="name">var <span class="ident">subFolder</span></p>
-            
-
-            
-  
-    <div class="desc"><p>Sub-folder for Grid-based analysis.</p></div>
   <div class="source_cont">
 </div>
 
@@ -1183,139 +1102,24 @@ def write(filePath, data, mkdir=False):
           <h3>Methods</h3>
             
   <div class="item">
-    <div class="name def" id="honeybeex.honeybee.radiance.recipe.imagebased.HBImageBasedAnalysisRecipe.__init__">
-    <p>def <span class="ident">__init__</span>(</p><p>self)</p>
+    <div class="name def" id="honeybeex.honeybee.energyplus.geometryrules.GlobalGeometryRules.__init__">
+    <p>def <span class="ident">__init__</span>(</p><p>self, startingCorner=&#39;LowerLeftCorner&#39;, direction=&#39;CounterClockWise&#39;, system=&#39;Absolute&#39;)</p>
     </div>
     
 
     
   
-    <div class="desc"><p>Create an Image-based recipe.</p></div>
+    <div class="desc"><p>Init Global Geometry.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.recipe.imagebased.HBImageBasedAnalysisRecipe.__init__', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeex.honeybee.radiance.recipe.imagebased.HBImageBasedAnalysisRecipe.__init__" class="source">
-    <pre><code>def __init__(self):
-    """Create an Image-based recipe."""
-    raise NotImplementedError()
-</code></pre>
-  </div>
-</div>
-
-  </div>
-  
-            
-  <div class="item">
-    <div class="name def" id="honeybeex.honeybee.radiance.recipe.imagebased.HBImageBasedAnalysisRecipe.hbObjectsToRadString">
-    <p>def <span class="ident">hbObjectsToRadString</span>(</p><p>self)</p>
-    </div>
-    
-
-    
-  
-    <div class="desc"><p>Return geometries and materials as a tuple of multiline string.</p>
-<p>Returns:
-    A namedTuple of multiline data. Keys are: materials geometries</p>
-<p>Usage:
-    s = self.hbObjectsToRadString()
-    geoString = s.geometries
-    matString = s.materials
-    or
-    s = self.hbObjectsToRadString()
-    matString, geoString = s</p></div>
-  <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.recipe.imagebased.HBImageBasedAnalysisRecipe.hbObjectsToRadString', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeex.honeybee.radiance.recipe.imagebased.HBImageBasedAnalysisRecipe.hbObjectsToRadString" class="source">
-    <pre><code>def hbObjectsToRadString(self):
-    """Return geometries and materials as a tuple of multiline string.
-    Returns:
-        A namedTuple of multiline data. Keys are: materials geometries
-    Usage:
-        s = self.hbObjectsToRadString()
-        geoString = s.geometries
-        matString = s.materials
-        or
-        s = self.hbObjectsToRadString()
-        matString, geoString = s
-    """
-    _radDefinition = namedtuple("RadString", "materials geometries")
-    _matStr = ""
-    _geoStr = ""
-    if len(self.hbObjects) > 0:
-        _materials = []
-        _geos = []
-        for hbo in self.hbObjects:
-            try:
-                # hbzone or HBSurface with child surface returns a list of materials
-                _materials.extend(hbo.radianceMaterial)
-            except:
-                # hb surface with no child surface
-                _materials.append(hbo.radianceMaterial)
-            _geos.append(hbo.toRadString())
-        # remove duplicated materials
-        _materials = set([mat.toRadString() for mat in _materials])
-        _matStr = "\n".join(_materials)
-        # joing geometries
-        _geoStr = "\n".join(_geos)
-        print "Number of total materials: %d" % len(_materials)
-        print "Number of total surfaces: %d" % len(_geos)
-    else:
-        print "Warning: Found no Honeybee objects."
-    return _radDefinition(_matStr, _geoStr)
-</code></pre>
-  </div>
-</div>
-
-  </div>
-  
-            
-  <div class="item">
-    <div class="name def" id="honeybeex.honeybee.radiance.recipe.imagebased.HBImageBasedAnalysisRecipe.toRadString">
-    <p>def <span class="ident">toRadString</span>(</p><p>self)</p>
-    </div>
-    
-
-    
-  
-    <div class="desc"><p>Radiance representation of the recipe.</p></div>
-  <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.recipe.imagebased.HBImageBasedAnalysisRecipe.toRadString', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeex.honeybee.radiance.recipe.imagebased.HBImageBasedAnalysisRecipe.toRadString" class="source">
-    <pre><code>@abstractmethod
-def toRadString(self):
-    """Radiance representation of the recipe."""
-    pass
-</code></pre>
-  </div>
-</div>
-
-  </div>
-  
-            
-  <div class="item">
-    <div class="name def" id="honeybeex.honeybee.radiance.recipe.imagebased.HBImageBasedAnalysisRecipe.writeToFile">
-    <p>def <span class="ident">writeToFile</span>(</p><p>self, targetFolder)</p>
-    </div>
-    
-
-    
-  
-    <div class="desc"><p>Write files for the analysis recipe to file.</p>
-<p>Args:
-    filePath: Full path for a valid file path (e.g. c:/ladybug/testPts.pts)</p>
-<p>Returns:
-    True in case of success. False in case of failure.</p></div>
-  <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.recipe.imagebased.HBImageBasedAnalysisRecipe.writeToFile', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeex.honeybee.radiance.recipe.imagebased.HBImageBasedAnalysisRecipe.writeToFile" class="source">
-    <pre><code>@abstractmethod
-def writeToFile(self, targetFolder):
-    """Write files for the analysis recipe to file.
-    Args:
-        filePath: Full path for a valid file path (e.g. c:/ladybug/testPts.pts)
-    Returns:
-        True in case of success. False in case of failure.
-    """
-    pass
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.energyplus.geometryrules.GlobalGeometryRules.__init__', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.energyplus.geometryrules.GlobalGeometryRules.__init__" class="source">
+    <pre><code>def __init__(self, startingCorner="LowerLeftCorner",
+             direction="CounterClockWise",
+             system="Absolute"):
+    """Init Global Geometry."""
+    self.startingCorner = startingCorner
+    self.direction = direction
+    self.system = system
 </code></pre>
   </div>
 </div>

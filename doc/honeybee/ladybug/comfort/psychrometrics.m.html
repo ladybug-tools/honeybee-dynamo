@@ -3,8 +3,8 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 
-    <title>honeybeex.honeybee.radiance.analysis API documentation</title>
-    <meta name="description" content="Radiance Analysis workflows." />
+    <title>honeybeex.honeybee.ladybug.comfort.psychrometrics API documentation</title>
+    <meta name="description" content="A list of useful functions for psychrometrics" />
 
   <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300' rel='stylesheet' type='text/css'>
 
@@ -985,23 +985,23 @@ table {
     <h1>Index</h1>
     <ul id="index">
 
-
-    <li class="set"><h3><a href="#header-classes">Classes</a></h3>
-      <ul>
-        <li class="mono">
-        <span class="class_name"><a href="#honeybeex.honeybee.radiance.analysis.AnalysisBase">AnalysisBase</a></span>
-        
-          
+    <li class="set"><h3><a href="#header-functions">Functions</a></h3>
+      
   <ul>
-    <li class="mono"><a href="#honeybeex.honeybee.radiance.analysis.AnalysisBase.__init__">__init__</a></li>
-    <li class="mono"><a href="#honeybeex.honeybee.radiance.analysis.AnalysisBase.results">results</a></li>
-    <li class="mono"><a href="#honeybeex.honeybee.radiance.analysis.AnalysisBase.run">run</a></li>
-    <li class="mono"><a href="#honeybeex.honeybee.radiance.analysis.AnalysisBase.write">write</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.ladybug.comfort.psychrometrics.findAirTempFromEnthalpy">findAirTempFromEnthalpy</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.ladybug.comfort.psychrometrics.findAirTempFromWetBulb">findAirTempFromWetBulb</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.ladybug.comfort.psychrometrics.findDewPoint">findDewPoint</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.ladybug.comfort.psychrometrics.findEnthalpy">findEnthalpy</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.ladybug.comfort.psychrometrics.findHumidRatio">findHumidRatio</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.ladybug.comfort.psychrometrics.findRelHumidFromDryBulbDewPt">findRelHumidFromDryBulbDewPt</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.ladybug.comfort.psychrometrics.findRelHumidFromHumidRatio">findRelHumidFromHumidRatio</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.ladybug.comfort.psychrometrics.findSaturatedVaporPressureHighAccuracy">findSaturatedVaporPressureHighAccuracy</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.ladybug.comfort.psychrometrics.findSaturatedVaporPressureTorr">findSaturatedVaporPressureTorr</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.ladybug.comfort.psychrometrics.findWetBulb">findWetBulb</a></li>
   </ul>
 
-        </li>
-      </ul>
     </li>
+
 
     </ul>
   </div>
@@ -1014,389 +1014,177 @@ table {
 
 
   <header id="section-intro">
-  <h1 class="title"><span class="name">honeybeex.honeybee.radiance.analysis</span> module</h1>
-  <p>Radiance Analysis workflows.</p>
+  <h1 class="title"><span class="name">honeybeex.honeybee.ladybug.comfort.psychrometrics</span> module</h1>
+  <p>A list of useful functions for psychrometrics</p>
   
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.analysis', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeex.honeybee.radiance.analysis" class="source">
-    <pre><code>"""Radiance Analysis workflows."""
-from subprocess import Popen
-import time
-import os
-
-
-# TODO: (@sariths) Should we add electrical lighting as an input in rad files.
-class AnalysisBase(object):
-    """Base analysis class for Radiance analysis."""
-
-    def __init__(self, HBObjects, analysisRecipe, otherRADFiles=None):
-        """Create an analysis by HBSky and HBObjects.
-
-        Args:
-            HBSky: A honeybee.radiance.sky
-            analysisRecipe: A honeybee.radiance.analysisRecipe
-            HBObjects: A list of Honeybee surfaces or zones
-            otherRADFiles: An ordered list of additional radiance file to be
-                added to the analysis.
-        """
-        self.__isExecuted = False
-        self.__done = False
-
-    @property
-    def isRunning(self):
-        """Return is analysis is still running."""
-        if not self.__isExecuted:
-            return False
-        return not self.__done
-
-    @property
-    def isOver(self):
-        """Return if analysis is done."""
-        return self.__done
-
-    @property
-    def progress(self):
-        """Return progress value between 0-100."""
-        raise NotImplementedError
-
-    def write(self):
-        """Write analysis files."""
-        raise NotImplementedError
-
-    def run(self, minimize=False):
-        """Run analysis."""
-        self.__isExecuted = True
-        self.__executeBatchFiles(minimize=minimize)
-
-    def results(self):
-        """Get analysis results."""
-        pass
-
-    def __executeBatchFiles(self, batchFiles, maxPRuns=None, minimize=False,
-                            waitingTime=0.5):
-        """Run a list of batch files in parallel.
-
-        Args:
-            batchFiles: List of batch files.
-            maxPRuns: Max number of files to be ran in parallel (default: 1).
-            minimize: Set to True if you want NOT to see the cmd window.
-        """
-        if not maxPRuns:
-            maxPRuns = 1
-        maxPRuns = int(maxPRuns)
-        total = len(batchFiles)
-
-        if maxPRuns < 1:
-            maxPRuns = 1
-        if maxPRuns > total:
-            maxPRuns = total
-
-        running = 0
-        self.__done = False
-        jobs = []
-        pid = 0
-
-        try:
-            while not self.__done:
-                if running < maxPRuns and pid < total:
-                    # execute the files
-                    jobs.append(Popen(os.path.normpath(batchFiles[pid]), shell=minimize))
-                    pid += 1
-                    time.sleep(waitingTime)
-
-                # count how many jobs are running and how many are done
-                running = 0
-                finished = 0
-                for job in jobs:
-                    if job.poll() is None:
-                        # one job is still running
-                        running += 1
-                    else:
-                        finished += 1
-
-                if running == maxPRuns:
-                    # wait for half a second
-                    time.sleep(waitingTime)
-
-                if finished == total:
-                    self.__done = True
-
-        except Exception, e:
-            print "Failed to execute batch files: %s" % str(e)
-
-    def __repr__(self):
-        """Represent Analysis class."""
-        return "honeybee.Analysis.%s" % self.__class__.__name__
-</code></pre>
-  </div>
 
   </header>
 
   <section id="section-items">
 
-
-    <h2 class="section-title" id="header-classes">Classes</h2>
+    <h2 class="section-title" id="header-functions">Functions</h2>
       
-      <div class="item">
-      <p id="honeybeex.honeybee.radiance.analysis.AnalysisBase" class="name">class <span class="ident">AnalysisBase</span></p>
+  <div class="item">
+    <div class="name def" id="honeybeex.honeybee.ladybug.comfort.psychrometrics.findAirTempFromEnthalpy">
+    <p>def <span class="ident">findAirTempFromEnthalpy</span>(</p><p>enthalpy, absHumid)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Calculates Air Temperature (C) at Enthalpy enthalpy (kJ/kg) and Humidity Ratio absHumid (kg water/kg air).</p></div>
+  <div class="source_cont">
+</div>
+
+  </div>
+  
       
-  
-    <div class="desc"><p>Base analysis class for Radiance analysis.</p></div>
-  <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.analysis.AnalysisBase', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeex.honeybee.radiance.analysis.AnalysisBase" class="source">
-    <pre><code>class AnalysisBase(object):
-    """Base analysis class for Radiance analysis."""
-
-    def __init__(self, HBObjects, analysisRecipe, otherRADFiles=None):
-        """Create an analysis by HBSky and HBObjects.
-
-        Args:
-            HBSky: A honeybee.radiance.sky
-            analysisRecipe: A honeybee.radiance.analysisRecipe
-            HBObjects: A list of Honeybee surfaces or zones
-            otherRADFiles: An ordered list of additional radiance file to be
-                added to the analysis.
-        """
-        self.__isExecuted = False
-        self.__done = False
-
-    @property
-    def isRunning(self):
-        """Return is analysis is still running."""
-        if not self.__isExecuted:
-            return False
-        return not self.__done
-
-    @property
-    def isOver(self):
-        """Return if analysis is done."""
-        return self.__done
-
-    @property
-    def progress(self):
-        """Return progress value between 0-100."""
-        raise NotImplementedError
-
-    def write(self):
-        """Write analysis files."""
-        raise NotImplementedError
-
-    def run(self, minimize=False):
-        """Run analysis."""
-        self.__isExecuted = True
-        self.__executeBatchFiles(minimize=minimize)
-
-    def results(self):
-        """Get analysis results."""
-        pass
-
-    def __executeBatchFiles(self, batchFiles, maxPRuns=None, minimize=False,
-                            waitingTime=0.5):
-        """Run a list of batch files in parallel.
-
-        Args:
-            batchFiles: List of batch files.
-            maxPRuns: Max number of files to be ran in parallel (default: 1).
-            minimize: Set to True if you want NOT to see the cmd window.
-        """
-        if not maxPRuns:
-            maxPRuns = 1
-        maxPRuns = int(maxPRuns)
-        total = len(batchFiles)
-
-        if maxPRuns < 1:
-            maxPRuns = 1
-        if maxPRuns > total:
-            maxPRuns = total
-
-        running = 0
-        self.__done = False
-        jobs = []
-        pid = 0
-
-        try:
-            while not self.__done:
-                if running < maxPRuns and pid < total:
-                    # execute the files
-                    jobs.append(Popen(os.path.normpath(batchFiles[pid]), shell=minimize))
-                    pid += 1
-                    time.sleep(waitingTime)
-
-                # count how many jobs are running and how many are done
-                running = 0
-                finished = 0
-                for job in jobs:
-                    if job.poll() is None:
-                        # one job is still running
-                        running += 1
-                    else:
-                        finished += 1
-
-                if running == maxPRuns:
-                    # wait for half a second
-                    time.sleep(waitingTime)
-
-                if finished == total:
-                    self.__done = True
-
-        except Exception, e:
-            print "Failed to execute batch files: %s" % str(e)
-
-    def __repr__(self):
-        """Represent Analysis class."""
-        return "honeybee.Analysis.%s" % self.__class__.__name__
-</code></pre>
-  </div>
-</div>
-
-
-      <div class="class">
-          <h3>Ancestors (in MRO)</h3>
-          <ul class="class_list">
-          <li><a href="#honeybeex.honeybee.radiance.analysis.AnalysisBase">AnalysisBase</a></li>
-          <li>__builtin__.object</li>
-          </ul>
-          <h3>Instance variables</h3>
-            <div class="item">
-            <p id="honeybeex.honeybee.radiance.analysis.AnalysisBase.isOver" class="name">var <span class="ident">isOver</span></p>
-            
-
-            
-  
-    <div class="desc"><p>Return if analysis is done.</p></div>
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="honeybeex.honeybee.radiance.analysis.AnalysisBase.isRunning" class="name">var <span class="ident">isRunning</span></p>
-            
-
-            
-  
-    <div class="desc"><p>Return is analysis is still running.</p></div>
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="honeybeex.honeybee.radiance.analysis.AnalysisBase.progress" class="name">var <span class="ident">progress</span></p>
-            
-
-            
-  
-    <div class="desc"><p>Return progress value between 0-100.</p></div>
-  <div class="source_cont">
-</div>
-
-            </div>
-          <h3>Methods</h3>
-            
   <div class="item">
-    <div class="name def" id="honeybeex.honeybee.radiance.analysis.AnalysisBase.__init__">
-    <p>def <span class="ident">__init__</span>(</p><p>self, HBObjects, analysisRecipe, otherRADFiles=None)</p>
+    <div class="name def" id="honeybeex.honeybee.ladybug.comfort.psychrometrics.findAirTempFromWetBulb">
+    <p>def <span class="ident">findAirTempFromWetBulb</span>(</p><p>wetBulb, relHumid, avgBarPress=101325)</p>
     </div>
     
 
     
   
-    <div class="desc"><p>Create an analysis by HBSky and HBObjects.</p>
-<p>Args:
-    HBSky: A honeybee.radiance.sky
-    analysisRecipe: A honeybee.radiance.analysisRecipe
-    HBObjects: A list of Honeybee surfaces or zones
-    otherRADFiles: An ordered list of additional radiance file to be
-        added to the analysis.</p></div>
+    <div class="desc"><p>Calculates Air Temperature (C) at Wet Bulb Temperature wetBulb (C), Relative Humidity relHumid (%)
+and Barometric Pressure avgBarPress (Pa).</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.analysis.AnalysisBase.__init__', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeex.honeybee.radiance.analysis.AnalysisBase.__init__" class="source">
-    <pre><code>def __init__(self, HBObjects, analysisRecipe, otherRADFiles=None):
-    """Create an analysis by HBSky and HBObjects.
-    Args:
-        HBSky: A honeybee.radiance.sky
-        analysisRecipe: A honeybee.radiance.analysisRecipe
-        HBObjects: A list of Honeybee surfaces or zones
-        otherRADFiles: An ordered list of additional radiance file to be
-            added to the analysis.
-    """
-    self.__isExecuted = False
-    self.__done = False
-</code></pre>
-  </div>
 </div>
 
   </div>
   
-            
+      
   <div class="item">
-    <div class="name def" id="honeybeex.honeybee.radiance.analysis.AnalysisBase.results">
-    <p>def <span class="ident">results</span>(</p><p>self)</p>
+    <div class="name def" id="honeybeex.honeybee.ladybug.comfort.psychrometrics.findDewPoint">
+    <p>def <span class="ident">findDewPoint</span>(</p><p>dbTemp, RH)</p>
     </div>
     
 
     
   
-    <div class="desc"><p>Get analysis results.</p></div>
+    <div class="desc"><p>Calculates Dew Point Temperature (C) at Temperature dbTemp (C) and
+Relative Humidity RH (%).</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.analysis.AnalysisBase.results', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeex.honeybee.radiance.analysis.AnalysisBase.results" class="source">
-    <pre><code>def results(self):
-    """Get analysis results."""
-    pass
-</code></pre>
-  </div>
 </div>
 
   </div>
   
-            
+      
   <div class="item">
-    <div class="name def" id="honeybeex.honeybee.radiance.analysis.AnalysisBase.run">
-    <p>def <span class="ident">run</span>(</p><p>self, minimize=False)</p>
+    <div class="name def" id="honeybeex.honeybee.ladybug.comfort.psychrometrics.findEnthalpy">
+    <p>def <span class="ident">findEnthalpy</span>(</p><p>airTemp, humidRatio)</p>
     </div>
     
 
     
   
-    <div class="desc"><p>Run analysis.</p></div>
+    <div class="desc"><p>Calculates Enthalpy (kJ/kg) at Humidity Ratio humidRatio (kg water/kg air)
+and at Temperature airTemp (C).</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.analysis.AnalysisBase.run', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeex.honeybee.radiance.analysis.AnalysisBase.run" class="source">
-    <pre><code>def run(self, minimize=False):
-    """Run analysis."""
-    self.__isExecuted = True
-    self.__executeBatchFiles(minimize=minimize)
-</code></pre>
-  </div>
 </div>
 
   </div>
   
-            
+      
   <div class="item">
-    <div class="name def" id="honeybeex.honeybee.radiance.analysis.AnalysisBase.write">
-    <p>def <span class="ident">write</span>(</p><p>self)</p>
+    <div class="name def" id="honeybeex.honeybee.ladybug.comfort.psychrometrics.findHumidRatio">
+    <p>def <span class="ident">findHumidRatio</span>(</p><p>airTemp, relHumid, barPress=101325)</p>
     </div>
     
 
     
   
-    <div class="desc"><p>Write analysis files.</p></div>
+    <div class="desc"><p>Calculates Humidity Ratio (kg water/kg air), Partial Pressure (Pa), and
+saturationPressure (Pa) at a given
+at Temperature airTemp (C), Relative Humidity relHumid (%),
+and Barometric Pressure barPress (Pa).</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.analysis.AnalysisBase.write', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeex.honeybee.radiance.analysis.AnalysisBase.write" class="source">
-    <pre><code>def write(self):
-    """Write analysis files."""
-    raise NotImplementedError
-</code></pre>
-  </div>
 </div>
 
   </div>
   
-      </div>
-      </div>
+      
+  <div class="item">
+    <div class="name def" id="honeybeex.honeybee.ladybug.comfort.psychrometrics.findRelHumidFromDryBulbDewPt">
+    <p>def <span class="ident">findRelHumidFromDryBulbDewPt</span>(</p><p>airTemp, dewPt)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Calculates Relative Humidity (%) at Temperature airTemp (C), and Dew Point dewPt (C).</p></div>
+  <div class="source_cont">
+</div>
+
+  </div>
+  
+      
+  <div class="item">
+    <div class="name def" id="honeybeex.honeybee.ladybug.comfort.psychrometrics.findRelHumidFromHumidRatio">
+    <p>def <span class="ident">findRelHumidFromHumidRatio</span>(</p><p>absHumid, airTemp, barPress=101325)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Calculates Relative Humidity (%) at Humidity Ratio absHumid (kg water/kg air),
+Temperature airTemp (C), and Barometric Pressure barPress (Pa).</p></div>
+  <div class="source_cont">
+</div>
+
+  </div>
+  
+      
+  <div class="item">
+    <div class="name def" id="honeybeex.honeybee.ladybug.comfort.psychrometrics.findSaturatedVaporPressureHighAccuracy">
+    <p>def <span class="ident">findSaturatedVaporPressureHighAccuracy</span>(</p><p>tKelvin)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Calculates Saturated Vapor Pressure (Pa) at Temperature tKelvin (K)
+to a high accuracy.  The function accounts for the different behaviour of above
+and below the freezing point of water.</p></div>
+  <div class="source_cont">
+</div>
+
+  </div>
+  
+      
+  <div class="item">
+    <div class="name def" id="honeybeex.honeybee.ladybug.comfort.psychrometrics.findSaturatedVaporPressureTorr">
+    <p>def <span class="ident">findSaturatedVaporPressureTorr</span>(</p><p>T)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Calculates Saturated Vapor Pressure (Torr) at Temperature T (C)
+Used frequently throughtout the pmv comfort functions.</p></div>
+  <div class="source_cont">
+</div>
+
+  </div>
+  
+      
+  <div class="item">
+    <div class="name def" id="honeybeex.honeybee.ladybug.comfort.psychrometrics.findWetBulb">
+    <p>def <span class="ident">findWetBulb</span>(</p><p>dbTemp, RH, Psta=101325)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Calculates Wet Bulb Temperature (C) at Temperature dbTemp (C),
+Relative Humidity RH (%), and Barometric Pressure Psta (Pa).</p></div>
+  <div class="source_cont">
+</div>
+
+  </div>
+  
+
 
   </section>
 
