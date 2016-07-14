@@ -991,30 +991,65 @@ table {
         <li class="mono">
         <span class="class_name"><a href="#honeybeex.honeybee.surfacetype.AirWall">AirWall</a></span>
         
+          
+  <ul>
+    <li class="mono"><a href="#honeybeex.honeybee.surfacetype.AirWall.ToString">ToString</a></li>
+  </ul>
+
         </li>
         <li class="mono">
         <span class="class_name"><a href="#honeybeex.honeybee.surfacetype.Ceiling">Ceiling</a></span>
         
+          
+  <ul>
+    <li class="mono"><a href="#honeybeex.honeybee.surfacetype.Ceiling.ToString">ToString</a></li>
+  </ul>
+
         </li>
         <li class="mono">
         <span class="class_name"><a href="#honeybeex.honeybee.surfacetype.Context">Context</a></span>
         
+          
+  <ul>
+    <li class="mono"><a href="#honeybeex.honeybee.surfacetype.Context.ToString">ToString</a></li>
+  </ul>
+
         </li>
         <li class="mono">
         <span class="class_name"><a href="#honeybeex.honeybee.surfacetype.ExposedFloor">ExposedFloor</a></span>
         
+          
+  <ul>
+    <li class="mono"><a href="#honeybeex.honeybee.surfacetype.ExposedFloor.ToString">ToString</a></li>
+  </ul>
+
         </li>
         <li class="mono">
         <span class="class_name"><a href="#honeybeex.honeybee.surfacetype.Floor">Floor</a></span>
         
+          
+  <ul>
+    <li class="mono"><a href="#honeybeex.honeybee.surfacetype.Floor.ToString">ToString</a></li>
+  </ul>
+
         </li>
         <li class="mono">
         <span class="class_name"><a href="#honeybeex.honeybee.surfacetype.Roof">Roof</a></span>
         
+          
+  <ul>
+    <li class="mono"><a href="#honeybeex.honeybee.surfacetype.Roof.ToString">ToString</a></li>
+  </ul>
+
         </li>
         <li class="mono">
         <span class="class_name"><a href="#honeybeex.honeybee.surfacetype.SlabOnGrade">SlabOnGrade</a></span>
         
+          
+  <ul>
+    <li class="mono"><a href="#honeybeex.honeybee.surfacetype.SlabOnGrade.ToString">ToString</a></li>
+  </ul>
+
         </li>
         <li class="mono">
         <span class="class_name"><a href="#honeybeex.honeybee.surfacetype.SurfaceTypes">SurfaceTypes</a></span>
@@ -1033,26 +1068,56 @@ table {
         <li class="mono">
         <span class="class_name"><a href="#honeybeex.honeybee.surfacetype.UndergroundCeiling">UndergroundCeiling</a></span>
         
+          
+  <ul>
+    <li class="mono"><a href="#honeybeex.honeybee.surfacetype.UndergroundCeiling.ToString">ToString</a></li>
+  </ul>
+
         </li>
         <li class="mono">
         <span class="class_name"><a href="#honeybeex.honeybee.surfacetype.UndergroundSlab">UndergroundSlab</a></span>
         
+          
+  <ul>
+    <li class="mono"><a href="#honeybeex.honeybee.surfacetype.UndergroundSlab.ToString">ToString</a></li>
+  </ul>
+
         </li>
         <li class="mono">
         <span class="class_name"><a href="#honeybeex.honeybee.surfacetype.UndergroundWall">UndergroundWall</a></span>
         
+          
+  <ul>
+    <li class="mono"><a href="#honeybeex.honeybee.surfacetype.UndergroundWall.ToString">ToString</a></li>
+  </ul>
+
         </li>
         <li class="mono">
         <span class="class_name"><a href="#honeybeex.honeybee.surfacetype.Wall">Wall</a></span>
         
+          
+  <ul>
+    <li class="mono"><a href="#honeybeex.honeybee.surfacetype.Wall.ToString">ToString</a></li>
+  </ul>
+
         </li>
         <li class="mono">
         <span class="class_name"><a href="#honeybeex.honeybee.surfacetype.Window">Window</a></span>
         
+          
+  <ul>
+    <li class="mono"><a href="#honeybeex.honeybee.surfacetype.Window.ToString">ToString</a></li>
+  </ul>
+
         </li>
         <li class="mono">
         <span class="class_name"><a href="#honeybeex.honeybee.surfacetype.surfaceTypeBase">surfaceTypeBase</a></span>
         
+          
+  <ul>
+    <li class="mono"><a href="#honeybeex.honeybee.surfacetype.surfaceTypeBase.ToString">ToString</a></li>
+  </ul>
+
         </li>
       </ul>
     </li>
@@ -1089,6 +1154,10 @@ class surfaceTypeBase(object):
     """Default Radiance material."""
     energyPlusConstruction = None
     """Default EnergyPlus Construction."""
+
+    def ToString(self):
+        """Overwrite .NET ToString method."""
+        return self.__repr__()
 
     def __repr__(self):
         """Return class name."""
@@ -1439,6 +1508,33 @@ class SurfaceTypes(object):
 </div>
 
             </div>
+          <h3>Methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="honeybeex.honeybee.surfacetype.AirWall.ToString">
+    <p>def <span class="ident">ToString</span>(</p><p>self)</p>
+    </div>
+    
+    <p class="inheritance">
+     <strong>Inheritance:</strong>
+       <code><a href="#honeybeex.honeybee.surfacetype.surfaceTypeBase">surfaceTypeBase</a></code>.<code><a href="#honeybeex.honeybee.surfacetype.surfaceTypeBase.ToString">ToString</a></code>
+    </p>
+
+    
+  
+    <div class="desc inherited"><p>Overwrite .NET ToString method.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.surfacetype.AirWall.ToString', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.surfacetype.AirWall.ToString" class="source">
+    <pre><code>def ToString(self):
+    """Overwrite .NET ToString method."""
+    return self.__repr__()
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
       </div>
       </div>
       
@@ -1515,6 +1611,33 @@ class SurfaceTypes(object):
 </div>
 
             </div>
+          <h3>Methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="honeybeex.honeybee.surfacetype.Ceiling.ToString">
+    <p>def <span class="ident">ToString</span>(</p><p>self)</p>
+    </div>
+    
+    <p class="inheritance">
+     <strong>Inheritance:</strong>
+       <code><a href="#honeybeex.honeybee.surfacetype.surfaceTypeBase">surfaceTypeBase</a></code>.<code><a href="#honeybeex.honeybee.surfacetype.surfaceTypeBase.ToString">ToString</a></code>
+    </p>
+
+    
+  
+    <div class="desc inherited"><p>Overwrite .NET ToString method.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.surfacetype.Ceiling.ToString', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.surfacetype.Ceiling.ToString" class="source">
+    <pre><code>def ToString(self):
+    """Overwrite .NET ToString method."""
+    return self.__repr__()
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
       </div>
       </div>
       
@@ -1591,6 +1714,33 @@ class SurfaceTypes(object):
 </div>
 
             </div>
+          <h3>Methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="honeybeex.honeybee.surfacetype.Context.ToString">
+    <p>def <span class="ident">ToString</span>(</p><p>self)</p>
+    </div>
+    
+    <p class="inheritance">
+     <strong>Inheritance:</strong>
+       <code><a href="#honeybeex.honeybee.surfacetype.surfaceTypeBase">surfaceTypeBase</a></code>.<code><a href="#honeybeex.honeybee.surfacetype.surfaceTypeBase.ToString">ToString</a></code>
+    </p>
+
+    
+  
+    <div class="desc inherited"><p>Overwrite .NET ToString method.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.surfacetype.Context.ToString', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.surfacetype.Context.ToString" class="source">
+    <pre><code>def ToString(self):
+    """Overwrite .NET ToString method."""
+    return self.__repr__()
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
       </div>
       </div>
       
@@ -1671,6 +1821,33 @@ class SurfaceTypes(object):
 </div>
 
             </div>
+          <h3>Methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="honeybeex.honeybee.surfacetype.ExposedFloor.ToString">
+    <p>def <span class="ident">ToString</span>(</p><p>self)</p>
+    </div>
+    
+    <p class="inheritance">
+     <strong>Inheritance:</strong>
+       <code><a href="#honeybeex.honeybee.surfacetype.surfaceTypeBase">surfaceTypeBase</a></code>.<code><a href="#honeybeex.honeybee.surfacetype.surfaceTypeBase.ToString">ToString</a></code>
+    </p>
+
+    
+  
+    <div class="desc inherited"><p>Overwrite .NET ToString method.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.surfacetype.ExposedFloor.ToString', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.surfacetype.ExposedFloor.ToString" class="source">
+    <pre><code>def ToString(self):
+    """Overwrite .NET ToString method."""
+    return self.__repr__()
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
       </div>
       </div>
       
@@ -1747,6 +1924,33 @@ class SurfaceTypes(object):
 </div>
 
             </div>
+          <h3>Methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="honeybeex.honeybee.surfacetype.Floor.ToString">
+    <p>def <span class="ident">ToString</span>(</p><p>self)</p>
+    </div>
+    
+    <p class="inheritance">
+     <strong>Inheritance:</strong>
+       <code><a href="#honeybeex.honeybee.surfacetype.surfaceTypeBase">surfaceTypeBase</a></code>.<code><a href="#honeybeex.honeybee.surfacetype.surfaceTypeBase.ToString">ToString</a></code>
+    </p>
+
+    
+  
+    <div class="desc inherited"><p>Overwrite .NET ToString method.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.surfacetype.Floor.ToString', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.surfacetype.Floor.ToString" class="source">
+    <pre><code>def ToString(self):
+    """Overwrite .NET ToString method."""
+    return self.__repr__()
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
       </div>
       </div>
       
@@ -1823,6 +2027,33 @@ class SurfaceTypes(object):
 </div>
 
             </div>
+          <h3>Methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="honeybeex.honeybee.surfacetype.Roof.ToString">
+    <p>def <span class="ident">ToString</span>(</p><p>self)</p>
+    </div>
+    
+    <p class="inheritance">
+     <strong>Inheritance:</strong>
+       <code><a href="#honeybeex.honeybee.surfacetype.surfaceTypeBase">surfaceTypeBase</a></code>.<code><a href="#honeybeex.honeybee.surfacetype.surfaceTypeBase.ToString">ToString</a></code>
+    </p>
+
+    
+  
+    <div class="desc inherited"><p>Overwrite .NET ToString method.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.surfacetype.Roof.ToString', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.surfacetype.Roof.ToString" class="source">
+    <pre><code>def ToString(self):
+    """Overwrite .NET ToString method."""
+    return self.__repr__()
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
       </div>
       </div>
       
@@ -1903,6 +2134,33 @@ class SurfaceTypes(object):
 </div>
 
             </div>
+          <h3>Methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="honeybeex.honeybee.surfacetype.SlabOnGrade.ToString">
+    <p>def <span class="ident">ToString</span>(</p><p>self)</p>
+    </div>
+    
+    <p class="inheritance">
+     <strong>Inheritance:</strong>
+       <code><a href="#honeybeex.honeybee.surfacetype.surfaceTypeBase">surfaceTypeBase</a></code>.<code><a href="#honeybeex.honeybee.surfacetype.surfaceTypeBase.ToString">ToString</a></code>
+    </p>
+
+    
+  
+    <div class="desc inherited"><p>Overwrite .NET ToString method.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.surfacetype.SlabOnGrade.ToString', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.surfacetype.SlabOnGrade.ToString" class="source">
+    <pre><code>def ToString(self):
+    """Overwrite .NET ToString method."""
+    return self.__repr__()
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
       </div>
       </div>
       
@@ -2370,6 +2628,33 @@ def getTypeByKey(cls, key):
 </div>
 
             </div>
+          <h3>Methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="honeybeex.honeybee.surfacetype.UndergroundCeiling.ToString">
+    <p>def <span class="ident">ToString</span>(</p><p>self)</p>
+    </div>
+    
+    <p class="inheritance">
+     <strong>Inheritance:</strong>
+       <code><a href="#honeybeex.honeybee.surfacetype.surfaceTypeBase">surfaceTypeBase</a></code>.<code><a href="#honeybeex.honeybee.surfacetype.surfaceTypeBase.ToString">ToString</a></code>
+    </p>
+
+    
+  
+    <div class="desc inherited"><p>Overwrite .NET ToString method.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.surfacetype.UndergroundCeiling.ToString', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.surfacetype.UndergroundCeiling.ToString" class="source">
+    <pre><code>def ToString(self):
+    """Overwrite .NET ToString method."""
+    return self.__repr__()
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
       </div>
       </div>
       
@@ -2450,6 +2735,33 @@ def getTypeByKey(cls, key):
 </div>
 
             </div>
+          <h3>Methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="honeybeex.honeybee.surfacetype.UndergroundSlab.ToString">
+    <p>def <span class="ident">ToString</span>(</p><p>self)</p>
+    </div>
+    
+    <p class="inheritance">
+     <strong>Inheritance:</strong>
+       <code><a href="#honeybeex.honeybee.surfacetype.surfaceTypeBase">surfaceTypeBase</a></code>.<code><a href="#honeybeex.honeybee.surfacetype.surfaceTypeBase.ToString">ToString</a></code>
+    </p>
+
+    
+  
+    <div class="desc inherited"><p>Overwrite .NET ToString method.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.surfacetype.UndergroundSlab.ToString', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.surfacetype.UndergroundSlab.ToString" class="source">
+    <pre><code>def ToString(self):
+    """Overwrite .NET ToString method."""
+    return self.__repr__()
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
       </div>
       </div>
       
@@ -2526,6 +2838,33 @@ def getTypeByKey(cls, key):
 </div>
 
             </div>
+          <h3>Methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="honeybeex.honeybee.surfacetype.UndergroundWall.ToString">
+    <p>def <span class="ident">ToString</span>(</p><p>self)</p>
+    </div>
+    
+    <p class="inheritance">
+     <strong>Inheritance:</strong>
+       <code><a href="#honeybeex.honeybee.surfacetype.surfaceTypeBase">surfaceTypeBase</a></code>.<code><a href="#honeybeex.honeybee.surfacetype.surfaceTypeBase.ToString">ToString</a></code>
+    </p>
+
+    
+  
+    <div class="desc inherited"><p>Overwrite .NET ToString method.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.surfacetype.UndergroundWall.ToString', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.surfacetype.UndergroundWall.ToString" class="source">
+    <pre><code>def ToString(self):
+    """Overwrite .NET ToString method."""
+    return self.__repr__()
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
       </div>
       </div>
       
@@ -2602,6 +2941,33 @@ def getTypeByKey(cls, key):
 </div>
 
             </div>
+          <h3>Methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="honeybeex.honeybee.surfacetype.Wall.ToString">
+    <p>def <span class="ident">ToString</span>(</p><p>self)</p>
+    </div>
+    
+    <p class="inheritance">
+     <strong>Inheritance:</strong>
+       <code><a href="#honeybeex.honeybee.surfacetype.surfaceTypeBase">surfaceTypeBase</a></code>.<code><a href="#honeybeex.honeybee.surfacetype.surfaceTypeBase.ToString">ToString</a></code>
+    </p>
+
+    
+  
+    <div class="desc inherited"><p>Overwrite .NET ToString method.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.surfacetype.Wall.ToString', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.surfacetype.Wall.ToString" class="source">
+    <pre><code>def ToString(self):
+    """Overwrite .NET ToString method."""
+    return self.__repr__()
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
       </div>
       </div>
       
@@ -2678,6 +3044,33 @@ def getTypeByKey(cls, key):
 </div>
 
             </div>
+          <h3>Methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="honeybeex.honeybee.surfacetype.Window.ToString">
+    <p>def <span class="ident">ToString</span>(</p><p>self)</p>
+    </div>
+    
+    <p class="inheritance">
+     <strong>Inheritance:</strong>
+       <code><a href="#honeybeex.honeybee.surfacetype.surfaceTypeBase">surfaceTypeBase</a></code>.<code><a href="#honeybeex.honeybee.surfacetype.surfaceTypeBase.ToString">ToString</a></code>
+    </p>
+
+    
+  
+    <div class="desc inherited"><p>Overwrite .NET ToString method.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.surfacetype.Window.ToString', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.surfacetype.Window.ToString" class="source">
+    <pre><code>def ToString(self):
+    """Overwrite .NET ToString method."""
+    return self.__repr__()
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
       </div>
       </div>
       
@@ -2700,6 +3093,10 @@ def getTypeByKey(cls, key):
     """Default Radiance material."""
     energyPlusConstruction = None
     """Default EnergyPlus Construction."""
+
+    def ToString(self):
+        """Overwrite .NET ToString method."""
+        return self.__repr__()
 
     def __repr__(self):
         """Return class name."""
@@ -2749,6 +3146,29 @@ def getTypeByKey(cls, key):
 </div>
 
             </div>
+          <h3>Methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="honeybeex.honeybee.surfacetype.surfaceTypeBase.ToString">
+    <p>def <span class="ident">ToString</span>(</p><p>self)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Overwrite .NET ToString method.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.surfacetype.surfaceTypeBase.ToString', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.surfacetype.surfaceTypeBase.ToString" class="source">
+    <pre><code>def ToString(self):
+    """Overwrite .NET ToString method."""
+    return self.__repr__()
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
       </div>
       </div>
 

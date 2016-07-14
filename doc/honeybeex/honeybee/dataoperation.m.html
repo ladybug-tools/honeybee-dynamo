@@ -989,6 +989,7 @@ table {
       
   <ul>
     <li class="mono"><a href="#honeybeex.honeybee.dataoperation.flattenTupleList">flattenTupleList</a></li>
+    <li class="mono"><a href="#honeybeex.honeybee.dataoperation.unflatten">unflatten</a></li>
   </ul>
 
     </li>
@@ -1031,6 +1032,23 @@ def flattenTupleList(inputList):
                 yield sub
         else:
             yield el
+
+def unflatten(guide, falttenedInput):
+    """Unflatten a falttened generator.
+
+    Args:
+        guide: A guide list to follow the structure
+        falttenedInput: A flattened iterator object
+
+    Usage:
+
+        guide = iter([["a"], ["b","c","d"], [["e"]], ["f"]])
+        inputList = [0, 1, 2, 3, 4, 5, 6, 7]
+        unflatten(guide, iter(inputList))
+        >> [[0], [1, 2, 3], [[4]], [5]]
+    """
+    return tuple(unflatten(subList, falttenedInput) if isinstance(subList, list)
+                 else next(falttenedInput) for subList in guide)
 </code></pre>
   </div>
 
@@ -1074,6 +1092,50 @@ def flattenTupleList(inputList):
                 yield sub
         else:
             yield el
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+      
+  <div class="item">
+    <div class="name def" id="honeybeex.honeybee.dataoperation.unflatten">
+    <p>def <span class="ident">unflatten</span>(</p><p>guide, falttenedInput)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Unflatten a falttened generator.</p>
+<p>Args:
+    guide: A guide list to follow the structure
+    falttenedInput: A flattened iterator object</p>
+<p>Usage:</p>
+<pre><code>guide = iter([["a"], ["b","c","d"], [["e"]], ["f"]])
+inputList = [0, 1, 2, 3, 4, 5, 6, 7]
+unflatten(guide, iter(inputList))
+&gt;&gt; [[0], [1, 2, 3], [[4]], [5]]
+</code></pre></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.dataoperation.unflatten', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.honeybee.dataoperation.unflatten" class="source">
+    <pre><code>def unflatten(guide, falttenedInput):
+    """Unflatten a falttened generator.
+
+    Args:
+        guide: A guide list to follow the structure
+        falttenedInput: A flattened iterator object
+
+    Usage:
+
+        guide = iter([["a"], ["b","c","d"], [["e"]], ["f"]])
+        inputList = [0, 1, 2, 3, 4, 5, 6, 7]
+        unflatten(guide, iter(inputList))
+        >> [[0], [1, 2, 3], [[4]], [5]]
+    """
+    return tuple(unflatten(subList, falttenedInput) if isinstance(subList, list)
+                 else next(falttenedInput) for subList in guide)
 </code></pre>
   </div>
 </div>

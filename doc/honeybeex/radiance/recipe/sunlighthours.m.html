@@ -3,8 +3,8 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 
-    <title>honeybeex.honeybee.radiance.recipe.daylightfactor API documentation</title>
-    <meta name="description" content="Radiance Analysis Recipes." />
+    <title>honeybeex.radiance.recipe.sunlighthours API documentation</title>
+    <meta name="description" content="" />
 
   <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300' rel='stylesheet' type='text/css'>
 
@@ -989,22 +989,26 @@ table {
     <li class="set"><h3><a href="#header-classes">Classes</a></h3>
       <ul>
         <li class="mono">
-        <span class="class_name"><a href="#honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe">HBDaylightFactorRecipe</a></span>
+        <span class="class_name"><a href="#honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe">SunlightHoursAnalysisRecipe</a></span>
         
           
   <ul>
-    <li class="mono"><a href="#honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.write">write</a></li>
-    <li class="mono"><a href="#honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.__init__">__init__</a></li>
-    <li class="mono"><a href="#honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.createAnalysisPointGroups">createAnalysisPointGroups</a></li>
-    <li class="mono"><a href="#honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.flatten">flatten</a></li>
-    <li class="mono"><a href="#honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.hbObjectsToRadString">hbObjectsToRadString</a></li>
-    <li class="mono"><a href="#honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.results">results</a></li>
-    <li class="mono"><a href="#honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.run">run</a></li>
-    <li class="mono"><a href="#honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.toRadString">toRadString</a></li>
-    <li class="mono"><a href="#honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.updatePointGroups">updatePointGroups</a></li>
-    <li class="mono"><a href="#honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.writeHBObjectsToFile">writeHBObjectsToFile</a></li>
-    <li class="mono"><a href="#honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.writePointsToFile">writePointsToFile</a></li>
-    <li class="mono"><a href="#honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.writeToFile">writeToFile</a></li>
+    <li class="mono"><a href="#honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.write">write</a></li>
+    <li class="mono"><a href="#honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.__init__">__init__</a></li>
+    <li class="mono"><a href="#honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.createAnalysisPointGroups">createAnalysisPointGroups</a></li>
+    <li class="mono"><a href="#honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.flatten">flatten</a></li>
+    <li class="mono"><a href="#honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.fromLBSuns">fromLBSuns</a></li>
+    <li class="mono"><a href="#honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.fromLocationAndAnalysisPeriod">fromLocationAndAnalysisPeriod</a></li>
+    <li class="mono"><a href="#honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.fromLocationAndHoys">fromLocationAndHoys</a></li>
+    <li class="mono"><a href="#honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.hbObjectsToRadString">hbObjectsToRadString</a></li>
+    <li class="mono"><a href="#honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.results">results</a></li>
+    <li class="mono"><a href="#honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.run">run</a></li>
+    <li class="mono"><a href="#honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.toRadString">toRadString</a></li>
+    <li class="mono"><a href="#honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.updatePointGroups">updatePointGroups</a></li>
+    <li class="mono"><a href="#honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.writeHBObjectsToFile">writeHBObjectsToFile</a></li>
+    <li class="mono"><a href="#honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.writePointsToFile">writePointsToFile</a></li>
+    <li class="mono"><a href="#honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.writeSunsToFile">writeSunsToFile</a></li>
+    <li class="mono"><a href="#honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.writeToFile">writeToFile</a></li>
   </ul>
 
         </li>
@@ -1022,22 +1026,96 @@ table {
 
 
   <header id="section-intro">
-  <h1 class="title"><span class="name">honeybeex.honeybee.radiance.recipe.daylightfactor</span> module</h1>
-  <p>Radiance Analysis Recipes.</p>
+  <h1 class="title"><span class="name">honeybeex.radiance.recipe.sunlighthours</span> module</h1>
   
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.recipe.daylightfactor', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeex.honeybee.radiance.recipe.daylightfactor" class="source">
-    <pre><code>"""Radiance Analysis Recipes."""
+  
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.radiance.recipe.sunlighthours', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.radiance.recipe.sunlighthours" class="source">
+    <pre><code>from ...honeybee.radiance.recipe.sunlighthours import HBSunlightHoursAnalysisRecipe
+from ...honeybee.ladybug.sunpath import LBSunpath
+from ._sensor import SensorGroup
 
-from gridbased import HBGridBasedAnalysisRecipe
 
+class SunlightHoursAnalysisRecipe(HBSunlightHoursAnalysisRecipe):
+    """Sunlight hour analysis.
 
-class HBDaylightFactorRecipe(HBGridBasedAnalysisRecipe):
-    """Daylight Factor Recipe."""
+    This class calculates number of sunlight hours for a group of test points.
 
-    def __init__(self):
-        """Create daylight factor recipe."""
-        raise NotImplementedError()
+    Attributes:
+        sunVectors: A list of ladybug sun vectors as (x, y, z) values. Z value
+            for sun vectors should be negative (coming from sun toward earth)
+        pointGroupsT: A Grasshopper DataTree of Point3d test points. Each branch
+            of test points will be converted to a TestPointGroup.
+        vectorGroupsT: A DataTree of Vector3d vectors. Each vector represents direction
+            of corresponding point in testPts. If the vector is not provided (0, 0, 1)
+            will be assigned.
+        timestep: The number of timesteps per hour for sun vectors. This number
+            should be smaller than 60 and divisible by 60. The default is set to
+            1 such that one sun vector is generated for each hour (Default: 1).
+    """
+
+    def __init__(self, sunVectors, pointGroupsT, vectorGroupsT=[], timestep=1):
+        """Create sunlighthours recipe."""
+        # convert DataTrees to lists
+        pointGroups, vectorGroups = \
+            SensorGroup().matchPointsAndVectors(pointGroupsT, vectorGroupsT)
+
+        if len(pointGroups) == 0:
+            print "No test points!"
+
+        HBSunlightHoursAnalysisRecipe.__init__(self, sunVectors, pointGroups,
+                                               vectorGroups, timestep)
+
+    @classmethod
+    def fromLBSuns(cls, suns, pointGroups, vectorGroups=[], timestep=1,
+                   hbObjects=None, subFolder="sunlighthour"):
+        """Create sunlighthours recipe from LB sun objects.
+
+        Attributes:
+            suns: A list of ladybug suns.
+            pointGroups: A list of (x, y, z) test points or lists of (x, y, z) test
+                points. Each list of test points will be converted to a
+                TestPointGroup. If testPts is a single flattened list only one
+                TestPointGroup will be created.
+            vectorGroups: An optional list of (x, y, z) vectors. Each vector
+                represents direction of corresponding point in testPts. If the
+                vector is not provided (0, 0, 1) will be assigned.
+            timestep: The number of timesteps per hour for sun vectors. This number
+                should be smaller than 60 and divisible by 60. The default is set to
+                1 such that one sun vector is generated for each hour (Default: 1).
+        """
+        try:
+            sunVectors = [s.sunVector for s in suns if s.isDuringDay]
+        except AttributeError:
+            raise ValueError("%s is not a valid LBSun" % s)
+
+        return cls(sunVectors, pointGroups, vectorGroups, timestep)
+
+    @classmethod
+    def fromLocationAndHoys(cls, location, HOYs, pointGroups, vectorGroups=[],
+                            timestep=1):
+        """Create sunlighthours recipe from Location and hours of year."""
+        sp = LBSunpath.fromLocation(location)
+
+        suns = [sp.calculateSunFromHOY(HOY) for HOY in HOYs]
+
+        sunVectors = [s.sunVector for s in suns if s.isDuringDay]
+
+        return cls(sunVectors, pointGroups, vectorGroups, timestep)
+
+    @classmethod
+    def fromLocationAndAnalysisPeriod(
+        cls, location, analysisPeriod, pointGroups, vectorGroups=[]
+    ):
+        """Create sunlighthours recipe from Location and analysis period."""
+        sp = LBSunpath.fromLocation(location)
+
+        suns = [sp.calculateSunFromHOY(HOY) for HOY in analysisPeriod.floatHOYs]
+
+        sunVectors = [s.sunVector for s in suns if s.isDuringDay]
+
+        return cls(sunVectors, pointGroups, vectorGroups,
+                   analysisPeriod.timestep)
 </code></pre>
   </div>
 
@@ -1049,19 +1127,105 @@ class HBDaylightFactorRecipe(HBGridBasedAnalysisRecipe):
     <h2 class="section-title" id="header-classes">Classes</h2>
       
       <div class="item">
-      <p id="honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe" class="name">class <span class="ident">HBDaylightFactorRecipe</span></p>
+      <p id="honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe" class="name">class <span class="ident">SunlightHoursAnalysisRecipe</span></p>
       
   
-    <div class="desc"><p>Daylight Factor Recipe.</p></div>
+    <div class="desc"><p>Sunlight hour analysis.</p>
+<p>This class calculates number of sunlight hours for a group of test points.</p>
+<p>Attributes:
+    sunVectors: A list of ladybug sun vectors as (x, y, z) values. Z value
+        for sun vectors should be negative (coming from sun toward earth)
+    pointGroupsT: A Grasshopper DataTree of Point3d test points. Each branch
+        of test points will be converted to a TestPointGroup.
+    vectorGroupsT: A DataTree of Vector3d vectors. Each vector represents direction
+        of corresponding point in testPts. If the vector is not provided (0, 0, 1)
+        will be assigned.
+    timestep: The number of timesteps per hour for sun vectors. This number
+        should be smaller than 60 and divisible by 60. The default is set to
+        1 such that one sun vector is generated for each hour (Default: 1).</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe" class="source">
-    <pre><code>class HBDaylightFactorRecipe(HBGridBasedAnalysisRecipe):
-    """Daylight Factor Recipe."""
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe" class="source">
+    <pre><code>class SunlightHoursAnalysisRecipe(HBSunlightHoursAnalysisRecipe):
+    """Sunlight hour analysis.
 
-    def __init__(self):
-        """Create daylight factor recipe."""
-        raise NotImplementedError()
+    This class calculates number of sunlight hours for a group of test points.
+
+    Attributes:
+        sunVectors: A list of ladybug sun vectors as (x, y, z) values. Z value
+            for sun vectors should be negative (coming from sun toward earth)
+        pointGroupsT: A Grasshopper DataTree of Point3d test points. Each branch
+            of test points will be converted to a TestPointGroup.
+        vectorGroupsT: A DataTree of Vector3d vectors. Each vector represents direction
+            of corresponding point in testPts. If the vector is not provided (0, 0, 1)
+            will be assigned.
+        timestep: The number of timesteps per hour for sun vectors. This number
+            should be smaller than 60 and divisible by 60. The default is set to
+            1 such that one sun vector is generated for each hour (Default: 1).
+    """
+
+    def __init__(self, sunVectors, pointGroupsT, vectorGroupsT=[], timestep=1):
+        """Create sunlighthours recipe."""
+        # convert DataTrees to lists
+        pointGroups, vectorGroups = \
+            SensorGroup().matchPointsAndVectors(pointGroupsT, vectorGroupsT)
+
+        if len(pointGroups) == 0:
+            print "No test points!"
+
+        HBSunlightHoursAnalysisRecipe.__init__(self, sunVectors, pointGroups,
+                                               vectorGroups, timestep)
+
+    @classmethod
+    def fromLBSuns(cls, suns, pointGroups, vectorGroups=[], timestep=1,
+                   hbObjects=None, subFolder="sunlighthour"):
+        """Create sunlighthours recipe from LB sun objects.
+
+        Attributes:
+            suns: A list of ladybug suns.
+            pointGroups: A list of (x, y, z) test points or lists of (x, y, z) test
+                points. Each list of test points will be converted to a
+                TestPointGroup. If testPts is a single flattened list only one
+                TestPointGroup will be created.
+            vectorGroups: An optional list of (x, y, z) vectors. Each vector
+                represents direction of corresponding point in testPts. If the
+                vector is not provided (0, 0, 1) will be assigned.
+            timestep: The number of timesteps per hour for sun vectors. This number
+                should be smaller than 60 and divisible by 60. The default is set to
+                1 such that one sun vector is generated for each hour (Default: 1).
+        """
+        try:
+            sunVectors = [s.sunVector for s in suns if s.isDuringDay]
+        except AttributeError:
+            raise ValueError("%s is not a valid LBSun" % s)
+
+        return cls(sunVectors, pointGroups, vectorGroups, timestep)
+
+    @classmethod
+    def fromLocationAndHoys(cls, location, HOYs, pointGroups, vectorGroups=[],
+                            timestep=1):
+        """Create sunlighthours recipe from Location and hours of year."""
+        sp = LBSunpath.fromLocation(location)
+
+        suns = [sp.calculateSunFromHOY(HOY) for HOY in HOYs]
+
+        sunVectors = [s.sunVector for s in suns if s.isDuringDay]
+
+        return cls(sunVectors, pointGroups, vectorGroups, timestep)
+
+    @classmethod
+    def fromLocationAndAnalysisPeriod(
+        cls, location, analysisPeriod, pointGroups, vectorGroups=[]
+    ):
+        """Create sunlighthours recipe from Location and analysis period."""
+        sp = LBSunpath.fromLocation(location)
+
+        suns = [sp.calculateSunFromHOY(HOY) for HOY in analysisPeriod.floatHOYs]
+
+        sunVectors = [s.sunVector for s in suns if s.isDuringDay]
+
+        return cls(sunVectors, pointGroups, vectorGroups,
+                   analysisPeriod.timestep)
 </code></pre>
   </div>
 </div>
@@ -1070,15 +1234,16 @@ class HBDaylightFactorRecipe(HBGridBasedAnalysisRecipe):
       <div class="class">
           <h3>Ancestors (in MRO)</h3>
           <ul class="class_list">
-          <li><a href="#honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe">HBDaylightFactorRecipe</a></li>
-          <li>honeybeex.honeybee.radiance.recipe.gridbased.HBGridBasedAnalysisRecipe</li>
-          <li>honeybeex.honeybee.radiance.recipe.recipeBase.HBDaylightAnalysisRecipe</li>
+          <li><a href="#honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe">SunlightHoursAnalysisRecipe</a></li>
+          <li>honeybeex.honeybee.radiance.recipe.sunlighthours.HBSunlightHoursAnalysisRecipe</li>
+          <li>honeybeex.honeybee.radiance.recipe._gridbasedbase.HBGenericGridBasedAnalysisRecipe</li>
+          <li>honeybeex.honeybee.radiance.recipe._recipebase.HBDaylightAnalysisRecipe</li>
           <li>__builtin__.object</li>
           </ul>
           <h3>Static methods</h3>
             
   <div class="item">
-    <div class="name def" id="honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.write">
+    <div class="name def" id="honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.write">
     <p>def <span class="ident">write</span>(</p><p>filePath, data, mkdir=False)</p>
     </div>
     
@@ -1091,8 +1256,8 @@ class HBDaylightFactorRecipe(HBGridBasedAnalysisRecipe):
     data: Any data as string
     mkdir: Set to True to create the directory if doesn't exist (Default: False)</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.write', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.write" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.write', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.write" class="source">
     <pre><code>@staticmethod
 def write(filePath, data, mkdir=False):
     """Write a string of data to file.
@@ -1122,7 +1287,7 @@ def write(filePath, data, mkdir=False):
   
           <h3>Instance variables</h3>
             <div class="item">
-            <p id="honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.analysisPointsGroups" class="name">var <span class="ident">analysisPointsGroups</span></p>
+            <p id="honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.analysisPointsGroups" class="name">var <span class="ident">analysisPointsGroups</span></p>
             
 
             
@@ -1133,7 +1298,7 @@ def write(filePath, data, mkdir=False):
 
             </div>
             <div class="item">
-            <p id="honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.hbObjects" class="name">var <span class="ident">hbObjects</span></p>
+            <p id="honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.hbObjects" class="name">var <span class="ident">hbObjects</span></p>
             
 
             
@@ -1144,7 +1309,7 @@ def write(filePath, data, mkdir=False):
 
             </div>
             <div class="item">
-            <p id="honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.isAnalysisRecipe" class="name">var <span class="ident">isAnalysisRecipe</span></p>
+            <p id="honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.isAnalysisRecipe" class="name">var <span class="ident">isAnalysisRecipe</span></p>
             
 
             
@@ -1155,7 +1320,7 @@ def write(filePath, data, mkdir=False):
 
             </div>
             <div class="item">
-            <p id="honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.numOfPointGroups" class="name">var <span class="ident">numOfPointGroups</span></p>
+            <p id="honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.numOfPointGroups" class="name">var <span class="ident">numOfPointGroups</span></p>
             
 
             
@@ -1166,7 +1331,7 @@ def write(filePath, data, mkdir=False):
 
             </div>
             <div class="item">
-            <p id="honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.numOfTotalPoints" class="name">var <span class="ident">numOfTotalPoints</span></p>
+            <p id="honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.numOfTotalPoints" class="name">var <span class="ident">numOfTotalPoints</span></p>
             
 
             
@@ -1177,7 +1342,7 @@ def write(filePath, data, mkdir=False):
 
             </div>
             <div class="item">
-            <p id="honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.pointGroups" class="name">var <span class="ident">pointGroups</span></p>
+            <p id="honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.pointGroups" class="name">var <span class="ident">pointGroups</span></p>
             
 
             
@@ -1188,7 +1353,7 @@ def write(filePath, data, mkdir=False):
 
             </div>
             <div class="item">
-            <p id="honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.points" class="name">var <span class="ident">points</span></p>
+            <p id="honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.points" class="name">var <span class="ident">points</span></p>
             
 
             
@@ -1199,41 +1364,7 @@ def write(filePath, data, mkdir=False):
 
             </div>
             <div class="item">
-            <p id="honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.radianceParameters" class="name">var <span class="ident">radianceParameters</span></p>
-            
-
-            
-  
-    <div class="desc"><p>Get and set Radiance parameters.</p></div>
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.simulationType" class="name">var <span class="ident">simulationType</span></p>
-            
-
-            
-  
-    <div class="desc"><p>Get/set simulation Type.</p>
-<p>0: Illuminance(lux), 1: Radiation (kWh), 2: Luminance (Candela) (Default: 0)</p></div>
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.sky" class="name">var <span class="ident">sky</span></p>
-            
-
-            
-  
-    <div class="desc"><p>Get and set sky definition.</p></div>
-  <div class="source_cont">
-</div>
-
-            </div>
-            <div class="item">
-            <p id="honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.subFolder" class="name">var <span class="ident">subFolder</span></p>
+            <p id="honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.subFolder" class="name">var <span class="ident">subFolder</span></p>
             
 
             
@@ -1244,7 +1375,30 @@ def write(filePath, data, mkdir=False):
 
             </div>
             <div class="item">
-            <p id="honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.vectors" class="name">var <span class="ident">vectors</span></p>
+            <p id="honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.sunVectors" class="name">var <span class="ident">sunVectors</span></p>
+            
+
+            
+  
+    <div class="desc"><p>A list of ladybug sun vectors as (x, y, z) values.</p></div>
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.timestep" class="name">var <span class="ident">timestep</span></p>
+            
+
+            
+  
+    <div class="desc"><p>An intger for the number of timesteps per hour for sun vectors.</p>
+<p>This number should be smaller than 60 and divisible by 60.</p></div>
+  <div class="source_cont">
+</div>
+
+            </div>
+            <div class="item">
+            <p id="honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.vectors" class="name">var <span class="ident">vectors</span></p>
             
 
             
@@ -1257,20 +1411,26 @@ def write(filePath, data, mkdir=False):
           <h3>Methods</h3>
             
   <div class="item">
-    <div class="name def" id="honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.__init__">
-    <p>def <span class="ident">__init__</span>(</p><p>self)</p>
+    <div class="name def" id="honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.__init__">
+    <p>def <span class="ident">__init__</span>(</p><p>self, sunVectors, pointGroupsT, vectorGroupsT=[], timestep=1)</p>
     </div>
     
 
     
   
-    <div class="desc"><p>Create daylight factor recipe.</p></div>
+    <div class="desc"><p>Create sunlighthours recipe.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.__init__', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.__init__" class="source">
-    <pre><code>def __init__(self):
-    """Create daylight factor recipe."""
-    raise NotImplementedError()
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.__init__', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.__init__" class="source">
+    <pre><code>def __init__(self, sunVectors, pointGroupsT, vectorGroupsT=[], timestep=1):
+    """Create sunlighthours recipe."""
+    # convert DataTrees to lists
+    pointGroups, vectorGroups = \
+        SensorGroup().matchPointsAndVectors(pointGroupsT, vectorGroupsT)
+    if len(pointGroups) == 0:
+        print "No test points!"
+    HBSunlightHoursAnalysisRecipe.__init__(self, sunVectors, pointGroups,
+                                           vectorGroups, timestep)
 </code></pre>
   </div>
 </div>
@@ -1279,7 +1439,7 @@ def write(filePath, data, mkdir=False):
   
             
   <div class="item">
-    <div class="name def" id="honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.createAnalysisPointGroups">
+    <div class="name def" id="honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.createAnalysisPointGroups">
     <p>def <span class="ident">createAnalysisPointGroups</span>(</p><p>self, pointGroups, vectorGroups)</p>
     </div>
     
@@ -1289,8 +1449,8 @@ def write(filePath, data, mkdir=False):
     <div class="desc"><p>Create AnalysisPointGroups from input points and vectors.</p>
 <p>You can acces AnalysisPointGroups using self.analysisPointsGroups property.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.createAnalysisPointGroups', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.createAnalysisPointGroups" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.createAnalysisPointGroups', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.createAnalysisPointGroups" class="source">
     <pre><code>def createAnalysisPointGroups(self, pointGroups, vectorGroups):
     """Create AnalysisPointGroups from input points and vectors.
     You can acces AnalysisPointGroups using self.analysisPointsGroups property.
@@ -1303,7 +1463,8 @@ def write(filePath, data, mkdir=False):
         pointGroups = [[pointGroups]]
         vectorGroups = [[vectorGroups]]
     # if point group is flatten - create a single group
-    elif not isinstance(pointGroups[0][0], Iterable) and not hasattr(pointGroups[0][0], "X"):
+    elif not isinstance(pointGroups[0][0], Iterable) \
+            and not hasattr(pointGroups[0][0], "X"):
         pointGroups = [pointGroups]
         vectorGroups = [vectorGroups]
     for groupCount, pts in enumerate(pointGroups):
@@ -1328,7 +1489,7 @@ def write(filePath, data, mkdir=False):
   
             
   <div class="item">
-    <div class="name def" id="honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.flatten">
+    <div class="name def" id="honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.flatten">
     <p>def <span class="ident">flatten</span>(</p><p>self, inputList)</p>
     </div>
     
@@ -1342,8 +1503,8 @@ list(flatten(inputList))
 &gt;&gt; ['a', 'b', 'c', 'd', 'e', 'f']
 </code></pre></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.flatten', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.flatten" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.flatten', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.flatten" class="source">
     <pre><code>def flatten(self, inputList):
     """Return a flattened genertor from an input list.
     Usage:
@@ -1365,7 +1526,116 @@ list(flatten(inputList))
   
             
   <div class="item">
-    <div class="name def" id="honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.hbObjectsToRadString">
+    <div class="name def" id="honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.fromLBSuns">
+    <p>def <span class="ident">fromLBSuns</span>(</p><p>cls, suns, pointGroups, vectorGroups=[], timestep=1, hbObjects=None, subFolder=&#39;sunlighthour&#39;)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Create sunlighthours recipe from LB sun objects.</p>
+<p>Attributes:
+    suns: A list of ladybug suns.
+    pointGroups: A list of (x, y, z) test points or lists of (x, y, z) test
+        points. Each list of test points will be converted to a
+        TestPointGroup. If testPts is a single flattened list only one
+        TestPointGroup will be created.
+    vectorGroups: An optional list of (x, y, z) vectors. Each vector
+        represents direction of corresponding point in testPts. If the
+        vector is not provided (0, 0, 1) will be assigned.
+    timestep: The number of timesteps per hour for sun vectors. This number
+        should be smaller than 60 and divisible by 60. The default is set to
+        1 such that one sun vector is generated for each hour (Default: 1).</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.fromLBSuns', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.fromLBSuns" class="source">
+    <pre><code>@classmethod
+def fromLBSuns(cls, suns, pointGroups, vectorGroups=[], timestep=1,
+               hbObjects=None, subFolder="sunlighthour"):
+    """Create sunlighthours recipe from LB sun objects.
+    Attributes:
+        suns: A list of ladybug suns.
+        pointGroups: A list of (x, y, z) test points or lists of (x, y, z) test
+            points. Each list of test points will be converted to a
+            TestPointGroup. If testPts is a single flattened list only one
+            TestPointGroup will be created.
+        vectorGroups: An optional list of (x, y, z) vectors. Each vector
+            represents direction of corresponding point in testPts. If the
+            vector is not provided (0, 0, 1) will be assigned.
+        timestep: The number of timesteps per hour for sun vectors. This number
+            should be smaller than 60 and divisible by 60. The default is set to
+            1 such that one sun vector is generated for each hour (Default: 1).
+    """
+    try:
+        sunVectors = [s.sunVector for s in suns if s.isDuringDay]
+    except AttributeError:
+        raise ValueError("%s is not a valid LBSun" % s)
+    return cls(sunVectors, pointGroups, vectorGroups, timestep)
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.fromLocationAndAnalysisPeriod">
+    <p>def <span class="ident">fromLocationAndAnalysisPeriod</span>(</p><p>cls, location, analysisPeriod, pointGroups, vectorGroups=[])</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Create sunlighthours recipe from Location and analysis period.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.fromLocationAndAnalysisPeriod', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.fromLocationAndAnalysisPeriod" class="source">
+    <pre><code>@classmethod
+def fromLocationAndAnalysisPeriod(
+    cls, location, analysisPeriod, pointGroups, vectorGroups=[]
+):
+    """Create sunlighthours recipe from Location and analysis period."""
+    sp = LBSunpath.fromLocation(location)
+    suns = [sp.calculateSunFromHOY(HOY) for HOY in analysisPeriod.floatHOYs]
+    sunVectors = [s.sunVector for s in suns if s.isDuringDay]
+    return cls(sunVectors, pointGroups, vectorGroups,
+               analysisPeriod.timestep)
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.fromLocationAndHoys">
+    <p>def <span class="ident">fromLocationAndHoys</span>(</p><p>cls, location, HOYs, pointGroups, vectorGroups=[], timestep=1)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Create sunlighthours recipe from Location and hours of year.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.fromLocationAndHoys', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.fromLocationAndHoys" class="source">
+    <pre><code>@classmethod
+def fromLocationAndHoys(cls, location, HOYs, pointGroups, vectorGroups=[],
+                        timestep=1):
+    """Create sunlighthours recipe from Location and hours of year."""
+    sp = LBSunpath.fromLocation(location)
+    suns = [sp.calculateSunFromHOY(HOY) for HOY in HOYs]
+    sunVectors = [s.sunVector for s in suns if s.isDuringDay]
+    return cls(sunVectors, pointGroups, vectorGroups, timestep)
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.hbObjectsToRadString">
     <p>def <span class="ident">hbObjectsToRadString</span>(</p><p>self)</p>
     </div>
     
@@ -1383,8 +1653,8 @@ list(flatten(inputList))
     s = self.hbObjectsToRadString()
     matString, geoString = s</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.hbObjectsToRadString', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.hbObjectsToRadString" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.hbObjectsToRadString', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.hbObjectsToRadString" class="source">
     <pre><code>def hbObjectsToRadString(self):
     """Return geometries and materials as a tuple of multiline string.
     Returns:
@@ -1429,7 +1699,7 @@ list(flatten(inputList))
   
             
   <div class="item">
-    <div class="name def" id="honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.results">
+    <div class="name def" id="honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.results">
     <p>def <span class="ident">results</span>(</p><p>self, flattenResults=True)</p>
     </div>
     
@@ -1438,14 +1708,14 @@ list(flatten(inputList))
   
     <div class="desc"><p>Return results for this analysis.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.results', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.results" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.results', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.results" class="source">
     <pre><code>def results(self, flattenResults=True):
     """Return results for this analysis."""
     assert self.isCalculated, \
         "You haven't run the Recipe yet. Use self.run " + \
         "to run the analysis before loading the results."
-    self.loader.simulationType = self.simulationType
+    self.loader.timestep = self.timestep
     self.loader.resultFiles = self.resultsFile
     return self.loader.results
 </code></pre>
@@ -1456,7 +1726,7 @@ list(flatten(inputList))
   
             
   <div class="item">
-    <div class="name def" id="honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.run">
+    <div class="name def" id="honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.run">
     <p>def <span class="ident">run</span>(</p><p>self, debug=False)</p>
     </div>
     
@@ -1465,18 +1735,21 @@ list(flatten(inputList))
   
     <div class="desc"><p>Run the analysis.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.run', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.run" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.run', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.run" class="source">
     <pre><code>def run(self, debug=False):
     """Run the analysis."""
     if self.__batchFile:
         if debug:
             with open(self.__batchFile, "a") as bf:
                 bf.write("\npause")
+        if len(self.sunVectors) > 2047:
+            print "Update Radiance in case you get this error: " \
+                "rcontrib: internal - too many modifiers."
         subprocess.call(self.__batchFile)
         self.isCalculated = True
         # self.isChanged = False
-        self.resultsFile = [self.__batchFile.replace(".bat", ".res")]
+        self.resultsFile = [self.__batchFile.replace(".bat", ".dc")]
         return True
     else:
         raise Exception("You need to write the files before running the recipe.")
@@ -1488,7 +1761,7 @@ list(flatten(inputList))
   
             
   <div class="item">
-    <div class="name def" id="honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.toRadString">
+    <div class="name def" id="honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.toRadString">
     <p>def <span class="ident">toRadString</span>(</p><p>self, hbObjects=False, points=False)</p>
     </div>
     
@@ -1508,8 +1781,8 @@ list(flatten(inputList))
     s = self.toRadString(points=True)
     ptsString = s.points</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.toRadString', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.toRadString" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.toRadString', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.toRadString" class="source">
     <pre><code>def toRadString(self, hbObjects=False, points=False):
     """Return a tuple of multiline string radiance definition.
     Args:
@@ -1541,7 +1814,7 @@ list(flatten(inputList))
   
             
   <div class="item">
-    <div class="name def" id="honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.updatePointGroups">
+    <div class="name def" id="honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.updatePointGroups">
     <p>def <span class="ident">updatePointGroups</span>(</p><p>self, pointGroups, vectorGroups=[])</p>
     </div>
     
@@ -1558,8 +1831,8 @@ list(flatten(inputList))
         represents direction of corresponding point in testPts. If the
         vector is not provided (0, 0, 1) will be assigned.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.updatePointGroups', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.updatePointGroups" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.updatePointGroups', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.updatePointGroups" class="source">
     <pre><code>def updatePointGroups(self, pointGroups, vectorGroups=[]):
     """Update point groups.
     Args:
@@ -1580,7 +1853,7 @@ list(flatten(inputList))
   
             
   <div class="item">
-    <div class="name def" id="honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.writeHBObjectsToFile">
+    <div class="name def" id="honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.writeHBObjectsToFile">
     <p>def <span class="ident">writeHBObjectsToFile</span>(</p><p>self, targetDir, projectName, mkdir=False, writeMaterial=True, writeGeometry=True)</p>
     </div>
     
@@ -1598,8 +1871,8 @@ list(flatten(inputList))
 <p>Exceptions:
     ValueError if targetDir doesn't exist and mkdir is False.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.writeHBObjectsToFile', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.writeHBObjectsToFile" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.writeHBObjectsToFile', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.writeHBObjectsToFile" class="source">
     <pre><code>def writeHBObjectsToFile(self, targetDir, projectName, mkdir=False,
                          writeMaterial=True, writeGeometry=True):
     """Write HBobjects to *.rad and .mat files.
@@ -1616,9 +1889,9 @@ list(flatten(inputList))
     assert type(projectName) is str, "projectName should be a string."
     _matStr, _geoStr = self.hbObjectsToRadString()
     _mat = self.write(os.path.join(targetDir, projectName + ".mat"),
-                      _matStr, mkdir) if writeMaterial else " "
+                      _matStr + "\n", mkdir) if writeMaterial else " "
     _geo = self.write(os.path.join(targetDir, projectName + ".rad"),
-                      _geoStr, mkdir) if writeMaterial else " "
+                      _geoStr + "\n", mkdir) if writeMaterial else " "
     if _mat and _geo:
         return _mat, _geo
 </code></pre>
@@ -1629,7 +1902,7 @@ list(flatten(inputList))
   
             
   <div class="item">
-    <div class="name def" id="honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.writePointsToFile">
+    <div class="name def" id="honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.writePointsToFile">
     <p>def <span class="ident">writePointsToFile</span>(</p><p>self, targetDir, projectName, mkdir=False)</p>
     </div>
     
@@ -1646,8 +1919,8 @@ list(flatten(inputList))
 <p>Exceptions:
     ValueError if targetDir doesn't exist and mkdir is False.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.writePointsToFile', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.writePointsToFile" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.writePointsToFile', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.writePointsToFile" class="source">
     <pre><code>def writePointsToFile(self, targetDir, projectName, mkdir=False):
     """Write point groups to file.
     Args:
@@ -1662,7 +1935,7 @@ list(flatten(inputList))
     assert type(projectName) is str, "projectName should be a string."
     projectName += ".pts"
     _pts = self.write(os.path.join(targetDir, projectName),
-                      self.toRadString(points=True).points, mkdir)
+                      self.toRadString(points=True).points + "\n", mkdir)
     if _pts:
         return _pts
 </code></pre>
@@ -1673,7 +1946,64 @@ list(flatten(inputList))
   
             
   <div class="item">
-    <div class="name def" id="honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.writeToFile">
+    <div class="name def" id="honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.writeSunsToFile">
+    <p>def <span class="ident">writeSunsToFile</span>(</p><p>self, targetDir, projectName, mkdir=False)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Write sunlist, sun geometry and sun material files.</p>
+<p>Args:
+    targetDir: Path to project directory (e.g. c:/ladybug)
+    projectName: Project name as string. Suns will be saved as
+        projectName.sun</p>
+<p>Returns:
+    A tuple of paths to sunlist file, sun materials and sun geometries</p>
+<p>Exceptions:
+    ValueError if targetDir doesn't exist and mkdir is False.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.writeSunsToFile', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.writeSunsToFile" class="source">
+    <pre><code>def writeSunsToFile(self, targetDir, projectName, mkdir=False):
+    """Write sunlist, sun geometry and sun material files.
+    Args:
+        targetDir: Path to project directory (e.g. c:/ladybug)
+        projectName: Project name as string. Suns will be saved as
+            projectName.sun
+    Returns:
+        A tuple of paths to sunlist file, sun materials and sun geometries
+    Exceptions:
+        ValueError if targetDir doesn't exist and mkdir is False.
+    """
+    assert type(projectName) is str, "projectName should be a string."
+    _suns = range(len(self.sunVectors))
+    _mat = range(len(self.sunVectors))
+    _geo = range(len(self.sunVectors))
+    # create data
+    for count, v in enumerate(self.sunVectors):
+        _suns[count] = "solar%d" % count
+        _mat[count] = "void light solar%d 0 0 3 1.0 1.0 1.0" % count
+        _geo[count] = \
+            "solar{0} source sun{0} 0 0 4 {1} {2} {3} 0.533".format(
+                count, v.X, v.Y, v.Z)
+    _sunsf = self.write(os.path.join(targetDir, projectName + ".sun"),
+                        "\n".join(_suns) + "\n", mkdir)
+    _matf = self.write(os.path.join(targetDir, projectName + "_suns.mat"),
+                       "\n".join(_mat) + "\n", mkdir)
+    _geof = self.write(os.path.join(targetDir, projectName + "_suns.rad"),
+                       "\n".join(_geo) + "\n", mkdir)
+    if _sunsf and _matf and _geof:
+        return _sunsf, _matf, _geof
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+            
+  <div class="item">
+    <div class="name def" id="honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.writeToFile">
     <p>def <span class="ident">writeToFile</span>(</p><p>self, targetFolder, projectName, radFiles=None, useRelativePath=False)</p>
     </div>
     
@@ -1681,16 +2011,16 @@ list(flatten(inputList))
     
   
     <div class="desc"><p>Write analysis files to target folder.</p>
-<p>Files for a grid based analysis are:
+<p>Files for sunlight hours analysis are:
     test points <projectName.pts>: List of analysis points.
-    sky file &lt;<em>.sky&gt;: Radiance sky for this analysis.
+    suns file &lt;<em>.sun&gt;: list of sun sources .
+    suns material file &lt;</em>_suns.mat&gt;: Radiance materials for sun sources.
+    suns geometry file &lt;<em>_suns.rad&gt;: Radiance geometries for sun sources.
     material file &lt;</em>.mat&gt;: Radiance materials. Will be empty if HBObjects is None.
     geometry file &lt;<em>.rad&gt;: Radiance geometries. Will be empty if HBObjects is None.
-    sky file &lt;</em>.sky&gt;: Radiance sky for this analysis.
-    batch file &lt;<em>.bat&gt;: An executable batch file which has the list of commands.
-        oconve &lt;</em>.sky&gt; <projectName.mat> <projectName.rad> <additional radFiles> &gt; <projectName.oct>
-        rtrace <radianceParameters> <projectName.oct> &gt; <projectName.res>
-    results file &lt;*.res&gt;: Results file once the analysis is over.</p>
+    batch file &lt;</em>.bat&gt;: An executable batch file which has the list of commands.
+        oconv [material file] [geometry file] [sun materials file] [sun geometries file] &gt; [octree file]
+        rcontrib -ab 0 -ad 10000 -I -M [sunlist.txt] -dc 1 [octree file]&lt; [pts file] &gt; [rcontrib results file]</p>
 <p>Args:
     targetFolder: Path to parent folder. Files will be created under
         targetFolder/gridbased. use self.subFolder to change subfolder name.
@@ -1700,21 +2030,21 @@ list(flatten(inputList))
 <p>Returns:
     True in case of success.</p></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.writeToFile', this);">Show source &equiv;</a></p>
-  <div id="source-honeybeex.honeybee.radiance.recipe.daylightfactor.HBDaylightFactorRecipe.writeToFile" class="source">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.writeToFile', this);">Show source &equiv;</a></p>
+  <div id="source-honeybeex.radiance.recipe.sunlighthours.SunlightHoursAnalysisRecipe.writeToFile" class="source">
     <pre><code>def writeToFile(self, targetFolder, projectName, radFiles=None,
                 useRelativePath=False):
     """Write analysis files to target folder.
-    Files for a grid based analysis are:
+    Files for sunlight hours analysis are:
         test points <projectName.pts>: List of analysis points.
-        sky file <*.sky>: Radiance sky for this analysis.
+        suns file <*.sun>: list of sun sources .
+        suns material file <*_suns.mat>: Radiance materials for sun sources.
+        suns geometry file <*_suns.rad>: Radiance geometries for sun sources.
         material file <*.mat>: Radiance materials. Will be empty if HBObjects is None.
         geometry file <*.rad>: Radiance geometries. Will be empty if HBObjects is None.
-        sky file <*.sky>: Radiance sky for this analysis.
         batch file <*.bat>: An executable batch file which has the list of commands.
-            oconve <*.sky> <projectName.mat> <projectName.rad> <additional radFiles> > <projectName.oct>
-            rtrace <radianceParameters> <projectName.oct> > <projectName.res>
-        results file <*.res>: Results file once the analysis is over.
+            oconv [material file] [geometry file] [sun materials file] [sun geometries file] > [octree file]
+            rcontrib -ab 0 -ad 10000 -I -M [sunlist.txt] -dc 1 [octree file]< [pts file] > [rcontrib results file]
     Args:
         targetFolder: Path to parent folder. Files will be created under
             targetFolder/gridbased. use self.subFolder to change subfolder name.
@@ -1736,29 +2066,30 @@ list(flatten(inputList))
     # Check if anything has changed
     # if not self.isChanged:
     #     print "Inputs has not changed! Check files at %s" % _path
-    # 1.write sky file
-    skyFile = self.sky.writeToFile(_path)
+    # 1.write sun files
+    sunsList, sunsMat, sunsGeo = self.writeSunsToFile(_path, projectName)
+    # 1.1.add sun list to modifiers
+    self.__radianceParameters.modFile = RadianceCommand.normspace(sunsList)
     # 2.write points
     pointsFile = self.writePointsToFile(_path, projectName)
     # 3.write materials and geometry files
     matFile, geoFile = self.writeHBObjectsToFile(_path, projectName)
     # 4.write batch file
     batchFileLines = []
-    # TODO: This line won't work for in linux.
+    # TODO: This line won't work in linux.
     dirLine = "%s\ncd %s" % (os.path.splitdrive(_path)[0], _path)
     batchFileLines.append(dirLine)
     # # 4.1.prepare oconv
     oc = Oconv(projectName)
-    oc.inputFiles = [skyFile, matFile, geoFile]
+    oc.sceneFiles = [matFile, geoFile, sunsMat, sunsGeo]
     # # 4.2.prepare rtrace
-    rt = Rtrace(projectName,
-                simulationType=self.simulationType,
-                radianceParameters=self.radianceParameters)
-    rt.octFile = os.path.join(_path, projectName + ".oct")
-    rt.pointFile = pointsFile
+    rct = Rcontrib(projectName,
+                   rcontribParameters=self.__radianceParameters)
+    rct.octreeFile = os.path.join(_path, projectName + ".oct")
+    rct.pointsFile = pointsFile
     # # 4.3 write batch file
     batchFileLines.append(oc.toRadString())
-    batchFileLines.append(rt.toRadString())
+    batchFileLines.append(rct.toRadString())
     batchFile = os.path.join(_path, projectName + ".bat")
     self.write(batchFile, "\n".join(batchFileLines))
     self.__batchFile = batchFile
