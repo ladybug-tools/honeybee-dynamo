@@ -1,2 +1,2 @@
-c:\Python27\python.exe C:\Python27\Scripts\pdoc --all-submodules --html --html-dir ./doc --overwrite honeybeex
+c:\Python27\python.exe C:\Python27\Scripts\pdoc --all-submodules --html --html-dir ./doc --overwrite honeybee_dynamo
 pause
