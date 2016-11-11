@@ -2,7 +2,7 @@
 import sys
 import os
 
-__dependencies = ('ladybug', 'honeybee')
+__dependencies = ('honeybee',)
 for lib in __dependencies:
     if lib not in sys.modules:
         sys.path.insert(
