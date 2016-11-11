@@ -2,8 +2,8 @@ import honeybee
 from .utilities import extractSurfacePoints, polygon, xyzToGeometricalPoints
 
 
-class HBFenSurface(honeybee.hbfensurface.HBFenSurface):
-    """Honeybee fenestration surface.
+class HBSurface(honeybee.hbsurface.HBSurface):
+    """Honeybee surface.
 
     Args:
         name: A unique string for surface name
@@ -11,6 +11,16 @@ class HBFenSurface(honeybee.hbfensurface.HBFenSurface):
             (x, y, z). Points should be sorted. This class won't sort the points.
             If surfaces has multiple subsurfaces you can pass lists of point lists
             to this function (e.g. ((0, 0, 0), (10, 0, 0), (0, 10, 0))).
+        surfaceType: Optional input for surface type. You can use any of the surface
+            types available from surfacetype libraries or use a float number to
+            indicate the type. If not indicated it will be assigned based on normal
+            angle of the surface which will be calculated from surface points.
+                0.0: Wall           0.5: UndergroundWall
+                1.0: Roof           1.5: UndergroundCeiling
+                2.0: Floor          2.25: UndergroundSlab
+                2.5: SlabOnGrade    2.75: ExposedFloor
+                3.0: Ceiling        4.0: AirWall
+                6.0: Context
         isNameSetByUser: If you want the name to be changed by honeybee any case
             set isNameSetByUser to True. Default is set to False which let Honeybee
             to rename the surface in cases like creating a newHBZone.
@@ -21,15 +31,15 @@ class HBFenSurface(honeybee.hbfensurface.HBFenSurface):
     """
 
     @classmethod
-    def fromGeometry(cls, name, geometry, isNameSetByUser=False,
-                     radProperties=None, epProperties=None,
-                     isCreatedFromGeometry=True):
-        """Create a honeybee fenestration surface from Dynamo geometry."""
-        cls.geometry = geometry
-        sortedPoints = extractSurfacePoints(cls)
-
-        return cls(name, sortedPoints, isNameSetByUser, radProperties,
-                   epProperties)
+    def fromGeometry(cls, name, geometry, surfaceType=None,
+                     isNameSetByUser=False, isTypeSetByUser=False,
+                     radProperties=None, epProperties=None):
+        """Create a honeybee surface from Grasshopper or Dynamo geometry."""
+        _pts = extractSurfacePoints(geometry)
+        _srf = cls(name, _pts, surfaceType, isNameSetByUser, isTypeSetByUser,
+                   radProperties, epProperties)
+        _srf.geometry = geometry
+        return _srf
 
     @property
     def isCreatedFromGeometry(self):
@@ -38,7 +48,7 @@ class HBFenSurface(honeybee.hbfensurface.HBFenSurface):
 
     @property
     def geometry(self):
-        """return geometry."""
+        """Return geometry."""
         if self.isCreatedFromGeometry:
             return self.__geometry
         else:

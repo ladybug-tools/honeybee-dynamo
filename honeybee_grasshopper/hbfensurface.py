@@ -1,4 +1,4 @@
-import honeybee
+from honeybee
 from .utilities import extractSurfacePoints, polygon, xyzToGeometricalPoints
 
 
@@ -18,15 +18,14 @@ class HBFenSurface(honeybee.hbfensurface.HBFenSurface):
             RADProperties will be assigned to surface by Honeybee.
         epProperties: EnergyPlus properties for this surface. If empty default
             epProperties will be assigned to surface by Honeybee.
+        isCreatedFromGeometry: ...
     """
 
-    @classmethod
     def fromGeometry(cls, name, geometry, isNameSetByUser=False,
-                     radProperties=None, epProperties=None,
-                     isCreatedFromGeometry=True):
-        """Create a honeybee fenestration surface from Dynamo geometry."""
-        cls.geometry = geometry
-        sortedPoints = extractSurfacePoints(cls)
+                     radProperties=None, epProperties=None):
+        "Create a honeybee fenestration surface from Grasshopper geometry."
+        self.geometry = geometry
+        sortedPoints = extractSurfacePoints(self)
 
         return cls(name, sortedPoints, isNameSetByUser, radProperties,
                    epProperties)

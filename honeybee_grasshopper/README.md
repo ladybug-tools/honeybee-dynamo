@@ -1,15 +1,14 @@
-# honeybee dynamo
-Honeybee pluging for Dynamo
+# honeybeex
+Honeybee plugin for Grasshopper
 
-### [API Documentation](http://ladybug-analysis-tools.github.io/honeybeeplus/honeybee_dynamo/doc/)
+### [API Documentation](http://ladybug-analysis-tools.github.io/honeybeeplus/honeybee_grasshopper/doc/)
 
 ```python
 # Here is a simple example on how to use the API for a grid based daylight simulation
 
-import honeybee_dynamo as hbd
-from hbd.radiance.sky.certainIlluminance import SkyWithCertainIlluminanceLevel
-from hbd.radiance.recipe.gridbased import HBGridBasedAnalysisRecipe
-from hbd.hbsurface import HBAnalysisSurface
+from honeybeex.radiance.sky.certainIlluminance import SkyWithCertainIlluminanceLevel
+from honeybeex.radiance.recipe.gridbased import HBGridBasedAnalysisRecipe
+from honeybeex.hbsurface import HBAnalysisSurface
 
 # surface points
 pts = [(0, 0, 0), (10, 0, 0), (10, 10, 0), (0, 10, 0)]

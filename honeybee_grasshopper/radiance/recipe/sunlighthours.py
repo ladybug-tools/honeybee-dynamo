@@ -61,7 +61,7 @@ class SunlightHoursAnalysisRecipe(HBSunlightHoursAnalysisRecipe):
         return cls(sunVectors, pointGroups, vectorGroups, timestep)
 
     @classmethod
-    def fromLocationAndHoys(cls, location, HOYs, pointGroups, vectorGroups=[],
+    def fromLocationAndHoys(cls, location, HOYs, pointGroups, vectorGroups=None,
                             timestep=1):
         """Create sunlighthours recipe from Location and hours of year."""
         sp = LBSunpath.fromLocation(location)
@@ -74,8 +74,7 @@ class SunlightHoursAnalysisRecipe(HBSunlightHoursAnalysisRecipe):
 
     @classmethod
     def fromLocationAndAnalysisPeriod(
-        cls, location, analysisPeriod, pointGroups, vectorGroups=None
-    ):
+            cls, location, analysisPeriod, pointGroups, vectorGroups=None):
         """Create sunlighthours recipe from Location and analysis period."""
         sp = LBSunpath.fromLocation(location)
 
