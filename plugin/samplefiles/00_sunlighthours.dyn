@@ -1,0 +1,238 @@
+<Workspace Version="1.2.0.2690" X="31.8320842200409" Y="401.278564079541" zoom="0.449828896540615" Name="Home" Description="" RunType="Manual" RunPeriod="1000" HasRunWithoutCrash="True">
+  <NamespaceResolutionMap />
+  <Elements>
+    <CoreNodeModels.Input.BoolSelector guid="441dc5e1-47ec-4cd1-a6dd-b7fc96f215f9" type="CoreNodeModels.Input.BoolSelector" nickname="Boolean" x="-4.072846884961" y="373.765966495615" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="True" IsFrozen="false" isPinned="false">
+      <System.Boolean>True</System.Boolean>
+    </CoreNodeModels.Input.BoolSelector>
+    <Dynamo.Graph.Nodes.CustomNodes.Function guid="6bf86694-91a5-4c9e-9c2f-50438eef8f12" type="Dynamo.Graph.Nodes.CustomNodes.Function" nickname="Rooms to HBZones" x="623.454536511498" y="380.665054976674" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false" isPinned="false">
+      <PortInfo index="0" default="False" />
+      <PortInfo index="1" default="True" />
+      <ID value="1a4d9a13-2794-4eb5-b3c1-2a49dc7a9e89" />
+      <Name value="Rooms to HBZones" />
+      <Description value="Create Honeybee zones from Revit Rooms or MEPSpaces.&#xD;&#xA;This node currently ONLY collects geometrical data from Revit. In the future it will import constructions, materials and MEP data (e.g lighting power density)." />
+      <Inputs>
+        <Input value="_rooms" />
+        <Input value="_boundaryLoc_" />
+      </Inputs>
+      <Outputs>
+        <Output value="HBZones" />
+        <Output value="polylines" />
+        <Output value="ERRReport" />
+      </Outputs>
+    </Dynamo.Graph.Nodes.CustomNodes.Function>
+    <Dynamo.Graph.Nodes.CustomNodes.Function guid="f55c437c-b605-437a-a0a1-2c90ae46a90e" type="Dynamo.Graph.Nodes.CustomNodes.Function" nickname="Generate Test Points from HBZones" x="1075.11491368716" y="446.485080398063" isVisible="false" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false" isPinned="false">
+      <PortInfo index="0" default="False" />
+      <PortInfo index="1" default="False" />
+      <PortInfo index="2" default="True" />
+      <ID value="c748c4e3-42e1-421d-87c9-06495df97ddf" />
+      <Name value="Generate Test Points from HBZones" />
+      <Description value="Generate test points from Honeybee zones based on grid size." />
+      <Inputs>
+        <Input value="_HBZones" />
+        <Input value="_gridSize" />
+        <Input value="_disFromSurface_" />
+      </Inputs>
+      <Outputs>
+        <Output value="testPts" />
+        <Output value="ptsNormal" />
+        <Output value="UVs" />
+        <Output value="polygons" />
+        <Output value="ERRReport" />
+      </Outputs>
+    </Dynamo.Graph.Nodes.CustomNodes.Function>
+    <Dynamo.Graph.Nodes.CodeBlockNodeModel guid="da7e334a-85a0-488b-8009-35d14b67cab0" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" nickname="Code Block" x="709.114913687162" y="538.91174706473" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" isPinned="false" CodeText="500;&#xA;750;" ShouldFocus="false" />
+    <Dynamo.Graph.Nodes.CustomNodes.Function guid="7636cfe2-73e4-40e9-837a-9029047c9ed6" type="Dynamo.Graph.Nodes.CustomNodes.Function" nickname="Import Location" x="851.52074587324" y="-145.139182811795" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false" isPinned="false">
+      <PortInfo index="0" default="False" />
+      <ID value="4a0bf83d-d31d-446f-83a9-cc5bde60d8e3" />
+      <Name value="Import Location" />
+      <Description value="Import location data from an epw weather file" />
+      <Inputs>
+        <Input value="_epwFile" />
+      </Inputs>
+      <Outputs>
+        <Output value="location" />
+        <Output value="ERRReport" />
+      </Outputs>
+    </Dynamo.Graph.Nodes.CustomNodes.Function>
+    <CoreNodeModels.Input.Filename guid="1b4116a7-8d07-43b7-9cb3-e7f49910c28a" type="CoreNodeModels.Input.Filename" nickname="File Path" x="282.52074587324" y="-145.139182811795" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="True" IsFrozen="false" isPinned="false">
+      <System.String>C:\EnergyPlusV8-3-0\WeatherData\USA_CA_San.Francisco.Intl.AP.724940_TMY3.epw</System.String>
+      <HintPath>C:\EnergyPlusV8-3-0\WeatherData\USA_CA_San.Francisco.Intl.AP.724940_TMY3.epw</HintPath>
+    </CoreNodeModels.Input.Filename>
+    <Dynamo.Graph.Nodes.CustomNodes.Function guid="6ac9e433-76d1-4595-8177-100ed9e7ed40" type="Dynamo.Graph.Nodes.CustomNodes.Function" nickname="Run Radiance Simulation" x="2537.64636568695" y="235.390548352283" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false" isPinned="false">
+      <PortInfo index="0" default="True" />
+      <PortInfo index="1" default="False" />
+      <PortInfo index="2" default="True" />
+      <PortInfo index="3" default="True" />
+      <PortInfo index="4" default="True" />
+      <PortInfo index="5" default="True" />
+      <ID value="88b3aa3e-8e57-4383-ba99-b3d4ec7176c6" />
+      <Name value="Run Radiance Simulation" />
+      <Description value="Write and run radiance simulations from Radiance recipes." />
+      <Inputs>
+        <Input value="_analysisRecipe" />
+        <Input value="_honeybeeObjects" />
+        <Input value="_workingDir_" />
+        <Input value="_projectName_" />
+        <Input value="_write" />
+        <Input value="run_" />
+      </Inputs>
+      <Outputs>
+        <Output value="results" />
+        <Output value="ERRReport" />
+      </Outputs>
+    </Dynamo.Graph.Nodes.CustomNodes.Function>
+    <Dynamo.Graph.Nodes.CodeBlockNodeModel guid="eeb08f2e-b2ba-498b-b537-3bdcad9d48a2" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" nickname="Code Block" x="2165.1818164058" y="297.208894244019" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" isPinned="false" CodeText="&quot;c:/ladybug&quot;;&#xA;&quot;twoRooms&quot;;&#xA;true;" ShouldFocus="false" />
+    <Dynamo.Graph.Nodes.CustomNodes.Function guid="4a2a4f6a-3f41-440a-8de0-43210f89139d" type="Dynamo.Graph.Nodes.CustomNodes.Function" nickname="Generate Colors" x="2960.92331340742" y="236.790910203435" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false" isPinned="false">
+      <PortInfo index="0" default="False" />
+      <PortInfo index="1" default="True" />
+      <ID value="d3408aa8-7ebe-40b5-8754-ae621b6d9647" />
+      <Name value="Generate Colors" />
+      <Description value="Color a test surface based on the results of a study. The results structure should match the test points structure to be mapped correctly on the surface." />
+      <Inputs>
+        <Input value="_values" />
+        <Input value="_legendPar_" />
+      </Inputs>
+      <Outputs>
+        <Output value="colors" />
+        <Output value="ERRReport" />
+      </Outputs>
+    </Dynamo.Graph.Nodes.CustomNodes.Function>
+    <Dynamo.Graph.Nodes.ZeroTouch.DSFunction guid="70ca6e74-14f9-4009-89c1-fe518139493b" type="Dynamo.Graph.Nodes.ZeroTouch.DSFunction" nickname="Display.ByGeometryColor" x="3455.65772892354" y="544.640060645094" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false" isPinned="false" assembly="Display.dll" function="Display.Display.ByGeometryColor@Autodesk.DesignScript.Geometry.Geometry,DSCore.Color">
+      <PortInfo index="0" default="False" />
+      <PortInfo index="1" default="False" />
+    </Dynamo.Graph.Nodes.ZeroTouch.DSFunction>
+    <Dynamo.Graph.Nodes.ZeroTouch.DSFunction guid="4c014090-dd24-4e39-b596-aadeedd9c9bf" type="Dynamo.Graph.Nodes.ZeroTouch.DSFunction" nickname="Surface.ByPatch" x="3012.48082089265" y="542.875302728527" isVisible="false" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false" isPinned="false" assembly="ProtoGeometry.dll" function="Autodesk.DesignScript.Geometry.Surface.ByPatch@Autodesk.DesignScript.Geometry.Curve">
+      <PortInfo index="0" default="False" />
+    </Dynamo.Graph.Nodes.ZeroTouch.DSFunction>
+    <Dynamo.Graph.Nodes.CodeBlockNodeModel guid="00d9d5f8-c60a-4cad-b53e-6ce4fb5f06fb" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" nickname="Code Block" x="1055.65247559567" y="-352.689026011399" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" isPinned="false" CodeText="9;&#xA;21;&#xA;8..18;" ShouldFocus="false" />
+    <Dynamo.Graph.Nodes.CustomNodes.Function guid="38abe811-b749-4a23-a683-9ca58d7f8221" type="Dynamo.Graph.Nodes.CustomNodes.Function" nickname="Sunpath" x="1567.08529075874" y="-192.295436342889" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false" isPinned="false">
+      <PortInfo index="0" default="True" />
+      <PortInfo index="1" default="False" />
+      <PortInfo index="2" default="True" />
+      <PortInfo index="3" default="True" />
+      <PortInfo index="4" default="True" />
+      <PortInfo index="5" default="True" />
+      <PortInfo index="6" default="True" />
+      <ID value="0927efd4-0340-42da-983a-a9d20b1310cd" />
+      <Name value="Sunpath" />
+      <Description value="Use this node to make a 3D sun-path (aka. sun plot) in the Dynamo scene.  The node also outputs sun vectors that can be used for sunlight hours analysis or shading design with the other Ladybug nodes." />
+      <Inputs>
+        <Input value="north_" />
+        <Input value="_location" />
+        <Input value="_hoursOfYear_" />
+        <Input value="_centerPt_" />
+        <Input value="_scale_" />
+        <Input value="_sunScale_" />
+        <Input value="_annualSunpath_" />
+      </Inputs>
+      <Outputs>
+        <Output value="sunVectors" />
+        <Output value="sunAltitudes" />
+        <Output value="sunAzimuths" />
+        <Output value="sunSpheres" />
+        <Output value="geometry" />
+        <Output value="centerPt" />
+        <Output value="sunPositions" />
+        <Output value="datetimes" />
+        <Output value="ERRReport" />
+      </Outputs>
+    </Dynamo.Graph.Nodes.CustomNodes.Function>
+    <Dynamo.Graph.Nodes.CustomNodes.Function guid="b61a5adf-d2f6-4ea7-8e79-8ff1f956be6b" type="Dynamo.Graph.Nodes.CustomNodes.Function" nickname="Calculate HOY" x="1300.26481175602" y="-369.772089277248" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false" isPinned="false">
+      <PortInfo index="0" default="True" />
+      <PortInfo index="1" default="True" />
+      <PortInfo index="2" default="True" />
+      <PortInfo index="3" default="True" />
+      <ID value="1c87cdac-09c1-4de8-ab8e-bc7e46be1be1" />
+      <Name value="Calculate HOY" />
+      <Description value="Calculate hour of year for a month, day and hour" />
+      <Inputs>
+        <Input value="_month_" />
+        <Input value="_day_" />
+        <Input value="_hour_" />
+        <Input value="_minute_" />
+      </Inputs>
+      <Outputs>
+        <Output value="HOY" />
+        <Output value="DOY" />
+        <Output value="datetime" />
+        <Output value="ERRReport" />
+      </Outputs>
+    </Dynamo.Graph.Nodes.CustomNodes.Function>
+    <Dynamo.Graph.Nodes.CodeBlockNodeModel guid="a75e04ac-571b-4dc5-8e5e-3965c5f047bf" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" nickname="Code Block" x="1405.04253140309" y="-76.3443451422587" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" isPinned="false" CodeText="250;" ShouldFocus="false" />
+    <Dynamo.Graph.Nodes.ZeroTouch.DSFunction guid="63a9674e-c435-4040-bec7-b8eccd9dbffa" type="Dynamo.Graph.Nodes.ZeroTouch.DSFunction" nickname="Line.ByStartPointEndPoint" x="2356.5404692914" y="-68.208227907397" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false" isPinned="false" assembly="ProtoGeometry.dll" function="Autodesk.DesignScript.Geometry.Line.ByStartPointEndPoint@Autodesk.DesignScript.Geometry.Point,Autodesk.DesignScript.Geometry.Point">
+      <PortInfo index="0" default="False" />
+      <PortInfo index="1" default="False" />
+    </Dynamo.Graph.Nodes.ZeroTouch.DSFunction>
+    <Dynamo.Graph.Nodes.CustomNodes.Function guid="84438c58-34ee-46a5-a555-1d869d55c762" type="Dynamo.Graph.Nodes.CustomNodes.Function" nickname="Collect Rooms and Spaces" x="294.504050302716" y="381.614876467276" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false" isPinned="false">
+      <PortInfo index="0" default="True" />
+      <ID value="d5ab273a-33be-4b0a-9070-c6c03d4d2790" />
+      <Name value="Collect Rooms and Spaces" />
+      <Description value="Collect rooms and MEP spaces in the Revit document.&#xD;&#xA;&#xD;&#xA;Use &quot;Rooms to HBZones&quot; node to convert them to Honeybee zones." />
+      <Inputs>
+        <Input value="_collect" />
+      </Inputs>
+      <Outputs>
+        <Output value="rooms" />
+        <Output value="spaces" />
+      </Outputs>
+    </Dynamo.Graph.Nodes.CustomNodes.Function>
+    <Dynamo.Graph.Nodes.CustomNodes.Function guid="7a6e2c87-d573-48c2-b046-5c7b8546aa5e" type="Dynamo.Graph.Nodes.CustomNodes.Function" nickname="Sunlighthours Analysis Recipe" x="1953.84278712482" y="429.796606258446" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false" isPinned="false">
+      <PortInfo index="0" default="False" />
+      <PortInfo index="1" default="False" />
+      <PortInfo index="2" default="False" />
+      <PortInfo index="3" default="True" />
+      <ID value="8e19ad53-607d-4d8e-af32-fca810c8b9ea" />
+      <Name value="Sunlighthours Analysis Recipe" />
+      <Description value="Calculate number of direct sunlight hours." />
+      <Inputs>
+        <Input value="_sunVectors" />
+        <Input value="_testPoints" />
+        <Input value="_ptsNormal" />
+        <Input value="_timestep_" />
+      </Inputs>
+      <Outputs>
+        <Output value="sunlighthoursAnalysisRecipe" />
+        <Output value="ERRReport" />
+      </Outputs>
+    </Dynamo.Graph.Nodes.CustomNodes.Function>
+  </Elements>
+  <Connectors>
+    <Dynamo.Graph.Connectors.ConnectorModel start="441dc5e1-47ec-4cd1-a6dd-b7fc96f215f9" start_index="0" end="84438c58-34ee-46a5-a555-1d869d55c762" end_index="0" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="6bf86694-91a5-4c9e-9c2f-50438eef8f12" start_index="0" end="f55c437c-b605-437a-a0a1-2c90ae46a90e" end_index="0" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="6bf86694-91a5-4c9e-9c2f-50438eef8f12" start_index="0" end="6ac9e433-76d1-4595-8177-100ed9e7ed40" end_index="1" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="f55c437c-b605-437a-a0a1-2c90ae46a90e" start_index="0" end="7a6e2c87-d573-48c2-b046-5c7b8546aa5e" end_index="1" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="f55c437c-b605-437a-a0a1-2c90ae46a90e" start_index="1" end="7a6e2c87-d573-48c2-b046-5c7b8546aa5e" end_index="2" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="f55c437c-b605-437a-a0a1-2c90ae46a90e" start_index="3" end="4c014090-dd24-4e39-b596-aadeedd9c9bf" end_index="0" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="da7e334a-85a0-488b-8009-35d14b67cab0" start_index="0" end="f55c437c-b605-437a-a0a1-2c90ae46a90e" end_index="1" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="da7e334a-85a0-488b-8009-35d14b67cab0" start_index="1" end="f55c437c-b605-437a-a0a1-2c90ae46a90e" end_index="2" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="7636cfe2-73e4-40e9-837a-9029047c9ed6" start_index="0" end="38abe811-b749-4a23-a683-9ca58d7f8221" end_index="1" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="1b4116a7-8d07-43b7-9cb3-e7f49910c28a" start_index="0" end="7636cfe2-73e4-40e9-837a-9029047c9ed6" end_index="0" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="6ac9e433-76d1-4595-8177-100ed9e7ed40" start_index="0" end="4a2a4f6a-3f41-440a-8de0-43210f89139d" end_index="0" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="eeb08f2e-b2ba-498b-b537-3bdcad9d48a2" start_index="0" end="6ac9e433-76d1-4595-8177-100ed9e7ed40" end_index="2" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="eeb08f2e-b2ba-498b-b537-3bdcad9d48a2" start_index="1" end="6ac9e433-76d1-4595-8177-100ed9e7ed40" end_index="3" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="eeb08f2e-b2ba-498b-b537-3bdcad9d48a2" start_index="2" end="6ac9e433-76d1-4595-8177-100ed9e7ed40" end_index="4" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="eeb08f2e-b2ba-498b-b537-3bdcad9d48a2" start_index="2" end="6ac9e433-76d1-4595-8177-100ed9e7ed40" end_index="5" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="4a2a4f6a-3f41-440a-8de0-43210f89139d" start_index="0" end="70ca6e74-14f9-4009-89c1-fe518139493b" end_index="1" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="4c014090-dd24-4e39-b596-aadeedd9c9bf" start_index="0" end="70ca6e74-14f9-4009-89c1-fe518139493b" end_index="0" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="00d9d5f8-c60a-4cad-b53e-6ce4fb5f06fb" start_index="0" end="b61a5adf-d2f6-4ea7-8e79-8ff1f956be6b" end_index="0" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="00d9d5f8-c60a-4cad-b53e-6ce4fb5f06fb" start_index="1" end="b61a5adf-d2f6-4ea7-8e79-8ff1f956be6b" end_index="1" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="00d9d5f8-c60a-4cad-b53e-6ce4fb5f06fb" start_index="2" end="b61a5adf-d2f6-4ea7-8e79-8ff1f956be6b" end_index="2" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="38abe811-b749-4a23-a683-9ca58d7f8221" start_index="0" end="7a6e2c87-d573-48c2-b046-5c7b8546aa5e" end_index="0" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="38abe811-b749-4a23-a683-9ca58d7f8221" start_index="5" end="63a9674e-c435-4040-bec7-b8eccd9dbffa" end_index="0" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="38abe811-b749-4a23-a683-9ca58d7f8221" start_index="6" end="63a9674e-c435-4040-bec7-b8eccd9dbffa" end_index="1" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="b61a5adf-d2f6-4ea7-8e79-8ff1f956be6b" start_index="0" end="38abe811-b749-4a23-a683-9ca58d7f8221" end_index="2" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="a75e04ac-571b-4dc5-8e5e-3965c5f047bf" start_index="0" end="38abe811-b749-4a23-a683-9ca58d7f8221" end_index="4" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="84438c58-34ee-46a5-a555-1d869d55c762" start_index="0" end="6bf86694-91a5-4c9e-9c2f-50438eef8f12" end_index="0" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="7a6e2c87-d573-48c2-b046-5c7b8546aa5e" start_index="0" end="6ac9e433-76d1-4595-8177-100ed9e7ed40" end_index="0" portType="0" />
+  </Connectors>
+  <Notes />
+  <Annotations>
+    <Dynamo.Graph.Annotations.AnnotationModel guid="a63dd250-c1b9-411f-96b2-293042e4ad0f" annotationText="This component fails for complex geometries. In those cases you can create the model surface by surface.&#xD;&#xA;&#xD;&#xA;You can also vote at the link below here so Autodesk opens up the Room API, so we can get the openings without failure!&#xD;&#xA;&#xD;&#xA;http://forums.autodesk.com/t5/revit-ideas/api-access-to-room-openings-geometry-and-materials-in-revit/idi-p/6642406" left="284.504050302716" top="-38.385123532724" width="220" height="539" fontSize="18" InitialTop="381.614876467276" InitialHeight="149" TextblockHeight="410" backgrouund="#FFFF7BAC">
+      <Models ModelGuid="84438c58-34ee-46a5-a555-1d869d55c762" />
+    </Dynamo.Graph.Annotations.AnnotationModel>
+  </Annotations>
+  <Presets />
+  <Cameras>
+    <Camera Name="Background Preview" eyeX="-18173.9563378259" eyeY="38915.1439269208" eyeZ="19855.2504887664" lookX="17066.8420800134" lookY="-39356.2728331708" lookZ="-17866.0649418914" upX="0.492676523798573" upY="0.700909245078849" upZ="-0.515748116244314" />
+  </Cameras>
+</Workspace>

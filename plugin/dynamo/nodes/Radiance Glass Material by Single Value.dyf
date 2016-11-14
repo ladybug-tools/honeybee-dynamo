@@ -1,9 +1,11 @@
-<Workspace Version="1.0.0.1180" X="-286.959786770685" Y="170.619709578252" zoom="0.616107147327431" Name="Radiance Glass Material by Single Value" Description="Create a Radiance material by a single value for visible transmittace of the glass." ID="aefb4c9a-4566-4d36-9e57-2d50c1a07e98" Category="Honeybee.01 :: Daylight :: Materials">
+<Workspace Version="1.2.0.2690" X="46.0154881298758" Y="374.587107408441" zoom="0.793979681425322" Name="Radiance Glass Material by Single Value" Description="Create a Radiance material by a single value for visible transmittace of the glass." ID="aefb4c9a-4566-4d36-9e57-2d50c1a07e98" Category="Honeybee.01 :: Daylight :: Materials">
   <NamespaceResolutionMap>
     <ClassMap partialName="List" resolvedName="DSCore.List" assemblyName="DSCoreNodes.dll" />
   </NamespaceResolutionMap>
   <Elements>
     <PythonNodeModels.PythonNode guid="c89deefa-2a22-405d-9521-15349672fca0" type="PythonNodeModels.PythonNode" nickname="Error Report!" x="1595.82141220496" y="-2.16624230023072" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" isPinned="false" inputcount="2">
+      <PortInfo index="0" default="False" />
+      <PortInfo index="1" default="False" />
       <Script>"""Report errors"""
 importErr = IN[0]
 runErr = IN[1]
@@ -20,47 +22,11 @@ if len(errors)==0:
 else:
 	OUT = "\n".join(errors)</Script>
     </PythonNodeModels.PythonNode>
-    <PythonNodeModels.PythonStringNode guid="b63822b0-4c8e-4f28-96f0-4e1c1968199b" type="PythonNodeModels.PythonStringNode" nickname="Python Script From String" x="1190.54812790067" y="242.22987489775" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" isPinned="false" inputcount="3" />
-    <PythonNodeModels.PythonNode guid="ad577bdd-2298-45d0-a2cf-0eadac29e830" type="PythonNodeModels.PythonNode" nickname="Find file and import it!" x="735.954733419071" y="0" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" isPinned="false" inputcount="1">
-      <Script>try:
-	def getPackagePath(packageName):
-		import sys
-		sys.path.append('C:\Program Files (x86)\IronPython 2.7\Lib')
-		import os
-		import clr
-		clr.AddReference('DynamoCore')
-		_loc = clr.References[2].Location
-		_ver = _loc.split('\\')[-2].split(' ')[-1]
-		
-		# the path structure has changed after the release of version 1
-		dynamoPath_1 = "Dynamo\\Dynamo Revit\\" + _ver
-		dynamoPath_0 = "Dynamo\\" + _ver
-		appdata = os.getenv('APPDATA')
-		path1 = r'%s\%s\packages\%s\extra\nodesrc\\'%(appdata, dynamoPath_1, packageName)
-		path0 = r'%s\%s\packages\%s\extra\nodesrc\\'%(appdata, dynamoPath_0, packageName)
-		
-		if os.path.isdir(path1):
-			return path1
-		elif os.path.isdir(path0):
-			return path0
-		else:
-			raise Exception("Can't find Dynamo installation Folder!")
-
-	filePath = getPackagePath('Honeybee') + IN[0]
-
-	with open(filePath, 'rb') as inf:
-	    lines = inf.readlines()
-
-	OUT = ''.join(lines)
-except Exception, e:
-	import traceback
-	OUT = "ERROR:\n%s" % str(e) + \
-		"\n\nIf you think this is a bug submit an issue on github.\n" + \
-		"https://github.com/ladybug-analysis-tools/ladybug-dynamo/issues" + \
-		"\n\n%s" % traceback.format_exc()
-		</Script>
-    </PythonNodeModels.PythonNode>
-    <Dynamo.Graph.Nodes.CodeBlockNodeModel guid="c734cb82-affb-4465-9b78-b9d67cec924c" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" nickname="Code Block" x="266.775369508201" y="4.48063022787386" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" isPinned="false" CodeText="&quot;radianceGlassMaterialBySingleValue_node.py&quot;;" ShouldFocus="false" />
+    <PythonNodeModels.PythonStringNode guid="b63822b0-4c8e-4f28-96f0-4e1c1968199b" type="PythonNodeModels.PythonStringNode" nickname="Python Script From String" x="1190.54812790067" y="242.22987489775" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" isPinned="false" inputcount="3">
+      <PortInfo index="0" default="False" />
+      <PortInfo index="1" default="False" />
+      <PortInfo index="2" default="False" />
+    </PythonNodeModels.PythonStringNode>
     <Dynamo.Graph.Nodes.CustomNodes.Symbol guid="698481b6-0587-481d-936c-7f07f2d4b11c" type="Dynamo.Graph.Nodes.CustomNodes.Symbol" nickname="Input" x="732.558531161569" y="265.277741239444" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="True" IsFrozen="false" isPinned="false">
       <Symbol value="//Material name&#xD;&#xA;_name: string;" />
     </Dynamo.Graph.Nodes.CustomNodes.Symbol>
@@ -68,32 +34,115 @@ except Exception, e:
       <Symbol value="//Glass transmittance (0..1)&#xD;&#xA;_transmittance: double;" />
     </Dynamo.Graph.Nodes.CustomNodes.Symbol>
     <Dynamo.Graph.Nodes.CustomNodes.Output guid="fe5c7016-889e-4bea-af82-ceb12784f3fb" type="Dynamo.Graph.Nodes.CustomNodes.Output" nickname="Output" x="1504.77057496892" y="242.322645019566" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" isPinned="false">
+      <PortInfo index="0" default="False" />
       <Symbol value="//material&#xD;&#xA;glassMaterial;" />
     </Dynamo.Graph.Nodes.CustomNodes.Output>
     <Dynamo.Graph.Nodes.CustomNodes.Output guid="2eb0d2ca-d3d2-4c82-b459-c0a8fbd407b4" type="Dynamo.Graph.Nodes.CustomNodes.Output" nickname="Output" x="1771.26559355389" y="-1.64355563864311" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" isPinned="false">
+      <PortInfo index="0" default="False" />
       <Symbol value="//Report&#xD;&#xA;ERRReport;" />
     </Dynamo.Graph.Nodes.CustomNodes.Output>
+    <PythonNodeModels.PythonNode guid="9556ef2e-7811-4d5f-8f50-71820fd53ea4" type="PythonNodeModels.PythonNode" nickname="import and prepare py code" x="755.202124752054" y="-2.75024388680089" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" isPinned="false" inputcount="2">
+      <PortInfo index="0" default="False" />
+      <PortInfo index="1" default="False" />
+      <Script>"""Find packages from Dynamo folder and prepare the code."""
+import clr
+from System import AppDomain, Environment, IO
+
+def tryGetPluginPath(plugin):
+    """Try to get path to plugin folder."""
+    clr.AddReference('ProtoGeometry')
+    _loc = tuple(a.Location
+                 for a in AppDomain.CurrentDomain.GetAssemblies()
+                 if 'ProtoGeometry' in a.FullName)
+
+    try:
+        _ver = float(_loc[0].split('\\')[-2])
+    except:
+        _ver = float(_loc[0].split('\\')[-2].split(' ')[-1])
+
+    assert _ver &gt;= 1.2, 'You need Dynamo 1.2 or higher to use this plugin!'
+
+    _appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)
+    _dynamoPath = ('\\').join(_loc[0].split('\\')[-4:-1])
+    # if the assembly is cached put Revit folder first, and then try to load it from core
+    _dynamoPaths = (_dynamoPath.replace('Dynamo Core', 'Dynamo Revit'),
+                    _dynamoPath.replace('Dynamo Revit', 'Dynamo Core'))
+    _settingsFilename = 'DynamoSettings.xml'
+    
+    pkf = []
+    for path in _dynamoPaths:
+        settingsFile = IO.Path.Combine(_appdata, path, _settingsFilename)
+        with open(settingsFile, 'rb') as outf:
+            for line in outf:
+                if line.strip().startswith('&lt;CustomPackageFolders&gt;'):
+                    for l in outf:
+                        if l.strip().startswith('&lt;/CustomPackageFolders&gt;'):
+                            break
+                        else:
+                            pkf.append(l.replace('&lt;/string&gt;', '').replace('&lt;string&gt;', '').strip())
+
+    for p in pkf:
+        pp = IO.Path.Combine(p, 'packages', plugin, 'extra')
+        if IO.Directory.Exists(pp):
+            return pp
+
+try:
+    plugin, filename = IN
+    p = tryGetPluginPath(plugin)
+    if not p:
+        raise ImportError('{} is not installed! Install it from package manager.'.format(plugin))
+    # import the file and wrap it into sys.append
+    f = IO.Path.Combine(p, 'nodesrc', filename)
+    with open(f, 'rb') as inf:
+        source = '    '.join(inf.readlines())
+
+    header = 'try:\n    import sys\n' + \
+        '    sys.path.append(r\'{}\')\n\n'.format(p) + \
+        '    sys.path.append(r\'C:\Program Files (x86)\IronPython 2.7\Lib\')\n\n' + \
+        '    '
+
+    footer = '\nexcept Exception, e:\n' + \
+        '    import traceback\n' + \
+        '    OUT = "ERROR:\\n\\t{}".format(str(e)) + \\\n' + \
+        '    "\\n\\nIf you think this is a bug submit an issue on github.\\n" + \\\n' + \
+        '    "https://github.com/ladybug-analysis-tools/honeybee-plus/issues\\n" +  \\\n' + \
+        '    "and include below error message:\\n\\n" + \\\n' + \
+        '    "{}".format(traceback.format_exc())\n'
+
+    OUT = header + source + footer
+
+except Exception, e:
+    import sys
+    sys.path.append(r'C:\Program Files (x86)\IronPython 2.7\Lib')
+    import traceback
+    OUT = "ERROR:\n\t{}".format(str(e)) + \
+        "\n\nIf you think this is a bug submit an issue on github.\n" + \
+        "https://github.com/ladybug-analysis-tools/honeybee-plus/issues\n" +  \
+        "and include below error message:\n\n" + \
+        "{}".format(traceback.format_exc())
+</Script>
+    </PythonNodeModels.PythonNode>
+    <Dynamo.Graph.Nodes.CodeBlockNodeModel guid="b927fd01-2197-4858-ada6-9fcbe41863a6" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" nickname="Code Block" x="245.481300796452" y="1.48282469406143" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" isPinned="false" CodeText="&quot;Honeybee&quot;;&#xA;&quot;radianceGlassMaterialBySingleValue_node.py&quot;;" ShouldFocus="false" />
   </Elements>
   <Connectors>
     <Dynamo.Graph.Connectors.ConnectorModel start="c89deefa-2a22-405d-9521-15349672fca0" start_index="0" end="2eb0d2ca-d3d2-4c82-b459-c0a8fbd407b4" end_index="0" portType="0" />
     <Dynamo.Graph.Connectors.ConnectorModel start="b63822b0-4c8e-4f28-96f0-4e1c1968199b" start_index="0" end="c89deefa-2a22-405d-9521-15349672fca0" end_index="1" portType="0" />
     <Dynamo.Graph.Connectors.ConnectorModel start="b63822b0-4c8e-4f28-96f0-4e1c1968199b" start_index="0" end="fe5c7016-889e-4bea-af82-ceb12784f3fb" end_index="0" portType="0" />
-    <Dynamo.Graph.Connectors.ConnectorModel start="ad577bdd-2298-45d0-a2cf-0eadac29e830" start_index="0" end="c89deefa-2a22-405d-9521-15349672fca0" end_index="0" portType="0" />
-    <Dynamo.Graph.Connectors.ConnectorModel start="ad577bdd-2298-45d0-a2cf-0eadac29e830" start_index="0" end="b63822b0-4c8e-4f28-96f0-4e1c1968199b" end_index="0" portType="0" />
-    <Dynamo.Graph.Connectors.ConnectorModel start="c734cb82-affb-4465-9b78-b9d67cec924c" start_index="0" end="ad577bdd-2298-45d0-a2cf-0eadac29e830" end_index="0" portType="0" />
     <Dynamo.Graph.Connectors.ConnectorModel start="698481b6-0587-481d-936c-7f07f2d4b11c" start_index="0" end="b63822b0-4c8e-4f28-96f0-4e1c1968199b" end_index="1" portType="0" />
     <Dynamo.Graph.Connectors.ConnectorModel start="32e5acb2-72b8-4cd3-83ed-34e24c8276fd" start_index="0" end="b63822b0-4c8e-4f28-96f0-4e1c1968199b" end_index="2" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="9556ef2e-7811-4d5f-8f50-71820fd53ea4" start_index="0" end="c89deefa-2a22-405d-9521-15349672fca0" end_index="0" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="9556ef2e-7811-4d5f-8f50-71820fd53ea4" start_index="0" end="b63822b0-4c8e-4f28-96f0-4e1c1968199b" end_index="0" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="b927fd01-2197-4858-ada6-9fcbe41863a6" start_index="0" end="9556ef2e-7811-4d5f-8f50-71820fd53ea4" end_index="0" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="b927fd01-2197-4858-ada6-9fcbe41863a6" start_index="1" end="9556ef2e-7811-4d5f-8f50-71820fd53ea4" end_index="1" portType="0" />
   </Connectors>
   <Notes />
   <Annotations>
-    <Dynamo.Graph.Annotations.AnnotationModel guid="f90d5b5e-20bc-4e7f-816b-86a8647299f4" annotationText="load the script" left="256.775369508201" top="-25.5193697721261" width="428" height="98" fontSize="14" InitialTop="4.48063022787386" InitialHeight="123" TextblockHeight="20" backgrouund="#FFC1D676">
-      <Models ModelGuid="c734cb82-affb-4465-9b78-b9d67cec924c" />
-      <Models ModelGuid="c734cb82-affb-4465-9b78-b9d67cec924c" />
-      <Models ModelGuid="c734cb82-affb-4465-9b78-b9d67cec924c" />
+    <Dynamo.Graph.Annotations.AnnotationModel guid="9ff3e739-210b-42b1-935c-037204eb71f7" annotationText="load the script" left="235.481300796452" top="-28.5171753059386" width="423" height="108" fontSize="14" InitialTop="1.48282469406143" InitialHeight="108" TextblockHeight="20" backgrouund="#FFC1D676">
+      <Models ModelGuid="b927fd01-2197-4858-ada6-9fcbe41863a6" />
     </Dynamo.Graph.Annotations.AnnotationModel>
   </Annotations>
   <Presets />
   <Cameras>
-    <Camera Name="Background Preview" eyeX="-34.0008926391602" eyeY="49.4524841308594" eyeZ="21.1884765625" lookX="-14.1877288818359" lookY="-43.0581092834473" lookZ="-41.6508407592773" upX="-0.170867875218391" upY="0.848048031330109" upZ="-0.501615941524506" />
+    <Camera Name="Background Preview" eyeX="-91.5115585327148" eyeY="89.0903091430664" eyeZ="-1.02528882026672" lookX="80.9099578857422" lookY="-92.7222061157227" lookZ="2.38632082939148" upX="0.594564259052277" upY="0.803856790065765" upZ="0.0175358131527901" />
   </Cameras>
 </Workspace>
