@@ -73,7 +73,7 @@ def isPointsSortedAntiClockwise(sortedPoints, normal):
         return False
 
 
-def getSurfaceCenterPtandNormal(HBSurface):
+def getSurfaceCenterPtandNormal(geometry):
     """Calculate center point and normal for a HBSurface.
 
     Args:
@@ -82,11 +82,6 @@ def getSurfaceCenterPtandNormal(HBSurface):
     Returns:
         Returns a tuple as (centerPt, normalVector)
     """
-    try:
-        geometry = HBSurface.geometry
-    except AttributeError as e:
-        raise TypeError("Input is not a HBSurface: %s" % str(e))
-
     brepFace = geometry.Faces[0]
     if brepFace.IsPlanar and brepFace.IsSurface:
         u_domain = brepFace.Domain(0)

@@ -69,7 +69,7 @@ def dataTreeToList(input):
     Returns:
         listData: A list of namedtuples (path, dataList)
     """
-    allData = {}
+    allData = range(len(input.Paths))
     Pattern = namedtuple('Pattern', 'path list')
 
     for i, path in enumerate(input.Paths):
@@ -82,4 +82,4 @@ def dataTreeToList(input):
 
         allData[i] = branch
 
-    return allData.values()
+    return allData
