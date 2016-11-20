@@ -16,12 +16,8 @@ Sunlight Hours Recipe.
             Ladybug sunpath to generate the vectors for any time of the year. If
             you're generating the vectors in a different way make sure that the
             vectors are looking downwards from the sun (e.g. z = 0).
-        _testPoints: A list or a datatree of points. Each branch of the datatree
-            will be considered as a point group.
-        ptsVectors_: A list or a datatree of vectors. Each vector represents the
-            direction of the respective test point in testPoints. If only one
-            value is provided it will be used for all the test points. If no value
-            is provided (0, 0, 1) will be assigned for all the vectors.
+        _analysisGrids: List of honeybee analysis grids. Use Analysis grid component
+            which you can find under 00 :: Create to create them.
         _timestep_: Timstep for sun vectors. Default is 1 which means each sun vector
             represents an hour of time.
         
@@ -33,7 +29,7 @@ Sunlight Hours Recipe.
 
 ghenv.Component.Name = "HoneybeePlus_Sunlight Hours Recipe"
 ghenv.Component.NickName = 'sunlightHoursRecipe'
-ghenv.Component.Message = 'VER 0.0.01\nNOV_16_2016'
+ghenv.Component.Message = 'VER 0.0.01\nNOV_18_2016'
 ghenv.Component.Category = "HoneybeePlus"
 ghenv.Component.SubCategory = '03 :: Daylight :: Recipe'
 ghenv.Component.AdditionalHelpFromDocStrings = "1"
@@ -50,18 +46,7 @@ except ImportError as e:
     raise ImportError('{}\n\t{}'.format(msg, e))
 
 
-if _sunVectors and _sunVectors[0] != None:
-    # match points and vectors
-    try:
-        from honeybee_grasshopper import datatree
-    except ImportError:
-        # Dynamo
-        pass
-    else:
-        _testPoints = tuple(i.list for i in datatree.dataTreeToList(_testPoints))
-        ptsVectors_ = tuple(i.list for i in datatree.dataTreeToList(ptsVectors_))
-    
+if _sunVectors and _sunVectors[0] != None and _analysisGrids:
     # set a sunlight hours analysis recipe together if there are points
-    analysisRecipe = HBSunlightHoursAnalysisRecipe(_sunVectors,
-        _testPoints, ptsVectors_, _timestep_
-    )
+    analysisRecipe = HBSunlightHoursAnalysisRecipe(_sunVectors, _analysisGrids,
+                                                   _timestep_)

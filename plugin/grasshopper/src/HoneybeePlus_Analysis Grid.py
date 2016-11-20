@@ -7,37 +7,32 @@
 # @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
 
 """
-Grid-based Recipe.
+Analysis Grid.
 
 -
 
     Args:
-        _sky: A radiance sky. Find honeybee skies under 02::Daylight::Light Sources.
         _testPoints: A list or a datatree of points. Each branch of the datatree
             will be considered as a point group.
         ptsVectors_: A list or a datatree of vectors. Each vector represents the
             direction of the respective test point in testPoints. If only one
             value is provided it will be used for all the test points. If no value
             is provided (0, 0, 1) will be assigned for all the vectors.
-        _analysisType_: Analysis type. [0] illuminance(lux), [1] radiation (kwh),
-            [2] luminance (Candela).
-        _radiancePar_: Radiance parameters for Grid-based analysis. Find Radiance
-            parameters node under 03::Daylight::Recipes.
     Returns:
         readMe!: Reports, errors, warnings, etc.
-        analysisRecipe: Grid-based analysis recipe. Connect this recipe to
-            Run Radiance Analysis to run a grid-based analysis.
+        analysisGrid: Analysis grid. Use this analysis grid to create a grid-based
+            analysis.
 """
 
-ghenv.Component.Name = "HoneybeePlus_Grid-Based Recipe"
-ghenv.Component.NickName = 'gridBasedRecipe'
+ghenv.Component.Name = "HoneybeePlus_Analysis Grid"
+ghenv.Component.NickName = 'analysisGrid'
 ghenv.Component.Message = 'VER 0.0.01\nNOV_18_2016'
 ghenv.Component.Category = "HoneybeePlus"
-ghenv.Component.SubCategory = '03 :: Daylight :: Recipe'
-ghenv.Component.AdditionalHelpFromDocStrings = "1"
+ghenv.Component.SubCategory = '00 :: Create'
+ghenv.Component.AdditionalHelpFromDocStrings = "2"
 
 try:
-    from honeybee.radiance.recipe.gridbased import HBGridBasedAnalysisRecipe
+    from honeybee.radiance.analysisgrid import AnalysisGrid
 except ImportError as e:
     msg = '\nFailed to import honeybee. Did you install honeybee on your machine?' + \
             '\nYou can download the installer file from github: ' + \
@@ -48,8 +43,20 @@ except ImportError as e:
     raise ImportError('{}\n\t{}'.format(msg, e))
 
 
-if _sky and _analysisGrids:
-    
-    # set a sunlight hours analysis recipe together if there are points
-    analysisRecipe = HBGridBasedAnalysisRecipe(
-        _sky, _analysisGrids, _analysisType_, _radiancePar_)
+if _testPoints:
+    # match points and vectors
+    try:
+        from honeybee_grasshopper import datatree
+        _testPoints = tuple(i.list for i in datatree.dataTreeToList(_testPoints))
+        ptsVectors_ = tuple(i.list for i in datatree.dataTreeToList(ptsVectors_))
+    except ImportError:
+        # Dynamo
+        pass
+    else:
+        ptsVectors_ = ptsVectors_ or ((),)
+        
+        ptsVectors_ = tuple(ptsVectors_[i]
+                       if i < len(ptsVectors_) else ptsVectors_[-1]
+                       for i in range(len(_testPoints)))
+        analysisGrid = (AnalysisGrid.fromPointsAndVectors(pts, vectors)
+                        for pts, vectors in zip(_testPoints, ptsVectors_))
