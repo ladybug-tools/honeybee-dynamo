@@ -1,4 +1,4 @@
-<Workspace Version="1.2.0.2690" X="-266.262154449095" Y="37.8002901977078" zoom="1.23489149706356" Name="Rooms to HBZones" Description="Create Honeybee zones from Revit Rooms or MEPSpaces.&#xD;&#xA;This node currently ONLY collects geometrical data from Revit. In the future it will import constructions, materials and MEP data (e.g lighting power density)." ID="1a4d9a13-2794-4eb5-b3c1-2a49dc7a9e89" Category="Honeybee.Revit">
+<Workspace Version="1.2.0.2690" X="-58.0142830333243" Y="55.3507412330288" zoom="0.659303492768033" Name="Rooms to HBZones" Description="Create Honeybee zones from Revit Rooms or MEPSpaces.&#xD;&#xA;This node currently ONLY collects geometrical data from Revit. In the future it will import constructions, materials and MEP data (e.g lighting power density)." ID="1a4d9a13-2794-4eb5-b3c1-2a49dc7a9e89" Category="Honeybee.Revit">
   <NamespaceResolutionMap />
   <Elements>
     <PythonNodeModels.PythonNode guid="cfdd0aa1-b707-4208-bf11-e0a6fe8fae99" type="PythonNodeModels.PythonNode" nickname="Error Report!" x="1512.61950975536" y="212.932025313884" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" isPinned="false" inputcount="2">
@@ -46,7 +46,8 @@ else:
       <PortInfo index="0" default="False" />
       <Symbol value="//Report&#xD;&#xA;ERRReport" />
     </Dynamo.Graph.Nodes.CustomNodes.Output>
-    <PythonNodeModels.PythonNode guid="93c8b8e5-ed46-4265-9b5c-728ed88bde3e" type="PythonNodeModels.PythonNode" nickname="import and prepare py code" x="693.916327914922" y="217.432950627791" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" isPinned="false" inputcount="2">
+    <Dynamo.Graph.Nodes.CodeBlockNodeModel guid="883852a9-ca46-48e6-b479-bdda90cf97f9" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" nickname="Code Block" x="302.717832676757" y="224.15534113135" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" isPinned="false" CodeText="&quot;Honeybee&quot;;&#xA;&quot;convertRoomsToHBZones_node.py&quot;;" ShouldFocus="false" />
+    <PythonNodeModels.PythonNode guid="c36c7171-8fc1-422b-a4f4-a72ebed02666" type="PythonNodeModels.PythonNode" nickname="import and prepare py code" x="684.77312459072" y="217.887968028557" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" isPinned="false" inputcount="2">
       <PortInfo index="0" default="False" />
       <PortInfo index="1" default="False" />
       <Script>"""Find packages from Dynamo folder and prepare the code."""
@@ -77,6 +78,8 @@ def tryGetPluginPath(plugin):
     pkf = []
     for path in _dynamoPaths:
         settingsFile = IO.Path.Combine(_appdata, path, _settingsFilename)
+        if not IO.File.Exists(settingsFile):
+            continue
         with open(settingsFile, 'rb') as outf:
             for line in outf:
                 if line.strip().startswith('&lt;CustomPackageFolders&gt;'):
@@ -127,7 +130,6 @@ except Exception, e:
         "{}".format(traceback.format_exc())
 </Script>
     </PythonNodeModels.PythonNode>
-    <Dynamo.Graph.Nodes.CodeBlockNodeModel guid="883852a9-ca46-48e6-b479-bdda90cf97f9" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" nickname="Code Block" x="302.717832676757" y="224.15534113135" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" isPinned="false" CodeText="&quot;Honeybee&quot;;&#xA;&quot;convertRoomsToHBZones_node.py&quot;;" ShouldFocus="false" />
   </Elements>
   <Connectors>
     <Dynamo.Graph.Connectors.ConnectorModel start="cfdd0aa1-b707-4208-bf11-e0a6fe8fae99" start_index="0" end="2f212ed8-2681-4650-8e9d-dd8c37d81d7d" end_index="0" portType="0" />
@@ -137,10 +139,10 @@ except Exception, e:
     <Dynamo.Graph.Connectors.ConnectorModel start="6b5e3b5f-d1b5-4bca-a7b8-61d48e6b5ecd" start_index="0" end="8f5dcc59-e616-4412-b8af-fa67a43d4d2c" end_index="2" portType="0" />
     <Dynamo.Graph.Connectors.ConnectorModel start="4f2a9a8d-1c87-4466-a0c6-47fa3235c34b" start_index="0" end="6e700974-863b-4762-888b-23baa1941c1f" end_index="0" portType="0" />
     <Dynamo.Graph.Connectors.ConnectorModel start="4f2a9a8d-1c87-4466-a0c6-47fa3235c34b" start_index="1" end="4ea662f0-02f7-40ea-8c86-48a93f512773" end_index="0" portType="0" />
-    <Dynamo.Graph.Connectors.ConnectorModel start="93c8b8e5-ed46-4265-9b5c-728ed88bde3e" start_index="0" end="cfdd0aa1-b707-4208-bf11-e0a6fe8fae99" end_index="0" portType="0" />
-    <Dynamo.Graph.Connectors.ConnectorModel start="93c8b8e5-ed46-4265-9b5c-728ed88bde3e" start_index="0" end="8f5dcc59-e616-4412-b8af-fa67a43d4d2c" end_index="0" portType="0" />
-    <Dynamo.Graph.Connectors.ConnectorModel start="883852a9-ca46-48e6-b479-bdda90cf97f9" start_index="0" end="93c8b8e5-ed46-4265-9b5c-728ed88bde3e" end_index="0" portType="0" />
-    <Dynamo.Graph.Connectors.ConnectorModel start="883852a9-ca46-48e6-b479-bdda90cf97f9" start_index="1" end="93c8b8e5-ed46-4265-9b5c-728ed88bde3e" end_index="1" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="883852a9-ca46-48e6-b479-bdda90cf97f9" start_index="0" end="c36c7171-8fc1-422b-a4f4-a72ebed02666" end_index="0" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="883852a9-ca46-48e6-b479-bdda90cf97f9" start_index="1" end="c36c7171-8fc1-422b-a4f4-a72ebed02666" end_index="1" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="c36c7171-8fc1-422b-a4f4-a72ebed02666" start_index="0" end="cfdd0aa1-b707-4208-bf11-e0a6fe8fae99" end_index="0" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="c36c7171-8fc1-422b-a4f4-a72ebed02666" start_index="0" end="8f5dcc59-e616-4412-b8af-fa67a43d4d2c" end_index="0" portType="0" />
   </Connectors>
   <Notes />
   <Annotations>
@@ -150,6 +152,6 @@ except Exception, e:
   </Annotations>
   <Presets />
   <Cameras>
-    <Camera Name="Background Preview" eyeX="-91.5115585327148" eyeY="89.0903091430664" eyeZ="-1.02528882026672" lookX="80.9099578857422" lookY="-92.7222061157227" lookZ="2.38632082939148" upX="0.594564259052277" upY="0.803856790065765" upZ="0.0175358131527901" />
+    <Camera Name="Background Preview" eyeX="-18173.95703125" eyeY="38915.14453125" eyeZ="19855.25" lookX="17066.841796875" lookY="-39356.2734375" lookZ="-17866.064453125" upX="0.49267652630806" upY="0.70090925693512" upZ="-0.515748143196106" />
   </Cameras>
 </Workspace>

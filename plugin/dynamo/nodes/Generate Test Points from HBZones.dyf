@@ -1,4 +1,4 @@
-<Workspace Version="1.2.0.2690" X="-51.0410043037543" Y="181.547072743909" zoom="0.926652175244368" Name="Generate Test Points from HBZones" Description="Generate test points from Honeybee zones based on grid size." ID="c748c4e3-42e1-421d-87c9-06495df97ddf" Category="Honeybee.03 :: Daylight :: Recipes">
+<Workspace Version="1.2.0.2690" X="-75.2681824041176" Y="216.858603886403" zoom="0.863147625765326" Name="Generate Test Points from HBZones" Description="Generate test points from Honeybee zones based on grid size." ID="c748c4e3-42e1-421d-87c9-06495df97ddf" Category="Honeybee.03 :: Daylight :: Recipes">
   <NamespaceResolutionMap>
     <ClassMap partialName="List" resolvedName="DSCore.List" assemblyName="DSCoreNodes.dll" />
     <ClassMap partialName="System.Object" resolvedName="System.Object" assemblyName="" />
@@ -73,7 +73,8 @@ else:
       <PortInfo index="0" default="False" />
       <Symbol value="//Report&#xD;&#xA;ERRReport" />
     </Dynamo.Graph.Nodes.CustomNodes.Output>
-    <PythonNodeModels.PythonNode guid="742d8e0c-cf87-478d-a8cd-e8d7c0aec9fe" type="PythonNodeModels.PythonNode" nickname="import and prepare py code" x="620.228436592896" y="-0.590375502830682" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" isPinned="false" inputcount="2">
+    <Dynamo.Graph.Nodes.CodeBlockNodeModel guid="913aff2e-eccd-4dfb-a667-80d9d46e8d9a" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" nickname="Code Block" x="230.983113213228" y="2.35413237851674" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" isPinned="false" CodeText="&quot;Honeybee&quot;;&#xA;&quot;genTestPointsFromHBZones_node.py&quot;;" ShouldFocus="false" />
+    <PythonNodeModels.PythonNode guid="4daa6c6e-4ea8-4b14-811f-44bd77eddbe8" type="PythonNodeModels.PythonNode" nickname="import and prepare py code" x="594.274104112642" y="-1.96990689780489" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" isPinned="false" inputcount="2">
       <PortInfo index="0" default="False" />
       <PortInfo index="1" default="False" />
       <Script>"""Find packages from Dynamo folder and prepare the code."""
@@ -104,6 +105,8 @@ def tryGetPluginPath(plugin):
     pkf = []
     for path in _dynamoPaths:
         settingsFile = IO.Path.Combine(_appdata, path, _settingsFilename)
+        if not IO.File.Exists(settingsFile):
+            continue
         with open(settingsFile, 'rb') as outf:
             for line in outf:
                 if line.strip().startswith('&lt;CustomPackageFolders&gt;'):
@@ -154,7 +157,6 @@ except Exception, e:
         "{}".format(traceback.format_exc())
 </Script>
     </PythonNodeModels.PythonNode>
-    <Dynamo.Graph.Nodes.CodeBlockNodeModel guid="913aff2e-eccd-4dfb-a667-80d9d46e8d9a" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" nickname="Code Block" x="230.983113213228" y="2.35413237851674" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" isPinned="false" CodeText="&quot;Honeybee&quot;;&#xA;&quot;genTestPointsFromHBZones_node.py&quot;;" ShouldFocus="false" />
   </Elements>
   <Connectors>
     <Dynamo.Graph.Connectors.ConnectorModel start="9b6b11cc-357e-4474-bf40-61286e030508" start_index="0" end="f4c3c43f-b6f3-422b-bdc7-c04408984db2" end_index="1" portType="0" />
@@ -167,10 +169,10 @@ except Exception, e:
     <Dynamo.Graph.Connectors.ConnectorModel start="249af892-8055-40ec-a654-0d9345cedc99" start_index="1" end="9e4f44cc-023f-477c-b035-acde02cef787" end_index="0" portType="0" />
     <Dynamo.Graph.Connectors.ConnectorModel start="249af892-8055-40ec-a654-0d9345cedc99" start_index="2" end="f58734c9-a481-4d10-b648-59bbb47552a9" end_index="0" portType="0" />
     <Dynamo.Graph.Connectors.ConnectorModel start="249af892-8055-40ec-a654-0d9345cedc99" start_index="3" end="8c3b0af0-ca99-4a20-9c51-f2f6d65efb16" end_index="0" portType="0" />
-    <Dynamo.Graph.Connectors.ConnectorModel start="742d8e0c-cf87-478d-a8cd-e8d7c0aec9fe" start_index="0" end="f4c3c43f-b6f3-422b-bdc7-c04408984db2" end_index="0" portType="0" />
-    <Dynamo.Graph.Connectors.ConnectorModel start="742d8e0c-cf87-478d-a8cd-e8d7c0aec9fe" start_index="0" end="9b6b11cc-357e-4474-bf40-61286e030508" end_index="0" portType="0" />
-    <Dynamo.Graph.Connectors.ConnectorModel start="913aff2e-eccd-4dfb-a667-80d9d46e8d9a" start_index="0" end="742d8e0c-cf87-478d-a8cd-e8d7c0aec9fe" end_index="0" portType="0" />
-    <Dynamo.Graph.Connectors.ConnectorModel start="913aff2e-eccd-4dfb-a667-80d9d46e8d9a" start_index="1" end="742d8e0c-cf87-478d-a8cd-e8d7c0aec9fe" end_index="1" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="913aff2e-eccd-4dfb-a667-80d9d46e8d9a" start_index="0" end="4daa6c6e-4ea8-4b14-811f-44bd77eddbe8" end_index="0" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="913aff2e-eccd-4dfb-a667-80d9d46e8d9a" start_index="1" end="4daa6c6e-4ea8-4b14-811f-44bd77eddbe8" end_index="1" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="4daa6c6e-4ea8-4b14-811f-44bd77eddbe8" start_index="0" end="f4c3c43f-b6f3-422b-bdc7-c04408984db2" end_index="0" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="4daa6c6e-4ea8-4b14-811f-44bd77eddbe8" start_index="0" end="9b6b11cc-357e-4474-bf40-61286e030508" end_index="0" portType="0" />
   </Connectors>
   <Notes />
   <Annotations>
@@ -180,6 +182,6 @@ except Exception, e:
   </Annotations>
   <Presets />
   <Cameras>
-    <Camera Name="Background Preview" eyeX="-91.5115585327148" eyeY="89.0903091430664" eyeZ="-1.02528882026672" lookX="80.9099578857422" lookY="-92.7222061157227" lookZ="2.38632082939148" upX="0.594564259052277" upY="0.803856790065765" upZ="0.0175358131527901" />
+    <Camera Name="Background Preview" eyeX="-18173.95703125" eyeY="38915.14453125" eyeZ="19855.25" lookX="17066.841796875" lookY="-39356.2734375" lookZ="-17866.064453125" upX="0.49267652630806" upY="0.70090925693512" upZ="-0.515748143196106" />
   </Cameras>
 </Workspace>
