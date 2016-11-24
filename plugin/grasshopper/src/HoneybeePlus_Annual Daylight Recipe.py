@@ -29,7 +29,7 @@ Annual daylight Recipe.
 
 ghenv.Component.Name = "HoneybeePlus_Annual Daylight Recipe"
 ghenv.Component.NickName = 'annualRecipe'
-ghenv.Component.Message = 'VER 0.0.01\nNOV_16_2016'
+ghenv.Component.Message = 'VER 0.0.01\nNOV_18_2016'
 ghenv.Component.Category = "HoneybeePlus"
 ghenv.Component.SubCategory = '03 :: Daylight :: Recipe'
 ghenv.Component.AdditionalHelpFromDocStrings = "1"
@@ -46,18 +46,5 @@ except ImportError as e:
     raise ImportError('{}\n\t{}'.format(msg, e))
 
 
-if _epwFile:
-    # match points and vectors
-    try:
-        from honeybee_grasshopper import datatree
-    except ImportError:
-        # Dynamo
-        pass
-    else:
-        _testPoints = tuple(i.list for i in datatree.dataTreeToList(_testPoints))
-        ptsVectors_ = tuple(i.list for i in datatree.dataTreeToList(ptsVectors_))
-    
-    _skyDensity_= _skyDensity_ or 1
-    # set a sunlight hours analysis recipe together if there are points
-    analysisRecipe = HBAnnualAnalysisRecipe(_epwFile, _testPoints, ptsVectors_,
-                                            _skyDensity_)
+if _skyMTX and _analysisGrids:
+    analysisRecipe = HBAnnualAnalysisRecipe(_skyMTX, _analysisGrids, _annualDLPar_)
