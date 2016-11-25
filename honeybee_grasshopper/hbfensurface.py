@@ -1,4 +1,4 @@
-from honeybee
+import honeybee
 from .utilities import extractSurfacePoints, polygon, xyzToGeometricalPoints
 
 
@@ -21,11 +21,12 @@ class HBFenSurface(honeybee.hbfensurface.HBFenSurface):
         isCreatedFromGeometry: ...
     """
 
+    @classmethod
     def fromGeometry(cls, name, geometry, isNameSetByUser=False,
                      radProperties=None, epProperties=None):
-        "Create a honeybee fenestration surface from Grasshopper geometry."
-        self.geometry = geometry
-        sortedPoints = extractSurfacePoints(self)
+        """Create a honeybee fenestration surface from Grasshopper geometry."""
+        cls.geometry = geometry
+        sortedPoints = extractSurfacePoints(cls.geometry)
 
         return cls(name, sortedPoints, isNameSetByUser, radProperties,
                    epProperties)

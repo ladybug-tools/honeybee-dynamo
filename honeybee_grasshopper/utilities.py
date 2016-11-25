@@ -28,10 +28,10 @@ def extractSurfacePoints(geometry, triangulate=False, meshingParameters=None):
         a number of lists.
     """
     assert isinstance(geometry, rc.Geometry.GeometryBase), \
-        "Input surface should be a Mesh or a Brep."
+        TypeError("Input surface should be a Mesh or a Brep not {}.".format(type(geometry)))
 
     assert not isinstance(geometry, rc.Geometry.Mesh), \
-        "Extracting points for mesh surfaces hasn't been implemented."
+        NotImplementedError("Extracting points for mesh surfaces hasn't been implemented.")
 
     pts = geometry.DuplicateVertices()
     # sort points anti clockwise

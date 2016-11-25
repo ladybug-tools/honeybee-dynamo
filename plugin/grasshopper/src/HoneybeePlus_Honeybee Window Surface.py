@@ -7,7 +7,7 @@
 # @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
 
 """
-Honeybee Surface
+Honeybee Window Surface
 
 -
 
@@ -15,18 +15,14 @@ Honeybee Surface
         _geo: An input geometry.
         name_: A name for this surface. If the name is not provided Honeybee will
             assign a random name to the surface.
-        _type_: Surface type. Surface type will be used to set the material and
-            construction for the surface if they are not assigned by user.
-            0   Wall           0.5 UndergroundWall
-            1   Roof           1.5 UndergroundCeiling
-            2   Floor          2.25 UndergroundSlab
-            2.5 SlabOnGrade    2.75 ExposedFloor
-            3   Ceiling        4   AirWall
-            5   Window         6   Context
-        radMat_: Radiance material. If radiance matrial is not provided the component
-            will use the type to assign the default material for the surface. If type
-            is also not assigned by user. Honeybee will guess the type of the surface
-            based on surface normal vector direction at the center of the surface.
+        radMat_: A Radiance material or a list pf BSDF materials.
+            If multiple BSDF materials are provided and the 3-Phase recipe is
+            used the simulation will run for each material separately as a
+            different state for this window.
+            If radiance matrial is not provided the component will use the type
+            to assign the default material for the surface. If type is also not
+            assigned by user. Honeybee will guess the type of the surface based
+            on surface normal vector direction at the center of the surface.
         epProp_: EnergyPlus properties. If EnergyPlus properties is not provided the
             component will use the "type" to assign the EnergyPlus properties for this
             surface. If type is also not assigned by user Honeybee will guess the type
@@ -39,15 +35,16 @@ Honeybee Surface
             or to create a Honeybee zone for Energy analysis.
 """
 
-ghenv.Component.Name = "HoneybeePlus_Honeybee Surface"
-ghenv.Component.NickName = 'HBSurface'
+ghenv.Component.Name = "HoneybeePlus_Honeybee Window Surface"
+ghenv.Component.NickName = 'HBWinSrf'
 ghenv.Component.Message = 'VER 0.0.01\nNOV_24_2016'
 ghenv.Component.Category = "HoneybeePlus"
 ghenv.Component.SubCategory = '00 :: Create'
 ghenv.Component.AdditionalHelpFromDocStrings = "1"
 
+
 try:
-    from honeybee_grasshopper.hbsurface import HBSurface
+    from honeybee_grasshopper.hbfensurface import HBFenSurface
     from honeybee.radiance.properties import RadianceProperties
 except ImportError as e:
     msg = '\nFailed to import honeybee. Did you install honeybee on your machine?' + \
@@ -66,14 +63,17 @@ if _geo:
     if not name_:
         name_ = "Surface_%s" % uuid4()
         isNameSetByUser = False
-        
-    isTypeSetByUser = True
-    if not _type_:
-        isTypeSetByUser = False
     
-    radProp_ = RadianceProperties(radMat_, True) if radMat_ else RadianceProperties()
-    
+    for m in radMat_:
+        assert m.isGlassMaterial, \
+            TypeError('Radiance material must be a Window material not {}.'.format(type(m)))
+    if len(radMat_)==0:
+        radProp_ = RadianceProperties()
+    elif len(radMat_) == 1:
+        radProp_ = RadianceProperties(radMat_[0], True)
+    else:
+        radProp_ = RadianceProperties(
+            radMat_[0], True, alternateMaterials=radMat_[1:])
+
     epProp_ = epProp_ if epProp_ else None
-    
-    HBSrf = HBSurface.fromGeometry(name_, _geo, _type_, isNameSetByUser,
-                                   isTypeSetByUser, radProp_, epProp_)
+    HBWindowSrf = HBFenSurface.fromGeometry(name_, _geo, isNameSetByUser, radProp_, epProp_)
