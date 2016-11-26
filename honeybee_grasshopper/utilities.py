@@ -7,6 +7,11 @@ except ImportError as e:
     pass
 
 
+def isPlanar(geometry, tol=1e-3):
+    """Check if a surface in planar."""
+    return geometry.Faces[0].IsPlanar(tol)
+
+
 def extractSurfacePoints(geometry, triangulate=False, meshingParameters=None):
     """Calculate list of points for a HBSurface.
 
@@ -30,9 +35,15 @@ def extractSurfacePoints(geometry, triangulate=False, meshingParameters=None):
     assert isinstance(geometry, rc.Geometry.GeometryBase), \
         TypeError("Input surface should be a Mesh or a Brep not {}.".format(type(geometry)))
 
-    assert not isinstance(geometry, rc.Geometry.Mesh), \
-        NotImplementedError("Extracting points for mesh surfaces hasn't been implemented.")
+    if isinstance(geometry, rc.Geometry.Mesh):
+        return extractMeshPoints((geometry,))
 
+    if isinstance(geometry, rc.Geometry.Brep) and not isPlanar(geometry):
+        meshes = rc.Geometry.Mesh.CreateFromBrep(geometry, meshingParameters)
+        return extractMeshPoints(meshes)
+
+    meshingParameters = meshingParameters or rc.Geometry.MeshingParameters.Coarse
+    meshingParameters.SimplePlanes = True
     pts = geometry.DuplicateVertices()
     # sort points anti clockwise
     # this is only important for energy simulation and won't make a difference
@@ -40,18 +51,30 @@ def extractSurfacePoints(geometry, triangulate=False, meshingParameters=None):
 
     # To sort the points we find border of the surface and evaluate points
     # on border and use the parameter value to sort them
-    border = rc.Geometry.Curve.JoinCurves(geometry.DuplicateEdgeCurves(True))[0]
+    border = rc.Geometry.Curve.JoinCurves(geometry.DuplicateEdgeCurves(True))
 
-    pointsSorted = sorted(pts, key=lambda pt: border.ClosestPoint(pt)[1])
+    if len(border) == 1:
+        pointsSorted = sorted(pts, key=lambda pt: border[0].ClosestPoint(pt)[1])
+        # make sure points are anti clockwise
+        if not isPointsSortedAntiClockwise(
+                pointsSorted, getSurfaceCenterPtandNormal(geometry).normalVector):
+            pointsSorted.reverse()
 
-    # make sure points are anti clockwise
-    if not isPointsSortedAntiClockwise(
-            pointsSorted, getSurfaceCenterPtandNormal(geometry).normalVector):
-        return pointsSorted.reverse()
+        # return sorted points
+        # Wrap in a list as Honeybee accepts list of list of points
+        return (pointsSorted,)
+    else:
+        # mesh the surface
+        meshes = rc.Geometry.Mesh.CreateFromBrep(geometry, meshingParameters)
+        return extractMeshPoints(meshes)
 
-    # return sorted points
-    # Wrap in a list as Honeybee accepts list of list of points
-    return (pointsSorted,)
+
+def extractMeshPoints(meshes):
+    """Extract points from a mesh."""
+    return tuple(tuple(mesh.Vertices[face[i]] for i in range(4))
+                 if face.IsQuad else
+                 tuple(mesh.Vertices[face[i]] for i in range(3))
+                 for mesh in meshes for face in mesh.Faces)
 
 
 def vectorsCrossProduct(vector1, vector2):
