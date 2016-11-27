@@ -15,20 +15,10 @@ Honeybee Window Surface
         _geo: An input geometry.
         name_: A name for this surface. If the name is not provided Honeybee will
             assign a random name to the surface.
-        radMat_: A Radiance material or a list pf BSDF materials.
-            If multiple BSDF materials are provided and the 3-Phase recipe is
-            used the simulation will run for each material separately as a
-            different state for this window.
-            If radiance matrial is not provided the component will use the type
-            to assign the default material for the surface. If type is also not
-            assigned by user. Honeybee will guess the type of the surface based
-            on surface normal vector direction at the center of the surface.
-        epProp_: EnergyPlus properties. If EnergyPlus properties is not provided the
-            component will use the "type" to assign the EnergyPlus properties for this
-            surface. If type is also not assigned by user Honeybee will guess the type
-            of the surface based on surface normal vector direction at the center of
-            the surface, and sets EnergyPlus properties based on the type.
-        
+        radMat_: A Radiance material. If radiance matrial is not provided the
+            component will use the type to assign the default material
+            (%60 transmittance)for the surface.
+        epProp_: EnergyPlus properties.
     Returns:
         readMe!: Reports, errors, warnings, etc.
         HBSrf: Honeybee surface. Use this surface directly for daylight simulation
@@ -37,7 +27,7 @@ Honeybee Window Surface
 
 ghenv.Component.Name = "HoneybeePlus_Honeybee Window Surface"
 ghenv.Component.NickName = 'HBWinSrf'
-ghenv.Component.Message = 'VER 0.0.01\nNOV_25_2016'
+ghenv.Component.Message = 'VER 0.0.01\nNOV_26_2016'
 ghenv.Component.Category = "HoneybeePlus"
 ghenv.Component.SubCategory = '00 :: Create'
 ghenv.Component.AdditionalHelpFromDocStrings = "1"
@@ -67,7 +57,7 @@ if _geo:
     if radMat_:
         assert radMat_.isGlassMaterial, \
             TypeError('Radiance material must be a Window material not {}.'.format(type(m)))
-        radProp_ = RadianceProperties(radMat_[0], True)
+        radProp_ = RadianceProperties(radMat_, True)
     else:
         radProp_ = RadianceProperties()
 
