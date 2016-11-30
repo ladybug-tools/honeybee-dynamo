@@ -15,6 +15,8 @@ Run Radiance Analysis
         _analysisRecipe: Radiance analysis recipe. You can find the recipes under
             tab 03 | Daylight | Recipe.
         _HBObjects: A flatten list of Honeybee surfaces and zones.
+        radScene_: A honeybee radiance scene that will be considered as the context
+            for honeybee objects. Use Radiance Scene component to create a radScene.
         _folder_: An optional folder to save the files for this analysis.
         _name_: An optional name for this analysis.
         _write: Set to True to write the files to the folder.
@@ -27,7 +29,7 @@ Run Radiance Analysis
 
 ghenv.Component.Name = "HoneybeePlus_Run Radiance Analysis"
 ghenv.Component.NickName = 'runRadiance'
-ghenv.Component.Message = 'VER 0.0.01\nNOV_27_2016'
+ghenv.Component.Message = 'VER 0.0.01\nNOV_30_2016'
 ghenv.Component.Category = "HoneybeePlus"
 ghenv.Component.SubCategory = '04 :: Daylight :: Daylight'
 ghenv.Component.AdditionalHelpFromDocStrings = "1"
@@ -40,8 +42,6 @@ if _HBObjects and _analysisRecipe and _write:
     try:
         for obj in _HBObjects:
             assert hasattr(obj, 'isHBObject')
-        for obj in context_:
-            assert hasattr(obj, 'isHBObject')            
     except AssertionError:
         raise ValueError("\n{} is not a valid Honeybee object.".format(obj))
    
@@ -59,8 +59,8 @@ if _HBObjects and _analysisRecipe and _write:
         else:
             _analysisRecipe.hbObjects = _HBObjects
 
-        _analysisRecipe.writeToFile(_folder_, _name_)
+        batchFile = _analysisRecipe.write(_folder_, _name_)
 
     if _write and run_:
-        if _analysisRecipe.run(False):
+        if _analysisRecipe.run(batchFile, False):
             results = _analysisRecipe.results()
