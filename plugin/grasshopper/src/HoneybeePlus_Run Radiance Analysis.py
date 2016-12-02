@@ -29,7 +29,7 @@ Run Radiance Analysis
 
 ghenv.Component.Name = "HoneybeePlus_Run Radiance Analysis"
 ghenv.Component.NickName = 'runRadiance'
-ghenv.Component.Message = 'VER 0.0.01\nNOV_30_2016'
+ghenv.Component.Message = 'VER 0.0.01\nDEC_02_2016'
 ghenv.Component.Category = "HoneybeePlus"
 ghenv.Component.SubCategory = '04 :: Daylight :: Daylight'
 ghenv.Component.AdditionalHelpFromDocStrings = "1"
@@ -58,9 +58,10 @@ if _HBObjects and _analysisRecipe and _write:
                 tuple(obj for obj in _HBObjects if obj.hasBSDFRadianceMaterial)
         else:
             _analysisRecipe.hbObjects = _HBObjects
-
+        
+        _analysisRecipe.scene = radScene_
         batchFile = _analysisRecipe.write(_folder_, _name_)
 
     if _write and run_:
-        if _analysisRecipe.run(batchFile, False):
+        if _analysisRecipe.run(batchFile, run_ % 2 == 0):
             results = _analysisRecipe.results()
