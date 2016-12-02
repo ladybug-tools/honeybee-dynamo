@@ -29,16 +29,13 @@ Three-pahse daylight Recipe.
 
 ghenv.Component.Name = "HoneybeePlus_Three-Phase Daylight Recipe"
 ghenv.Component.NickName = 'threePhaseRecipe'
-ghenv.Component.Message = 'VER 0.0.01\nNOV_23_2016'
+ghenv.Component.Message = 'VER 0.0.01\nDEC_02_2016'
 ghenv.Component.Category = "HoneybeePlus"
 ghenv.Component.SubCategory = '03 :: Daylight :: Recipe'
-ghenv.Component.AdditionalHelpFromDocStrings = "1"
-
-#import honeybee
-#reload(honeybee.radiance.recipe.threephase)
+ghenv.Component.AdditionalHelpFromDocStrings = "3"
 
 try:
-    from honeybee.radiance.recipe.threephase import HBThreePhaseAnalysisRecipe
+    from honeybee.radiance.recipe.threephase.gridbased import HBThreePhaseGridBasedAnalysisRecipe
 except ImportError as e:
     msg = '\nFailed to import honeybee. Did you install honeybee on your machine?' + \
             '\nYou can download the installer file from github: ' + \
@@ -52,6 +49,6 @@ except ImportError as e:
 if _skyMTX and _analysisGrid:
     reuseDaylightMTX_ = True if reuseDaylightMTX_ is None else reuseDaylightMTX_
     reuseViewMTX_ = True if reuseViewMTX_ is None else reuseViewMTX_
-    analysisRecipe = HBThreePhaseAnalysisRecipe(
+    analysisRecipe = HBThreePhaseGridBasedAnalysisRecipe(
         _skyMTX, _analysisGrid, _viewMTXPar_, _DaylightMTXPar_, reuseViewMTX_,
         reuseDaylightMTX_)
