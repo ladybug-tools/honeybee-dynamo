@@ -31,13 +31,13 @@ Image-based Recipe.
 
 ghenv.Component.Name = "HoneybeePlus_Image-Based Recipe"
 ghenv.Component.NickName = 'imageBasedRecipe'
-ghenv.Component.Message = 'VER 0.0.01\nNOV_30_2016'
+ghenv.Component.Message = 'VER 0.0.01\nDEC_02_2016'
 ghenv.Component.Category = "HoneybeePlus"
 ghenv.Component.SubCategory = '03 :: Daylight :: Recipe'
 ghenv.Component.AdditionalHelpFromDocStrings = "1"
 
 try:
-    from honeybee.radiance.recipe.imagebased import HBImageBasedAnalysisRecipe
+    from honeybee.radiance.recipe.imagebased import ImageBasedAnalysisRecipe
 except ImportError as e:
     msg = '\nFailed to import honeybee. Did you install honeybee on your machine?' + \
             '\nYou can download the installer file from github: ' + \
@@ -50,5 +50,5 @@ except ImportError as e:
 
 if _sky and _views:
     # set a sunlight hours analysis recipe together if there are points
-    analysisRecipe = HBImageBasedAnalysisRecipe(
+    analysisRecipe = ImageBasedAnalysisRecipe(
         _sky, _views, _analysisType_, _radiancePar_)

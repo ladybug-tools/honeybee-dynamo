@@ -24,13 +24,13 @@ Write honeybee objects to a Radiance file.
 
 ghenv.Component.Name = "HoneybeePlus_Write HBObjects to Radiance"
 ghenv.Component.NickName = 'HBToRad'
-ghenv.Component.Message = 'VER 0.0.01\nDEC_01_2016'
+ghenv.Component.Message = 'VER 0.0.01\nDEC_02_2016'
 ghenv.Component.Category = "HoneybeePlus"
 ghenv.Component.SubCategory = '00 :: Create'
 ghenv.Component.AdditionalHelpFromDocStrings = "3"
 
 try:
-    from honeybee.radiance.recipe._recipebase import HBDaylightAnalysisRecipe
+    from honeybee.radiance.recipe._recipebase import DaylightAnalysisRecipe
 except ImportError as e:
     msg = '\nFailed to import honeybee. Did you install honeybee on your machine?' + \
             '\nYou can download the installer file from github: ' + \
@@ -41,5 +41,5 @@ except ImportError as e:
     raise ImportError('{}\n\t{}'.format(msg, e))
 
 if _hbObjects and _folder and _filename and _write:
-    recp = HBDaylightAnalysisRecipe(_hbObjects, '')
+    recp = DaylightAnalysisRecipe(_hbObjects, '')
     radFile = recp.writeMaterialsAndGeometriesToFile(_folder, _filename, True)

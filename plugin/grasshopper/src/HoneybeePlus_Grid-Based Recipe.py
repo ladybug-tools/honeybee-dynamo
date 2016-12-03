@@ -31,13 +31,15 @@ Grid-based Recipe.
 
 ghenv.Component.Name = "HoneybeePlus_Grid-Based Recipe"
 ghenv.Component.NickName = 'gridBasedRecipe'
-ghenv.Component.Message = 'VER 0.0.01\nNOV_18_2016'
+ghenv.Component.Message = 'VER 0.0.01\nDEC_02_2016'
 ghenv.Component.Category = "HoneybeePlus"
 ghenv.Component.SubCategory = '03 :: Daylight :: Recipe'
 ghenv.Component.AdditionalHelpFromDocStrings = "1"
 
+#    import honeybee
+#    reload(honeybee.radiance.recipe.gridbased)
 try:
-    from honeybee.radiance.recipe.gridbased import HBGridBasedAnalysisRecipe
+    from honeybee.radiance.recipe.gridbased import GridBasedAnalysisRecipe
 except ImportError as e:
     msg = '\nFailed to import honeybee. Did you install honeybee on your machine?' + \
             '\nYou can download the installer file from github: ' + \
@@ -51,5 +53,5 @@ except ImportError as e:
 if _sky and _analysisGrids:
     
     # set a sunlight hours analysis recipe together if there are points
-    analysisRecipe = HBGridBasedAnalysisRecipe(
+    analysisRecipe = GridBasedAnalysisRecipe(
         _sky, _analysisGrids, _analysisType_, _radiancePar_)
