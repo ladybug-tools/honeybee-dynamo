@@ -28,7 +28,7 @@ Standard Radiance CIE Sky.
 
 ghenv.Component.Name = "HoneybeePlus_CIE Standard Sky"
 ghenv.Component.NickName = 'CIESky'
-ghenv.Component.Message = 'VER 0.0.01\nNOV_16_2016'
+ghenv.Component.Message = 'VER 0.0.01\nDEC_04_2016'
 ghenv.Component.Category = "HoneybeePlus"
 ghenv.Component.SubCategory = '02 :: Daylight :: Light Sources'
 ghenv.Component.AdditionalHelpFromDocStrings = "1"
@@ -37,7 +37,7 @@ try:
     from honeybee.radiance.sky.cieradiancesky import CIERadianceSky
     
     # This will be changed to ladybug.location
-    from honeybee.ladybug.core import Location
+    from ladybug.location import Location
 except ImportError as e:
     msg = '\nFailed to import honeybee. Did you install honeybee on your machine?' + \
             '\nYou can download the installer file from github: ' + \
@@ -47,10 +47,9 @@ except ImportError as e:
         
     raise ImportError('{}\n\t{}'.format(msg, e))
 
-
 if _location:
     if not hasattr(_location, 'isLocation'):
-        _location = Location.fromEPString(_location)
+        _location = Location.fromLocation(_location)
     # set default values if they are not set
     north_ = north_ or 0
     _skyType_ = _skyType_ or 0
