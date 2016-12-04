@@ -12,30 +12,27 @@ Three-pahse daylight Recipe.
 -
 
     Args:
-        _sky: A radiance sky. Find honeybee skies under 02::Daylight::Light Sources.
-        _testPoints: A list or a datatree of points. Each branch of the datatree
-            will be considered as a point group.
-        ptsVectors_: A list or a datatree of vectors. Each vector represents the
-            direction of the respective test point in testPoints. If only one
-            value is provided it will be used for all the test points. If no value
-            is provided (0, 0, 1) will be assigned for all the vectors.
-        _skyDensity_: A positive intger for sky density. [1] Tregenza Sky,
-            [2] Reinhart Sky, etc. (Default: 1)
+        _skyMTX: A sky matrix or a sky vector. Find honeybee skies under 02::Daylight::Light Sources.
+        _analysisGrids: A list of Honeybee analysis grids.
+        _analysisType_: Analysis type. [0] illuminance(lux), [1] radiation (kwh),
+            [2] luminance (Candela).
+        _radiancePar_: Radiance parameters for Grid-based analysis. Find Radiance
+            parameters node under 03::Daylight::Recipes.
     Returns:
         readMe!: Reports, errors, warnings, etc.
         analysisRecipe: Annual analysis recipe. Connect this recipe to Run Radiance
             Analysis to run a annual analysis.
 """
 
-ghenv.Component.Name = "HoneybeePlus_Three-Phase Daylight Recipe"
-ghenv.Component.NickName = 'threePhaseRecipe'
-ghenv.Component.Message = 'VER 0.0.01\nDEC_02_2016'
+ghenv.Component.Name = "HoneybeePlus_Grid-Based Three-Phase Daylight Recipe"
+ghenv.Component.NickName = 'threePhaseGBRecipe'
+ghenv.Component.Message = 'VER 0.0.01\nDEC_03_2016'
 ghenv.Component.Category = "HoneybeePlus"
 ghenv.Component.SubCategory = '03 :: Daylight :: Recipe'
 ghenv.Component.AdditionalHelpFromDocStrings = "3"
 
 try:
-    from honeybee.radiance.recipe.threephase.gridbased import HBThreePhaseGridBasedAnalysisRecipe
+    from honeybee.radiance.recipe.threephase.gridbased import ThreePhaseGridBasedAnalysisRecipe
 except ImportError as e:
     msg = '\nFailed to import honeybee. Did you install honeybee on your machine?' + \
             '\nYou can download the installer file from github: ' + \
@@ -49,6 +46,6 @@ except ImportError as e:
 if _skyMTX and _analysisGrid:
     reuseDaylightMTX_ = True if reuseDaylightMTX_ is None else reuseDaylightMTX_
     reuseViewMTX_ = True if reuseViewMTX_ is None else reuseViewMTX_
-    analysisRecipe = HBThreePhaseGridBasedAnalysisRecipe(
-        _skyMTX, _analysisGrid, _viewMTXPar_, _DaylightMTXPar_, reuseViewMTX_,
-        reuseDaylightMTX_)
+    analysisRecipe = ThreePhaseGridBasedAnalysisRecipe(
+        _skyMTX, _analysisGrid, _analysisType_, _viewMTXPar_, _DaylightMTXPar_,
+        reuseViewMTX_, reuseDaylightMTX_)
