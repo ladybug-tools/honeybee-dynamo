@@ -25,13 +25,14 @@ Sky Vector.
 
 ghenv.Component.Name = "HoneybeePlus_Sky Vector"
 ghenv.Component.NickName = 'skyVector'
-ghenv.Component.Message = 'VER 0.0.01\nNOV_18_2016'
+ghenv.Component.Message = 'VER 0.0.01\nDEC_05_2016'
 ghenv.Component.Category = "HoneybeePlus"
 ghenv.Component.SubCategory = '02 :: Daylight :: Light Sources'
 ghenv.Component.AdditionalHelpFromDocStrings = "1"
 
 try:
     from honeybee.radiance.sky.skyvector import SkyVector
+    from ladybug.dt import LBDateTime
 except ImportError as e:
     msg = '\nFailed to import honeybee. Did you install honeybee on your machine?' + \
             '\nYou can download the installer file from github: ' + \
@@ -41,9 +42,18 @@ except ImportError as e:
         
     raise ImportError('{}\n\t{}'.format(msg, e))
 
-if _epwFile:
+if _wea:
+    north_ = north_ or 0
     _month_ = _month_ or 6
     _day_ = _day_ or 21
     _hour_ = _hour_ or 12
+    dt = LBDateTime(_month_, _day_, _hour_)
     _skyDensity_ = _skyDensity_ or 1
-    skyVec = SkyVector.fromClimateBasedSky(_epwFile, _month_, _day_, _hour_, _skyDensity_)
+    
+    location = _wea.location
+    directNormalRadiation = _wea.directNormalRadiation[int(dt.HOY)]
+    diffuseHorizontalRadiation = _wea.diffuseHorizontalRadiation[int(dt.HOY)]
+    
+    skyVec = SkyVector.fromRadiationValues(
+        location, directNormalRadiation, diffuseHorizontalRadiation, _month_,
+        _day_, _hour_, _skyDensity_, north_)
