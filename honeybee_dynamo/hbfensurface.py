@@ -1,8 +1,8 @@
-import honeybee
+import honeybee.hbfensurface as hbfensrf
 from .utilities import extractSurfacePoints, polygon, xyzToGeometricalPoints
 
 
-class HBFenSurface(honeybee.hbfensurface.HBFenSurface):
+class HBFenSurface(hbfensrf.HBFenSurface):
     """Honeybee fenestration surface.
 
     Args:

@@ -1,8 +1,8 @@
-import honeybee
+import honeybee.hbsurface as hbsrf
 from .utilities import extractSurfacePoints, polygon, xyzToGeometricalPoints
 
 
-class HBSurface(honeybee.hbsurface.HBSurface):
+class HBSurface(hbsrf.HBSurface):
     """Honeybee surface.
 
     Args:

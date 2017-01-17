@@ -1,7 +1,7 @@
-import honeybee
+import honeybee.hbzone as hbZone
 
 
-class HBZone(honeybee.hbzone.HBZone):
+class HBZone(hbZone.HBZone):
     """Honeybee Zone.
 
     Args:
