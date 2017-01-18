@@ -29,7 +29,7 @@ Run Radiance Analysis
 
 ghenv.Component.Name = "HoneybeePlus_Run Radiance Analysis"
 ghenv.Component.NickName = 'runRadiance'
-ghenv.Component.Message = 'VER 0.0.01\nDEC_06_2016'
+ghenv.Component.Message = 'VER 0.0.01\nJAN_17_2017'
 ghenv.Component.Category = "HoneybeePlus"
 ghenv.Component.SubCategory = '04 :: Daylight :: Daylight'
 ghenv.Component.AdditionalHelpFromDocStrings = "1"
@@ -51,9 +51,8 @@ if _HBObjects and _analysisRecipe and _write:
     if _write:
         # Add Honeybee objects to the recipe
         if 'Phase' in _analysisRecipe.__class__.__name__: 
-            print ''
             _analysisRecipe.hbObjects = \
-                [obj for obj in _HBObjects if not obj.hasBSDFRadianceMaterial] + context_
+                tuple(obj for obj in _HBObjects if not obj.hasBSDFRadianceMaterial)
             _analysisRecipe.windowSurfaces = \
                 tuple(obj for obj in _HBObjects if obj.hasBSDFRadianceMaterial)
         else:
