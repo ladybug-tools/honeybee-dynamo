@@ -24,22 +24,17 @@ Write honeybee objects to a Radiance file.
 
 ghenv.Component.Name = "HoneybeePlus_Write HBObjects to Radiance"
 ghenv.Component.NickName = 'HBToRad'
-ghenv.Component.Message = 'VER 0.0.01\nDEC_02_2016'
+ghenv.Component.Message = 'VER 0.0.02\nJUN_29_2017'
 ghenv.Component.Category = "HoneybeePlus"
 ghenv.Component.SubCategory = '00 :: Create'
 ghenv.Component.AdditionalHelpFromDocStrings = "3"
 
 try:
-    from honeybee.radiance.recipe._recipebase import DaylightAnalysisRecipe
+    from honeybee.radiance.radfile import RadFile
 except ImportError as e:
-    msg = '\nFailed to import honeybee. Did you install honeybee on your machine?' + \
-            '\nYou can download the installer file from github: ' + \
-            'https://github.com/ladybug-analysis-tools/honeybee-plus/tree/master/plugin/grasshopper/samplefiles' + \
-            '\nOpen an issue on github if you think this is a bug:' + \
-            ' https://github.com/ladybug-analysis-tools/honeybee-plus/issues'
-        
-    raise ImportError('{}\n\t{}'.format(msg, e))
+    raise ImportError('\nFailed to import honeybee:\n\t{}'.format(e))
+
 
 if _hbObjects and _folder and _filename and _write:
-    recp = DaylightAnalysisRecipe(_hbObjects, '')
-    radFile = recp.writeMaterialsAndGeometriesToFile(_folder, _filename, True)
+    rf = RadFile(_hbObjects)
+    radFile = rf. write(_folder, _filename, mkdir=True)

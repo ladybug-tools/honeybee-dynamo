@@ -17,57 +17,44 @@ group.
 -
 
     Args:
-        _name: A name for this window group. You can use this name later to add
-            or remove this group contribution to 3-Phase analysis.
-        _HBWindowSrfs: A list of HBWindow surfaces by similar normal direction.
-        _bsdfMaterials: A list of BSDF materials. The first material will overwrite
-            the radiance material for window surface. If multiple BSDF materials
-            are provided the simulation will run for each material separately as
-            a different state of the window group.
+        _geo: A list of input geometry.
+        name_: A name for this surface. If the name is not provided Honeybee will
+            assign a random name to the surface.
+        radMat_: A Radiance material. If radiance matrial is not provided the
+            component will use the type to assign the default material 
+            (%60 transmittance)for the surface.
+        epProp_: EnergyPlus properties.
     Returns:
-        readMe!: Reports, errors, warnings, etc.
-        HBWindowGroup: List of HBWindowsSrf for this window group.
+        report: Reports, errors, warnings, etc.
+        HBWinSrf: Honeybee window surface. Use this surface directly for daylight
+            simulation or add it to a honeybee surface or a honeybee zone for
+            energy simulation.
 """
 
 ghenv.Component.Name = "HoneybeePlus_Honeybee Window Group"
-ghenv.Component.NickName = 'HBWindowGroup'
-ghenv.Component.Message = 'VER 0.0.01\nNOV_25_2016'
+ghenv.Component.NickName = 'HBWinGroup'
+ghenv.Component.Message = 'VER 0.0.02\nJUN_29_2017'
 ghenv.Component.Category = "HoneybeePlus"
 ghenv.Component.SubCategory = '00 :: Create'
-ghenv.Component.AdditionalHelpFromDocStrings = "2"
+ghenv.Component.AdditionalHelpFromDocStrings = "1"
 
-if _name and _bsdfMaterials and _HBWindowSrfs:
-    # check inputs
-    try:
-        _normal = _HBWindowSrfs[0].normal
-    except AttributeError:
-        # A None input is connected which will be raised in next loop
-        pass
+try:
+    from honeybee_grasshopper.hbfensurface import HBFenSurface
+    from honeybee.radiance.properties import RadianceProperties
+except ImportError as e:
+    raise ImportError('\nFailed to import honeybee:\n\t{}'.format(e))
 
-    names = tuple(material.name for material in _bsdfMaterials)
-    
-    assert len(names) == len(set(names)), \
-        'Duplicated name found in bsdfMaterials!\n\t{}'.format(names)
-    
-    windowGroupSrfs = range(len(_HBWindowSrfs))
-    for count, srf in enumerate(_HBWindowSrfs):
-        assert hasattr(srf, 'isHBFenSurface'), \
-            TypeError('{} is not a HBWindowSurface.'.format(srf))
-    
-        assert srf.normal == _normal, \
-            ValueError('Normal direction of Windows in a window groups should match.\n'
-                       '{} from {} does not match {} from {}.'.format(
-                       srf.normal, srf, _HBWindowSrfs[0].normal, _HBWindowSrfs[0]
-                       ))
-        
-        newsrf= srf.duplicate()
-        # change window group name for this surface
-        newsrf.radProperties.windowGroupName = _name
-        newsrf.radProperties.radianceMaterial = _bsdfMaterials[0]
-        if len(_bsdfMaterials) > 1:
-            newsrf.radProperties.alternateMaterials = _bsdfMaterials[1:]
-        
-        windowGroupSrfs[count] = newsrf
+if _name and len(_geo)!=0 and _geo[0]!=None:
 
-    HBWindowGroup = windowGroupSrfs
-    
+    isNameSetByUser = True
+
+    if radMat_:
+        assert radMat_.isGlassMaterial, \
+            TypeError('Radiance material must be a Window material not {}.'.format(type(m)))
+        radProp_ = RadianceProperties(radMat_, True)
+    else:
+        radProp_ = RadianceProperties()
+
+    epProp_ = None
+    HBWinGroup = HBFenSurface.fromGeometry(
+        _name, _geo, isNameSetByUser, radProp_, epProp_, states_, group=True)

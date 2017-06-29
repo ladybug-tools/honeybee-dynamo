@@ -12,48 +12,38 @@ Honeybee Window Surface
 -
 
     Args:
-        _geo: An input geometry.
+        _geo: A list of input geometry.
         name_: A name for this surface. If the name is not provided Honeybee will
             assign a random name to the surface.
         radMat_: A Radiance material. If radiance matrial is not provided the
-            component will use the type to assign the default material
+            component will use the type to assign the default material 
             (%60 transmittance)for the surface.
         epProp_: EnergyPlus properties.
     Returns:
-        readMe!: Reports, errors, warnings, etc.
-        HBSrf: Honeybee surface. Use this surface directly for daylight simulation
-            or to create a Honeybee zone for Energy analysis.
+        report: Reports, errors, warnings, etc.
+        HBWinSrf: Honeybee window surface. Use this surface directly for daylight
+            simulation or add it to a honeybee surface or a honeybee zone for
+            energy simulation.
 """
 
 ghenv.Component.Name = "HoneybeePlus_Honeybee Window Surface"
 ghenv.Component.NickName = 'HBWinSrf'
-ghenv.Component.Message = 'VER 0.0.01\nNOV_26_2016'
+ghenv.Component.Message = 'VER 0.0.02\nJUN_29_2017'
 ghenv.Component.Category = "HoneybeePlus"
 ghenv.Component.SubCategory = '00 :: Create'
 ghenv.Component.AdditionalHelpFromDocStrings = "1"
-
 
 try:
     from honeybee_grasshopper.hbfensurface import HBFenSurface
     from honeybee.radiance.properties import RadianceProperties
 except ImportError as e:
-    msg = '\nFailed to import honeybee. Did you install honeybee on your machine?' + \
-            '\nYou can download the installer file from github: ' + \
-            'https://github.com/ladybug-analysis-tools/honeybee-plus/tree/master/plugin/grasshopper/samplefiles' + \
-            '\nOpen an issue on github if you think this is a bug:' + \
-            ' https://github.com/ladybug-analysis-tools/honeybee-plus/issues'
-        
-    raise ImportError('{}\n\t{}'.format(msg, e))
+    raise ImportError('\nFailed to import honeybee:\n\t{}'.format(e))
 
+if len(_geo)!=0 and _geo[0]!=None:
+    isNameSetByUser = False
+    if name_:
+        isNameSetByUser = True
 
-from uuid import uuid4
-
-if _geo:
-    isNameSetByUser = True
-    if not name_:
-        name_ = "Surface_%s" % uuid4()
-        isNameSetByUser = False
-    
     if radMat_:
         assert radMat_.isGlassMaterial, \
             TypeError('Radiance material must be a Window material not {}.'.format(type(m)))
@@ -61,5 +51,5 @@ if _geo:
     else:
         radProp_ = RadianceProperties()
 
-    epProp_ = epProp_ if epProp_ else None
-    HBWindowSrf = HBFenSurface.fromGeometry(name_, _geo, isNameSetByUser, radProp_, epProp_)
+    epProp_ = None
+    HBWinSrf = HBFenSurface.fromGeometry(name_, _geo, isNameSetByUser, radProp_, epProp_)

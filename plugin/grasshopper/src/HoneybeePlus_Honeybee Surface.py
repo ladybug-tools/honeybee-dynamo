@@ -12,7 +12,7 @@ Honeybee Surface
 -
 
     Args:
-        _geo: An input geometry.
+        _geo: A list of input geometries.
         name_: A name for this surface. If the name is not provided Honeybee will
             assign a random name to the surface.
         _type_: Surface type. Surface type will be used to set the material and
@@ -34,14 +34,14 @@ Honeybee Surface
             the surface, and sets EnergyPlus properties based on the type.
         
     Returns:
-        readMe!: Reports, errors, warnings, etc.
+        report: Reports, errors, warnings, etc.
         HBSrf: Honeybee surface. Use this surface directly for daylight simulation
             or to create a Honeybee zone for Energy analysis.
 """
 
 ghenv.Component.Name = "HoneybeePlus_Honeybee Surface"
 ghenv.Component.NickName = 'HBSurface'
-ghenv.Component.Message = 'VER 0.0.01\nNOV_24_2016'
+ghenv.Component.Message = 'VER 0.0.02\nJUN_29_2017'
 ghenv.Component.Category = "HoneybeePlus"
 ghenv.Component.SubCategory = '00 :: Create'
 ghenv.Component.AdditionalHelpFromDocStrings = "1"
@@ -50,22 +50,13 @@ try:
     from honeybee_grasshopper.hbsurface import HBSurface
     from honeybee.radiance.properties import RadianceProperties
 except ImportError as e:
-    msg = '\nFailed to import honeybee. Did you install honeybee on your machine?' + \
-            '\nYou can download the installer file from github: ' + \
-            'https://github.com/ladybug-analysis-tools/honeybee-plus/tree/master/plugin/grasshopper/samplefiles' + \
-            '\nOpen an issue on github if you think this is a bug:' + \
-            ' https://github.com/ladybug-analysis-tools/honeybee-plus/issues'
-        
-    raise ImportError('{}\n\t{}'.format(msg, e))
+    raise ImportError('\nFailed to import honeybee:\n\t{}'.format(e))
 
 
-from uuid import uuid4
-
-if _geo:
-    isNameSetByUser = True
-    if not name_:
-        name_ = "Surface_%s" % uuid4()
-        isNameSetByUser = False
+if len(_geo)!=0 and _geo[0]!=None:
+    isNameSetByUser = False
+    if name_:
+        isNameSetByUser = True
         
     isTypeSetByUser = True
     if not _type_:
@@ -73,7 +64,7 @@ if _geo:
     
     radProp_ = RadianceProperties(radMat_, True) if radMat_ else RadianceProperties()
     
-    epProp_ = epProp_ if epProp_ else None
+    epProp_ = None
     
     HBSrf = HBSurface.fromGeometry(name_, _geo, _type_, isNameSetByUser,
                                    isTypeSetByUser, radProp_, epProp_)

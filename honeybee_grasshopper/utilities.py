@@ -56,7 +56,7 @@ def extractBrepPoints(brep, meshingParameters=None, tol=1e-3):
         geometry = brep.Faces[fid].DuplicateFace(False)
         if not brep.Faces[fid].IsPlanar(tol):
             meshes = rc.Geometry.Mesh.CreateFromBrep(geometry, meshingParameters)
-            yield extractMeshPoints(meshes)
+            yield next(extractMeshPoints(meshes))
         else:
             # planar surface
             pts = geometry.DuplicateVertices()
@@ -72,16 +72,17 @@ def extractBrepPoints(brep, meshingParameters=None, tol=1e-3):
                 # mesh the surface
                 meshingParameters.SimplePlanes = True
                 meshes = rc.Geometry.Mesh.CreateFromBrep(geometry, meshingParameters)
-                yield extractMeshPoints(meshes)
-
-            pointsSorted = sorted(pts, key=lambda pt: border[0].ClosestPoint(pt)[1])
-            # make sure points are anti clockwise
-            if not isPointsSortedAntiClockwise(
-                    pointsSorted, getSurfaceCenterPtandNormal(geometry).normalVector):
-                pointsSorted.reverse()
-            # return sorted points
-            # Wrap in a list as Honeybee accepts list of list of points
-            yield geometry, (pointsSorted,)
+                yield next(extractMeshPoints(meshes))
+            else:
+                pointsSorted = sorted(pts, key=lambda pt: border[0].ClosestPoint(pt)[1])
+                # make sure points are anti clockwise
+                if not isPointsSortedAntiClockwise(
+                        pointsSorted,
+                        getSurfaceCenterPtandNormal(geometry).normalVector):
+                    pointsSorted.reverse()
+                # return sorted points
+                # Wrap in a list as Honeybee accepts list of list of points
+                yield geometry, (pointsSorted,)
 
 
 def extractMeshPoints(meshes):
