@@ -33,11 +33,11 @@ class HBSurface(hbsrf.HBSurface):
     @classmethod
     def fromGeometry(cls, name, geometry, surfaceType=None,
                      isNameSetByUser=False, isTypeSetByUser=False,
-                     radProperties=None, epProperties=None):
+                     radProperties=None, epProperties=None, states=None):
         """Create a honeybee surface from Dynamo geometry."""
         _pts = extractSurfacePoints(geometry)
         _srf = cls(name, _pts, surfaceType, isNameSetByUser, isTypeSetByUser,
-                   radProperties, epProperties)
+                   radProperties, epProperties, states)
         _srf.geometry = geometry
         return _srf
 
@@ -50,14 +50,14 @@ class HBSurface(hbsrf.HBSurface):
     def geometry(self):
         """Return geometry."""
         if self.isCreatedFromGeometry:
-            return self.__geometry
+            return self._geometry
         else:
             return self.profile
 
     @geometry.setter
     def geometry(self, geo):
         """Set geometry."""
-        self.__geometry = geo
+        self._geometry = geo
 
     @property
     def profile(self):

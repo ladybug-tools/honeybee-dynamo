@@ -1,5 +1,6 @@
 import honeybee.hbsurface as hbsrf
-from .utilities import extractSurfacePoints, polygon, xyzToGeometricalPoints
+from honeybee.utilcol import randomName
+from .utilities import extractGeometryPoints, polygon, xyzToGeometricalPoints
 
 
 class HBSurface(hbsrf.HBSurface):
@@ -21,25 +22,65 @@ class HBSurface(hbsrf.HBSurface):
                 2.5: SlabOnGrade    2.75: ExposedFloor
                 3.0: Ceiling        4.0: AirWall
                 6.0: Context
-        isNameSetByUser: If you want the name to be changed by honeybee any case
+        isNameSetByUser: If you do not want the name to be changed by honeybee any case
             set isNameSetByUser to True. Default is set to False which let Honeybee
-            to rename the surface in cases like creating a newHBZone.
+            to rename the surface in cases like creating a newHBZone (Default: False).
+        isTypeSetByUser: If you so not want the type to be changed by honeybee any case
+            set isTypeSetByUser to True. Default is set to False which let Honeybee
+            to set the surface type based on surface normal (Default: False).
         radProperties: Radiance properties for this surface. If empty default
-            RADProperties will be assigned to surface by Honeybee.
+            RADProperties will be assigned to surface by Honeybee (Default: None).
         epProperties: EnergyPlus properties for this surface. If empty default
-            epProperties will be assigned to surface by Honeybee.
+            epProperties will be assigned to surface by Honeybee (Default: None).
+        states: A list of SurfaceStates if surface has several states.
+        group: Group the surfaces if input is a list of geometries or a multi facade
+            geometry (Default: False).
     """
 
     @classmethod
     def fromGeometry(cls, name, geometry, surfaceType=None,
                      isNameSetByUser=False, isTypeSetByUser=False,
-                     radProperties=None, epProperties=None):
-        """Create a honeybee surface from Grasshopper or Dynamo geometry."""
-        _pts = extractSurfacePoints(geometry)
-        _srf = cls(name, _pts, surfaceType, isNameSetByUser, isTypeSetByUser,
-                   radProperties, epProperties)
-        _srf.geometry = geometry
-        return _srf
+                     radProperties=None, epProperties=None, states=None, group=False):
+        """Create honeybee surface[s] from a Grasshopper geometry.
+
+        If group is False it will return a list of HBSurfaces.
+        """
+        name = name or randomName()
+        srfData = extractGeometryPoints(geometry)
+        if not group:
+            hbsrfs = []
+            # create a separate surface for each geometry.
+            for gcount, srf in enumerate(srfData):
+                for scount, (geo, pts) in enumerate(srf):
+                    _name = '%s_%d_%d' % (name, gcount, scount)
+                    _srf = cls(_name, pts, surfaceType, isNameSetByUser, isTypeSetByUser,
+                               radProperties, epProperties, states)
+                    _srf.geometry = geometry
+                    hbsrfs.append(_srf)
+
+            # check naming and fix it if it's only single geometry
+            if gcount == 0 and scount == 0:
+                # this is just a single geometry. remove counter
+                hbsrfs[0].name = '_'.join(hbsrfs[0].name.split('_')[:-2])
+            elif gcount == 0:
+                # this is a single geometry with multiple sub surfaces like a polysurface
+                for hbs in hbsrfs:
+                    bname = hbs.name.split('_')
+                    hbs.name = '%s_%s' % ('_'.join(bname[:-2]), bname[-1])
+            return hbsrfs
+        else:
+            _geos = []
+            _pts = []
+            # collect all the points in a single list
+            for srf in srfData:
+                for geo, pts in srf:
+                    _pts.extend(pts)
+                    _geos.append(geo)
+
+            _srf = cls(name, _pts, surfaceType, isNameSetByUser, isTypeSetByUser,
+                       radProperties, epProperties, states)
+            _srf.geometry = _geos
+            return _srf
 
     @property
     def isCreatedFromGeometry(self):
@@ -50,14 +91,14 @@ class HBSurface(hbsrf.HBSurface):
     def geometry(self):
         """Return geometry."""
         if self.isCreatedFromGeometry:
-            return self.__geometry
+            return self._geometry
         else:
             return self.profile
 
     @geometry.setter
     def geometry(self, geo):
         """Set geometry."""
-        self.__geometry = geo
+        self._geometry = geo
 
     @property
     def profile(self):

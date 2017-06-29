@@ -22,14 +22,13 @@ class HBFenSurface(hbfensrf.HBFenSurface):
 
     @classmethod
     def fromGeometry(cls, name, geometry, isNameSetByUser=False,
-                     radProperties=None, epProperties=None,
-                     isCreatedFromGeometry=True):
+                     radProperties=None, epProperties=None, states=None):
         """Create a honeybee fenestration surface from Dynamo geometry."""
         cls.geometry = geometry
         sortedPoints = extractSurfacePoints(cls)
 
         return cls(name, sortedPoints, isNameSetByUser, radProperties,
-                   epProperties)
+                   epProperties, states)
 
     @property
     def isCreatedFromGeometry(self):
@@ -40,14 +39,14 @@ class HBFenSurface(hbfensrf.HBFenSurface):
     def geometry(self):
         """return geometry."""
         if self.isCreatedFromGeometry:
-            return self.__geometry
+            return self._geometry
         else:
             return self.profile
 
     @geometry.setter
     def geometry(self, geo):
         """Set geometry."""
-        self.__geometry = geo
+        self._geometry = geo
 
     @property
     def profile(self):

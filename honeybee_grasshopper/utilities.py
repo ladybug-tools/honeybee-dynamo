@@ -12,69 +12,87 @@ def isPlanar(geometry, tol=1e-3):
     return geometry.Faces[0].IsPlanar(tol)
 
 
-def extractSurfacePoints(geometry, triangulate=False, meshingParameters=None):
-    """Calculate list of points for a HBSurface.
+# TODO(someone!): Implement triangulate
+def extractGeometryPoints(geometries, triangulate=False, meshingParameters=None):
+    """Calculate list of points for a Grasshopper geometry.
 
     For planar surfaces the length of the list will be only 1. For non-planar
     surfaces or surfaces with internal edges it will be a number of lists.
 
     Args:
-        geometry: A Mesh or Brep
+        geometries: List of meshes or Breps
         triangulate: If set to True the function returns the points for triangulated
             surfaces (Default: False)
-        meshingParameters: Optional Rhino meshingParameters. This will only be used if the
-            surface is non-planar or has an internal edge and needs to be meshed.
+        meshingParameters: Optional Rhino meshingParameters. This will only be used if
+            the surface is non-planar or has an internal edge and needs to be meshed.
             Default:
-                Rhino.Geometry.MeshingParameters.Coarse; SimplePlanes = True for planar surfaces
-                Rhino.Geometry.MeshingParameters.Smooth for non-planar surfaces
+                Rhino.Geometry.MeshingParameters.Coarse; SimplePlanes = True for planar
+                surfaces; Rhino.Geometry.MeshingParameters.Smooth for non-planar surfaces
     Returns:
-        A list of point lists. For planar surfaces the length of the list will be
-        only 1. For non-planar surfaces or surfaces with internal edges it will be
-        a number of lists.
+        A Collection of (geometry, points) in which each geometry is coupled by points.
+        For planar surfaces the length of the points list will be only 1. For
+        non-planar surfaces, meshes or surfaces with internal edges it will be multiple
+        lists.
     """
-    assert isinstance(geometry, rc.Geometry.GeometryBase), \
-        TypeError("Input surface should be a Mesh or a Brep not {}.".format(type(geometry)))
+    if not hasattr(geometries, '__iter__'):
+        geometries = (geometries,)
 
-    if isinstance(geometry, rc.Geometry.Mesh):
-        return extractMeshPoints((geometry,))
+    for geometry in geometries:
 
-    if isinstance(geometry, rc.Geometry.Brep) and not isPlanar(geometry):
-        meshes = rc.Geometry.Mesh.CreateFromBrep(geometry, meshingParameters)
-        return extractMeshPoints(meshes)
+        if isinstance(geometry, rc.Geometry.Mesh):
+            yield extractMeshPoints((geometry,))
+        elif isinstance(geometry, rc.Geometry.Brep):
+            yield extractBrepPoints(geometry, meshingParameters)
+        else:
+            raise TypeError(
+                'Input surface should be a Mesh or a Brep not {}.'.format(type(geometry))
+            )
 
+
+def extractBrepPoints(brep, meshingParameters=None, tol=1e-3):
+    """Extract points from Brep."""
     meshingParameters = meshingParameters or rc.Geometry.MeshingParameters.Coarse
-    meshingParameters.SimplePlanes = True
-    pts = geometry.DuplicateVertices()
-    # sort points anti clockwise
-    # this is only important for energy simulation and won't make a difference
-    # for Radiance
+    for fid in xrange(brep.Faces.Count):
+        geometry = brep.Faces[fid].DuplicateFace(False)
+        if not brep.Faces[fid].IsPlanar(tol):
+            meshes = rc.Geometry.Mesh.CreateFromBrep(geometry, meshingParameters)
+            yield extractMeshPoints(meshes)
+        else:
+            # planar surface
+            pts = geometry.DuplicateVertices()
+            # sort points anti clockwise
+            # this is only important for energy simulation and won't make a difference
+            # for Radiance
 
-    # To sort the points we find border of the surface and evaluate points
-    # on border and use the parameter value to sort them
-    border = rc.Geometry.Curve.JoinCurves(geometry.DuplicateEdgeCurves(True))
+            # To sort the points we find border of the surface and evaluate points
+            # on border and use the parameter value to sort them
+            border = rc.Geometry.Curve.JoinCurves(geometry.DuplicateEdgeCurves(True))
 
-    if len(border) == 1:
-        pointsSorted = sorted(pts, key=lambda pt: border[0].ClosestPoint(pt)[1])
-        # make sure points are anti clockwise
-        if not isPointsSortedAntiClockwise(
-                pointsSorted, getSurfaceCenterPtandNormal(geometry).normalVector):
-            pointsSorted.reverse()
+            if len(border) > 1:
+                # mesh the surface
+                meshingParameters.SimplePlanes = True
+                meshes = rc.Geometry.Mesh.CreateFromBrep(geometry, meshingParameters)
+                yield extractMeshPoints(meshes)
 
-        # return sorted points
-        # Wrap in a list as Honeybee accepts list of list of points
-        return (pointsSorted,)
-    else:
-        # mesh the surface
-        meshes = rc.Geometry.Mesh.CreateFromBrep(geometry, meshingParameters)
-        return extractMeshPoints(meshes)
+            pointsSorted = sorted(pts, key=lambda pt: border[0].ClosestPoint(pt)[1])
+            # make sure points are anti clockwise
+            if not isPointsSortedAntiClockwise(
+                    pointsSorted, getSurfaceCenterPtandNormal(geometry).normalVector):
+                pointsSorted.reverse()
+            # return sorted points
+            # Wrap in a list as Honeybee accepts list of list of points
+            yield geometry, (pointsSorted,)
 
 
 def extractMeshPoints(meshes):
     """Extract points from a mesh."""
-    return tuple(tuple(mesh.Vertices[face[i]] for i in range(4))
-                 if face.IsQuad else
-                 tuple(mesh.Vertices[face[i]] for i in range(3))
-                 for mesh in meshes for face in mesh.Faces)
+    for mesh in meshes:
+        yield mesh, tuple(
+            tuple(mesh.Vertices[face[i]] for i in range(4))
+            if face.IsQuad else
+            tuple(mesh.Vertices[face[i]] for i in range(3))
+            for face in mesh.Faces
+        )
 
 
 def vectorsCrossProduct(vector1, vector2):

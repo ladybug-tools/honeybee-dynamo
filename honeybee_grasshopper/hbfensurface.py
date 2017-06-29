@@ -1,5 +1,6 @@
 import honeybee.hbfensurface as hbfensrf
-from .utilities import extractSurfacePoints, polygon, xyzToGeometricalPoints
+from honeybee.utilcol import randomName
+from .utilities import extractGeometryPoints, polygon, xyzToGeometricalPoints
 
 
 class HBFenSurface(hbfensrf.HBFenSurface):
@@ -22,14 +23,44 @@ class HBFenSurface(hbfensrf.HBFenSurface):
     """
 
     @classmethod
-    def fromGeometry(cls, name, geometry, isNameSetByUser=False,
-                     radProperties=None, epProperties=None):
+    def fromGeometry(cls, name, geometry, isNameSetByUser=False, radProperties=None,
+                     epProperties=None, states=None, group=False):
         """Create a honeybee fenestration surface from Grasshopper geometry."""
-        cls.geometry = geometry
-        sortedPoints = extractSurfacePoints(cls.geometry)
+        name = name or randomName()
+        srfData = extractGeometryPoints(geometry)
+        if not group:
+            hbsrfs = []
+            # create a separate surface for each geometry.
+            for gcount, srf in enumerate(srfData):
+                for scount, (geo, pts) in enumerate(srf):
+                    _name = '%s_%d_%d' % (name, gcount, scount)
+                    _srf = cls(_name, pts, isNameSetByUser, radProperties, epProperties,
+                               states)
+                    _srf.geometry = geometry
+                    hbsrfs.append(_srf)
 
-        return cls(name, sortedPoints, isNameSetByUser, radProperties,
-                   epProperties)
+            # check naming and fix it if it's only single geometry
+            if gcount == 0 and scount == 0:
+                # this is just a single geometry. remove counter
+                hbsrfs[0].name = '_'.join(hbsrfs[0].name.split('_')[:-2])
+            elif gcount == 0:
+                # this is a single geometry with multiple sub surfaces like a polysurface
+                for hbs in hbsrfs:
+                    bname = hbs.name.split('_')
+                    hbs.name = '%s_%s' % ('_'.join(bname[:-2]), bname[-1])
+            return hbsrfs
+        else:
+            _geos = []
+            _pts = []
+            # collect all the points in a single list
+            for srf in srfData:
+                for geo, pts in srf:
+                    _pts.extend(pts)
+                    _geos.append(geo)
+
+            _srf = cls(name, _pts, isNameSetByUser, radProperties, epProperties, states)
+            _srf.geometry = _geos
+            return _srf
 
     @property
     def isCreatedFromGeometry(self):
@@ -40,14 +71,14 @@ class HBFenSurface(hbfensrf.HBFenSurface):
     def geometry(self):
         """return geometry."""
         if self.isCreatedFromGeometry:
-            return self.__geometry
+            return self._geometry
         else:
             return self.profile
 
     @geometry.setter
     def geometry(self, geo):
         """Set geometry."""
-        self.__geometry = geo
+        self._geometry = geo
 
     @property
     def profile(self):
