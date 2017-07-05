@@ -31,7 +31,7 @@ Grid-based Recipe.
 
 ghenv.Component.Name = "HoneybeePlus_Grid-Based Recipe"
 ghenv.Component.NickName = 'gridBasedRecipe'
-ghenv.Component.Message = 'VER 0.0.02\nJUL_04_2017'
+ghenv.Component.Message = 'VER 0.0.02\nJUL_05_2017'
 ghenv.Component.Category = "HoneybeePlus"
 ghenv.Component.SubCategory = '03 :: Daylight :: Recipe'
 ghenv.Component.AdditionalHelpFromDocStrings = "1"
@@ -39,7 +39,7 @@ ghenv.Component.AdditionalHelpFromDocStrings = "1"
 #    import honeybee
 #    reload(honeybee.radiance.recipe.gridbased)
 try:
-    from honeybee.radiance.recipe.gridbased import GridBased
+    from honeybee.radiance.recipe.pointintime.gridbased import GridBased
 except ImportError as e:
     raise ImportError('\nFailed to import honeybee:\n\t{}'.format(e))
 

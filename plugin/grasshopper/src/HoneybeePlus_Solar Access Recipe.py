@@ -29,17 +29,17 @@ Solar Access Recipe.
 
 ghenv.Component.Name = "HoneybeePlus_Solar Access Recipe"
 ghenv.Component.NickName = 'solarAccessRecipe'
-ghenv.Component.Message = 'VER 0.0.02\nJUL_04_2017'
+ghenv.Component.Message = 'VER 0.0.02\nJUL_05_2017'
 ghenv.Component.Category = "HoneybeePlus"
 ghenv.Component.SubCategory = '03 :: Daylight :: Recipe'
 ghenv.Component.AdditionalHelpFromDocStrings = "1"
 
 try:
-    from honeybee.radiance.recipe.solaraccess import SolarAccess
+    from honeybee.radiance.recipe.solaraccess.gridbased import SolarAccessGridBased
 except ImportError as e:
     raise ImportError('\nFailed to import honeybee:\n\t{}'.format(e))
 
 
 if _sunVectors and _sunVectors[0] != None and _analysisGrids:
     # set a sunlight hours analysis recipe together if there are points
-    analysisRecipe = SolarAccess(_sunVectors, _analysisGrids, _timestep_)
+    analysisRecipe = SolarAccessGridBased(_sunVectors, _analysisGrids, _timestep_)

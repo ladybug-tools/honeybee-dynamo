@@ -31,13 +31,13 @@ Image-based Recipe.
 
 ghenv.Component.Name = "HoneybeePlus_Image-Based Recipe"
 ghenv.Component.NickName = 'imageBasedRecipe'
-ghenv.Component.Message = 'VER 0.0.02\nJUL_04_2017'
+ghenv.Component.Message = 'VER 0.0.02\nJUL_05_2017'
 ghenv.Component.Category = "HoneybeePlus"
 ghenv.Component.SubCategory = '03 :: Daylight :: Recipe'
 ghenv.Component.AdditionalHelpFromDocStrings = "1"
 
 try:
-    from honeybee.radiance.recipe.imagebased import ImageBased
+    from honeybee.radiance.recipe.pointintime.imagebased import ImageBased
 except ImportError as e:
     raise ImportError('\nFailed to import honeybee:\n\t{}'.format(e))
 
