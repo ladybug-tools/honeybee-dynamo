@@ -12,12 +12,18 @@ Analysis Grid.
 -
 
     Args:
+        _name_: A name for this analysis grid.
         _testPoints: A list or a datatree of points. Each branch of the datatree
             will be considered as a point group.
         ptsVectors_: A list or a datatree of vectors. Each vector represents the
             direction of the respective test point in testPoints. If only one
             value is provided it will be used for all the test points. If no value
             is provided (0, 0, 1) will be assigned for all the vectors.
+        windowGroups: An optional list of windowGroups. This input is only
+            important for multi-phase daylight simulation to avoid unnecessary
+            view matrix calculations. If this input is left empty for multi-phase
+            daylight recipes the view matrix will be calculated for each analysis
+            grid and every window group.
     Returns:
         readMe!: Reports, errors, warnings, etc.
         analysisGrid: Analysis grid. Use this analysis grid to create a grid-based
@@ -26,7 +32,7 @@ Analysis Grid.
 
 ghenv.Component.Name = "HoneybeePlus_Analysis Grid"
 ghenv.Component.NickName = 'analysisGrid'
-ghenv.Component.Message = 'VER 0.0.01\nNOV_18_2016'
+ghenv.Component.Message = 'VER 0.0.02\nJUL_04_2017'
 ghenv.Component.Category = "HoneybeePlus"
 ghenv.Component.SubCategory = '00 :: Create'
 ghenv.Component.AdditionalHelpFromDocStrings = "2"
@@ -34,29 +40,9 @@ ghenv.Component.AdditionalHelpFromDocStrings = "2"
 try:
     from honeybee.radiance.analysisgrid import AnalysisGrid
 except ImportError as e:
-    msg = '\nFailed to import honeybee. Did you install honeybee on your machine?' + \
-            '\nYou can download the installer file from github: ' + \
-            'https://github.com/ladybug-analysis-tools/honeybee-plus/tree/master/plugin/grasshopper/samplefiles' + \
-            '\nOpen an issue on github if you think this is a bug:' + \
-            ' https://github.com/ladybug-analysis-tools/honeybee-plus/issues'
-        
-    raise ImportError('{}\n\t{}'.format(msg, e))
+    raise ImportError('\nFailed to import honeybee:\n\t{}'.format(e))
 
 
 if _testPoints:
-    # match points and vectors
-    try:
-        from honeybee_grasshopper import datatree
-        _testPoints = tuple(i.list for i in datatree.dataTreeToList(_testPoints))
-        ptsVectors_ = tuple(i.list for i in datatree.dataTreeToList(ptsVectors_))
-    except ImportError:
-        # Dynamo
-        pass
-    else:
-        ptsVectors_ = ptsVectors_ or ((),)
-        
-        ptsVectors_ = tuple(ptsVectors_[i]
-                       if i < len(ptsVectors_) else ptsVectors_[-1]
-                       for i in range(len(_testPoints)))
-        analysisGrid = (AnalysisGrid.fromPointsAndVectors(pts, vectors)
-                        for pts, vectors in zip(_testPoints, ptsVectors_))
+    analysisGrid = AnalysisGrid.fromPointsAndVectors(_testPoints, ptsVectors_,
+        _name_, windowGroups_)

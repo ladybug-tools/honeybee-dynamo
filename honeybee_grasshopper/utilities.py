@@ -74,6 +74,10 @@ def extractBrepPoints(brep, meshingParameters=None, tol=1e-3):
                 meshes = rc.Geometry.Mesh.CreateFromBrep(geometry, meshingParameters)
                 yield next(extractMeshPoints(meshes))
             else:
+                # In some strange cases Rhino returns a single point for the surface
+                if len(pts) == 1:
+                    pts = (p.Location for p in border[0].Points)
+
                 pointsSorted = sorted(pts, key=lambda pt: border[0].ClosestPoint(pt)[1])
                 # make sure points are anti clockwise
                 if not isPointsSortedAntiClockwise(

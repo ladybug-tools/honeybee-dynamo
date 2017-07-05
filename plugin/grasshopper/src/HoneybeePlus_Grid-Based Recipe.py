@@ -31,7 +31,7 @@ Grid-based Recipe.
 
 ghenv.Component.Name = "HoneybeePlus_Grid-Based Recipe"
 ghenv.Component.NickName = 'gridBasedRecipe'
-ghenv.Component.Message = 'VER 0.0.01\nDEC_02_2016'
+ghenv.Component.Message = 'VER 0.0.02\nJUL_04_2017'
 ghenv.Component.Category = "HoneybeePlus"
 ghenv.Component.SubCategory = '03 :: Daylight :: Recipe'
 ghenv.Component.AdditionalHelpFromDocStrings = "1"
@@ -39,19 +39,13 @@ ghenv.Component.AdditionalHelpFromDocStrings = "1"
 #    import honeybee
 #    reload(honeybee.radiance.recipe.gridbased)
 try:
-    from honeybee.radiance.recipe.gridbased import GridBasedAnalysisRecipe
+    from honeybee.radiance.recipe.gridbased import GridBased
 except ImportError as e:
-    msg = '\nFailed to import honeybee. Did you install honeybee on your machine?' + \
-            '\nYou can download the installer file from github: ' + \
-            'https://github.com/ladybug-analysis-tools/honeybee-plus/tree/master/plugin/grasshopper/samplefiles' + \
-            '\nOpen an issue on github if you think this is a bug:' + \
-            ' https://github.com/ladybug-analysis-tools/honeybee-plus/issues'
-        
-    raise ImportError('{}\n\t{}'.format(msg, e))
+    raise ImportError('\nFailed to import honeybee:\n\t{}'.format(e))
 
 
 if _sky and _analysisGrids:
     
     # set a sunlight hours analysis recipe together if there are points
-    analysisRecipe = GridBasedAnalysisRecipe(
-        _sky, _analysisGrids, _analysisType_, _radiancePar_)
+    analysisRecipe = GridBased(_sky, _analysisGrids, _analysisType_,
+                               _radiancePar_)

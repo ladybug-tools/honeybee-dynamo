@@ -26,26 +26,23 @@ Three-pahse daylight Recipe.
 
 ghenv.Component.Name = "HoneybeePlus_Grid-Based Three-Phase Daylight Recipe"
 ghenv.Component.NickName = 'threePhaseGBRecipe'
-ghenv.Component.Message = 'VER 0.0.01\nDEC_03_2016'
+ghenv.Component.Message = 'VER 0.0.02\nJUL_04_2017'
 ghenv.Component.Category = "HoneybeePlus"
 ghenv.Component.SubCategory = '03 :: Daylight :: Recipe'
 ghenv.Component.AdditionalHelpFromDocStrings = "3"
 
+#import honeybee
+#reload(honeybee.radiance.recipe.threephase.gridbased)
+
 try:
-    from honeybee.radiance.recipe.threephase.gridbased import ThreePhaseGridBasedAnalysisRecipe
+    from honeybee.radiance.recipe.threephase.gridbased import ThreePhaseGridBased
 except ImportError as e:
-    msg = '\nFailed to import honeybee. Did you install honeybee on your machine?' + \
-            '\nYou can download the installer file from github: ' + \
-            'https://github.com/ladybug-analysis-tools/honeybee-plus/tree/master/plugin/grasshopper/samplefiles' + \
-            '\nOpen an issue on github if you think this is a bug:' + \
-            ' https://github.com/ladybug-analysis-tools/honeybee-plus/issues'
-        
-    raise ImportError('{}\n\t{}'.format(msg, e))
+    raise ImportError('\nFailed to import honeybee:\n\t{}'.format(e))
 
 
 if _skyMTX and _analysisGrid:
     reuseDaylightMTX_ = True if reuseDaylightMTX_ is None else reuseDaylightMTX_
     reuseViewMTX_ = True if reuseViewMTX_ is None else reuseViewMTX_
-    analysisRecipe = ThreePhaseGridBasedAnalysisRecipe(
+    analysisRecipe = ThreePhaseGridBased(
         _skyMTX, _analysisGrid, _analysisType_, _viewMTXPar_, _DaylightMTXPar_,
         reuseViewMTX_, reuseDaylightMTX_)

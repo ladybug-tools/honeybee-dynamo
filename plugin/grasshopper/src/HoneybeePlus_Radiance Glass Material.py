@@ -21,7 +21,7 @@ Radiance Glass Material from Visible Transmitance
 
 ghenv.Component.Name = "HoneybeePlus_Radiance Glass Material"
 ghenv.Component.NickName = 'radGlassMaterial'
-ghenv.Component.Message = 'VER 0.0.01\nNOV_16_2016'
+ghenv.Component.Message = 'VER 0.0.02\nJUL_04_2017'
 ghenv.Component.Category = "HoneybeePlus"
 ghenv.Component.SubCategory = '01 :: Daylight :: Materials'
 ghenv.Component.AdditionalHelpFromDocStrings = "1"
@@ -29,13 +29,7 @@ ghenv.Component.AdditionalHelpFromDocStrings = "1"
 try:
     from honeybee.radiance.material.glass import GlassMaterial
 except ImportError as e:
-    msg = '\nFailed to import honeybee. Did you install honeybee on your machine?' + \
-            '\nYou can download the installer file from github: ' + \
-            'https://github.com/ladybug-analysis-tools/honeybee-plus/tree/master/plugin/grasshopper/samplefiles' + \
-            '\nOpen an issue on github if you think this is a bug:' + \
-            ' https://github.com/ladybug-analysis-tools/honeybee-plus/issues'
-        
-    raise ImportError('{}\n\t{}'.format(msg, e))
+    raise ImportError('\nFailed to import honeybee:\n\t{}'.format(e))
 
-if _name and _TVis:
+if _name and _TVis is not None:
     material = GlassMaterial.bySingleTransValue(_name, _TVis)

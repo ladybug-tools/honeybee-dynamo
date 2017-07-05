@@ -24,12 +24,14 @@ Run Radiance Analysis
             _write is also set to True.
     Returns:
         readMe!: Reports, errors, warnings, etc.
-        results: Results of the analysis.
+        legendPar: Suggested legend parameters based on the recipe.
+        results: Results of the analysis. Results can be a list of images or
+            a list of grids based on the type of anlaysis.
 """
 
 ghenv.Component.Name = "HoneybeePlus_Run Radiance Analysis"
 ghenv.Component.NickName = 'runRadiance'
-ghenv.Component.Message = 'VER 0.0.01\nJAN_17_2017'
+ghenv.Component.Message = 'VER 0.0.02\nJUL_04_2017'
 ghenv.Component.Category = "HoneybeePlus"
 ghenv.Component.SubCategory = '04 :: Daylight :: Daylight'
 ghenv.Component.AdditionalHelpFromDocStrings = "1"
@@ -48,25 +50,24 @@ if _HBObjects and _analysisRecipe and _write:
     assert hasattr(_analysisRecipe, 'isAnalysisRecipe'), \
         ValueError("\n{} is not a Honeybee recipe.".format(_analysisRecipe))
     
+    legendPar = _analysisRecipe.legendParameters
+
     if _write:
         # Add Honeybee objects to the recipe
         if 'Phase' in _analysisRecipe.__class__.__name__: 
+            print ''
             _analysisRecipe.hbObjects = \
-                tuple(obj for obj in _HBObjects if not obj.hasBSDFRadianceMaterial)
+                [obj for obj in _HBObjects if not obj.hasBSDFRadianceMaterial]
             _analysisRecipe.windowSurfaces = \
                 tuple(obj for obj in _HBObjects if obj.hasBSDFRadianceMaterial)
         else:
             _analysisRecipe.hbObjects = _HBObjects
         
-        _analysisRecipe.scene = radScene_
+        if radScene_:
+            _analysisRecipe.scene = radScene_
+        
         batchFile = _analysisRecipe.write(_folder_, _name_)
 
     if _write and run_:
-        if _analysisRecipe.run(batchFile, run_ % 2 == 0):
+        if _analysisRecipe.run(batchFile, False):
             results = _analysisRecipe.results()
-            
-            try:
-                results = _analysisRecipe.renameResultFiles()
-            except AttributeError:
-                # not a multiphase image based simulation
-                pass
