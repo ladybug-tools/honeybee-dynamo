@@ -1,2 +1,2 @@
-# honeybee-plus
-Honeybee plugin for Dynamo and Grasshopper
+# honeybee-dynamo
+Honeybee libraries and plugin for Dynamo
