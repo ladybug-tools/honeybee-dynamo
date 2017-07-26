@@ -1,0 +1,176 @@
+<Workspace Category="Honeybee.03 :: Daylight :: Recipe" Description="Daylight Coefficient Image-based Daylight Recipe.
+Use this recipe to set up annual daylight analysis.
+-" ID="e22d3e7e-2dd5-474c-861a-b0260b4246fc" Name="DC Image-based Daylight Recipe" Version="1.2.0.2690" X="400" Y="-100" zoom="0.5">
+  <NamespaceResolutionMap/>
+  <Elements>
+    <Dynamo.Graph.Nodes.CodeBlockNodeModel CodeText="&quot;Honeybee&quot;;&#xA;&quot;dcoeffgbrecipe_node.py&quot;;" ShouldFocus="false" guid="41c9ddd3-e841-4225-b853-6817b95c3d02" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="input python script" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" x="-750" y="390"/>
+    <PythonNodeModels.PythonNode guid="74e5f378-efd9-4638-adca-871644e461ee" inputcount="2" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="import and prepare py code" type="PythonNodeModels.PythonNode" x="-355" y="385">
+      <PortInfo default="false" index="0"/>
+      <PortInfo default="false" index="1"/>
+      <Script>
+        
+&quot;&quot;&quot;Find packages from Dynamo folder and prepare the code.&quot;&quot;&quot;
+import clr
+from System import AppDomain, Environment, IO
+
+def tryGetPluginPath(plugin):
+    &quot;&quot;&quot;Try to get path to plugin folder.&quot;&quot;&quot;
+    clr.AddReference('ProtoGeometry')
+    _loc = tuple(a.Location
+                 for a in AppDomain.CurrentDomain.GetAssemblies()
+                 if 'ProtoGeometry' in a.FullName)
+
+    try:
+        _ver = float(_loc[0].split('\\')[-2])
+    except:
+        _ver = float(_loc[0].split('\\')[-2].split(' ')[-1])
+
+    assert _ver &gt;= 1.2, 'You need Dynamo 1.2 or higher to use this plugin!'
+
+    _appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)
+    _dynamoPath = ('\\').join(_loc[0].split('\\')[-4:-1])
+    # if the assembly is cached put Revit folder first, and then try to load it from core
+    _dynamoPaths = (_dynamoPath.replace('Dynamo Core', 'Dynamo Revit'),
+                    _dynamoPath.replace('Dynamo Revit', 'Dynamo Core'))
+    _settingsFilename = 'DynamoSettings.xml'
+
+    pkf = []
+    for path in _dynamoPaths:
+        settingsFile = IO.Path.Combine(_appdata, path, _settingsFilename)
+        if IO.File.Exists(settingsFile):
+            with open(settingsFile, 'rb') as outf:
+                for line in outf:
+                    if line.strip().startswith('&lt;CustomPackageFolders&gt;'):
+                        for l in outf:
+                            if l.strip().startswith('&lt;/CustomPackageFolders&gt;'):
+                                break
+                            else:
+                                pkf.append(l.replace('&lt;/string&gt;', '').replace('&lt;string&gt;', '').strip())
+
+    for p in pkf:
+        pp = IO.Path.Combine(p, 'packages', plugin, 'extra')
+        # In case of custom folders user may put honeybee under the root folder
+        ppp = IO.Path.Combine(p, plugin, 'extra')
+        if IO.Directory.Exists(pp):
+            return pp
+        elif IO.Directory.Exists(ppp):
+            return ppp
+
+
+try:
+    plugin, filename = IN
+
+    p = tryGetPluginPath(plugin)
+
+    if not p:
+        raise ImportError('{} is not installed! Install it from package manager.'.format(plugin))
+
+	# import the file and wrap it into sys.append
+    f = IO.Path.Combine(p, 'nodesrc', filename)
+    with open(f, 'rb') as inf:
+        source = '    '.join(inf.readlines())
+
+    header = 'try:\n    import sys\n' + \
+        '    sys.path.append(r\'{}\')\n\n'.format(p) + \
+        '    sys.path.append(r\'C:\Program Files (x86)\IronPython 2.7\Lib\')\n\n' + \
+        '    '
+
+    footer = '\nexcept Exception, e:\n' + \
+        '    import traceback\n' + \
+        '    OUT = &quot;ERROR:\\n\\t{}&quot;.format(str(e)) + \\\n' + \
+        '    &quot;\\n\\nIf you think this is a bug submit an issue on github.\\n&quot; + \\\n' + \
+        '    &quot;https://github.com/ladybug-tools/honeybee-dynamo/issues\\n&quot; +  \\\n' + \
+        '    &quot;and include below error message:\\n\\n&quot; + \\\n' + \
+        '    &quot;{}&quot;.format(traceback.format_exc())\n'
+
+    OUT = header + source + footer
+
+except Exception, e:
+    import sys
+    sys.path.append(r'C:\Program Files (x86)\IronPython 2.7\Lib')
+    import traceback
+    OUT = &quot;ERROR:\n\t{}&quot;.format(str(e)) + \
+        &quot;\n\nIf you think this is a bug submit an issue on github.\n&quot; + \
+        &quot;https://github.com/ladybug-tools/honeybee-dynamo/issues\n&quot; +  \
+        &quot;and include below error message:\n\n&quot; + \
+        &quot;{}&quot;.format(traceback.format_exc())
+
+      </Script>
+    </PythonNodeModels.PythonNode>
+    <PythonNodeModels.PythonStringNode guid="d89bffa9-f096-4a88-97d8-4635371116f1" inputcount="6" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="core" type="PythonNodeModels.PythonStringNode" x="-75" y="460">
+      <PortInfo default="false" index="0"/>
+      <PortInfo default="false" index="1"/>
+      <PortInfo default="false" index="2"/>
+      <PortInfo default="false" index="3"/>
+      <PortInfo default="false" index="4"/>
+      <PortInfo default="false" index="5"/>
+    </PythonNodeModels.PythonStringNode>
+    <Dynamo.Graph.Nodes.CustomNodes.Symbol guid="8641ec28-2efd-4008-8d03-949fe5f176f8" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="_skymtx" type="Dynamo.Graph.Nodes.CustomNodes.Symbol" x="-750" y="475">
+      <Symbol value="// A sky matrix or a sky vector. Find honeybee skies under 02::Daylight::Light Sources.&#xD;&#xA;_skymtx: var;"/>
+    </Dynamo.Graph.Nodes.CustomNodes.Symbol>
+    <Dynamo.Graph.Nodes.CustomNodes.Symbol guid="c4f8b49e-464c-494a-9cd3-adfbb58f135e" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="_views" type="Dynamo.Graph.Nodes.CustomNodes.Symbol" x="-750" y="570">
+      <Symbol value="// A list of Honeybee views.&#xD;&#xA;_views: var[];"/>
+    </Dynamo.Graph.Nodes.CustomNodes.Symbol>
+    <Dynamo.Graph.Nodes.CustomNodes.Symbol guid="bca5abe8-5a98-4ce7-a5ae-a34ea56c9be6" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="_analysisType_" type="Dynamo.Graph.Nodes.CustomNodes.Symbol" x="-750" y="665">
+      <Symbol value="// Analysis type. [0] illuminance(lux), [1] radiation (kwh),&#xD;&#xA;// [2] luminance (Candela).&#xD;&#xA;_analysisType_: int = 2;"/>
+    </Dynamo.Graph.Nodes.CustomNodes.Symbol>
+    <Dynamo.Graph.Nodes.CustomNodes.Symbol guid="0cd980b5-3c31-4e36-8316-57267ce40607" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="_radiancePar_" type="Dynamo.Graph.Nodes.CustomNodes.Symbol" x="-750" y="760">
+      <Symbol value="// Radiance parameters for Image-based analysis. Find Radiance&#xD;&#xA;// parameters node under 03::Daylight::Recipes.&#xD;&#xA;_radiancePar_: var = null;"/>
+    </Dynamo.Graph.Nodes.CustomNodes.Symbol>
+    <Dynamo.Graph.Nodes.CustomNodes.Symbol guid="12857412-c701-4815-8e85-1e5a529c58cb" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="reuseDmtx_" type="Dynamo.Graph.Nodes.CustomNodes.Symbol" x="-750" y="855">
+      <Symbol value="// A boolean to indicate if you want the analysis to use the daylight&#xD;&#xA;// coeff matrix results from the previous study if available.&#xD;&#xA;reuseDmtx_: bool = true;"/>
+    </Dynamo.Graph.Nodes.CustomNodes.Symbol>
+    <Dynamo.Graph.Nodes.CodeBlockNodeModel CodeText="out[0];" ShouldFocus="false" guid="5f508348-13dc-40e6-8593-49bac3690665" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="decompose outputs" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" x="150" y="515"/>
+    <Dynamo.Graph.Nodes.CustomNodes.Output guid="d29bf2a5-608c-40fc-ac57-d72c1d9b9f19" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="analysisRecipe" type="Dynamo.Graph.Nodes.CustomNodes.Output" x="380" y="475">
+      <Symbol value="// Annual analysis recipe. Connect this recipe to Run Radiance&#xD;&#xA;// Analysis to run a annual analysis.&#xD;&#xA;analysisRecipe;"/>
+      <PortInfo default="false" index="0"/>
+    </Dynamo.Graph.Nodes.CustomNodes.Output>
+    <PythonNodeModels.PythonNode guid="72362df8-f439-4555-be7f-ce817e0d56b9" inputcount="2" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="Error report" type="PythonNodeModels.PythonNode" x="150" y="380">
+      <PortInfo default="false" index="0"/>
+      <PortInfo default="false" index="1"/>
+      <Script>
+        
+&quot;&quot;&quot;Report errors&quot;&quot;&quot;
+importErr, runErr = IN
+errors = []
+
+if importErr and str(importErr).startswith(&quot;ERROR:&quot;):
+    errors.append(importErr)
+
+if runErr and str(runErr).startswith(&quot;ERROR:&quot;):
+    errors.append(runErr)
+
+if len(errors)==0:
+    OUT = &quot;All good! Vvizzzz.&quot;
+else:
+    OUT = &quot;\n&quot;.join(errors)
+
+      </Script>
+    </PythonNodeModels.PythonNode>
+    <Dynamo.Graph.Nodes.CustomNodes.Output guid="6b29f887-5448-4e5e-9b06-98dbb35b8aaa" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="ERRReport" type="Dynamo.Graph.Nodes.CustomNodes.Output" x="380" y="380">
+      <Symbol value="// Report&#xD;&#xA;ERRReport;"/>
+      <PortInfo default="false" index="0"/>
+    </Dynamo.Graph.Nodes.CustomNodes.Output>
+  </Elements>
+  <Connectors>
+    <Dynamo.Graph.Connectors.ConnectorModel end="74e5f378-efd9-4638-adca-871644e461ee" end_index="0" portType="0" start="41c9ddd3-e841-4225-b853-6817b95c3d02" start_index="0"/>
+    <Dynamo.Graph.Connectors.ConnectorModel end="74e5f378-efd9-4638-adca-871644e461ee" end_index="1" portType="0" start="41c9ddd3-e841-4225-b853-6817b95c3d02" start_index="1"/>
+    <Dynamo.Graph.Connectors.ConnectorModel end="d89bffa9-f096-4a88-97d8-4635371116f1" end_index="0" portType="0" start="74e5f378-efd9-4638-adca-871644e461ee" start_index="0"/>
+    <Dynamo.Graph.Connectors.ConnectorModel end="d89bffa9-f096-4a88-97d8-4635371116f1" end_index="1" portType="0" start="8641ec28-2efd-4008-8d03-949fe5f176f8" start_index="0"/>
+    <Dynamo.Graph.Connectors.ConnectorModel end="d89bffa9-f096-4a88-97d8-4635371116f1" end_index="2" portType="0" start="c4f8b49e-464c-494a-9cd3-adfbb58f135e" start_index="0"/>
+    <Dynamo.Graph.Connectors.ConnectorModel end="d89bffa9-f096-4a88-97d8-4635371116f1" end_index="3" portType="0" start="bca5abe8-5a98-4ce7-a5ae-a34ea56c9be6" start_index="0"/>
+    <Dynamo.Graph.Connectors.ConnectorModel end="d89bffa9-f096-4a88-97d8-4635371116f1" end_index="4" portType="0" start="0cd980b5-3c31-4e36-8316-57267ce40607" start_index="0"/>
+    <Dynamo.Graph.Connectors.ConnectorModel end="d89bffa9-f096-4a88-97d8-4635371116f1" end_index="5" portType="0" start="12857412-c701-4815-8e85-1e5a529c58cb" start_index="0"/>
+    <Dynamo.Graph.Connectors.ConnectorModel end="5f508348-13dc-40e6-8593-49bac3690665" end_index="0" portType="0" start="d89bffa9-f096-4a88-97d8-4635371116f1" start_index="0"/>
+    <Dynamo.Graph.Connectors.ConnectorModel end="d29bf2a5-608c-40fc-ac57-d72c1d9b9f19" end_index="0" portType="0" start="5f508348-13dc-40e6-8593-49bac3690665" start_index="0"/>
+    <Dynamo.Graph.Connectors.ConnectorModel end="72362df8-f439-4555-be7f-ce817e0d56b9" end_index="0" portType="0" start="74e5f378-efd9-4638-adca-871644e461ee" start_index="0"/>
+    <Dynamo.Graph.Connectors.ConnectorModel end="72362df8-f439-4555-be7f-ce817e0d56b9" end_index="1" portType="0" start="d89bffa9-f096-4a88-97d8-4635371116f1" start_index="0"/>
+    <Dynamo.Graph.Connectors.ConnectorModel end="6b29f887-5448-4e5e-9b06-98dbb35b8aaa" end_index="0" portType="0" start="72362df8-f439-4555-be7f-ce817e0d56b9" start_index="0"/>
+  </Connectors>
+  <Notes/>
+  <Annotations/>
+  <Presets/>
+  <Cameras>
+    <Camera Name="Background Preview" eyeX="-34.00" eyeY="-34.00" eyeZ="21.19" lookX="-14.19" lookY="-43.06" lookZ="-41.65" upX="-0.17" upY="0.85" upZ="-0.50"/>
+  </Cameras>
+</Workspace>

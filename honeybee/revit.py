@@ -6,7 +6,6 @@ from hbfensurface import HBFenSurface
 
 import uuid
 
-
 try:
     import clr
     clr.AddReference("RevitAPI")
@@ -25,8 +24,8 @@ try:
     # Import ToProtoType, ToRevitType geometry conversion extension methods
     clr.ImportExtensions(GeometryConversion)
 
-    clr.AddReference('ProtoGeometry')
-    from Autodesk.DesignScript.Geometry import Point
+    # clr.AddReference('ProtoGeometry')
+    # from Autodesk.DesignScript.Geometry import Point
 except ImportError:
     "You can only use revit library from Revit not %s." % config.platform.platform
 
@@ -78,13 +77,13 @@ def extractPanelsVertices(hostElement, baseFace, opt):
         _geo = hostElement.Document.GetElement(panelId).get_Geometry(opt)
 
         _outerFaces = (p.ToProtoType().Faces[1] for obj in _geo
-                  for p in obj.GetInstanceGeometry())
+                       for p in obj.GetInstanceGeometry())
 
         openings = (
             tuple(edge.StartVertex.PointGeometry for edge in loop.CoEdges)
             for _outerFace in _outerFaces
             for loop in _outerFace.Loops
-            )
+        )
 
         coordinates = (
             tuple(
@@ -93,7 +92,7 @@ def extractPanelsVertices(hostElement, baseFace, opt):
             ))
 
         filteredCoordinates = tuple(coorgroup if len(set(coorgroup)) > 2 else None
-            for coorgroup in coordinates)
+                                    for coorgroup in coordinates)
 
         _panelElementIds.append(panelId)
         _panelVertices.append(filteredCoordinates)
@@ -101,7 +100,6 @@ def extractPanelsVertices(hostElement, baseFace, opt):
         # cleaning up
         (pt.Dispose() for opening in openings for pt in opening)
         (face.Dispose() for faceGroup in _outerFaces for face in faceGroup)
-
 
     return _panelElementIds, _panelVertices
 
@@ -184,7 +182,7 @@ def getParameters(el, parameter):
 
 def getParameter(el, parameter):
     """Get a parameter from an element."""
-    return tuple(p.AsValueString() for p in el.Parameters \
+    return tuple(p.AsValueString() for p in el.Parameters
                  if p.Definition.Name == parameter)[0]
 
 
@@ -207,9 +205,9 @@ def convertRoomsToHBZones(rooms, boundaryLocation=1):
     calculator = SpatialElementGeometryCalculator(doc, options)
 
     opt = Options()
-    _ids = []
+    # _ids = []
     _zones = range(len(rooms))
-    _surfaces = {} # collect hbSurfaces so I can set adjucent surfaces
+    _surfaces = {}  # collect hbSurfaces so I can set adjucent surfaces
     for zoneCount, room in enumerate(rooms):
         # initiate zone based on room id
         _zone = HBZone(room.Id)
@@ -280,7 +278,7 @@ def convertRoomsToHBZones(rooms, boundaryLocation=1):
                         if not coordinate:
                             print "{} has an opening with less than " \
                                 "two coordinates. It has been removed!" \
-                                .format(childElements[count].Id)
+                                .format(boundaryElement)
                             continue
 
                         # create honeybee surface - use element id as the name
@@ -295,7 +293,8 @@ def convertRoomsToHBZones(rooms, boundaryLocation=1):
 
                     if childElements:
 
-                        _coordinates = exctractGlazingVertices(boundaryElement, _baseFace, opt)
+                        _coordinates = exctractGlazingVertices(boundaryElement,
+                                                               _baseFace, opt)
 
                         for count, coordinate in enumerate(_coordinates):
 

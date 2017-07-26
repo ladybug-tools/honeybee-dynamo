@@ -17,17 +17,22 @@ except ImportError as e:
 from collections import namedtuple
 
 
-def extractSurfacePoints(geometry, maxTessellationDivisions=25,
-                         joinCoplanarTriFaces=True):
+def extractGeometryPoints(geometries, meshingParameters=None):
     """Extract points from a surface in Dynamo.
 
     Args:
         geometry: A Dynamo geometry.
-        maxTessellationDivisions: Maximum number of divisions for surface tessellation.
-        joinCoplanarTriFaces: Join two triangle faces if there is only two.
-
+        meshingParameters:  A tuple for (maxTessellationDivisions, joinCoplanarTriFaces)
+            maxTessellationDivisions is the maximum number of divisions for surface
+            tessellation. joinCoplanarTriFaces is a boolean to indicate if honeybee
+            should join two triangle faces if they are coplanar. This option generates
+            a cleaner Radiance geometry but will take longer to generate the file
+            (Default: (25, True)).
     Returns:
-        A list of point lists.
+        A Collection of (geometry, points) in which each geometry is coupled by points.
+        For planar surfaces the length of the points list will be only 1. For
+        non-planar surfaces, meshes or surfaces with internal edges it will be multiple
+        lists.
     """
     def splitList(li, step=3):
         return [li[x:x + step] for x in range(0, len(li), step)]
@@ -39,27 +44,54 @@ def extractSurfacePoints(geometry, maxTessellationDivisions=25,
         del(pts)
         return xyz
 
-    rpFactory = Dynamo.Visualization.DefaultRenderPackageFactory()
-    tp = DesignScript.Interfaces.TessellationParameters()
-    tp.MaxTessellationDivisions = maxTessellationDivisions
-    tp.Tolerance = -1
-    rp = rpFactory.CreateRenderPackage()
-    geometry.Tessellate(rp, tp)
-    pts = __getPoints(rp)
+    meshingParameters = meshingParameters or (25, True)
 
-    # check if two faces are generated for this geometry and merge them
-    if joinCoplanarTriFaces and len(pts) == 2:
-        pts[0].insert(2, pts[1][2])
-        pts = [pts[0]]
-    # clean Dynamo objects
-    del(rpFactory)
-    del(rp)
-    del(tp)
+    maxTessellationDivisions = meshingParameters[0]
+    joinCoplanarTriFaces = meshingParameters[1]
 
-    return pts
+    if not hasattr(geometries, '__iter__'):
+        geometries = (geometries,)
+
+    for geometry in geometries:
+        rpFactory = Dynamo.Visualization.DefaultRenderPackageFactory()
+        tp = DesignScript.Interfaces.TessellationParameters()
+        tp.MaxTessellationDivisions = maxTessellationDivisions
+        tp.Tolerance = -1
+        rp = rpFactory.CreateRenderPackage()
+
+        geometry.Tessellate(rp, tp)
+        pts = __getPoints(rp)
+
+        # check if two faces are generated for this geometry and merge them
+        if joinCoplanarTriFaces and len(pts) == 2:
+            pts[0].insert(2, pts[1][2])
+            pts = [pts[0]]
+
+        # matech the data structure
+        yield iter(((geometry, pts),))
+
+        # clean Dynamo objects
+        del(rpFactory)
+        del(rp)
+        del(tp)
 
 
-# TODO: This should be done in the core library and shared between the libraries
+def xyzToGeometricalPoints(xyzPoints):
+    """Convert a sequence of (x, y, z) values to Dynamo points."""
+    for xyzList in xyzPoints:
+        for xyz in xyzList:
+            yield DesignScript.Geometry \
+                .Point.ByCoordinates(xyz[0], xyz[1], xyz[2])
+
+
+def polygon(pointList):
+    """Return a polygon from points."""
+    return DesignScript.Geometry.Polygon.ByPoints(pointList)
+
+
+# ------------------------- End of honeybee[+] methods -----------------------------
+# ------------------------------ Utilities -----------------------------------------
+# TODO: This should be done in ladybug core library and shared between the libraries
 def vectorsCrossProduct(vector1, vector2):
     """Calculate cross product of two vectors."""
     return vector1.X * vector2.X + \
@@ -100,19 +132,6 @@ def getSurfaceCenterPtandNormal(HBSurface):
 
     SurfaceData = namedtuple('SurfaceData', 'centerPt normalVector')
     return SurfaceData(centerPt, normalVector)
-
-
-def xyzToGeometricalPoints(xyzPoints):
-    """Convert a sequence of (x, y, z) values to Dynamo points."""
-    for xyzList in xyzPoints:
-        for xyz in xyzList:
-            yield DesignScript.Geometry \
-                .Point.ByCoordinates(xyz[0], xyz[1], xyz[2])
-
-
-def polygon(pointList):
-    """Return a polygon from points."""
-    return DesignScript.Geometry.Polygon.ByPoints(pointList)
 
 
 class Grid(object):
@@ -209,17 +228,22 @@ class GridGenerator(object):
             _endVPt.Dispose()
             yield (u, v)
 
-    def __createGrids(self, surface, u, v, guidePt, border):
+    # TODO(mostapha): Add an option with no border
+    def __createGrids(self, surface, u, v, guidePt, border=None):
         """Create grids for a single surface."""
         _uSize = 1.0 / u
         _vSize = 1.0 / v
 
         for uCount in xrange(u):
             for vCount in xrange(v):
-                _cornerPt00 = surface.PointAtParameter(uCount * _uSize, vCount * _vSize)
-                _cornerPt10 = surface.PointAtParameter((uCount + 1) * _uSize, vCount * _vSize)
-                _cornerPt11 = surface.PointAtParameter((uCount + 1) * _uSize, (vCount + 1) * _vSize)
-                _cornerPt01 = surface.PointAtParameter(uCount * _uSize, (vCount + 1) * _vSize)
+                _cornerPt00 = surface.PointAtParameter(
+                    uCount * _uSize, vCount * _vSize)
+                _cornerPt10 = surface.PointAtParameter(
+                    (uCount + 1) * _uSize, vCount * _vSize)
+                _cornerPt11 = surface.PointAtParameter(
+                    (uCount + 1) * _uSize, (vCount + 1) * _vSize)
+                _cornerPt01 = surface.PointAtParameter(
+                    uCount * _uSize, (vCount + 1) * _vSize)
 
                 _cornerPts = (_cornerPt00, _cornerPt01, _cornerPt11, _cornerPt10)
                 # create a Polygon from points
@@ -296,7 +320,7 @@ class GridGenerator(object):
         for geo in geos:
             try:
                 geo.Dispose()
-            except:
+            except Exception:
                 pass
 
     @staticmethod
