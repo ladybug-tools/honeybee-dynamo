@@ -8,6 +8,9 @@ except ImportError as e:
     raise ImportError('\nFailed to import honeybee:\n\t{}'.format(e))
 
 if _analysisGrid:
+    if _analysisGrid.digitSign == 1:
+        _analysisGrid.loadValuesFromFiles()
+
     id = _index_ or 0
     sensor = _analysisGrid[id]
     pt = (sensor.location.x, sensor.location.y, sensor.location.z)

@@ -25,5 +25,6 @@ if len(_geo)!=0 and _geo[0]!=None:
     HBSrf = HBSurface.fromGeometry(names_, _geo, _type_, isNameSetByUser,
                                    isTypeSetByUser, radProp_, epProp_)
 
+
 # assign outputs to OUT
 OUT = (HBSrf,)

@@ -1,5 +1,5 @@
 # assign inputs
-_quality_, _recipeType_, radOptPar_, vmtxOptPar_, dmtxOptPar_, smtxOptPar_ = IN
+_complexity_, _recipeType_, radOptPar_, vmtxOptPar_, dmtxOptPar_, smtxOptPar_ = IN
 radPar = vmtxPar = dmtxPar = smtxPar = None
 
 try:
@@ -8,11 +8,11 @@ except ImportError as e:
     raise ImportError('\nFailed to import honeybee:\n\t{}'.format(e))
     
 
-_quality_ = _quality_ or 0
+_complexity_ = _complexity_ or 0
 _recipeType_ = _recipeType_ or 0
 
 radPar, vmtxPar, dmtxPar, smtxPar = \
-    param.getRadianceParametersImageBased(_quality_, _recipeType_)
+    param.getRadianceParametersImageBased(_complexity_, _recipeType_)
     
 if radOptPar_ and radPar:
     radPar.importParameterValuesFromString(radOptPar_)

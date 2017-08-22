@@ -205,11 +205,12 @@ def convertRoomsToHBZones(rooms, boundaryLocation=1):
     calculator = SpatialElementGeometryCalculator(doc, options)
 
     opt = Options()
-    # _ids = []
+    _elements = []
     _zones = range(len(rooms))
     _surfaces = {}  # collect hbSurfaces so I can set adjucent surfaces
     for zoneCount, room in enumerate(rooms):
         # initiate zone based on room id
+        _elements.append([])
         _zone = HBZone(room.Id)
 
         # assert False, room.Id
@@ -238,7 +239,7 @@ def convertRoomsToHBZones(rooms, boundaryLocation=1):
                 # initiate honeybee surface
                 _ver = tuple(v.PointGeometry for v in _baseFace.Vertices)
 
-                _hbSurface = HBSurface("%s:%s" % (_zone.name, createUUID()),
+                _hbSurface = HBSurface("%s_%s" % (_zone.name, createUUID()),
                                        _ver)
 
                 _zone.addSurface(_hbSurface)
@@ -257,15 +258,18 @@ def convertRoomsToHBZones(rooms, boundaryLocation=1):
                 if _ver in _collector:
                     continue
 
-                _hbSurface = HBSurface("%s:%s" % (_zone.name, boundaryElement.Id),
+                _hbSurface = HBSurface("%s_%s" % (_zone.name, boundaryElement.Id),
                                        _ver)
 
                 _collector.append(_ver)
+                _elements[zoneCount].append(doc.GetElement(
+                    boundaryFace.SpatialBoundaryElement.HostElementId
+                ))
 
                 if boundaryElement.Id not in _surfaces:
                     _surfaces[boundaryElement.Id] = _hbSurface
                 else:
-                    # TODO: set adjacent surface
+                    # TODO(mostapha): set adjacent surface
                     pass
 
                 # Take care of curtain wall systems
@@ -276,15 +280,17 @@ def convertRoomsToHBZones(rooms, boundaryLocation=1):
 
                     for count, coordinate in enumerate(_coordinates):
                         if not coordinate:
-                            print "{} has an opening with less than " \
-                                "two coordinates. It has been removed!" \
-                                .format(boundaryElement)
+                            print("{} has an opening with less than "
+                                  "two coordinates. It has been removed!"
+                                  .format(boundaryElement.Id))
                             continue
 
                         # create honeybee surface - use element id as the name
                         _hbfenSurface = HBFenSurface(
                             _elementIds[count], coordinate)
 
+                        elm = boundaryElement.Document.GetElement(_elementIds[count])
+                        _elements[zoneCount].append(elm)
                         # add fenestration surface to base honeybee surface
                         _hbSurface.addFenestrationSurface(_hbfenSurface)
                 else:
@@ -299,15 +305,17 @@ def convertRoomsToHBZones(rooms, boundaryLocation=1):
                         for count, coordinate in enumerate(_coordinates):
 
                             if not coordinate:
-                                print "{} has an opening with less than " \
-                                    "two coordinates. It has been removed!" \
-                                    .format(childElements[count].Id)
+                                print("{} has an opening with less than "
+                                      "two coordinates. It has been removed!"
+                                      .format(childElements[count].Id))
                                 continue
 
                             # create honeybee surface - use element id as the name
                             _hbfenSurface = HBFenSurface(
                                 childElements[count].Id, coordinate)
+
                             # add fenestration surface to base honeybee surface
+                            _elements[zoneCount].append(childElements[count])
                             _hbSurface.addFenestrationSurface(_hbfenSurface)
 
                 # add hbsurface to honeybee zone
@@ -320,4 +328,4 @@ def convertRoomsToHBZones(rooms, boundaryLocation=1):
         elementsData.Dispose()
 
     calculator.Dispose()
-    return _zones
+    return _zones, _elements

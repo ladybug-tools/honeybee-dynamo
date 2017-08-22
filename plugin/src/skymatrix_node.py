@@ -1,5 +1,5 @@
 # assign inputs
-north_, _wea, _density_, hoys_ = IN
+name_, north_, _wea, _density_, hoys_ = IN
 skymtx = None
 
 try:
@@ -9,7 +9,7 @@ except ImportError as e:
 
 
 if _wea:
-    skymtx = SkyMatrix(_wea, _density_, north_, hoys_)
+    skymtx = SkyMatrix(_wea, _density_, north_, hoys_, suffix=name_)
 
 # assign outputs to OUT
 OUT = (skymtx,)

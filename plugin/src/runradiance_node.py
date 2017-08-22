@@ -1,10 +1,14 @@
 # assign inputs
 _analysisRecipe, _HBObjects, radScene_, _folder_, _name_, _write, run_ = IN
-legendPar = results = None
+legendPar = outputs = None
 
 
-_HBObjects.Flatten()
-_HBObjects = _HBObjects.Branch(0)
+try:
+    _HBObjects.Flatten()
+    _HBObjects = _HBObjects.Branch(0)
+except AttributeError:
+    # the case for Dynamo
+    pass
 
 if _HBObjects and _analysisRecipe and _write:
     try:
@@ -27,8 +31,15 @@ if _HBObjects and _analysisRecipe and _write:
 
     if _write and run_:
         if _analysisRecipe.run(batchFile, False):
-            results = _analysisRecipe.results()
-
+            try:
+                outputs = _analysisRecipe.results()
+            except StopIteration:
+                raise ValueError(
+                    'Length of the results is smaller than the analysis grids '
+                    'point count [{}]. In case you have changed the analysis'
+                    ' Grid you must re-calculate daylight/view matrix!'
+                    .format(_analysisRecipe.totalPointCount)
+                )
 
 # assign outputs to OUT
-OUT = legendPar, results
+OUT = legendPar, outputs

@@ -2,8 +2,8 @@
 _sky, _analysisGrids, _analysisType_, _radiancePar_ = IN
 analysisRecipe = None
 
-#    import honeybee
-#    reload(honeybee.radiance.recipe.gridbased)
+#import honeybee
+#reload(honeybee.radiance.recipe.pointintime.gridbased)
 try:
     from honeybee.radiance.recipe.pointintime.gridbased import GridBased
 except ImportError as e:

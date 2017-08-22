@@ -1,23 +1,17 @@
 # ##### start you code from here ###
-from honeybee.geometryoperation import GridGenerator
+from honeybee.plus import GridGenerator
 
-_surfaces = IN[0]
+_zones = IN[0]
 _gridSize = IN[1]
 _distanceFromBaseSrf = IN[2]
-_borders = IN[3]
 
-if _surfaces and _gridSize and _distanceFromBaseSrf:
 
-    if not hasattr(_surfaces, '__iter__'):
-        _surfaces = (_surfaces,)
+if _zones and _gridSize and _distanceFromBaseSrf:
 
-    _borders = _borders if _borders else (getSurfaceBorder(surface)
-                                          for surface in _surfaces)
+    if not hasattr(_zones, '__iter__'):
+        _zones = (_zones,)
 
-    if not hasattr(_borders, '__iter__'):
-        _borders = (_borders,)
-
-    _gg = GridGenerator(_surfaces, _gridSize, _distanceFromBaseSrf, _borders)
+    _gg = GridGenerator.fromHBZones(_zones, _gridSize, _distanceFromBaseSrf)
     gridGroups = tuple(_gg.grids)
 
     _testPoints = tuple([] for g in gridGroups)

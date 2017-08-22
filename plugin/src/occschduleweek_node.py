@@ -1,6 +1,6 @@
 # assign inputs
 _occHours_, _offHours_, _weekend_, _defValue_ = IN
-schedule = None
+schedule = values = None
 
 try:
     from honeybee.schedule import Schedule
@@ -10,5 +10,7 @@ except ImportError as e:
 schedule = Schedule.fromWorkdayHours(
     _occHours_, _offHours_, _weekend_, _defValue_)
 
+values = schedule.values
+
 # assign outputs to OUT
-OUT = (schedule,)
+OUT = schedule, values

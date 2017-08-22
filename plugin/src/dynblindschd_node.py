@@ -1,5 +1,5 @@
 # assign inputs
-_sensor, _blindStates_, _logic_, data_ = IN
+_sensor, _blindCombs_, _logic_, data_ = IN
 blindStates = blindStIndex = illumTotal = illumDirect = success = None
 
 import copy
@@ -23,7 +23,8 @@ if _sensor:
         setattr(sensor, 'logic', sensor._logic)
 
     
-    results = sensor.blindsState(sensor.hoys, _blindStates_)
+    states = sensor.parseBlindStates(_blindCombs_)
+    results = sensor.blindsState(sensor.hoys, states)
     if results:
         blindStates = (str(d) for d in results[0])  # tuple is not a standard DS Type
         blindStIndex = results[1]

@@ -18,7 +18,8 @@ if _wea:
     dt = DateTime(_month_, _day_, _hour_)
     _density_ = _density_ or 1
     
-    skyVec = SkyMatrix(_wea, _density_, north_, (int(dt.hoy),))
+    skyVec = SkyMatrix(_wea, _density_, north_, (int(dt.hoy),),
+                       suffix=str(int(dt.hoy)))
     
 
 # assign outputs to OUT

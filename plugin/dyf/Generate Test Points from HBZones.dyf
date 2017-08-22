@@ -1,4 +1,4 @@
-<Workspace Version="1.2.0.2690" X="-75.2681824041176" Y="216.858603886403" zoom="0.863147625765326" Name="Generate Test Points from HBZones" Description="Generate test points from Honeybee zones based on grid size." ID="c748c4e3-42e1-421d-87c9-06495df97ddf" Category="Honeybee.03 :: Daylight :: Recipes">
+<Workspace Version="1.2.0.2690" X="-75.2681824041176" Y="216.858603886403" zoom="0.863147625765326" Name="Generate Test Points from HBZones" Description="Generate test points from Honeybee zones based on grid size." ID="c748c4e3-42e1-421d-87c9-06495df97ddf" Category="Honeybee.Revit">
   <NamespaceResolutionMap>
     <ClassMap partialName="List" resolvedName="DSCore.List" assemblyName="DSCoreNodes.dll" />
     <ClassMap partialName="System.Object" resolvedName="System.Object" assemblyName="" />
@@ -73,7 +73,7 @@ else:
       <PortInfo index="0" default="False" />
       <Symbol value="//Report&#xD;&#xA;ERRReport" />
     </Dynamo.Graph.Nodes.CustomNodes.Output>
-    <Dynamo.Graph.Nodes.CodeBlockNodeModel guid="913aff2e-eccd-4dfb-a667-80d9d46e8d9a" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" nickname="Code Block" x="230.983113213228" y="2.35413237851674" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" isPinned="false" CodeText="&quot;Honeybee&quot;;&#xA;&quot;genTestPointsFromHBZones_node.py&quot;;" ShouldFocus="false" />
+    <Dynamo.Graph.Nodes.CodeBlockNodeModel guid="913aff2e-eccd-4dfb-a667-80d9d46e8d9a" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" nickname="Code Block" x="230.983113213228" y="2.35413237851674" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" isPinned="false" CodeText="&quot;Honeybee&quot;;&#xA;&quot;rvt_genzonetestpoints_node.py&quot;;" ShouldFocus="false" />
     <PythonNodeModels.PythonNode guid="4daa6c6e-4ea8-4b14-811f-44bd77eddbe8" type="PythonNodeModels.PythonNode" nickname="import and prepare py code" x="594.274104112642" y="-1.96990689780489" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" isPinned="false" inputcount="2">
       <PortInfo index="0" default="False" />
       <PortInfo index="1" default="False" />
@@ -101,7 +101,7 @@ def tryGetPluginPath(plugin):
     _dynamoPaths = (_dynamoPath.replace('Dynamo Core', 'Dynamo Revit'),
                     _dynamoPath.replace('Dynamo Revit', 'Dynamo Core'))
     _settingsFilename = 'DynamoSettings.xml'
-    
+
     pkf = []
     for path in _dynamoPaths:
         settingsFile = IO.Path.Combine(_appdata, path, _settingsFilename)
@@ -140,7 +140,7 @@ try:
         '    import traceback\n' + \
         '    OUT = "ERROR:\\n\\t{}".format(str(e)) + \\\n' + \
         '    "\\n\\nIf you think this is a bug submit an issue on github.\\n" + \\\n' + \
-        '    "https://github.com/ladybug-analysis-tools/honeybee-plus/issues\\n" +  \\\n' + \
+        '    "https://github.com/ladybug-tools/honeybee-dynamo/issues\\n" +  \\\n' + \
         '    "and include below error message:\\n\\n" + \\\n' + \
         '    "{}".format(traceback.format_exc())\n'
 
@@ -152,7 +152,7 @@ except Exception, e:
     import traceback
     OUT = "ERROR:\n\t{}".format(str(e)) + \
         "\n\nIf you think this is a bug submit an issue on github.\n" + \
-        "https://github.com/ladybug-analysis-tools/honeybee-plus/issues\n" +  \
+        "https://github.com/ladybug-tools/honeybee-dynamo/issues\n" +  \
         "and include below error message:\n\n" + \
         "{}".format(traceback.format_exc())
 </Script>

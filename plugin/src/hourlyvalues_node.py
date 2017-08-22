@@ -1,5 +1,5 @@
 # assign inputs
-_analysisGrid, hoy_, blindStates_, _mode_ = IN
+_analysisGrid, hoy_, blindState_, _mode_ = IN
 values = None
 
 from ladybug.dt import DateTime
@@ -16,10 +16,10 @@ if _analysisGrid:
     assert _mode_ < 3, '_mode_ can only be 0: total, 1: direct or 2: sky.'
 
     try:
-        states = eval(blindStates_)
+        states = eval(blindState_)
     except Exception as e:
-        if blindStates_:
-            raise TypeError('Failed to read blindStates_:\n{}'.format(e))
+        if blindState_:
+            raise TypeError('Failed to read blindState_:\n{}'.format(e))
         states = None
     
     print('Loading {} values for {}.'.format(_modes[_mode_], DateTime.fromHoy(hoy_)))
