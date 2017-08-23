@@ -176,8 +176,8 @@ class GridGenerator(object):
         self.surfaces = surfaces
         self.gridSize = gridSize
         self.distanceFromBaseSrf = float(distanceFromBaseSrf)
-        self.borders = borders if borders else tuple(self.getSurfaceBorder(surface)
-                                                     for surface in surfaces)
+        self.borders = borders if borders else \
+            tuple(self.getSurfaceBorder(surface) for surface in surfaces)
         assert len(self.surfaces) == len(self.borders), \
             "Length of surfaces should be equal to length of borders."
 
@@ -229,7 +229,7 @@ class GridGenerator(object):
             yield (u, v)
 
     # TODO(mostapha): Add an option with no border
-    def __createGrids(self, surface, u, v, guidePt, border=None):
+    def __createGrids(self, surface, u, v, guidePt=None, border=None):
         """Create grids for a single surface."""
         _uSize = 1.0 / u
         _vSize = 1.0 / v
