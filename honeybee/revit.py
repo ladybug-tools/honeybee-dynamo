@@ -52,59 +52,68 @@ def collectMEPSpaces(document=None):
     return tuple(document.GetElement(elId) for elId in roomIter)
 
 
-def getChildElemenets(hostElement, addRectOpenings=True, includeShadows=False,
-                      includeEmbeddedWalls=False,
-                      includeSharedEmbeddedInserts=True):
+def getChildElemenets(host_element, add_rect_openings=True, include_shadows=False,
+                      include_embedded_walls=True,
+                      include_shared_embedded_inserts=True):
     """Get child elemsts for a Revit element."""
-    ids = hostElement.FindInserts(addRectOpenings,
-                                  includeShadows,
-                                  includeEmbeddedWalls,
-                                  includeSharedEmbeddedInserts)
+    try:
+        ids = host_element.FindInserts(add_rect_openings,
+                                       include_shadows,
+                                       include_embedded_walls,
+                                       include_shared_embedded_inserts)
+    except AttributeError:
+        # host element is not a wall, roof, etc. It's something like a column
+        return ()
 
-    return tuple(hostElement.Document.GetElement(i) for i in ids)
+    return tuple(host_element.Document.GetElement(i) for i in ids)
 
 
-def extractPanelsVertices(hostElement, baseFace, opt):
+def extractPanelsVertices(host_element, base_face, opt):
     """Return lists of lists of vertices for a panel grid."""
-    if not hostElement.CurtainGrid:
+    if not host_element.CurtainGrid:
         return (), ()
 
     _panelElementIds = []
     _panelVertices = []
+    panel_ids = host_element.CurtainGrid.GetPanelIds()
+    for panel_id in panel_ids:
 
-    for panelId in hostElement.CurtainGrid.GetPanelIds():
+        panel_el = host_element.Document.GetElement(panel_id)
+        geometries = panel_el.get_Geometry(opt)
+        # From here solids are dynamo objects
+        solids = tuple(p.ToProtoType()
+                       for geometry in geometries
+                       for p in geometry.GetInstanceGeometry())
 
-        _geo = hostElement.Document.GetElement(panelId).get_Geometry(opt)
+        if panel_el.Name == 'Curtain Wall Dbl Glass':
+            # remove handle geometry
+            solids = solids[2:]
 
-        _outerFaces = (p.ToProtoType().Faces[1] for obj in _geo
-                       for p in obj.GetInstanceGeometry())
+        outer_faces = tuple(
+            sorted(s.Faces, key=lambda x: x.SurfaceGeometry().Area, reverse=True)[0]
+            for s in solids if s and s.Faces.Length != 0)
 
-        openings = (
-            tuple(edge.StartVertex.PointGeometry for edge in loop.CoEdges)
-            for _outerFace in _outerFaces
-            for loop in _outerFace.Loops
+        vertices = tuple(
+            tuple(ver.PointGeometry for ver in outer_face.Vertices)
+            for outer_face in outer_faces
         )
 
-        coordinates = (
-            tuple(
-                tuple(baseFace.ClosestPointTo(pt) for pt in opening)
-                for opening in openings
-            ))
+        coordinates = tuple(
+            (base_face.ClosestPointTo(ver) for ver in ver_group)
+            for ver_group in vertices
+        )
 
-        filteredCoordinates = tuple(coorgroup if len(set(coorgroup)) > 2 else None
-                                    for coorgroup in coordinates)
-
-        _panelElementIds.append(panelId)
-        _panelVertices.append(filteredCoordinates)
+        for coords in coordinates:
+            _panelElementIds.append(panel_id)
+            _panelVertices.append(coords)
 
         # cleaning up
-        (pt.Dispose() for opening in openings for pt in opening)
-        (face.Dispose() for faceGroup in _outerFaces for face in faceGroup)
+        (solid.Dispose() for solid in solids)
 
     return _panelElementIds, _panelVertices
 
 
-def exctractGlazingVertices(hostElement, baseFace, opt):
+def exctractGlazingVertices(host_element, base_face, opt):
     """Return glazing vertices for a window family instance.
 
     I was hoping that revit supports a cleaner way for doing this but for now
@@ -114,7 +123,7 @@ def exctractGlazingVertices(hostElement, baseFace, opt):
     # get 3d faces for the geometry
     # TODO: Take all the vertices for daylight modeling
     faces = (clr.Convert(obj, Solid).Faces
-             for obj in hostElement.get_Geometry(opt))
+             for obj in host_element.get_Geometry(opt))
 
     _outerFace = next(faces)[0].ToProtoType()[0]
 
@@ -126,7 +135,7 @@ def exctractGlazingVertices(hostElement, baseFace, opt):
 
     coordinates = (
         tuple(
-            tuple(baseFace.ClosestPointTo(pt) for pt in opening)
+            tuple(base_face.ClosestPointTo(pt) for pt in opening)
             for opening in openings
         ))
 
@@ -134,10 +143,11 @@ def exctractGlazingVertices(hostElement, baseFace, opt):
     (pt.Dispose() for opening in openings for pt in opening)
     (face.Dispose() for faceGroup in faces for face in faceGroup)
 
-    filteredCoordinates = tuple(coorgroup if len(set(coorgroup)) > 2 else None
-                                for coorgroup in coordinates)
+    filtered_coordinates = tuple(coorgroup
+                                 for coorgroup in coordinates
+                                 if len(set(coorgroup)) > 2)
 
-    return filteredCoordinates
+    return filtered_coordinates
 
 
 def createUUID():
@@ -262,6 +272,7 @@ def convertRoomsToHBZones(rooms, boundaryLocation=1):
                                        _ver)
 
                 _collector.append(_ver)
+
                 _elements[zoneCount].append(doc.GetElement(
                     boundaryFace.SpatialBoundaryElement.HostElementId
                 ))
@@ -287,7 +298,7 @@ def convertRoomsToHBZones(rooms, boundaryLocation=1):
 
                         # create honeybee surface - use element id as the name
                         _hbfenSurface = HBFenSurface(
-                            _elementIds[count], coordinate)
+                            _elementIds[count], tuple(coordinate))
 
                         elm = boundaryElement.Document.GetElement(_elementIds[count])
                         _elements[zoneCount].append(elm)
