@@ -17,14 +17,14 @@ except ImportError as e:
 from collections import namedtuple
 
 
-def extractGeometryPoints(geometries, meshingParameters=None):
+def extract_geometry_points(geometries, meshing_parameters=None):
     """Extract points from a surface in Dynamo.
 
     Args:
         geometry: A Dynamo geometry.
-        meshingParameters:  A tuple for (maxTessellationDivisions, joinCoplanarTriFaces)
-            maxTessellationDivisions is the maximum number of divisions for surface
-            tessellation. joinCoplanarTriFaces is a boolean to indicate if honeybee
+        meshing_parameters:  A tuple for (maxTessellationDivisions, joinCoplanarTriFaces)
+            max_tessellation_divisions is the maximum number of divisions for surface
+            tessellation. join_coplanar_tri_faces is a boolean to indicate if honeybee
             should join two triangle faces if they are coplanar. This option generates
             a cleaner Radiance geometry but will take longer to generate the file
             (Default: (25, True)).
@@ -34,36 +34,36 @@ def extractGeometryPoints(geometries, meshingParameters=None):
         non-planar surfaces, meshes or surfaces with internal edges it will be multiple
         lists.
     """
-    def splitList(li, step=3):
+    def split_list(li, step=3):
         return [li[x:x + step] for x in range(0, len(li), step)]
 
-    def __getPoints(rp):
+    def __get_points(rp):
         pts = list(rp.MeshVertices)
         # split values in xyz
-        xyz = splitList(splitList(pts))
+        xyz = split_list(split_list(pts))
         del(pts)
         return xyz
 
-    meshingParameters = meshingParameters or (25, True)
+    meshing_parameters = meshing_parameters or (25, True)
 
-    maxTessellationDivisions = meshingParameters[0]
-    joinCoplanarTriFaces = meshingParameters[1]
+    max_tessellation_divisions = meshing_parameters[0]
+    join_coplanar_tri_faces = meshing_parameters[1]
 
     if not hasattr(geometries, '__iter__'):
         geometries = (geometries,)
 
     for geometry in geometries:
-        rpFactory = Dynamo.Visualization.DefaultRenderPackageFactory()
+        rp_factory = Dynamo.Visualization.DefaultRenderPackageFactory()
         tp = DesignScript.Interfaces.TessellationParameters()
-        tp.MaxTessellationDivisions = maxTessellationDivisions
+        tp.MaxTessellationDivisions = max_tessellation_divisions
         tp.Tolerance = -1
-        rp = rpFactory.CreateRenderPackage()
+        rp = rp_factory.CreateRenderPackage()
 
         geometry.Tessellate(rp, tp)
-        pts = __getPoints(rp)
+        pts = __get_points(rp)
 
         # check if two faces are generated for this geometry and merge them
-        if joinCoplanarTriFaces and len(pts) == 2:
+        if join_coplanar_tri_faces and len(pts) == 2:
             pts[0].insert(2, pts[1][2])
             pts = [pts[0]]
 
@@ -71,67 +71,69 @@ def extractGeometryPoints(geometries, meshingParameters=None):
         yield iter(((geometry, pts),))
 
         # clean Dynamo objects
-        del(rpFactory)
+        del(rp_factory)
         del(rp)
         del(tp)
 
 
-def xyzToGeometricalPoints(xyzPoints):
+def xyz_to_geometrical_points(xyz_points):
     """Convert a sequence of (x, y, z) values to Dynamo points."""
-    for xyzList in xyzPoints:
+    for xyzList in xyz_points:
         for xyz in xyzList:
             yield DesignScript.Geometry \
                 .Point.ByCoordinates(xyz[0], xyz[1], xyz[2])
 
 
-def polygon(pointList):
+def polygon(point_list):
     """Return a polygon from points."""
-    return DesignScript.Geometry.Polygon.ByPoints(pointList)
+    return DesignScript.Geometry.Polygon.ByPoints(point_list)
 
 
 # ------------------------- End of honeybee[+] methods -----------------------------
 # ------------------------------ Utilities -----------------------------------------
 # TODO: This should be done in ladybug core library and shared between the libraries
-def vectorsCrossProduct(vector1, vector2):
+def vectors_cross_product(vector1, vector2):
     """Calculate cross product of two vectors."""
     return vector1.X * vector2.X + \
         vector1.Y * vector2.Y + vector1.Z * vector2.Z
 
 
 # TODO: This should be done in the core library and shared between the libraries
-def isPointsSortedAntiClockwise(sortedPoints, normal):
+def is_points_sorted_anti_clockwise(sorted_points, normal):
     """Check if an ordered list of points are anti-clockwise."""
-    vector0 = DesignScript.Geometry.Vector.ByTwoPoints(sortedPoints[0], sortedPoints[1])
-    vector1 = DesignScript.Geometry.Vector.ByTwoPoints(sortedPoints[0], sortedPoints[-1])
-    ptsNormal = DesignScript.Geometry.Vector.Cross(vector0, vector1)
+    vector0 = DesignScript.Geometry.Vector.ByTwoPoints(sorted_points[0],
+                                                       sorted_points[1])
+    vector1 = DesignScript.Geometry.Vector.ByTwoPoints(sorted_points[0],
+                                                       sorted_points[-1])
+    pts_normal = DesignScript.Geometry.Vector.Cross(vector0, vector1)
 
     # in case points are anti-clockwise then normals should be parallel
-    if vectorsCrossProduct(ptsNormal, normal) > 0:
+    if vectors_cross_product(pts_normal, normal) > 0:
         return True
     else:
         return False
 
 
-def getSurfaceCenterPtandNormal(HBSurface):
-    """Calculate center point and normal for a HBSurface.
+def get_surface_center_ptand_normal(hb_surface):
+    """Calculate center point and normal for a hb_surface.
 
     Args:
-        HBSurface: A Honeybee surface
+        hb_surface: A Honeybee surface
 
     Returns:
-        Returns a tuple as (centerPt, normalVector)
+        Returns a tuple as (center_pt, normalVector)
     """
     try:
-        geometry = HBSurface.geometry
+        geometry = hb_surface.geometry
     except AttributeError as e:
-        raise TypeError("{} is not a HBSurface: {}".format(HBSurface, e))
+        raise TypeError("{} is not a HBSurface: {}".format(hb_surface, e))
 
     uv = DesignScript.Geometry.UV.ByCoordinates(0.5, 0.5)
-    centerPt = geometry.PointAtParameter(uv.U, uv.V)
-    normalVector = geometry.NormalAtParameter(uv.U, uv.V).Normalized()
+    center_pt = geometry.PointAtParameter(uv.U, uv.V)
+    normal_vector = geometry.NormalAtParameter(uv.U, uv.V).Normalized()
 
-    SurfaceData = namedtuple('SurfaceData', 'centerPt normalVector')
-    return SurfaceData(centerPt, normalVector)
+    SurfaceData = namedtuple('SurfaceData', 'center_pt normalVector')
+    return SurfaceData(center_pt, normal_vector)
 
 
 class Grid(object):
@@ -139,17 +141,17 @@ class Grid(object):
 
     __slots__ = ('polygon', 'uv', 'point', 'normal', 'originalPoint')
 
-    def __init__(self, polygon, centerPt, baseSurface, distanceFromBaseSrf=0):
+    def __init__(self, polygon, center_pt, base_surface, distance_from_base_srf=0):
         """Init Dynamo test grid."""
-        self.originalPoint = centerPt
-        self.uv = baseSurface.UVParameterAtPoint(self.originalPoint)
-        self.normal = baseSurface.NormalAtParameter(self.uv.U, self.uv.V)
-        _movingVector = self.normal.Scale(distanceFromBaseSrf)
+        self.originalPoint = center_pt
+        self.uv = base_surface.UVParameterAtPoint(self.originalPoint)
+        self.normal = base_surface.NormalAtParameter(self.uv.U, self.uv.V)
+        _movingVector = self.normal.Scale(distance_from_base_srf)
         self.polygon = polygon.Translate(_movingVector)
-        self.point = centerPt.Translate(_movingVector)
+        self.point = center_pt.Translate(_movingVector)
         polygon.Dispose()
 
-    def ToString(self):
+    def to_string(self):
         """Overwrite .NET ToString method."""
         return self.__repr__()
 
@@ -164,55 +166,55 @@ class Grid(object):
 class GridGenerator(object):
     """Grid generator for Dynamo."""
 
-    def __init__(self, surfaces, gridSize, distanceFromBaseSrf=0, borders=None):
+    def __init__(self, surfaces, grid_size, distance_from_base_srf=0, borders=None):
         """Init GridGenerator.
 
         Args:
             surfaces: List of Dynamo surfaces.
-            gridSize: Grid size in Revit units.
+            grid_size: Grid size in Revit units.
             borders: List of closed polygons for surfaces borders. Surface border
                 will be used if not provided.
         """
         self.surfaces = surfaces
-        self.gridSize = gridSize
-        self.distanceFromBaseSrf = float(distanceFromBaseSrf)
+        self.grid_size = grid_size
+        self.distance_from_base_srf = float(distance_from_base_srf)
         self.borders = borders if borders else \
-            tuple(self.getSurfaceBorder(surface) for surface in surfaces)
+            tuple(self.get_surface_border(surface) for surface in surfaces)
         assert len(self.surfaces) == len(self.borders), \
             "Length of surfaces should be equal to length of borders."
 
-        # generate guidePts for trimming
-        self.guidePts = (border.Center() for border in self.borders)
-        self.uvs = self.calculatUV()
+        # generate guide_pts for trimming
+        self.guide_pts = (border.Center() for border in self.borders)
+        self.uvs = self.calculat_uv()
 
     @classmethod
-    def fromHBZones(cls, HBZones, gridSize, distanceFromBaseSrf=0):
+    def fromhb_zones(cls, hb_zones, grid_size, distance_from_base_srf=0):
         """Create grid for Honeybee zones."""
-        for HBZone in HBZones:
+        for HBZone in hb_zones:
             assert hasattr(HBZone, 'isHBZone'), \
                 '{} is not a Honeybee Zone.'.format(HBZone)
 
         # get profile for floors
-        borders = tuple(floor.geometry for zone in HBZones for floor in zone.floors)
+        borders = tuple(floor.geometry for zone in hb_zones for floor in zone.floors)
         surfaces = tuple(border.Patch().FlipNormalDirection() for border in borders)
 
-        return cls(surfaces, gridSize, distanceFromBaseSrf, borders)
+        return cls(surfaces, grid_size, distance_from_base_srf, borders)
 
     @property
     def grids(self):
         """Generate polygons for each surface based on (u, v)."""
-        for surface, (u, v), guidePt, border in zip(self.surfaces,
-                                                    self.uvs,
-                                                    self.guidePts,
-                                                    self.borders):
-            yield self.__createGrids(surface, u, v, guidePt, border)
+        for surface, (u, v), guide_pt, border in zip(self.surfaces,
+                                                     self.uvs,
+                                                     self.guide_pts,
+                                                     self.borders):
+            yield self.__create_grids(surface, u, v, guide_pt, border)
 
-    def calculatUV(self):
+    def calculat_uv(self):
         """Calculate number of U, V for a surface based on a grid size.
 
         Args:
             surfaces: A list of Dynamo surfaces.
-            gridSize: A number in Dynamo units.
+            grid_size: A number in Dynamo units.
 
         Returns:
             A list of (u, v) tuples for surfaces
@@ -221,15 +223,15 @@ class GridGenerator(object):
             _cornerPt = surface.PointAtParameter(0, 0)
             _endUPt = surface.PointAtParameter(1, 0)
             _endVPt = surface.PointAtParameter(0, 1)
-            u = int(round(_cornerPt.DistanceTo(_endUPt) / self.gridSize) + 1)
-            v = int(round(_cornerPt.DistanceTo(_endVPt) / self.gridSize) + 1)
+            u = int(round(_cornerPt.DistanceTo(_endUPt) / self.grid_size) + 1)
+            v = int(round(_cornerPt.DistanceTo(_endVPt) / self.grid_size) + 1)
             _cornerPt.Dispose()
             _endUPt.Dispose()
             _endVPt.Dispose()
             yield (u, v)
 
     # TODO(mostapha): Add an option with no border
-    def __createGrids(self, surface, u, v, guidePt=None, border=None):
+    def __create_grids(self, surface, u, v, guide_pt=None, border=None):
         """Create grids for a single surface."""
         _uSize = 1.0 / u
         _vSize = 1.0 / v
@@ -248,7 +250,7 @@ class GridGenerator(object):
                 _cornerPts = (_cornerPt00, _cornerPt01, _cornerPt11, _cornerPt10)
                 # create a Polygon from points
                 _pl = DesignScript.Geometry.Polygon.ByPoints(_cornerPts)
-                _cenPoint = self.averagePoint(_cornerPts)
+                _cenPoint = self.average_point(_cornerPts)
                 # check if the center point is inside the border
                 if border.ContainmentTest(_cenPoint):
                     # scale pl inside to avoid intersection with border for
@@ -260,36 +262,36 @@ class GridGenerator(object):
 
                     if not DesignScript.Geometry.Polygon.Intersect(border, _scaledPl):
                         # return plg if polygon center is inside and doesn't intersect
-                        self.disposeGeometries(_cornerPts)
-                        self.disposeGeometries((_plane, _scaledPl))
+                        self.dispose_geometries(_cornerPts)
+                        self.dispose_geometries((_plane, _scaledPl))
                         yield Grid(_pl, _cenPoint, surface,
-                                   self.distanceFromBaseSrf)
+                                   self.distance_from_base_srf)
                     else:
                         # it's inside and intersects. trim with border and return
                         # the inside part.
-                        self.disposeGeometries((_plane, _scaledPl))
-                        self.disposeGeometries(_cornerPts)
-                        _tr = _pl.Trim(border, guidePt)[0]
-                        _cenPoint = self.averagePolygonPoints(_tr)
+                        self.dispose_geometries((_plane, _scaledPl))
+                        self.dispose_geometries(_cornerPts)
+                        _tr = _pl.Trim(border, guide_pt)[0]
+                        _cenPoint = self.average_polygon_points(_tr)
                         _pl = _tr.CloseWithLine()
                         _tr.Dispose()
                         yield Grid(_pl, _cenPoint, surface,
-                                   self.distanceFromBaseSrf)
+                                   self.distance_from_base_srf)
 
                 elif DesignScript.Geometry.Polygon.Intersect(border, _pl):
                     # center point is outside but still intersects
-                    _tr = _pl.Trim(border, guidePt)[0]
-                    _cenPoint = self.averagePolygonPoints(_tr)
+                    _tr = _pl.Trim(border, guide_pt)[0]
+                    _cenPoint = self.average_polygon_points(_tr)
                     if border.ContainmentTest(_cenPoint):
                         _pl = _tr.CloseWithLine()
                         _tr.Dispose()
-                        self.disposeGeometries(_cornerPts)
+                        self.dispose_geometries(_cornerPts)
                         yield Grid(_pl, _cenPoint, surface,
-                                   self.distanceFromBaseSrf)
+                                   self.distance_from_base_srf)
 
     @staticmethod
-    def averagePoint(pts):
-        """Find averagePoint for a list of points."""
+    def average_point(pts):
+        """Find average_point for a list of points."""
         cen = [0, 0, 0]
 
         for pt in pts:
@@ -299,23 +301,23 @@ class GridGenerator(object):
 
         return DesignScript.Geometry.Point.ByCoordinates(*(v / len(pts) for v in cen))
 
-    def averagePolygonPoints(self, polygon):
-        """Find averagePoint for a polygon."""
-        startPt = polygon.Curves()[0].StartPoint
+    def average_polygon_points(self, polygon):
+        """Find average_point for a polygon."""
+        start_pt = polygon.Curves()[0].StartPoint
         pts = tuple(c.EndPoint for c in polygon.Curves())
         _len = len(pts)
-        cen = [startPt.X, startPt.Y, startPt.Z]
+        cen = [start_pt.X, start_pt.Y, start_pt.Z]
 
         for pt in pts:
             cen[0] += pt.X
             cen[1] += pt.Y
             cen[2] += pt.Z
 
-        self.disposeGeometries(pts)
+        self.dispose_geometries(pts)
         return DesignScript.Geometry.Point.ByCoordinates(*(v / (_len + 1) for v in cen))
 
     @staticmethod
-    def disposeGeometries(geos):
+    def dispose_geometries(geos):
         """Dispose a list of geometries."""
         for geo in geos:
             try:
@@ -324,7 +326,7 @@ class GridGenerator(object):
                 pass
 
     @staticmethod
-    def getSurfaceBorder(surface):
+    def get_surface_border(surface):
         """Get surface border."""
         crvs = surface.PerimeterCurves()
         return crvs[0].Join(crvs[1:])
