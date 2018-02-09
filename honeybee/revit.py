@@ -30,7 +30,7 @@ except ImportError:
     "You can only use revit library from Revit not %s." % config.platform.platform
 
 
-def collectRooms(document=None):
+def collect_rooms(document=None):
     """Collect all the rooms in the current Revit document."""
     if not document:
         document = DocumentManager.Instance.CurrentDBDocument
@@ -41,7 +41,7 @@ def collectRooms(document=None):
     return tuple(document.GetElement(elId) for elId in roomIter)
 
 
-def collectMEPSpaces(document=None):
+def collect_MEP_spaces(document=None):
     """Collect all the spaces in the current Revit document."""
     if not document:
         document = DocumentManager.Instance.CurrentDBDocument
@@ -52,9 +52,9 @@ def collectMEPSpaces(document=None):
     return tuple(document.GetElement(elId) for elId in roomIter)
 
 
-def getChildElemenets(host_element, add_rect_openings=True, include_shadows=False,
-                      include_embedded_walls=True,
-                      include_shared_embedded_inserts=True):
+def get_child_elemenets(host_element, add_rect_openings=True, include_shadows=False,
+                        include_embedded_walls=True,
+                        include_shared_embedded_inserts=True):
     """Get child elemsts for a Revit element."""
     try:
         ids = host_element.FindInserts(add_rect_openings,
@@ -68,7 +68,7 @@ def getChildElemenets(host_element, add_rect_openings=True, include_shadows=Fals
     return tuple(host_element.Document.GetElement(i) for i in ids)
 
 
-def extractPanelsVertices(host_element, base_face, opt):
+def extract_panels_vertices(host_element, base_face, opt):
     """Return lists of lists of vertices for a panel grid."""
     if not host_element.CurtainGrid:
         return (), ()
@@ -113,7 +113,7 @@ def extractPanelsVertices(host_element, base_face, opt):
     return _panelElementIds, _panelVertices
 
 
-def exctractGlazingVertices(host_element, base_face, opt):
+def exctract_glazing_vertices(host_element, base_face, opt):
     """Return glazing vertices for a window family instance.
 
     I was hoping that revit supports a cleaner way for doing this but for now
@@ -150,12 +150,12 @@ def exctractGlazingVertices(host_element, base_face, opt):
     return filtered_coordinates
 
 
-def createUUID():
+def create_UUID():
     """Return a random uuid."""
     return str(uuid.uuid4())
 
 
-def _getInternalElements(elements):
+def _get_internal_elements(elements):
     """Get internal element from dynamo objects.
 
     This is similar to UnwrapElement in dynamo but will work fine outside dynamo.
@@ -164,14 +164,14 @@ def _getInternalElements(elements):
         return
 
     if hasattr(elements, '__iter__'):
-        return (_getInternalElements(x) for x in elements)
+        return (_get_internal_elements(x) for x in elements)
     elif hasattr(elements, 'InternalElement'):
         return elements.InternalElement
     else:
         return elements
 
 
-def getBoundaryLocation(index=1):
+def get_boundary_location(index=1):
     """Get SpatialElementBoundaryLocation.
 
     0 > Finish: Spatial element finish face.
@@ -185,18 +185,18 @@ def getBoundaryLocation(index=1):
     return _locations[index]
 
 
-def getParameters(el, parameter):
+def get_parameters(el, parameter):
     """Get the list of available parameter for an element."""
     return tuple(p.Definition.Name for p in el.Parameters)
 
 
-def getParameter(el, parameter):
+def get_parameter(el, parameter):
     """Get a parameter from an element."""
     return tuple(p.AsValueString() for p in el.Parameters
                  if p.Definition.Name == parameter)[0]
 
 
-def convertRoomsToHBZones(rooms, boundaryLocation=1):
+def convert_rooms_to_hb_zones(rooms, boundary_location=1):
     """Convert rooms to honeybee zones.
 
     This script will only work from inside Dynamo nodes. for a similar script
@@ -204,14 +204,14 @@ def convertRoomsToHBZones(rooms, boundaryLocation=1):
     https://github.com/jeremytammik/SpatialElementGeometryCalculator/
         blob/master/SpatialElementGeometryCalculator/Command.cs
     """
-    rooms = tuple(_getInternalElements(rooms))
+    rooms = tuple(_get_internal_elements(rooms))
     if not rooms:
         return []
 
     # create a spatial element calculator to calculate room data
     doc = rooms[0].Document
     options = SpatialElementBoundaryOptions()
-    options.SpatialElementBoundaryLocation = getBoundaryLocation(boundaryLocation)
+    options.SpatialElementBoundaryLocation = get_boundary_location(boundary_location)
     calculator = SpatialElementGeometryCalculator(doc, options)
 
     opt = Options()
@@ -249,10 +249,10 @@ def convertRoomsToHBZones(rooms, boundaryLocation=1):
                 # initiate honeybee surface
                 _ver = tuple(v.PointGeometry for v in _baseFace.Vertices)
 
-                _hbSurface = HBSurface("%s_%s" % (_zone.name, createUUID()),
+                _hbSurface = HBSurface("%s_%s" % (_zone.name, create_UUID()),
                                        _ver)
 
-                _zone.addSurface(_hbSurface)
+                _zone.add_surface(_hbSurface)
                 continue
 
             for boundaryFace in _boundaryFaces:
@@ -285,9 +285,9 @@ def convertRoomsToHBZones(rooms, boundaryLocation=1):
 
                 # Take care of curtain wall systems
                 # I'm not sure how this will work with custom Curtain Wall
-                if getParameter(boundaryElement, 'Family') == 'Curtain Wall':
+                if get_parameter(boundaryElement, 'Family') == 'Curtain Wall':
                     _elementIds, _coordinates = \
-                        extractPanelsVertices(boundaryElement, _baseFace, opt)
+                        extract_panels_vertices(boundaryElement, _baseFace, opt)
 
                     for count, coordinate in enumerate(_coordinates):
                         if not coordinate:
@@ -303,15 +303,15 @@ def convertRoomsToHBZones(rooms, boundaryLocation=1):
                         elm = boundaryElement.Document.GetElement(_elementIds[count])
                         _elements[zoneCount].append(elm)
                         # add fenestration surface to base honeybee surface
-                        _hbSurface.addFenestrationSurface(_hbfenSurface)
+                        _hbSurface.add_fenestration_surface(_hbfenSurface)
                 else:
                     # check if there is any child elements
-                    childElements = getChildElemenets(boundaryElement)
+                    childElements = get_child_elemenets(boundaryElement)
 
                     if childElements:
 
-                        _coordinates = exctractGlazingVertices(boundaryElement,
-                                                               _baseFace, opt)
+                        _coordinates = exctract_glazing_vertices(boundaryElement,
+                                                                 _baseFace, opt)
 
                         for count, coordinate in enumerate(_coordinates):
 
@@ -327,10 +327,10 @@ def convertRoomsToHBZones(rooms, boundaryLocation=1):
 
                             # add fenestration surface to base honeybee surface
                             _elements[zoneCount].append(childElements[count])
-                            _hbSurface.addFenestrationSurface(_hbfenSurface)
+                            _hbSurface.add_fenestration_surface(_hbfenSurface)
 
                 # add hbsurface to honeybee zone
-                _zone.addSurface(_hbSurface)
+                _zone.add_surface(_hbSurface)
                 boundaryElement.Dispose()
 
         _zones[zoneCount] = _zone

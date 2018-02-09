@@ -188,7 +188,7 @@ class GridGenerator(object):
         self.uvs = self.calculat_uv()
 
     @classmethod
-    def fromhb_zones(cls, hb_zones, grid_size, distance_from_base_srf=0):
+    def from_hb_zones(cls, hb_zones, grid_size, distance_from_base_srf=0):
         """Create grid for Honeybee zones."""
         for HBZone in hb_zones:
             assert hasattr(HBZone, 'isHBZone'), \
