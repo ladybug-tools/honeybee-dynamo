@@ -1,9 +1,9 @@
 <Workspace Category="Honeybee.04 :: Daylight :: Daylight" Description="Dynamic Blinds Schedule
--" ID="128e04c8-cbff-4197-9b8a-26293d7da5f7" Name="Dynamic Blinds Schedule" Version="1.2.0.2690" X="400" Y="-100" zoom="0.5">
+-" ID="f5964120-9ce2-4e75-8f68-d2affb9501b2" Name="Dynamic Blinds Schedule" Version="1.2.0.2690" X="400" Y="-100" zoom="0.5">
   <NamespaceResolutionMap/>
   <Elements>
-    <Dynamo.Graph.Nodes.CodeBlockNodeModel CodeText="&quot;Honeybee&quot;;&#xA;&quot;dynblindschd_node.py&quot;;" ShouldFocus="false" guid="3ad004b3-4cc6-42ce-b8f9-7ccfb7f9f4ae" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="input python script" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" x="-750" y="390"/>
-    <PythonNodeModels.PythonNode guid="95dea7f9-680a-4f3f-8079-14e40a964d68" inputcount="2" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="import and prepare py code" type="PythonNodeModels.PythonNode" x="-355" y="385">
+    <Dynamo.Graph.Nodes.CodeBlockNodeModel CodeText="&quot;Honeybee&quot;;&#xA;&quot;dynblindschd_node.py&quot;;" ShouldFocus="false" guid="20e6b159-88ee-4c6c-a51f-fdf854aca477" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="input python script" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" x="-750" y="390"/>
+    <PythonNodeModels.PythonNode guid="3c33abbb-e123-432c-b086-0b8f9a73b6ae" inputcount="2" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="import and prepare py code" type="PythonNodeModels.PythonNode" x="-355" y="385">
       <PortInfo default="false" index="0"/>
       <PortInfo default="false" index="1"/>
       <Script>
@@ -96,47 +96,47 @@ except Exception, e:
 
       </Script>
     </PythonNodeModels.PythonNode>
-    <PythonNodeModels.PythonStringNode guid="1b1d2f54-6fa6-4797-8954-46e6644b338b" inputcount="5" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="core" type="PythonNodeModels.PythonStringNode" x="-75" y="460">
+    <PythonNodeModels.PythonStringNode guid="04d2185c-69df-4825-8bdd-1752d80c6b47" inputcount="5" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="core" type="PythonNodeModels.PythonStringNode" x="-75" y="460">
       <PortInfo default="false" index="0"/>
       <PortInfo default="false" index="1"/>
       <PortInfo default="false" index="2"/>
       <PortInfo default="false" index="3"/>
       <PortInfo default="false" index="4"/>
     </PythonNodeModels.PythonStringNode>
-    <Dynamo.Graph.Nodes.CustomNodes.Symbol guid="6030dc78-9005-4167-97f9-d14c5cd26e5d" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="_sensor" type="Dynamo.Graph.Nodes.CustomNodes.Symbol" x="-750" y="475">
+    <Dynamo.Graph.Nodes.CustomNodes.Symbol guid="c8ba562c-e42f-4bf8-a657-b83bb48e84f8" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="_sensor" type="Dynamo.Graph.Nodes.CustomNodes.Symbol" x="-750" y="475">
       <Symbol value="// A single sensor from the analsysi Grid.&#xD;&#xA;_sensor: var;"/>
     </Dynamo.Graph.Nodes.CustomNodes.Symbol>
-    <Dynamo.Graph.Nodes.CustomNodes.Symbol guid="0c6e0cf1-d6ed-46c9-a519-89d20c60ee9e" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="_blindCombs_" type="Dynamo.Graph.Nodes.CustomNodes.Symbol" x="-750" y="570">
-      <Symbol value="// Suggested states combinations for sources. Default is&#xD;&#xA;// the longest combination between all the window groups. Put each&#xD;&#xA;// state as a tuple. Check the sensor output for sources and possible&#xD;&#xA;// states. For instance (0, 0, 1) indicates the first and second window&#xD;&#xA;// groups are at state 0 and the third window group is at state 1.&#xD;&#xA;_blindCombs_: var[] = {};"/>
+    <Dynamo.Graph.Nodes.CustomNodes.Symbol guid="e1ee1f0b-a988-43ce-883a-f03fe26861d7" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="_blindCombs_" type="Dynamo.Graph.Nodes.CustomNodes.Symbol" x="-750" y="570">
+      <Symbol value="// Suggested blind state combinations of window groups for meeting the logic.&#xD;&#xA;// States can be one of the following:&#xD;&#xA;// -1 = No light from window source (opaque)&#xD;&#xA;// 0 = Normal window state (typically transparent)&#xD;&#xA;// 1 = The first shade state (assuming one has been assigned)&#xD;&#xA;// 2 = the second shade state (assuming one has been assigned)&#xD;&#xA;// ... etc.&#xD;&#xA;// Put each state as a tuple that has a length equal to the number of&#xD;&#xA;// window groups in the model (check the report output of this component to see&#xD;&#xA;// the order of the window groups). For instance (0, 0, 1) indicates that the&#xD;&#xA;// first and second window groups are at state 0 and the third window group is&#xD;&#xA;// at state 1. If you plug in a list of tuples, honeybee will try to meet the logic&#xD;&#xA;// by first using the first tuple in the list.  If that doesn't work, the second&#xD;&#xA;// tuple will be used, etc.&#xD;&#xA;// The default is the longest combination of all window groups.&#xD;&#xA;// For example if you have 3 window groups. The first with 1 state,&#xD;&#xA;// the second with 3 states and the last with 2 states. The combinations&#xD;&#xA;// are (0,0,0), (0,1,1) and (0,2,1). State -1 will never be assigned&#xD;&#xA;// by default.&#xD;&#xA;_blindCombs_: var[] = {};"/>
     </Dynamo.Graph.Nodes.CustomNodes.Symbol>
-    <Dynamo.Graph.Nodes.CustomNodes.Symbol guid="7776187f-502a-444e-ba75-f49a3c021252" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="_logic_" type="Dynamo.Graph.Nodes.CustomNodes.Symbol" x="-750" y="665">
+    <Dynamo.Graph.Nodes.CustomNodes.Symbol guid="71ed43ce-3b4c-4679-9806-62ad8b32248e" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="_logic_" type="Dynamo.Graph.Nodes.CustomNodes.Symbol" x="-750" y="665">
       <Symbol value="// Blinds logic. You can use ill, ill_dir and h(our) as input&#xD;&#xA;// values. Default is ill &gt; 3000. You can also overwrite the logic&#xD;&#xA;// by opening the components and edit 'checkLogic' function.&#xD;&#xA;_logic_: string = null;"/>
     </Dynamo.Graph.Nodes.CustomNodes.Symbol>
-    <Dynamo.Graph.Nodes.CustomNodes.Symbol guid="34dd26f8-8264-4aa3-a9be-cdfcce85b57e" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="data_" type="Dynamo.Graph.Nodes.CustomNodes.Symbol" x="-750" y="760">
+    <Dynamo.Graph.Nodes.CustomNodes.Symbol guid="0445d23c-257f-4725-8316-9731e70f09c9" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="data_" type="Dynamo.Graph.Nodes.CustomNodes.Symbol" x="-750" y="760">
       <Symbol value="// optional data to pass along side the values which can be used&#xD;&#xA;// to set-up the logic. This input yet needs to be tested.&#xD;&#xA;data_: var[] = {};"/>
     </Dynamo.Graph.Nodes.CustomNodes.Symbol>
-    <Dynamo.Graph.Nodes.CodeBlockNodeModel CodeText="out[0];&#xA;out[1];&#xA;out[2];&#xA;out[3];&#xA;out[4];" ShouldFocus="false" guid="d9b37cd0-86f2-41ea-b8b9-bf818c65f927" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="decompose outputs" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" x="150" y="515"/>
-    <Dynamo.Graph.Nodes.CustomNodes.Output guid="9441fbf3-0abd-4345-a566-df68dc8ae20b" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="blindStates" type="Dynamo.Graph.Nodes.CustomNodes.Output" x="380" y="475">
+    <Dynamo.Graph.Nodes.CodeBlockNodeModel CodeText="out[0];&#xA;out[1];&#xA;out[2];&#xA;out[3];&#xA;out[4];" ShouldFocus="false" guid="72807414-fd73-4b31-858f-cce9d68fb953" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="decompose outputs" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" x="150" y="515"/>
+    <Dynamo.Graph.Nodes.CustomNodes.Output guid="f7ce0768-218e-41b2-a75e-def9aa94e957" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="blindStates" type="Dynamo.Graph.Nodes.CustomNodes.Output" x="380" y="475">
       <Symbol value="// Selected blind states based on input logic.&#xD;&#xA;blindStates;"/>
       <PortInfo default="false" index="0"/>
     </Dynamo.Graph.Nodes.CustomNodes.Output>
-    <Dynamo.Graph.Nodes.CustomNodes.Output guid="6abcfbf0-ec6c-4d2a-882c-5a9cc1958554" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="blindStIndex" type="Dynamo.Graph.Nodes.CustomNodes.Output" x="380" y="570">
+    <Dynamo.Graph.Nodes.CustomNodes.Output guid="b59c6649-1277-48a7-a9ce-6943687d58c7" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="blindStIndex" type="Dynamo.Graph.Nodes.CustomNodes.Output" x="380" y="570">
       <Symbol value="// Index of selected blind state from input _blindStates_.&#xD;&#xA;blindStIndex;"/>
       <PortInfo default="false" index="0"/>
     </Dynamo.Graph.Nodes.CustomNodes.Output>
-    <Dynamo.Graph.Nodes.CustomNodes.Output guid="ed3916b3-65c1-416c-ae5a-c5105993d2d9" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="illumTotal" type="Dynamo.Graph.Nodes.CustomNodes.Output" x="380" y="665">
+    <Dynamo.Graph.Nodes.CustomNodes.Output guid="55c22249-eed3-48d1-889a-4833e92b6b05" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="illumTotal" type="Dynamo.Graph.Nodes.CustomNodes.Output" x="380" y="665">
       <Symbol value="// Sensor total illuminance values.&#xD;&#xA;illumTotal;"/>
       <PortInfo default="false" index="0"/>
     </Dynamo.Graph.Nodes.CustomNodes.Output>
-    <Dynamo.Graph.Nodes.CustomNodes.Output guid="59e95e18-50da-466e-9d3e-d543d3d04bfd" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="illumDirect" type="Dynamo.Graph.Nodes.CustomNodes.Output" x="380" y="760">
+    <Dynamo.Graph.Nodes.CustomNodes.Output guid="faaca1ee-9e99-47cd-9d55-65b3ba38a424" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="illumDirect" type="Dynamo.Graph.Nodes.CustomNodes.Output" x="380" y="760">
       <Symbol value="// Sensor direct illuminance values. This value won't be available&#xD;&#xA;// for 3-Phase recipe.&#xD;&#xA;illumDirect;"/>
       <PortInfo default="false" index="0"/>
     </Dynamo.Graph.Nodes.CustomNodes.Output>
-    <Dynamo.Graph.Nodes.CustomNodes.Output guid="5d140537-1e9a-4ef7-95e2-e0ae3538f9fa" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="success" type="Dynamo.Graph.Nodes.CustomNodes.Output" x="380" y="855">
+    <Dynamo.Graph.Nodes.CustomNodes.Output guid="e2d495db-2343-477a-9964-c04b55d2efaa" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="success" type="Dynamo.Graph.Nodes.CustomNodes.Output" x="380" y="855">
       <Symbol value="// A boolean that shows if the logic is satisfied by using the current&#xD;&#xA;// combinations of shadings.&#xD;&#xA;success;"/>
       <PortInfo default="false" index="0"/>
     </Dynamo.Graph.Nodes.CustomNodes.Output>
-    <PythonNodeModels.PythonNode guid="0eef8c21-23eb-42a1-a3bc-91dab44df384" inputcount="2" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="Error report" type="PythonNodeModels.PythonNode" x="150" y="380">
+    <PythonNodeModels.PythonNode guid="c16985dc-6506-42a4-b7ec-3c8147f45f15" inputcount="2" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="Error report" type="PythonNodeModels.PythonNode" x="150" y="380">
       <PortInfo default="false" index="0"/>
       <PortInfo default="false" index="1"/>
       <Script>
@@ -158,28 +158,28 @@ else:
 
       </Script>
     </PythonNodeModels.PythonNode>
-    <Dynamo.Graph.Nodes.CustomNodes.Output guid="87eb0fa2-398a-4af9-8b96-a5e5a2ab52b5" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="ERRReport" type="Dynamo.Graph.Nodes.CustomNodes.Output" x="380" y="380">
+    <Dynamo.Graph.Nodes.CustomNodes.Output guid="31af2f02-c9bb-4833-af2c-e6792e0e62f1" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="ERRReport" type="Dynamo.Graph.Nodes.CustomNodes.Output" x="380" y="380">
       <Symbol value="// Report&#xD;&#xA;ERRReport;"/>
       <PortInfo default="false" index="0"/>
     </Dynamo.Graph.Nodes.CustomNodes.Output>
   </Elements>
   <Connectors>
-    <Dynamo.Graph.Connectors.ConnectorModel end="95dea7f9-680a-4f3f-8079-14e40a964d68" end_index="0" portType="0" start="3ad004b3-4cc6-42ce-b8f9-7ccfb7f9f4ae" start_index="0"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="95dea7f9-680a-4f3f-8079-14e40a964d68" end_index="1" portType="0" start="3ad004b3-4cc6-42ce-b8f9-7ccfb7f9f4ae" start_index="1"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="1b1d2f54-6fa6-4797-8954-46e6644b338b" end_index="0" portType="0" start="95dea7f9-680a-4f3f-8079-14e40a964d68" start_index="0"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="1b1d2f54-6fa6-4797-8954-46e6644b338b" end_index="1" portType="0" start="6030dc78-9005-4167-97f9-d14c5cd26e5d" start_index="0"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="1b1d2f54-6fa6-4797-8954-46e6644b338b" end_index="2" portType="0" start="0c6e0cf1-d6ed-46c9-a519-89d20c60ee9e" start_index="0"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="1b1d2f54-6fa6-4797-8954-46e6644b338b" end_index="3" portType="0" start="7776187f-502a-444e-ba75-f49a3c021252" start_index="0"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="1b1d2f54-6fa6-4797-8954-46e6644b338b" end_index="4" portType="0" start="34dd26f8-8264-4aa3-a9be-cdfcce85b57e" start_index="0"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="d9b37cd0-86f2-41ea-b8b9-bf818c65f927" end_index="0" portType="0" start="1b1d2f54-6fa6-4797-8954-46e6644b338b" start_index="0"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="9441fbf3-0abd-4345-a566-df68dc8ae20b" end_index="0" portType="0" start="d9b37cd0-86f2-41ea-b8b9-bf818c65f927" start_index="0"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="6abcfbf0-ec6c-4d2a-882c-5a9cc1958554" end_index="0" portType="0" start="d9b37cd0-86f2-41ea-b8b9-bf818c65f927" start_index="1"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="ed3916b3-65c1-416c-ae5a-c5105993d2d9" end_index="0" portType="0" start="d9b37cd0-86f2-41ea-b8b9-bf818c65f927" start_index="2"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="59e95e18-50da-466e-9d3e-d543d3d04bfd" end_index="0" portType="0" start="d9b37cd0-86f2-41ea-b8b9-bf818c65f927" start_index="3"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="5d140537-1e9a-4ef7-95e2-e0ae3538f9fa" end_index="0" portType="0" start="d9b37cd0-86f2-41ea-b8b9-bf818c65f927" start_index="4"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="0eef8c21-23eb-42a1-a3bc-91dab44df384" end_index="0" portType="0" start="95dea7f9-680a-4f3f-8079-14e40a964d68" start_index="0"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="0eef8c21-23eb-42a1-a3bc-91dab44df384" end_index="1" portType="0" start="1b1d2f54-6fa6-4797-8954-46e6644b338b" start_index="0"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="87eb0fa2-398a-4af9-8b96-a5e5a2ab52b5" end_index="0" portType="0" start="0eef8c21-23eb-42a1-a3bc-91dab44df384" start_index="0"/>
+    <Dynamo.Graph.Connectors.ConnectorModel end="3c33abbb-e123-432c-b086-0b8f9a73b6ae" end_index="0" portType="0" start="20e6b159-88ee-4c6c-a51f-fdf854aca477" start_index="0"/>
+    <Dynamo.Graph.Connectors.ConnectorModel end="3c33abbb-e123-432c-b086-0b8f9a73b6ae" end_index="1" portType="0" start="20e6b159-88ee-4c6c-a51f-fdf854aca477" start_index="1"/>
+    <Dynamo.Graph.Connectors.ConnectorModel end="04d2185c-69df-4825-8bdd-1752d80c6b47" end_index="0" portType="0" start="3c33abbb-e123-432c-b086-0b8f9a73b6ae" start_index="0"/>
+    <Dynamo.Graph.Connectors.ConnectorModel end="04d2185c-69df-4825-8bdd-1752d80c6b47" end_index="1" portType="0" start="c8ba562c-e42f-4bf8-a657-b83bb48e84f8" start_index="0"/>
+    <Dynamo.Graph.Connectors.ConnectorModel end="04d2185c-69df-4825-8bdd-1752d80c6b47" end_index="2" portType="0" start="e1ee1f0b-a988-43ce-883a-f03fe26861d7" start_index="0"/>
+    <Dynamo.Graph.Connectors.ConnectorModel end="04d2185c-69df-4825-8bdd-1752d80c6b47" end_index="3" portType="0" start="71ed43ce-3b4c-4679-9806-62ad8b32248e" start_index="0"/>
+    <Dynamo.Graph.Connectors.ConnectorModel end="04d2185c-69df-4825-8bdd-1752d80c6b47" end_index="4" portType="0" start="0445d23c-257f-4725-8316-9731e70f09c9" start_index="0"/>
+    <Dynamo.Graph.Connectors.ConnectorModel end="72807414-fd73-4b31-858f-cce9d68fb953" end_index="0" portType="0" start="04d2185c-69df-4825-8bdd-1752d80c6b47" start_index="0"/>
+    <Dynamo.Graph.Connectors.ConnectorModel end="f7ce0768-218e-41b2-a75e-def9aa94e957" end_index="0" portType="0" start="72807414-fd73-4b31-858f-cce9d68fb953" start_index="0"/>
+    <Dynamo.Graph.Connectors.ConnectorModel end="b59c6649-1277-48a7-a9ce-6943687d58c7" end_index="0" portType="0" start="72807414-fd73-4b31-858f-cce9d68fb953" start_index="1"/>
+    <Dynamo.Graph.Connectors.ConnectorModel end="55c22249-eed3-48d1-889a-4833e92b6b05" end_index="0" portType="0" start="72807414-fd73-4b31-858f-cce9d68fb953" start_index="2"/>
+    <Dynamo.Graph.Connectors.ConnectorModel end="faaca1ee-9e99-47cd-9d55-65b3ba38a424" end_index="0" portType="0" start="72807414-fd73-4b31-858f-cce9d68fb953" start_index="3"/>
+    <Dynamo.Graph.Connectors.ConnectorModel end="e2d495db-2343-477a-9964-c04b55d2efaa" end_index="0" portType="0" start="72807414-fd73-4b31-858f-cce9d68fb953" start_index="4"/>
+    <Dynamo.Graph.Connectors.ConnectorModel end="c16985dc-6506-42a4-b7ec-3c8147f45f15" end_index="0" portType="0" start="3c33abbb-e123-432c-b086-0b8f9a73b6ae" start_index="0"/>
+    <Dynamo.Graph.Connectors.ConnectorModel end="c16985dc-6506-42a4-b7ec-3c8147f45f15" end_index="1" portType="0" start="04d2185c-69df-4825-8bdd-1752d80c6b47" start_index="0"/>
+    <Dynamo.Graph.Connectors.ConnectorModel end="31af2f02-c9bb-4833-af2c-e6792e0e62f1" end_index="0" portType="0" start="c16985dc-6506-42a4-b7ec-3c8147f45f15" start_index="0"/>
   </Connectors>
   <Notes/>
   <Annotations/>

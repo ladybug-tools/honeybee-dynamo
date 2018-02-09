@@ -7,7 +7,7 @@ try:
 except ImportError as e:
     raise ImportError('\nFailed to import honeybee:\n\t{}'.format(e))
 
-schedule = Schedule.fromWorkdayHours(
+schedule = Schedule.from_workday_hours(
     _occHours_, _offHours_, _weekend_, _defValue_)
 
 values = schedule.values

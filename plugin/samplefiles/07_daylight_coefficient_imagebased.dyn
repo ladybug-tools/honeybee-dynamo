@@ -1,4 +1,4 @@
-<Workspace Version="1.3.0.875" X="-1077.541633717" Y="242.373026911699" zoom="0.68490708230713" ScaleFactor="1" Name="Home" Description="" RunType="Manual" RunPeriod="1000" HasRunWithoutCrash="True">
+<Workspace Version="1.3.0.875" X="-119.058306784692" Y="680.927937099913" zoom="0.78189045703832" ScaleFactor="1" Name="Home" Description="" RunType="Manual" RunPeriod="1000" HasRunWithoutCrash="False">
   <NamespaceResolutionMap />
   <Elements>
     <CoreNodeModels.Input.BoolSelector guid="441dc5e1-47ec-4cd1-a6dd-b7fc96f215f9" type="CoreNodeModels.Input.BoolSelector" nickname="Boolean" x="-2246.19553772929" y="584.808876760882" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="True" IsFrozen="false" isPinned="false">
@@ -43,7 +43,7 @@
       <PortInfo index="4" default="True" />
       <PortInfo index="5" default="False" />
       <PortInfo index="6" default="True" />
-      <ID value="b520d590-d076-49d5-b391-aa1d02b40600" />
+      <ID value="f0c1d13a-fa85-4560-95a4-8bb6a7c2f3ed" />
       <Name value="Run Radiance Analysis" />
       <Description value="Run Radiance Analysis&#xD;&#xA;-" />
       <Inputs>
@@ -73,7 +73,7 @@
       <PortInfo index="2" default="False" />
       <PortInfo index="3" default="True" />
       <PortInfo index="4" default="True" />
-      <ID value="ed591fbd-1179-4e08-8928-413f6b2345db" />
+      <ID value="d511f404-fba6-4ba8-8e0b-e1ca2f174da1" />
       <Name value="Sky Matrix" />
       <Description value="Sky Matrix.&#xD;&#xA;-" />
       <Inputs>
@@ -90,7 +90,7 @@
     </Dynamo.Graph.Nodes.CustomNodes.Function>
     <Dynamo.Graph.Nodes.CustomNodes.Function guid="0386fe82-9747-4ec8-9b22-655e0cadeea6" type="Dynamo.Graph.Nodes.CustomNodes.Function" nickname="Wea" x="579.713218186792" y="-427.918429709449" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false" isPinned="false">
       <PortInfo index="0" default="False" />
-      <ID value="6e8fd87a-99b8-4f0a-b52c-b05dcf1e0045" />
+      <ID value="69b9cbd1-25b0-4a00-9a6f-a1072608f040" />
       <Name value="Wea" />
       <Description value="epw2wea&#xD;&#xA;-" />
       <Inputs>
@@ -115,7 +115,7 @@
       <PortInfo index="6" default="True" />
       <PortInfo index="7" default="True" />
       <PortInfo index="8" default="True" />
-      <ID value="39f2e9cf-5722-4a6e-9322-27db585fefa8" />
+      <ID value="7809960b-7cc8-4165-ad13-3d8ee7c6054c" />
       <Name value="View" />
       <Description value="Honeybee View.&#xD;&#xA;-" />
       <Inputs>
@@ -173,7 +173,7 @@
       <PortInfo index="1" default="True" />
       <PortInfo index="2" default="True" />
       <PortInfo index="3" default="True" />
-      <ID value="97077763-16a0-43fd-88c2-364dd1691398" />
+      <ID value="bc2d397f-b1e0-4b1d-8129-60f3017b6139" />
       <Name value="Calculate HOY" />
       <Description value="Calculate hour of the year.&#xD;&#xA;-" />
       <Inputs>
@@ -196,7 +196,7 @@
       <PortInfo index="2" default="True" />
       <PortInfo index="3" default="True" />
       <PortInfo index="4" default="True" />
-      <ID value="0036a12d-409a-4908-a374-14e3e3857251" />
+      <ID value="703d370c-8af8-4102-9eea-26743965f27b" />
       <Name value="DC Image-based Daylight Recipe" />
       <Description value="Daylight Coefficient Image-based Daylight Recipe.&#xD;&#xA;Use this recipe to set up annual daylight analysis.&#xD;&#xA;-" />
       <Inputs>
@@ -216,7 +216,7 @@
       <PortInfo index="1" default="True" />
       <PortInfo index="2" default="True" />
       <PortInfo index="3" default="True" />
-      <ID value="4a761caa-dade-4b1a-8c0a-7655446ac954" />
+      <ID value="afdebbf7-838d-4889-90db-3aaa32d0054c" />
       <Name value="Generate Images" />
       <Description value="Hourly results for a sensor for several hours during the year.&#xD;&#xA;-" />
       <Inputs>
@@ -241,7 +241,7 @@
       <PortInfo index="1" default="True" />
       <PortInfo index="2" default="True" />
       <PortInfo index="3" default="True" />
-      <ID value="c43ee0bc-ee52-49e9-9a61-b3d584c37fb5" />
+      <ID value="b96f3579-614b-49db-8b8e-fb8cb6ef7cdd" />
       <Name value="Honeybee Surface" />
       <Description value="Honeybee Surface&#xD;&#xA;-" />
       <Inputs>
@@ -269,7 +269,7 @@
       <PortInfo index="0" default="False" />
       <PortInfo index="1" default="True" />
       <PortInfo index="2" default="True" />
-      <ID value="b946ade8-8e6b-49e8-8aab-486ea789ef78" />
+      <ID value="c9eafc59-17dc-46af-87b7-461a56d4abb0" />
       <Name value="Honeybee Window Surface" />
       <Description value="Honeybee Window Surface&#xD;&#xA;-" />
       <Inputs>
@@ -340,7 +340,7 @@ OUT = _geo</Script>
       <PortInfo index="1" default="False" />
       <PortInfo index="2" default="True" />
       <PortInfo index="3" default="True" />
-      <ID value="62ba4dc7-fcc0-4fe3-a9ee-d5e1af974f99" />
+      <ID value="d38a2365-031b-44e5-8602-3434c76d82fb" />
       <Name value="Honeybee Window Group" />
       <Description value="Honeybee Window Group&#xD;&#xA;A window group is a group of HBWindow surfaces which will be grouped together&#xD;&#xA;for 3-phase daylight analysis. View matrix will be calculated for all the Window&#xD;&#xA;surfaces in a group once. Window surfaces in a group shoudl have the same normal&#xD;&#xA;direction, and same BSDF materials will be assigned to all the windows in this&#xD;&#xA;group.&#xD;&#xA;-" />
       <Inputs>
@@ -373,7 +373,7 @@ OUT = IN[0].normal</Script>
       <PortInfo index="0" default="False" />
       <PortInfo index="1" default="True" />
       <PortInfo index="2" default="True" />
-      <ID value="16febae9-a6a9-4658-8b36-7fa897632546" />
+      <ID value="207badf4-90cd-4291-80a6-b4aaf468f7fe" />
       <Name value="WindowGroup State" />
       <Description value="Window Group State&#xD;&#xA;-" />
       <Inputs>
@@ -389,7 +389,7 @@ OUT = IN[0].normal</Script>
     <Dynamo.Graph.Nodes.CustomNodes.Function guid="351bc21e-b62a-40ef-bf59-2f9de0eeb0f4" type="Dynamo.Graph.Nodes.CustomNodes.Function" nickname="Radiance Glass Material" x="-1155.19241401239" y="2123.78349911051" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false" isPinned="false">
       <PortInfo index="0" default="False" />
       <PortInfo index="1" default="True" />
-      <ID value="61319b65-7da1-447b-a941-da7e191b1877" />
+      <ID value="1e61551f-8155-4371-b684-f7b09c90957a" />
       <Name value="Radiance Glass Material" />
       <Description value="Radiance Glass Material from Visible Transmitance&#xD;&#xA;-" />
       <Inputs>
@@ -404,7 +404,7 @@ OUT = IN[0].normal</Script>
     <Dynamo.Graph.Nodes.CustomNodes.Function guid="f14aa090-3467-42c4-9d71-6cacc9b26d39" type="Dynamo.Graph.Nodes.CustomNodes.Function" nickname="Radiance Glass Material" x="-1155.51407324721" y="2279.61107169588" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false" isPinned="false">
       <PortInfo index="0" default="False" />
       <PortInfo index="1" default="True" />
-      <ID value="61319b65-7da1-447b-a941-da7e191b1877" />
+      <ID value="1e61551f-8155-4371-b684-f7b09c90957a" />
       <Name value="Radiance Glass Material" />
       <Description value="Radiance Glass Material from Visible Transmitance&#xD;&#xA;-" />
       <Inputs>
@@ -438,7 +438,7 @@ OUT = IN[0].normal</Script>
     <Dynamo.Graph.Nodes.CustomNodes.Function guid="6f0a3b4d-10db-4891-b5b1-c853ce79da79" type="Dynamo.Graph.Nodes.CustomNodes.Function" nickname="HDR to Tiff" x="3511.23603673463" y="-245.041003272713" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false" isPinned="false">
       <PortInfo index="0" default="False" />
       <PortInfo index="1" default="False" />
-      <ID value="6129d8ae-6ba7-422b-ab1f-eef7b69f89ef" />
+      <ID value="72794562-d637-495e-91ac-107207f1f305" />
       <Name value="HDR to Tiff" />
       <Description value="Convert hdr files to tiff files.&#xD;&#xA;-" />
       <Inputs>
@@ -553,7 +553,9 @@ OUT = IN[0].normal</Script>
     <Dynamo.Graph.Connectors.ConnectorModel start="067f20fa-7411-4eb0-8f78-9363729907c2" start_index="0" end="dd668489-12d0-491f-b36c-c59011e7d043" end_index="0" portType="0" />
     <Dynamo.Graph.Connectors.ConnectorModel start="12ce242c-ab39-40a1-b3f0-6b40fbdcb4ae" start_index="0" end="d58537b1-a055-4986-9bba-4615695e8530" end_index="2" portType="0" />
   </Connectors>
-  <Notes />
+  <Notes>
+    <Dynamo.Graph.Notes.NoteModel guid="5d2550a0-f725-4a64-821d-bd21bfd8206d" text="This definition is using Honeybee and to run daylight analysis with Honeybee you need to install Radiance. Radiance can be downloaded and installed from this link:&#xD;&#xA;https://github.com/NREL/Radiance/releases/tag/5.2.0" x="560.833630808254" y="-562.457207078119" />
+  </Notes>
   <Annotations>
     <Dynamo.Graph.Annotations.AnnotationModel guid="0f94495b-03d9-42ae-a093-f37a0221a919" annotationText="This component fails for complex geometries. In those cases&#xD;&#xA;you can create the model surface by surface. You can also vote&#xD;&#xA;at the link below here so Autodesk opens up the Room API, so&#xD;&#xA;we can get the openings without failure!&#xD;&#xA;&#xD;&#xA;http://forums.autodesk.com/t5/revit-ideas/&#xD;&#xA;api-access-to-room-openings-geometry-and-materials-in-revit/&#xD;&#xA;idi-p/6642406" left="-1622.06266316848" top="342.178328205955" width="686.163333333333" height="411.666666666667" fontSize="24" InitialTop="582.844994872622" InitialHeight="175" TextblockHeight="230.666666666667" backgrouund="#FFFFAA45">
       <Models ModelGuid="6bf86694-91a5-4c9e-9c2f-50438eef8f12" />

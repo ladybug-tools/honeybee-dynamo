@@ -11,19 +11,19 @@ except ImportError as e:
     raise ImportError('\nFailed to import ladybug:\n\t{}'.format(e))
 
 
-col = color.Colorset.Original()
+col = color.Colorset.original()
 legendPar = lp.LegendParameters((0, 250), colors=col)
 
 if _analysisGrid:
-    states = _analysisGrid.parseBlindStates(blindStates_)
-    success, ASE, perArea, prblmPts, prblmHrs = _analysisGrid.annualSolarExposure(
+    states = _analysisGrid.parse_blind_states(blindStates_)
+    success, ASE, perArea, prblmPts, prblmHrs = _analysisGrid.annual_solar_exposure(
          _threshold_, states, _occSchedule_, _targetHrs_, _targetArea_
     )
 
     prblmPts = (lg.point(s.location.x, s.location.y, s.location.z) for s in prblmPts)
     # convert list of lists to data tree
     try:
-        prblmHrs = output.listToTree(prblmHrs, ghenv.Component.RunCount - 1)
+        prblmHrs = output.list_to_tree(prblmHrs, ghenv.Component.RunCount - 1)
     except NameError:
         # dynamo
         pass

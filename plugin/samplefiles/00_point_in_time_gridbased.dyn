@@ -1,10 +1,10 @@
-<Workspace Version="1.3.0.875" X="4.46366082887198" Y="361.327594659008" zoom="0.405131165017871" ScaleFactor="1" Name="Home" Description="" RunType="Manual" RunPeriod="1000" HasRunWithoutCrash="True">
+<Workspace Version="1.3.0.875" X="-17.5165288682133" Y="283.62190083462" zoom="0.465668679871764" ScaleFactor="1" Name="Home" Description="" RunType="Manual" RunPeriod="1000" HasRunWithoutCrash="True">
   <NamespaceResolutionMap />
   <Elements>
-    <CoreNodeModels.Input.BoolSelector guid="441dc5e1-47ec-4cd1-a6dd-b7fc96f215f9" type="CoreNodeModels.Input.BoolSelector" nickname="Boolean" x="63.0322754113512" y="282.918541682942" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="True" IsFrozen="false" isPinned="false">
+    <CoreNodeModels.Input.BoolSelector guid="441dc5e1-47ec-4cd1-a6dd-b7fc96f215f9" type="CoreNodeModels.Input.BoolSelector" nickname="Boolean" x="167.961387658491" y="765.332347080482" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="True" IsFrozen="false" isPinned="false">
       <System.Boolean>True</System.Boolean>
     </CoreNodeModels.Input.BoolSelector>
-    <Dynamo.Graph.Nodes.CustomNodes.Function guid="6bf86694-91a5-4c9e-9c2f-50438eef8f12" type="Dynamo.Graph.Nodes.CustomNodes.Function" nickname="Rooms to HBZones" x="575.914494290537" y="284.47938815752" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false" isPinned="false">
+    <Dynamo.Graph.Nodes.CustomNodes.Function guid="6bf86694-91a5-4c9e-9c2f-50438eef8f12" type="Dynamo.Graph.Nodes.CustomNodes.Function" nickname="Rooms to HBZones" x="717.961387658491" y="765.332347080482" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false" isPinned="true">
       <PortInfo index="0" default="False" />
       <PortInfo index="1" default="True" />
       <ID value="1a4d9a13-2794-4eb5-b3c1-2a49dc7a9e89" />
@@ -21,7 +21,7 @@
         <Output value="ERRReport" />
       </Outputs>
     </Dynamo.Graph.Nodes.CustomNodes.Function>
-    <Dynamo.Graph.Nodes.CustomNodes.Function guid="f55c437c-b605-437a-a0a1-2c90ae46a90e" type="Dynamo.Graph.Nodes.CustomNodes.Function" nickname="Generate Test Points from HBZones" x="1075.11491368716" y="446.485080398063" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false" isPinned="false">
+    <Dynamo.Graph.Nodes.CustomNodes.Function guid="f55c437c-b605-437a-a0a1-2c90ae46a90e" type="Dynamo.Graph.Nodes.CustomNodes.Function" nickname="Generate Test Points from HBZones" x="1486.55085957869" y="268.596701693626" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false" isPinned="true">
       <PortInfo index="0" default="False" />
       <PortInfo index="1" default="False" />
       <PortInfo index="2" default="True" />
@@ -41,16 +41,16 @@
         <Output value="ERRReport" />
       </Outputs>
     </Dynamo.Graph.Nodes.CustomNodes.Function>
-    <Dynamo.Graph.Nodes.CodeBlockNodeModel guid="da7e334a-85a0-488b-8009-35d14b67cab0" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" nickname="Code Block" x="927.264834245935" y="509.636216600133" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" isPinned="false" CodeText="500;&#xA;750;" ShouldFocus="false" />
-    <CoreNodeModels.Input.Filename guid="1b4116a7-8d07-43b7-9cb3-e7f49910c28a" type="CoreNodeModels.Input.Filename" nickname="File Path" x="282.52074587324" y="-145.139182811795" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="True" IsFrozen="false" isPinned="false">
+    <Dynamo.Graph.Nodes.CodeBlockNodeModel guid="da7e334a-85a0-488b-8009-35d14b67cab0" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" nickname="Code Block" x="1154.81921103367" y="304.283829861997" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" isPinned="false" CodeText="500;&#xA;750;" ShouldFocus="false" />
+    <CoreNodeModels.Input.Filename guid="1b4116a7-8d07-43b7-9cb3-e7f49910c28a" type="CoreNodeModels.Input.Filename" nickname="File Path" x="700.387526245352" y="-96.4032983063744" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="True" IsFrozen="false" isPinned="false">
       <System.String>..\..\..\..\..\..\..\..\EnergyPlusV8-6-0\WeatherData\USA_CA_San.Francisco.Intl.AP.724940_TMY3.epw</System.String>
       <HintPath>C:\EnergyPlusV8-6-0\WeatherData\USA_CA_San.Francisco.Intl.AP.724940_TMY3.epw</HintPath>
     </CoreNodeModels.Input.Filename>
-    <Dynamo.Graph.Nodes.CodeBlockNodeModel guid="eeb08f2e-b2ba-498b-b537-3bdcad9d48a2" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" nickname="Code Block" x="2012.50572938636" y="269.9242291331" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" isPinned="false" CodeText="&quot;c:/ladybug&quot;;&#xA;&quot;dynamo_sample_files&quot;;&#xA;true;" ShouldFocus="false" />
-    <Dynamo.Graph.Nodes.CustomNodes.Function guid="4a2a4f6a-3f41-440a-8de0-43210f89139d" type="Dynamo.Graph.Nodes.CustomNodes.Function" nickname="Generate Colors" x="3540.87015366741" y="151.334937671944" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false" isPinned="false">
+    <Dynamo.Graph.Nodes.CodeBlockNodeModel guid="eeb08f2e-b2ba-498b-b537-3bdcad9d48a2" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" nickname="Code Block" x="2221.61620604584" y="620.993270083891" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" isPinned="false" CodeText="&quot;c:/ladybug&quot;;&#xA;&quot;dynamo_sample_files&quot;;&#xA;true;" ShouldFocus="false" />
+    <Dynamo.Graph.Nodes.CustomNodes.Function guid="4a2a4f6a-3f41-440a-8de0-43210f89139d" type="Dynamo.Graph.Nodes.CustomNodes.Function" nickname="Generate Colors" x="3344.46848321956" y="457.582444902383" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false" isPinned="true">
       <PortInfo index="0" default="False" />
       <PortInfo index="1" default="True" />
-      <ID value="f8ec384e-4740-4fd7-99d4-38b1b17f7de1" />
+      <ID value="fc7f1dc1-3a79-4641-951f-3a79ba792c69" />
       <Name value="Generate Colors" />
       <Description value="Color a test surface based on the results of a study. The results structure should match the test points structure to be mapped correctly on the surface." />
       <Inputs>
@@ -62,14 +62,14 @@
         <Output value="ERRReport" />
       </Outputs>
     </Dynamo.Graph.Nodes.CustomNodes.Function>
-    <Dynamo.Graph.Nodes.ZeroTouch.DSFunction guid="70ca6e74-14f9-4009-89c1-fe518139493b" type="Dynamo.Graph.Nodes.ZeroTouch.DSFunction" nickname="Display.ByGeometryColor" x="3827.23944374602" y="541.934342279363" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false" isPinned="false" assembly="Display.dll" function="Display.Display.ByGeometryColor@Autodesk.DesignScript.Geometry.Geometry,DSCore.Color">
+    <Dynamo.Graph.Nodes.ZeroTouch.DSFunction guid="70ca6e74-14f9-4009-89c1-fe518139493b" type="Dynamo.Graph.Nodes.ZeroTouch.DSFunction" nickname="Display.ByGeometryColor" x="3775.32736139085" y="427.189441732553" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false" isPinned="false" assembly="Display.dll" function="Display.Display.ByGeometryColor@Autodesk.DesignScript.Geometry.Geometry,DSCore.Color">
       <PortInfo index="0" default="False" />
       <PortInfo index="1" default="False" />
     </Dynamo.Graph.Nodes.ZeroTouch.DSFunction>
-    <Dynamo.Graph.Nodes.ZeroTouch.DSFunction guid="4c014090-dd24-4e39-b596-aadeedd9c9bf" type="Dynamo.Graph.Nodes.ZeroTouch.DSFunction" nickname="Surface.ByPatch" x="3449.75711953789" y="542.016213733153" isVisible="false" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false" isPinned="false" assembly="ProtoGeometry.dll" function="Autodesk.DesignScript.Geometry.Surface.ByPatch@Autodesk.DesignScript.Geometry.Curve">
+    <Dynamo.Graph.Nodes.ZeroTouch.DSFunction guid="4c014090-dd24-4e39-b596-aadeedd9c9bf" type="Dynamo.Graph.Nodes.ZeroTouch.DSFunction" nickname="Surface.ByPatch" x="3373.50161863659" y="328.12317089849" isVisible="false" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false" isPinned="false" assembly="ProtoGeometry.dll" function="Autodesk.DesignScript.Geometry.Surface.ByPatch@Autodesk.DesignScript.Geometry.Curve">
       <PortInfo index="0" default="False" />
     </Dynamo.Graph.Nodes.ZeroTouch.DSFunction>
-    <Dynamo.Graph.Nodes.CustomNodes.Function guid="84438c58-34ee-46a5-a555-1d869d55c762" type="Dynamo.Graph.Nodes.CustomNodes.Function" nickname="Collect Rooms and Spaces" x="227.034652393935" y="283.608821796152" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false" isPinned="true">
+    <Dynamo.Graph.Nodes.CustomNodes.Function guid="84438c58-34ee-46a5-a555-1d869d55c762" type="Dynamo.Graph.Nodes.CustomNodes.Function" nickname="Collect Rooms and Spaces" x="402.628054325157" y="765.332347080482" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false" isPinned="true">
       <PortInfo index="0" default="True" />
       <ID value="d5ab273a-33be-4b0a-9070-c6c03d4d2790" />
       <Name value="Collect Rooms and Spaces" />
@@ -82,12 +82,12 @@
         <Output value="spaces" />
       </Outputs>
     </Dynamo.Graph.Nodes.CustomNodes.Function>
-    <Dynamo.Graph.Nodes.CustomNodes.Function guid="80bf53ec-998b-4f35-b264-89b9b8b5a6b1" type="Dynamo.Graph.Nodes.CustomNodes.Function" nickname="Analysis Grid" x="1580.25828716509" y="521.171471100833" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false" isPinned="false">
+    <Dynamo.Graph.Nodes.CustomNodes.Function guid="80bf53ec-998b-4f35-b264-89b9b8b5a6b1" type="Dynamo.Graph.Nodes.CustomNodes.Function" nickname="Analysis Grid" x="1877.21752624535" y="238.596701693626" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false" isPinned="false">
       <PortInfo index="0" default="True" />
       <PortInfo index="1" default="False" />
       <PortInfo index="2" default="True" />
       <PortInfo index="3" default="True" />
-      <ID value="c3cf0770-79db-4838-aca1-d68421d2ca1f" />
+      <ID value="f448873e-ec52-4548-a466-5eb3f8f5b5ee" />
       <Name value="Analysis Grid" />
       <Description value="Analysis Grid.&#xD;&#xA;-" />
       <Inputs>
@@ -101,7 +101,7 @@
         <Output value="ERRReport" />
       </Outputs>
     </Dynamo.Graph.Nodes.CustomNodes.Function>
-    <Dynamo.Graph.Nodes.CustomNodes.Function guid="8e9de23e-6cbd-4922-b16d-88e95981bd98" type="Dynamo.Graph.Nodes.CustomNodes.Function" nickname="Run Radiance Analysis" x="2636.658979485" y="300.328930582054" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false" isPinned="true">
+    <Dynamo.Graph.Nodes.CustomNodes.Function guid="8e9de23e-6cbd-4922-b16d-88e95981bd98" type="Dynamo.Graph.Nodes.CustomNodes.Function" nickname="Run Radiance Analysis" x="2617.61620604584" y="485.353270083891" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false" isPinned="true">
       <PortInfo index="0" default="False" />
       <PortInfo index="1" default="False" />
       <PortInfo index="2" default="True" />
@@ -109,7 +109,7 @@
       <PortInfo index="4" default="True" />
       <PortInfo index="5" default="False" />
       <PortInfo index="6" default="True" />
-      <ID value="b520d590-d076-49d5-b391-aa1d02b40600" />
+      <ID value="f0c1d13a-fa85-4560-95a4-8bb6a7c2f3ed" />
       <Name value="Run Radiance Analysis" />
       <Description value="Run Radiance Analysis&#xD;&#xA;-" />
       <Inputs>
@@ -127,15 +127,15 @@
         <Output value="ERRReport" />
       </Outputs>
     </Dynamo.Graph.Nodes.CustomNodes.Function>
-    <Dynamo.Graph.Nodes.ZeroTouch.DSFunction guid="1a06eac2-b735-4a8a-87cb-96a0bd32a4a7" type="Dynamo.Graph.Nodes.ZeroTouch.DSFunction" nickname="Flatten" x="2359.35256188787" y="288.648578575402" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false" isPinned="false" assembly="BuiltIn" function="Flatten@var[]..[]">
+    <Dynamo.Graph.Nodes.ZeroTouch.DSFunction guid="1a06eac2-b735-4a8a-87cb-96a0bd32a4a7" type="Dynamo.Graph.Nodes.ZeroTouch.DSFunction" nickname="Flatten" x="2221.61620604584" y="511.353270083891" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false" isPinned="false" assembly="BuiltIn" function="Flatten@var[]..[]">
       <PortInfo index="0" default="False" />
     </Dynamo.Graph.Nodes.ZeroTouch.DSFunction>
-    <Dynamo.Graph.Nodes.CustomNodes.Function guid="0f281620-b3b7-4e93-98ca-fca91ac8b544" type="Dynamo.Graph.Nodes.CustomNodes.Function" nickname="Hourly Values" x="3127.02164011816" y="148.592709958989" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false" isPinned="false">
+    <Dynamo.Graph.Nodes.CustomNodes.Function guid="0f281620-b3b7-4e93-98ca-fca91ac8b544" type="Dynamo.Graph.Nodes.CustomNodes.Function" nickname="Hourly Values" x="2971.6323115709" y="563.616504686323" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false" isPinned="false">
       <PortInfo index="0" default="False" />
       <PortInfo index="1" default="True" />
       <PortInfo index="2" default="True" />
       <PortInfo index="3" default="True" />
-      <ID value="c4ff31db-afff-4952-81bf-c3bdd8feea81" />
+      <ID value="b64f0f00-4821-473e-a7fb-fb1b09fe3fc6" />
       <Name value="Hourly Values" />
       <Description value="Hourly results for an analysis grid for a single hour of the year.&#xD;&#xA;-" />
       <Inputs>
@@ -149,16 +149,16 @@
         <Output value="ERRReport" />
       </Outputs>
     </Dynamo.Graph.Nodes.CustomNodes.Function>
-    <CoreNodeModels.Input.BoolSelector guid="a121ed28-8d12-46af-96ae-b04ad07c59dd" type="CoreNodeModels.Input.BoolSelector" nickname="Boolean" x="2089.19564476381" y="378.239661061417" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="True" IsFrozen="false" isPinned="false">
+    <CoreNodeModels.Input.BoolSelector guid="a121ed28-8d12-46af-96ae-b04ad07c59dd" type="CoreNodeModels.Input.BoolSelector" nickname="Boolean" x="2221.61620604584" y="756.353270083891" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="True" IsFrozen="false" isPinned="false">
       <System.Boolean>False</System.Boolean>
     </CoreNodeModels.Input.BoolSelector>
-    <Dynamo.Graph.Nodes.CustomNodes.Function guid="09f4b528-1924-4356-bb63-a583bb3e3428" type="Dynamo.Graph.Nodes.CustomNodes.Function" nickname="Climatebased Sky" x="1286.48721033014" y="-170.311401046915" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false" isPinned="false">
+    <Dynamo.Graph.Nodes.CustomNodes.Function guid="09f4b528-1924-4356-bb63-a583bb3e3428" type="Dynamo.Graph.Nodes.CustomNodes.Function" nickname="Climatebased Sky" x="1875.95521600983" y="-99.6343218586845" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false" isPinned="false">
       <PortInfo index="0" default="True" />
       <PortInfo index="1" default="False" />
       <PortInfo index="2" default="True" />
       <PortInfo index="3" default="True" />
       <PortInfo index="4" default="True" />
-      <ID value="764cabef-4656-4648-9d15-f05558b2889e" />
+      <ID value="5852b071-829d-44ac-bd47-1d58cc0260e6" />
       <Name value="Climatebased Sky" />
       <Description value="Climate-based Sky." />
       <Inputs>
@@ -173,9 +173,9 @@
         <Output value="ERRReport" />
       </Outputs>
     </Dynamo.Graph.Nodes.CustomNodes.Function>
-    <Dynamo.Graph.Nodes.CustomNodes.Function guid="32d3e491-81fa-4c2d-acd0-6b591b46646c" type="Dynamo.Graph.Nodes.CustomNodes.Function" nickname="Wea" x="845.443032186086" y="-143.519917572076" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false" isPinned="true">
+    <Dynamo.Graph.Nodes.CustomNodes.Function guid="32d3e491-81fa-4c2d-acd0-6b591b46646c" type="Dynamo.Graph.Nodes.CustomNodes.Function" nickname="Wea" x="1485.28854934316" y="-101.634321858685" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false" isPinned="true">
       <PortInfo index="0" default="False" />
-      <ID value="6e8fd87a-99b8-4f0a-b52c-b05dcf1e0045" />
+      <ID value="69b9cbd1-25b0-4a00-9a6f-a1072608f040" />
       <Name value="Wea" />
       <Description value="epw2wea&#xD;&#xA;-" />
       <Inputs>
@@ -186,12 +186,12 @@
         <Output value="ERRReport" />
       </Outputs>
     </Dynamo.Graph.Nodes.CustomNodes.Function>
-    <Dynamo.Graph.Nodes.CustomNodes.Function guid="759683cb-4c1e-4b3f-b603-bd778380159e" type="Dynamo.Graph.Nodes.CustomNodes.Function" nickname="Grid-Based Recipe" x="2017.10195875165" y="505.380394434924" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false" isPinned="false">
+    <Dynamo.Graph.Nodes.CustomNodes.Function guid="759683cb-4c1e-4b3f-b603-bd778380159e" type="Dynamo.Graph.Nodes.CustomNodes.Function" nickname="Grid-Based Recipe" x="2240.55085957869" y="119.596701693626" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false" isPinned="false">
       <PortInfo index="0" default="False" />
       <PortInfo index="1" default="False" />
       <PortInfo index="2" default="True" />
       <PortInfo index="3" default="True" />
-      <ID value="b2ed89bc-08a5-4ed8-a7d3-052361fdeb99" />
+      <ID value="bd179ba2-fca7-4039-bb5b-92c2433d80d5" />
       <Name value="Grid-Based Recipe" />
       <Description value="Grid-based Recipe.&#xD;&#xA;-" />
       <Inputs>
@@ -205,7 +205,7 @@
         <Output value="ERRReport" />
       </Outputs>
     </Dynamo.Graph.Nodes.CustomNodes.Function>
-    <Dynamo.Graph.Nodes.CodeBlockNodeModel guid="a4f60cb3-9239-4810-8b77-f0d55ea1c28b" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" nickname="Code Block" x="1146.35870609263" y="-61.5424595653946" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" isPinned="false" CodeText="16;" ShouldFocus="false" />
+    <Dynamo.Graph.Nodes.CodeBlockNodeModel guid="a4f60cb3-9239-4810-8b77-f0d55ea1c28b" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" nickname="Code Block" x="1485.28854934316" y="32.5790114746488" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" isPinned="false" CodeText="16;" ShouldFocus="false" />
   </Elements>
   <Connectors>
     <Dynamo.Graph.Connectors.ConnectorModel start="441dc5e1-47ec-4cd1-a6dd-b7fc96f215f9" start_index="0" end="84438c58-34ee-46a5-a555-1d869d55c762" end_index="0" portType="0" />
@@ -234,14 +234,16 @@
     <Dynamo.Graph.Connectors.ConnectorModel start="759683cb-4c1e-4b3f-b603-bd778380159e" start_index="0" end="8e9de23e-6cbd-4922-b16d-88e95981bd98" end_index="0" portType="0" />
     <Dynamo.Graph.Connectors.ConnectorModel start="a4f60cb3-9239-4810-8b77-f0d55ea1c28b" start_index="0" end="09f4b528-1924-4356-bb63-a583bb3e3428" end_index="4" portType="0" />
   </Connectors>
-  <Notes />
+  <Notes>
+    <Dynamo.Graph.Notes.NoteModel guid="2b456ebe-2090-4868-bf0b-cb97d204fb12" text="This definition is using Honeybee and to run daylight analysis with Honeybee you need to install Radiance. Radiance can be downloaded and installed from this link:&#xD;&#xA;https://github.com/NREL/Radiance/releases/tag/5.2.0" x="641.526133761179" y="-261.866689045512" />
+  </Notes>
   <Annotations>
-    <Dynamo.Graph.Annotations.AnnotationModel guid="0f94495b-03d9-42ae-a093-f37a0221a919" annotationText="This component fails for complex geometries. In those cases&#xD;&#xA;you can create the model surface by surface. You can also vote&#xD;&#xA;at the link below here so Autodesk opens up the Room API, so&#xD;&#xA;we can get the openings without failure!&#xD;&#xA;&#xD;&#xA;http://forums.autodesk.com/t5/revit-ideas/&#xD;&#xA;api-access-to-room-openings-geometry-and-materials-in-revit/&#xD;&#xA;idi-p/6642406" left="565.914494290537" top="43.8127214908534" width="686.163333333333" height="411.666666666667" fontSize="24" InitialTop="284.47938815752" InitialHeight="175" TextblockHeight="230.666666666667" backgrouund="#FFFFAA45">
+    <Dynamo.Graph.Annotations.AnnotationModel guid="0f94495b-03d9-42ae-a093-f37a0221a919" annotationText="This component fails for complex geometries. In those cases&#xD;&#xA;you can create the model surface by surface. You can also vote&#xD;&#xA;at the link below here so Autodesk opens up the Room API, so&#xD;&#xA;we can get the openings without failure!&#xD;&#xA;&#xD;&#xA;http://forums.autodesk.com/t5/revit-ideas/&#xD;&#xA;api-access-to-room-openings-geometry-and-materials-in-revit/&#xD;&#xA;idi-p/6642406" left="707.961387658491" top="524.665680413815" width="686.163333333333" height="411.666666666667" fontSize="24" InitialTop="765.332347080482" InitialHeight="175" TextblockHeight="230.666666666667" backgrouund="#FFFFAA45">
       <Models ModelGuid="6bf86694-91a5-4c9e-9c2f-50438eef8f12" />
     </Dynamo.Graph.Annotations.AnnotationModel>
   </Annotations>
   <Presets />
   <Cameras>
-    <Camera Name="Background Preview" eyeX="3550.70458984375" eyeY="12899.1640625" eyeZ="7074.478515625" lookX="-4626.1064453125" lookY="-13043.48828125" lookZ="-6372.59765625" upX="-0.426131874322891" upY="0.688354551792145" upZ="-0.587009131908417" />
+    <Camera Name="Background Preview" eyeX="3235.1464095067" eyeY="9419.24027880321" eyeZ="11751.8064714037" lookX="-4310.54826497545" lookY="-9563.56449755321" lookZ="-11049.9256120287" upX="-0.162159093696318" upY="0.894934366757247" upZ="-0.41568857544943" />
   </Cameras>
 </Workspace>

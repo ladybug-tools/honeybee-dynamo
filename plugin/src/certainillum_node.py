@@ -9,7 +9,7 @@ except ImportError as e:
 
 _value_ = _value_ or 10000
 sky = CertainIlluminanceLevel(_value_)
-print sky.toRadString()
+
 
 # assign outputs to OUT
 OUT = (sky,)

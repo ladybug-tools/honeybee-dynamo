@@ -1,8 +1,8 @@
-<Workspace Category="Honeybee.02 :: Daylight :: Light Sources" Description="Custom Sky." ID="1df7cf2b-4248-465f-b185-89d7ecf48042" Name="Custom Sky" Version="1.2.0.2690" X="400" Y="-100" zoom="0.5">
+<Workspace Category="Honeybee.02 :: Daylight :: Light Sources" Description="Custom Sky." ID="cfe6ea78-90c8-4a2b-8d9f-74886a3b4d45" Name="Custom Sky" Version="1.2.0.2690" X="400" Y="-100" zoom="0.5">
   <NamespaceResolutionMap/>
   <Elements>
-    <Dynamo.Graph.Nodes.CodeBlockNodeModel CodeText="&quot;Honeybee&quot;;&#xA;&quot;customsky_node.py&quot;;" ShouldFocus="false" guid="4e3e78e2-4b36-4980-b8e9-e8e247f7cb30" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="input python script" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" x="-750" y="390"/>
-    <PythonNodeModels.PythonNode guid="93e72ef9-fe27-4d28-96eb-1745b7f092ce" inputcount="2" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="import and prepare py code" type="PythonNodeModels.PythonNode" x="-355" y="385">
+    <Dynamo.Graph.Nodes.CodeBlockNodeModel CodeText="&quot;Honeybee&quot;;&#xA;&quot;customsky_node.py&quot;;" ShouldFocus="false" guid="cf58a519-5e60-4371-af61-4c5b64fbcaef" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="input python script" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" x="-750" y="390"/>
+    <PythonNodeModels.PythonNode guid="9730441b-e182-4de9-a48d-f7d74fd64d9f" inputcount="2" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="import and prepare py code" type="PythonNodeModels.PythonNode" x="-355" y="385">
       <PortInfo default="false" index="0"/>
       <PortInfo default="false" index="1"/>
       <Script>
@@ -95,7 +95,7 @@ except Exception, e:
 
       </Script>
     </PythonNodeModels.PythonNode>
-    <PythonNodeModels.PythonStringNode guid="b053cbbd-beb1-4c31-80a9-5930c77c1e01" inputcount="8" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="core" type="PythonNodeModels.PythonStringNode" x="-75" y="460">
+    <PythonNodeModels.PythonStringNode guid="13ce99df-c083-4a19-ba44-5075adc9e0ab" inputcount="8" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="core" type="PythonNodeModels.PythonStringNode" x="-75" y="460">
       <PortInfo default="false" index="0"/>
       <PortInfo default="false" index="1"/>
       <PortInfo default="false" index="2"/>
@@ -105,33 +105,33 @@ except Exception, e:
       <PortInfo default="false" index="6"/>
       <PortInfo default="false" index="7"/>
     </PythonNodeModels.PythonStringNode>
-    <Dynamo.Graph.Nodes.CustomNodes.Symbol guid="f2f3dea7-5e60-46c6-a18d-67100273884a" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="north_" type="Dynamo.Graph.Nodes.CustomNodes.Symbol" x="-750" y="475">
+    <Dynamo.Graph.Nodes.CustomNodes.Symbol guid="4832f647-87ea-4cf0-b178-c58c063960d3" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="north_" type="Dynamo.Graph.Nodes.CustomNodes.Symbol" x="-750" y="475">
       <Symbol value="// A number between 0 and 360 that represents the degrees off from&#xD;&#xA;// the y-axis to make North. The default North direction is set to the&#xD;&#xA;// Y-axis (default: 0 degrees).&#xD;&#xA;north_: double = null;"/>
     </Dynamo.Graph.Nodes.CustomNodes.Symbol>
-    <Dynamo.Graph.Nodes.CustomNodes.Symbol guid="37eb6633-a5a0-4add-bfd8-4b69d0269543" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="_location" type="Dynamo.Graph.Nodes.CustomNodes.Symbol" x="-750" y="570">
+    <Dynamo.Graph.Nodes.CustomNodes.Symbol guid="edc40c0a-e641-43f2-935b-7bd9a5fdcee0" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="_location" type="Dynamo.Graph.Nodes.CustomNodes.Symbol" x="-750" y="570">
       <Symbol value="// A Ladybug location.&#xD;&#xA;_location: var;"/>
     </Dynamo.Graph.Nodes.CustomNodes.Symbol>
-    <Dynamo.Graph.Nodes.CustomNodes.Symbol guid="f8132804-1f16-4966-ad91-781971be948c" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="_dirRad" type="Dynamo.Graph.Nodes.CustomNodes.Symbol" x="-750" y="665">
+    <Dynamo.Graph.Nodes.CustomNodes.Symbol guid="d6cc3fd7-3569-4d78-b156-8a76a2a794fa" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="_dirRad" type="Dynamo.Graph.Nodes.CustomNodes.Symbol" x="-750" y="665">
       <Symbol value="// Diffuse radiation W/m2.&#xD;&#xA;_dirRad: int;"/>
     </Dynamo.Graph.Nodes.CustomNodes.Symbol>
-    <Dynamo.Graph.Nodes.CustomNodes.Symbol guid="4f1b08ab-6f64-45d0-9466-f05f67c2dfa5" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="_difRad" type="Dynamo.Graph.Nodes.CustomNodes.Symbol" x="-750" y="760">
+    <Dynamo.Graph.Nodes.CustomNodes.Symbol guid="bfbce18d-e985-4b22-809c-7c8562147dae" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="_difRad" type="Dynamo.Graph.Nodes.CustomNodes.Symbol" x="-750" y="760">
       <Symbol value="// Diffuse Horizontal Radiation in Wh/m2&#xD;&#xA;_difRad: int;"/>
     </Dynamo.Graph.Nodes.CustomNodes.Symbol>
-    <Dynamo.Graph.Nodes.CustomNodes.Symbol guid="bafb3e4c-f427-48f7-b0c6-45003a13d370" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="_month_" type="Dynamo.Graph.Nodes.CustomNodes.Symbol" x="-750" y="855">
+    <Dynamo.Graph.Nodes.CustomNodes.Symbol guid="ce12e060-8aa0-4394-8fb4-907af1b9ce97" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="_month_" type="Dynamo.Graph.Nodes.CustomNodes.Symbol" x="-750" y="855">
       <Symbol value="// Input a number to indicate month (1..12) (default: 6).&#xD;&#xA;_month_: int = 6;"/>
     </Dynamo.Graph.Nodes.CustomNodes.Symbol>
-    <Dynamo.Graph.Nodes.CustomNodes.Symbol guid="e82c64d2-d8c5-491f-b172-ac79f325538d" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="_day_" type="Dynamo.Graph.Nodes.CustomNodes.Symbol" x="-750" y="950">
+    <Dynamo.Graph.Nodes.CustomNodes.Symbol guid="ac4ae6d8-caff-4385-8079-86dee945f73c" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="_day_" type="Dynamo.Graph.Nodes.CustomNodes.Symbol" x="-750" y="950">
       <Symbol value="// Input a number to indicate day (1..31) (default: 21).&#xD;&#xA;_day_: int = 21;"/>
     </Dynamo.Graph.Nodes.CustomNodes.Symbol>
-    <Dynamo.Graph.Nodes.CustomNodes.Symbol guid="edf790c4-702a-4dea-9881-d3728ce14288" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="_hour_" type="Dynamo.Graph.Nodes.CustomNodes.Symbol" x="-750" y="1045">
+    <Dynamo.Graph.Nodes.CustomNodes.Symbol guid="986c77db-495d-492f-9d38-4a624d20ff0c" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="_hour_" type="Dynamo.Graph.Nodes.CustomNodes.Symbol" x="-750" y="1045">
       <Symbol value="// Input a number to indicate hour (0..23) (default: 12).&#xD;&#xA;_hour_: double = 12.0;"/>
     </Dynamo.Graph.Nodes.CustomNodes.Symbol>
-    <Dynamo.Graph.Nodes.CodeBlockNodeModel CodeText="out[0];" ShouldFocus="false" guid="dc374dcd-6c8b-4b62-9f93-e7fabb6ed424" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="decompose outputs" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" x="150" y="515"/>
-    <Dynamo.Graph.Nodes.CustomNodes.Output guid="60b6c400-b35d-4cbc-9b55-1663b81637e8" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="sky" type="Dynamo.Graph.Nodes.CustomNodes.Output" x="380" y="475">
+    <Dynamo.Graph.Nodes.CodeBlockNodeModel CodeText="out[0];" ShouldFocus="false" guid="c112524f-54b2-4c00-b044-8413fb767e20" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="decompose outputs" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" x="150" y="515"/>
+    <Dynamo.Graph.Nodes.CustomNodes.Output guid="bf22b840-1c40-4b5f-af61-a30a15355534" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="sky" type="Dynamo.Graph.Nodes.CustomNodes.Output" x="380" y="475">
       <Symbol value="// Honeybee sky. You can use this sky to create a daylight recipe.&#xD;&#xA;sky;"/>
       <PortInfo default="false" index="0"/>
     </Dynamo.Graph.Nodes.CustomNodes.Output>
-    <PythonNodeModels.PythonNode guid="377945b0-9fc8-4d7e-beb6-94ef2ccb2dbe" inputcount="2" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="Error report" type="PythonNodeModels.PythonNode" x="150" y="380">
+    <PythonNodeModels.PythonNode guid="18284c7d-c9f3-4f67-8222-ff9f4ec3030c" inputcount="2" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="Error report" type="PythonNodeModels.PythonNode" x="150" y="380">
       <PortInfo default="false" index="0"/>
       <PortInfo default="false" index="1"/>
       <Script>
@@ -153,27 +153,27 @@ else:
 
       </Script>
     </PythonNodeModels.PythonNode>
-    <Dynamo.Graph.Nodes.CustomNodes.Output guid="7d97b648-9f67-4572-940a-e366084f0705" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="ERRReport" type="Dynamo.Graph.Nodes.CustomNodes.Output" x="380" y="380">
+    <Dynamo.Graph.Nodes.CustomNodes.Output guid="252a33a5-55ff-4e5f-aeac-d05efb3502a5" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="ERRReport" type="Dynamo.Graph.Nodes.CustomNodes.Output" x="380" y="380">
       <Symbol value="// Report&#xD;&#xA;ERRReport;"/>
       <PortInfo default="false" index="0"/>
     </Dynamo.Graph.Nodes.CustomNodes.Output>
   </Elements>
   <Connectors>
-    <Dynamo.Graph.Connectors.ConnectorModel end="93e72ef9-fe27-4d28-96eb-1745b7f092ce" end_index="0" portType="0" start="4e3e78e2-4b36-4980-b8e9-e8e247f7cb30" start_index="0"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="93e72ef9-fe27-4d28-96eb-1745b7f092ce" end_index="1" portType="0" start="4e3e78e2-4b36-4980-b8e9-e8e247f7cb30" start_index="1"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="b053cbbd-beb1-4c31-80a9-5930c77c1e01" end_index="0" portType="0" start="93e72ef9-fe27-4d28-96eb-1745b7f092ce" start_index="0"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="b053cbbd-beb1-4c31-80a9-5930c77c1e01" end_index="1" portType="0" start="f2f3dea7-5e60-46c6-a18d-67100273884a" start_index="0"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="b053cbbd-beb1-4c31-80a9-5930c77c1e01" end_index="2" portType="0" start="37eb6633-a5a0-4add-bfd8-4b69d0269543" start_index="0"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="b053cbbd-beb1-4c31-80a9-5930c77c1e01" end_index="3" portType="0" start="f8132804-1f16-4966-ad91-781971be948c" start_index="0"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="b053cbbd-beb1-4c31-80a9-5930c77c1e01" end_index="4" portType="0" start="4f1b08ab-6f64-45d0-9466-f05f67c2dfa5" start_index="0"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="b053cbbd-beb1-4c31-80a9-5930c77c1e01" end_index="5" portType="0" start="bafb3e4c-f427-48f7-b0c6-45003a13d370" start_index="0"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="b053cbbd-beb1-4c31-80a9-5930c77c1e01" end_index="6" portType="0" start="e82c64d2-d8c5-491f-b172-ac79f325538d" start_index="0"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="b053cbbd-beb1-4c31-80a9-5930c77c1e01" end_index="7" portType="0" start="edf790c4-702a-4dea-9881-d3728ce14288" start_index="0"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="dc374dcd-6c8b-4b62-9f93-e7fabb6ed424" end_index="0" portType="0" start="b053cbbd-beb1-4c31-80a9-5930c77c1e01" start_index="0"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="60b6c400-b35d-4cbc-9b55-1663b81637e8" end_index="0" portType="0" start="dc374dcd-6c8b-4b62-9f93-e7fabb6ed424" start_index="0"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="377945b0-9fc8-4d7e-beb6-94ef2ccb2dbe" end_index="0" portType="0" start="93e72ef9-fe27-4d28-96eb-1745b7f092ce" start_index="0"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="377945b0-9fc8-4d7e-beb6-94ef2ccb2dbe" end_index="1" portType="0" start="b053cbbd-beb1-4c31-80a9-5930c77c1e01" start_index="0"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="7d97b648-9f67-4572-940a-e366084f0705" end_index="0" portType="0" start="377945b0-9fc8-4d7e-beb6-94ef2ccb2dbe" start_index="0"/>
+    <Dynamo.Graph.Connectors.ConnectorModel end="9730441b-e182-4de9-a48d-f7d74fd64d9f" end_index="0" portType="0" start="cf58a519-5e60-4371-af61-4c5b64fbcaef" start_index="0"/>
+    <Dynamo.Graph.Connectors.ConnectorModel end="9730441b-e182-4de9-a48d-f7d74fd64d9f" end_index="1" portType="0" start="cf58a519-5e60-4371-af61-4c5b64fbcaef" start_index="1"/>
+    <Dynamo.Graph.Connectors.ConnectorModel end="13ce99df-c083-4a19-ba44-5075adc9e0ab" end_index="0" portType="0" start="9730441b-e182-4de9-a48d-f7d74fd64d9f" start_index="0"/>
+    <Dynamo.Graph.Connectors.ConnectorModel end="13ce99df-c083-4a19-ba44-5075adc9e0ab" end_index="1" portType="0" start="4832f647-87ea-4cf0-b178-c58c063960d3" start_index="0"/>
+    <Dynamo.Graph.Connectors.ConnectorModel end="13ce99df-c083-4a19-ba44-5075adc9e0ab" end_index="2" portType="0" start="edc40c0a-e641-43f2-935b-7bd9a5fdcee0" start_index="0"/>
+    <Dynamo.Graph.Connectors.ConnectorModel end="13ce99df-c083-4a19-ba44-5075adc9e0ab" end_index="3" portType="0" start="d6cc3fd7-3569-4d78-b156-8a76a2a794fa" start_index="0"/>
+    <Dynamo.Graph.Connectors.ConnectorModel end="13ce99df-c083-4a19-ba44-5075adc9e0ab" end_index="4" portType="0" start="bfbce18d-e985-4b22-809c-7c8562147dae" start_index="0"/>
+    <Dynamo.Graph.Connectors.ConnectorModel end="13ce99df-c083-4a19-ba44-5075adc9e0ab" end_index="5" portType="0" start="ce12e060-8aa0-4394-8fb4-907af1b9ce97" start_index="0"/>
+    <Dynamo.Graph.Connectors.ConnectorModel end="13ce99df-c083-4a19-ba44-5075adc9e0ab" end_index="6" portType="0" start="ac4ae6d8-caff-4385-8079-86dee945f73c" start_index="0"/>
+    <Dynamo.Graph.Connectors.ConnectorModel end="13ce99df-c083-4a19-ba44-5075adc9e0ab" end_index="7" portType="0" start="986c77db-495d-492f-9d38-4a624d20ff0c" start_index="0"/>
+    <Dynamo.Graph.Connectors.ConnectorModel end="c112524f-54b2-4c00-b044-8413fb767e20" end_index="0" portType="0" start="13ce99df-c083-4a19-ba44-5075adc9e0ab" start_index="0"/>
+    <Dynamo.Graph.Connectors.ConnectorModel end="bf22b840-1c40-4b5f-af61-a30a15355534" end_index="0" portType="0" start="c112524f-54b2-4c00-b044-8413fb767e20" start_index="0"/>
+    <Dynamo.Graph.Connectors.ConnectorModel end="18284c7d-c9f3-4f67-8222-ff9f4ec3030c" end_index="0" portType="0" start="9730441b-e182-4de9-a48d-f7d74fd64d9f" start_index="0"/>
+    <Dynamo.Graph.Connectors.ConnectorModel end="18284c7d-c9f3-4f67-8222-ff9f4ec3030c" end_index="1" portType="0" start="13ce99df-c083-4a19-ba44-5075adc9e0ab" start_index="0"/>
+    <Dynamo.Graph.Connectors.ConnectorModel end="252a33a5-55ff-4e5f-aeac-d05efb3502a5" end_index="0" portType="0" start="18284c7d-c9f3-4f67-8222-ff9f4ec3030c" start_index="0"/>
   </Connectors>
   <Notes/>
   <Annotations/>

@@ -13,13 +13,13 @@ except ImportError as e:
 
 if _skymtx and _views:
     # check inputs
-    assert _skymtx.skyDensity < 2, ValueError(
+    assert _skymtx.sky_density < 2, ValueError(
         'Due to Windows limitations on the maximum number of files that can be\n'
         ' open concurrently image-based analysis only works with skyDensity of 1.')
     
     analysisRecipe = DaylightCoeffImageBased(
         _skymtx, _views, _analysisType_, _dmtxPar_,
-        reuseDaylightMtx=reuseDmtx_)
+        reuse_daylight_mtx=reuseDmtx_)
 
 # assign outputs to OUT
 OUT = (analysisRecipe,)

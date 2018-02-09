@@ -1,4 +1,4 @@
-<Workspace Version="1.3.0.875" X="-766.259196759264" Y="56.2356740669876" zoom="0.551520311464878" ScaleFactor="1" Name="Home" Description="" RunType="Manual" RunPeriod="1000" HasRunWithoutCrash="True">
+<Workspace Version="1.3.0.875" X="363.839657492327" Y="291.89023639365" zoom="0.36148943658451" ScaleFactor="1" Name="Home" Description="" RunType="Manual" RunPeriod="1000" HasRunWithoutCrash="False">
   <NamespaceResolutionMap />
   <Elements>
     <CoreNodeModels.Input.BoolSelector guid="441dc5e1-47ec-4cd1-a6dd-b7fc96f215f9" type="CoreNodeModels.Input.BoolSelector" nickname="Boolean" x="-923.511515707268" y="307.601174329415" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="True" IsFrozen="false" isPinned="false">
@@ -47,7 +47,7 @@
       <PortInfo index="4" default="True" />
       <PortInfo index="5" default="False" />
       <PortInfo index="6" default="True" />
-      <ID value="b520d590-d076-49d5-b391-aa1d02b40600" />
+      <ID value="f0c1d13a-fa85-4560-95a4-8bb6a7c2f3ed" />
       <Name value="Run Radiance Analysis" />
       <Description value="Run Radiance Analysis&#xD;&#xA;-" />
       <Inputs>
@@ -77,7 +77,7 @@
       <PortInfo index="2" default="True" />
       <PortInfo index="3" default="True" />
       <PortInfo index="4" default="True" />
-      <ID value="764cabef-4656-4648-9d15-f05558b2889e" />
+      <ID value="5852b071-829d-44ac-bd47-1d58cc0260e6" />
       <Name value="Climatebased Sky" />
       <Description value="Climate-based Sky." />
       <Inputs>
@@ -94,7 +94,7 @@
     </Dynamo.Graph.Nodes.CustomNodes.Function>
     <Dynamo.Graph.Nodes.CustomNodes.Function guid="32d3e491-81fa-4c2d-acd0-6b591b46646c" type="Dynamo.Graph.Nodes.CustomNodes.Function" nickname="Wea" x="845.443032186086" y="-143.519917572076" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false" isPinned="true">
       <PortInfo index="0" default="False" />
-      <ID value="6e8fd87a-99b8-4f0a-b52c-b05dcf1e0045" />
+      <ID value="69b9cbd1-25b0-4a00-9a6f-a1072608f040" />
       <Name value="Wea" />
       <Description value="epw2wea&#xD;&#xA;-" />
       <Inputs>
@@ -111,7 +111,7 @@
       <PortInfo index="1" default="False" />
       <PortInfo index="2" default="True" />
       <PortInfo index="3" default="True" />
-      <ID value="4d57f2db-d3ef-41d3-9cc0-852305956d4e" />
+      <ID value="0bdd5982-e662-4f2c-8ab7-f25e4b9c828f" />
       <Name value="Image-Based Recipe" />
       <Description value="Image-based Recipe.&#xD;&#xA;-" />
       <Inputs>
@@ -135,7 +135,7 @@
       <PortInfo index="6" default="True" />
       <PortInfo index="7" default="True" />
       <PortInfo index="8" default="True" />
-      <ID value="39f2e9cf-5722-4a6e-9322-27db585fefa8" />
+      <ID value="7809960b-7cc8-4165-ad13-3d8ee7c6054c" />
       <Name value="View" />
       <Description value="Honeybee View.&#xD;&#xA;-" />
       <Inputs>
@@ -211,7 +211,7 @@
     <Dynamo.Graph.Nodes.CustomNodes.Function guid="7edc418f-14ca-4ed5-b160-f1b63ee8fb5a" type="Dynamo.Graph.Nodes.CustomNodes.Function" nickname="HDR to Tiff" x="3245.94588267661" y="328.785762178859" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false" isPinned="false">
       <PortInfo index="0" default="False" />
       <PortInfo index="1" default="False" />
-      <ID value="6129d8ae-6ba7-422b-ab1f-eef7b69f89ef" />
+      <ID value="72794562-d637-495e-91ac-107207f1f305" />
       <Name value="HDR to Tiff" />
       <Description value="Convert hdr files to tiff files.&#xD;&#xA;-" />
       <Inputs>
@@ -268,7 +268,9 @@
     <Dynamo.Graph.Connectors.ConnectorModel start="7edc418f-14ca-4ed5-b160-f1b63ee8fb5a" start_index="0" end="294f4dfd-5e03-4c7d-b4ce-0de055e9f4cb" end_index="0" portType="0" />
     <Dynamo.Graph.Connectors.ConnectorModel start="afddd811-3dfa-4a3c-b84f-3ab11ccd6098" start_index="0" end="7edc418f-14ca-4ed5-b160-f1b63ee8fb5a" end_index="1" portType="0" />
   </Connectors>
-  <Notes />
+  <Notes>
+    <Dynamo.Graph.Notes.NoteModel guid="1dfcfc6c-6130-4cf1-a4fe-8b7d85d3142b" text="This definition is using Honeybee and to run daylight analysis with Honeybee you need to install Radiance. Radiance can be downloaded and installed from this link:&#xD;&#xA;https://github.com/NREL/Radiance/releases/tag/5.2.0" x="806.499285385521" y="-291.660675199218" />
+  </Notes>
   <Annotations>
     <Dynamo.Graph.Annotations.AnnotationModel guid="0f94495b-03d9-42ae-a093-f37a0221a919" annotationText="This component fails for complex geometries. In those cases&#xD;&#xA;you can create the model surface by surface. You can also vote&#xD;&#xA;at the link below here so Autodesk opens up the Room API, so&#xD;&#xA;we can get the openings without failure!&#xD;&#xA;&#xD;&#xA;http://forums.autodesk.com/t5/revit-ideas/&#xD;&#xA;api-access-to-room-openings-geometry-and-materials-in-revit/&#xD;&#xA;idi-p/6642406" left="-248.875964034444" top="64.4926823620453" width="686.163333333333" height="411.666666666667" fontSize="24" InitialTop="305.159349028712" InitialHeight="175" TextblockHeight="230.666666666667" backgrouund="#FFFFAA45">
       <Models ModelGuid="6bf86694-91a5-4c9e-9c2f-50438eef8f12" />

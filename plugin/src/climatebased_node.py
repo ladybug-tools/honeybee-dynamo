@@ -13,7 +13,7 @@ if _wea:
     _month_ = _month_ or 6
     _day_ = _day_ or 21
     _hour_ = _hour_ or 12
-    sky = ClimateBased.fromWea(_wea, _month_, _day_, _hour_, north_)
+    sky = ClimateBased.from_wea(_wea, _month_, _day_, _hour_, north_)
 
 # assign outputs to OUT
 OUT = (sky,)

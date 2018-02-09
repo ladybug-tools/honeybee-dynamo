@@ -1,4 +1,4 @@
-<Workspace Version="1.3.0.875" X="5.8296427476946" Y="346.314290542259" zoom="0.383460014644381" ScaleFactor="1" Name="Home" Description="" RunType="Manual" RunPeriod="1000" HasRunWithoutCrash="True">
+<Workspace Version="1.3.0.875" X="-397.715062411711" Y="346.436644063473" zoom="0.529739512419158" ScaleFactor="1" Name="Home" Description="" RunType="Manual" RunPeriod="1000" HasRunWithoutCrash="True">
   <NamespaceResolutionMap />
   <Elements>
     <CoreNodeModels.Input.BoolSelector guid="441dc5e1-47ec-4cd1-a6dd-b7fc96f215f9" type="CoreNodeModels.Input.BoolSelector" nickname="Boolean" x="63.0322754113512" y="282.918541682942" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="True" IsFrozen="false" isPinned="false">
@@ -46,7 +46,7 @@
     <Dynamo.Graph.Nodes.CustomNodes.Function guid="4a2a4f6a-3f41-440a-8de0-43210f89139d" type="Dynamo.Graph.Nodes.CustomNodes.Function" nickname="Generate Colors" x="3634.85693626516" y="260.445996388702" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false" isPinned="false">
       <PortInfo index="0" default="False" />
       <PortInfo index="1" default="True" />
-      <ID value="f8ec384e-4740-4fd7-99d4-38b1b17f7de1" />
+      <ID value="fc7f1dc1-3a79-4641-951f-3a79ba792c69" />
       <Name value="Generate Colors" />
       <Description value="Color a test surface based on the results of a study. The results structure should match the test points structure to be mapped correctly on the surface." />
       <Inputs>
@@ -83,7 +83,7 @@
       <PortInfo index="1" default="False" />
       <PortInfo index="2" default="True" />
       <PortInfo index="3" default="True" />
-      <ID value="c3cf0770-79db-4838-aca1-d68421d2ca1f" />
+      <ID value="f448873e-ec52-4548-a466-5eb3f8f5b5ee" />
       <Name value="Analysis Grid" />
       <Description value="Analysis Grid.&#xD;&#xA;-" />
       <Inputs>
@@ -105,7 +105,7 @@
       <PortInfo index="4" default="True" />
       <PortInfo index="5" default="False" />
       <PortInfo index="6" default="True" />
-      <ID value="b520d590-d076-49d5-b391-aa1d02b40600" />
+      <ID value="f0c1d13a-fa85-4560-95a4-8bb6a7c2f3ed" />
       <Name value="Run Radiance Analysis" />
       <Description value="Run Radiance Analysis&#xD;&#xA;-" />
       <Inputs>
@@ -135,7 +135,7 @@
       <PortInfo index="2" default="False" />
       <PortInfo index="3" default="True" />
       <PortInfo index="4" default="True" />
-      <ID value="ed591fbd-1179-4e08-8928-413f6b2345db" />
+      <ID value="d511f404-fba6-4ba8-8e0b-e1ca2f174da1" />
       <Name value="Sky Matrix" />
       <Description value="Sky Matrix.&#xD;&#xA;-" />
       <Inputs>
@@ -152,7 +152,7 @@
     </Dynamo.Graph.Nodes.CustomNodes.Function>
     <Dynamo.Graph.Nodes.CustomNodes.Function guid="0386fe82-9747-4ec8-9b22-655e0cadeea6" type="Dynamo.Graph.Nodes.CustomNodes.Function" nickname="Wea" x="579.713218186792" y="-427.918429709449" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false" isPinned="false">
       <PortInfo index="0" default="False" />
-      <ID value="6e8fd87a-99b8-4f0a-b52c-b05dcf1e0045" />
+      <ID value="69b9cbd1-25b0-4a00-9a6f-a1072608f040" />
       <Name value="Wea" />
       <Description value="epw2wea&#xD;&#xA;-" />
       <Inputs>
@@ -173,7 +173,7 @@
       <PortInfo index="2" default="True" />
       <PortInfo index="3" default="True" />
       <PortInfo index="4" default="True" />
-      <ID value="cbfdaf47-1afe-4fbb-88f9-14b45c9a702b" />
+      <ID value="0a1c64be-8d1c-4e77-928c-02efb89497a0" />
       <Name value="Annual Daylight Metrics" />
       <Description value="Annual Daylight Metrics&#xD;&#xA;-" />
       <Inputs>
@@ -202,7 +202,7 @@
       <PortInfo index="2" default="True" />
       <PortInfo index="3" default="True" />
       <PortInfo index="4" default="True" />
-      <ID value="ac93b0e6-3443-40c4-9eed-de847829aa54" />
+      <ID value="a5f47bce-05b3-45b2-ba3c-4314c4ad041d" />
       <Name value="DC Grid-based Daylight Recipe" />
       <Description value="Daylight Coefficient Grid-based Daylight Recipe.&#xD;&#xA;Use this recipe to set up annual daylight analysis.&#xD;&#xA;-" />
       <Inputs>
@@ -222,7 +222,7 @@
       <PortInfo index="1" default="True" />
       <PortInfo index="2" default="True" />
       <PortInfo index="3" default="True" />
-      <ID value="c4ff31db-afff-4952-81bf-c3bdd8feea81" />
+      <ID value="b64f0f00-4821-473e-a7fb-fb1b09fe3fc6" />
       <Name value="Hourly Values" />
       <Description value="Hourly results for an analysis grid for a single hour of the year.&#xD;&#xA;-" />
       <Inputs>
@@ -271,7 +271,9 @@
     <Dynamo.Graph.Connectors.ConnectorModel start="4bfe3050-bc66-4f84-968a-01663308f9d6" start_index="0" end="d1c53148-baab-4c02-a8b3-7f8a46848f28" end_index="0" portType="0" />
     <Dynamo.Graph.Connectors.ConnectorModel start="35eceeae-0bb8-4ad6-9316-ba8a96ed4af5" start_index="0" end="4bfe3050-bc66-4f84-968a-01663308f9d6" end_index="1" portType="0" />
   </Connectors>
-  <Notes />
+  <Notes>
+    <Dynamo.Graph.Notes.NoteModel guid="9069526c-8511-48bd-b05f-cdda1979d89f" text="This definition is using Honeybee and to run daylight analysis with Honeybee you need to install Radiance. Radiance can be downloaded and installed from this link:&#xD;&#xA;https://github.com/NREL/Radiance/releases/tag/5.2.0" x="561.017725396596" y="-558.283860848568" />
+  </Notes>
   <Annotations>
     <Dynamo.Graph.Annotations.AnnotationModel guid="0f94495b-03d9-42ae-a093-f37a0221a919" annotationText="This component fails for complex geometries. In those cases&#xD;&#xA;you can create the model surface by surface. You can also vote&#xD;&#xA;at the link below here so Autodesk opens up the Room API, so&#xD;&#xA;we can get the openings without failure!&#xD;&#xA;&#xD;&#xA;http://forums.autodesk.com/t5/revit-ideas/&#xD;&#xA;api-access-to-room-openings-geometry-and-materials-in-revit/&#xD;&#xA;idi-p/6642406" left="565.914494290537" top="43.8127214908534" width="686.163333333333" height="411.666666666667" fontSize="24" InitialTop="284.47938815752" InitialHeight="175" TextblockHeight="230.666666666667" backgrouund="#FFFFAA45">
       <Models ModelGuid="6bf86694-91a5-4c9e-9c2f-50438eef8f12" />
@@ -279,6 +281,6 @@
   </Annotations>
   <Presets />
   <Cameras>
-    <Camera Name="Background Preview" eyeX="5018.41834319422" eyeY="17432.9326934489" eyeZ="5716.89646058116" lookX="-6699.94021611805" lookY="-17056.3164574852" lookZ="-6180.22561888589" upX="-0.558929195366198" upY="0.649448020235626" upZ="-0.515572989798832" />
+    <Camera Name="Background Preview" eyeX="5018.41845703125" eyeY="17432.93359375" eyeZ="5716.896484375" lookX="-6699.9404296875" lookY="-17056.31640625" lookZ="-6180.2255859375" upX="-0.558929204940796" upY="0.649448037147522" upZ="-0.515572965145111" />
   </Cameras>
 </Workspace>

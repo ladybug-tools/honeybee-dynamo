@@ -21,7 +21,7 @@ if len(_geo)!=0 and _geo[0]!=None:
         radProp_ = RadianceProperties()
 
     epProp_ = None
-    HBWinSrf = HBFenSurface.fromGeometry(names_, _geo, isNameSetByUser, radProp_, epProp_)
+    HBWinSrf = HBFenSurface.from_geometry(names_, _geo, isNameSetByUser, radProp_, epProp_)
 
 # assign outputs to OUT
 OUT = (HBWinSrf,)

@@ -8,12 +8,12 @@ try:
 except ImportError as e:
     raise ImportError('\nFailed to import ladybug:\n\t{}'.format(e))
 
-col = color.Colorset.Nuanced()
+col = color.Colorset.nuanced()
 legendPar = lp.LegendParameters((0, 100), colors=col)
 
 if _analysisGrid:
-    states = _analysisGrid.parseBlindStates(blindStates_)
-    DA, CDA, UDI, UDILess, UDIMore = _analysisGrid.annualMetrics(
+    states = _analysisGrid.parse_blind_states(blindStates_)
+    DA, CDA, UDI, UDILess, UDIMore = _analysisGrid.annual_metrics(
         _threshold_, _minmax_, states, _occSchedule_
     )
 

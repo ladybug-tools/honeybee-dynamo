@@ -10,7 +10,7 @@ except ImportError as e:
 
 if _location:
     if not hasattr(_location, 'isLocation'):
-        _location = Location.fromLocation(_location)
+        _location = Location.from_location(_location)
     # set default values if they are not set
     north_ = north_ or 0
     _type_ = _type_ or 0

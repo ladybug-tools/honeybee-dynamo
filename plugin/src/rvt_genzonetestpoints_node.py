@@ -11,7 +11,7 @@ if _zones and _gridSize and _distanceFromBaseSrf:
     if not hasattr(_zones, '__iter__'):
         _zones = (_zones,)
 
-    _gg = GridGenerator.fromHBZones(_zones, _gridSize, _distanceFromBaseSrf)
+    _gg = GridGenerator.from_hb_zones(_zones, _gridSize, _distanceFromBaseSrf)
     gridGroups = tuple(_gg.grids)
 
     _testPoints = tuple([] for g in gridGroups)

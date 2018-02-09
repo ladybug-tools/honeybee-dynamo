@@ -23,8 +23,8 @@ if _sensor:
         setattr(sensor, 'logic', sensor._logic)
 
     
-    states = sensor.parseBlindStates(_blindCombs_)
-    results = sensor.blindsState(sensor.hoys, states)
+    states = sensor.parse_blind_states(_blindCombs_)
+    results = sensor.blinds_state(sensor.hoys, states)
     if results:
         blindStates = (str(d) for d in results[0])  # tuple is not a standard DS Type
         blindStIndex = results[1]

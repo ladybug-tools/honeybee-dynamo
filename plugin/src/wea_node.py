@@ -8,7 +8,7 @@ except ImportError as e:
     raise ImportError('\nFailed to import honeybee:\n\t{}'.format(e))
 
 if _epwFile:
-    wea = Wea.fromEpwFile(_epwFile)
+    wea = Wea.from_epw_file(_epwFile)
 
 # assign outputs to OUT
 OUT = (wea,)

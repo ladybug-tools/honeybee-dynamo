@@ -9,7 +9,8 @@ except ImportError as e:
 
 if _name:
     _reflect_ = _reflect_ or 0.35
-    material = PlasticMaterial.bySingleReflectValue(_name, _reflect_, _spec_, _rough_)
+    material = PlasticMaterial.by_single_reflect_value(
+        _name, _reflect_, _spec_, _rough_)
 
 # assign outputs to OUT
 OUT = (material,)

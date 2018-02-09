@@ -9,7 +9,7 @@ except ImportError as e:
 
 
 if _testPoints:
-    analysisGrid = AnalysisGrid.fromPointsAndVectors(_testPoints, ptsVectors_,
+    analysisGrid = AnalysisGrid.from_points_and_vectors(_testPoints, ptsVectors_,
         _name_, wGroups_)
 
 # assign outputs to OUT

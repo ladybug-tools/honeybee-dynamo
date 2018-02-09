@@ -24,7 +24,7 @@ if _name and len(_geo)!=0 and _geo[0]!=None:
     _type_ = 5  # in the interface we use dynamic surfaces only for fenestration
     isTypeSetByUser = True
 
-    HBWinGroup = HBDynamicSurface.fromGeometry(
+    HBWinGroup = HBDynamicSurface.from_geometry(
         _name, _geo, _type_, isNameSetByUser, isTypeSetByUser, radProp_,
         epProp_, states_, group=True)
 

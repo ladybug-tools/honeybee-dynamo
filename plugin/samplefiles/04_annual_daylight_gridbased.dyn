@@ -1,4 +1,4 @@
-<Workspace Version="1.3.0.875" X="5.8296427476946" Y="382.958720429366" zoom="0.383460014644381" ScaleFactor="1" Name="Home" Description="" RunType="Manual" RunPeriod="1000" HasRunWithoutCrash="True">
+<Workspace Version="1.3.0.875" X="-223.036971590783" Y="375.887551794067" zoom="0.504022056295486" ScaleFactor="1" Name="Home" Description="" RunType="Manual" RunPeriod="1000" HasRunWithoutCrash="True">
   <NamespaceResolutionMap />
   <Elements>
     <CoreNodeModels.Input.BoolSelector guid="441dc5e1-47ec-4cd1-a6dd-b7fc96f215f9" type="CoreNodeModels.Input.BoolSelector" nickname="Boolean" x="63.0322754113512" y="282.918541682942" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="True" IsFrozen="false" isPinned="false">
@@ -46,7 +46,7 @@
     <Dynamo.Graph.Nodes.CustomNodes.Function guid="4a2a4f6a-3f41-440a-8de0-43210f89139d" type="Dynamo.Graph.Nodes.CustomNodes.Function" nickname="Generate Colors" x="3634.85693626516" y="260.445996388702" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false" isPinned="false">
       <PortInfo index="0" default="False" />
       <PortInfo index="1" default="True" />
-      <ID value="f8ec384e-4740-4fd7-99d4-38b1b17f7de1" />
+      <ID value="fc7f1dc1-3a79-4641-951f-3a79ba792c69" />
       <Name value="Generate Colors" />
       <Description value="Color a test surface based on the results of a study. The results structure should match the test points structure to be mapped correctly on the surface." />
       <Inputs>
@@ -83,7 +83,7 @@
       <PortInfo index="1" default="False" />
       <PortInfo index="2" default="True" />
       <PortInfo index="3" default="True" />
-      <ID value="c3cf0770-79db-4838-aca1-d68421d2ca1f" />
+      <ID value="f448873e-ec52-4548-a466-5eb3f8f5b5ee" />
       <Name value="Analysis Grid" />
       <Description value="Analysis Grid.&#xD;&#xA;-" />
       <Inputs>
@@ -105,7 +105,7 @@
       <PortInfo index="4" default="True" />
       <PortInfo index="5" default="False" />
       <PortInfo index="6" default="True" />
-      <ID value="b520d590-d076-49d5-b391-aa1d02b40600" />
+      <ID value="f0c1d13a-fa85-4560-95a4-8bb6a7c2f3ed" />
       <Name value="Run Radiance Analysis" />
       <Description value="Run Radiance Analysis&#xD;&#xA;-" />
       <Inputs>
@@ -135,7 +135,7 @@
       <PortInfo index="2" default="True" />
       <PortInfo index="3" default="True" />
       <PortInfo index="4" default="True" />
-      <ID value="465e2475-c863-4df1-b253-a3e9eb1e1a97" />
+      <ID value="5dba0011-38b7-43b0-899b-4eacf3ded277" />
       <Name value="Annual Daylight Recipe" />
       <Description value="Annual daylight analysis recipe.&#xD;&#xA;Use this recipe to set up annual daylight analysis for scenes with no&#xD;&#xA;window groups.&#xD;&#xA;-" />
       <Inputs>
@@ -156,7 +156,7 @@
       <PortInfo index="2" default="False" />
       <PortInfo index="3" default="True" />
       <PortInfo index="4" default="True" />
-      <ID value="ed591fbd-1179-4e08-8928-413f6b2345db" />
+      <ID value="d511f404-fba6-4ba8-8e0b-e1ca2f174da1" />
       <Name value="Sky Matrix" />
       <Description value="Sky Matrix.&#xD;&#xA;-" />
       <Inputs>
@@ -173,7 +173,7 @@
     </Dynamo.Graph.Nodes.CustomNodes.Function>
     <Dynamo.Graph.Nodes.CustomNodes.Function guid="0386fe82-9747-4ec8-9b22-655e0cadeea6" type="Dynamo.Graph.Nodes.CustomNodes.Function" nickname="Wea" x="579.713218186792" y="-427.918429709449" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false" isPinned="false">
       <PortInfo index="0" default="False" />
-      <ID value="6e8fd87a-99b8-4f0a-b52c-b05dcf1e0045" />
+      <ID value="69b9cbd1-25b0-4a00-9a6f-a1072608f040" />
       <Name value="Wea" />
       <Description value="epw2wea&#xD;&#xA;-" />
       <Inputs>
@@ -188,13 +188,13 @@
       <System.String>..\..\..\..\..\..\..\..\EnergyPlusV8-6-0\WeatherData\USA_CO_Golden-NREL.724666_TMY3.epw</System.String>
       <HintPath>C:\EnergyPlusV8-6-0\WeatherData\USA_CO_Golden-NREL.724666_TMY3.epw</HintPath>
     </CoreNodeModels.Input.Filename>
-    <Dynamo.Graph.Nodes.CustomNodes.Function guid="ce5a8e9d-05c9-4d39-bdd9-19b770b4d333" type="Dynamo.Graph.Nodes.CustomNodes.Function" nickname="Annual Daylight Metrics" x="3084.0402626963" y="-152.945309721275" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false" isPinned="false">
+    <Dynamo.Graph.Nodes.CustomNodes.Function guid="ce5a8e9d-05c9-4d39-bdd9-19b770b4d333" type="Dynamo.Graph.Nodes.CustomNodes.Function" nickname="Annual Daylight Metrics" x="3096.4121346298" y="-76.0629627059458" isVisible="true" isUpstreamVisible="true" lacing="Shortest" isSelectedInput="False" IsFrozen="false" isPinned="false">
       <PortInfo index="0" default="False" />
       <PortInfo index="1" default="True" />
       <PortInfo index="2" default="True" />
       <PortInfo index="3" default="True" />
       <PortInfo index="4" default="True" />
-      <ID value="cbfdaf47-1afe-4fbb-88f9-14b45c9a702b" />
+      <ID value="0a1c64be-8d1c-4e77-928c-02efb89497a0" />
       <Name value="Annual Daylight Metrics" />
       <Description value="Annual Daylight Metrics&#xD;&#xA;-" />
       <Inputs>
@@ -223,7 +223,7 @@
       <PortInfo index="2" default="True" />
       <PortInfo index="3" default="True" />
       <PortInfo index="4" default="True" />
-      <ID value="a8631835-d33b-447e-9eed-8b6ddaaedb6f" />
+      <ID value="695e3d7e-fe8e-46ec-b241-efc4d970ba2a" />
       <Name value="Spatial Daylight Autonomy" />
       <Description value="Calculate annual solar exposure (ASE).&#xD;&#xA;As per IES-LM-83-12 ASE is the percent of sensors that are&#xD;&#xA;found to be exposed to more than 1000lux of direct sunlight for&#xD;&#xA;more than 250hrs per year. For LEED credits no more than 10% of&#xD;&#xA;the points in the grid should fail this measure.&#xD;&#xA;-" />
       <Inputs>
@@ -231,11 +231,12 @@
         <Input value="blindStates_" />
         <Input value="_occSchedule_" />
         <Input value="_threshold_" />
-        <Input value="_targetArea_" />
+        <Input value="_targetDA_" />
       </Inputs>
       <Outputs>
         <Output value="sDA" />
-        <Output value="prblmHrs" />
+        <Output value="DA" />
+        <Output value="prblmPts" />
         <Output value="ERRReport" />
       </Outputs>
     </Dynamo.Graph.Nodes.CustomNodes.Function>
@@ -249,7 +250,7 @@
       <PortInfo index="3" default="True" />
       <PortInfo index="4" default="True" />
       <PortInfo index="5" default="True" />
-      <ID value="c8e5bd0f-1c5d-4e11-adb8-3f32a848e8f6" />
+      <ID value="bff1e59b-3d33-4b0c-97df-24f390775408" />
       <Name value="Annual Solar Exposure" />
       <Description value="Calculate annual solar exposure (ASE).&#xD;&#xA;As per IES-LM-83-12 ASE is the percent of sensors that are&#xD;&#xA;found to be exposed to more than 1000lux of direct sunlight for&#xD;&#xA;more than 250hrs per year. For LEED credits no more than 10% of&#xD;&#xA;the points in the grid should fail this measure.&#xD;&#xA;-" />
       <Inputs>
@@ -288,20 +289,20 @@
     <Dynamo.Graph.Connectors.ConnectorModel start="84438c58-34ee-46a5-a555-1d869d55c762" start_index="0" end="6bf86694-91a5-4c9e-9c2f-50438eef8f12" end_index="0" portType="0" />
     <Dynamo.Graph.Connectors.ConnectorModel start="80bf53ec-998b-4f35-b264-89b9b8b5a6b1" start_index="0" end="6d897f21-d7fa-4406-8feb-54cf3af3d1dd" end_index="1" portType="0" />
     <Dynamo.Graph.Connectors.ConnectorModel start="8e9de23e-6cbd-4922-b16d-88e95981bd98" start_index="1" end="ce5a8e9d-05c9-4d39-bdd9-19b770b4d333" end_index="0" portType="0" />
-    <Dynamo.Graph.Connectors.ConnectorModel start="8e9de23e-6cbd-4922-b16d-88e95981bd98" start_index="1" end="e06804fe-dfff-4555-9977-9554bd85dbae" end_index="0" portType="0" />
-    <Dynamo.Graph.Connectors.ConnectorModel start="8e9de23e-6cbd-4922-b16d-88e95981bd98" start_index="1" end="b6ed0ccb-f1f8-4819-abbf-224f64c33ca3" end_index="0" portType="0" />
     <Dynamo.Graph.Connectors.ConnectorModel start="1a06eac2-b735-4a8a-87cb-96a0bd32a4a7" start_index="0" end="8e9de23e-6cbd-4922-b16d-88e95981bd98" end_index="1" portType="0" />
     <Dynamo.Graph.Connectors.ConnectorModel start="a121ed28-8d12-46af-96ae-b04ad07c59dd" start_index="0" end="8e9de23e-6cbd-4922-b16d-88e95981bd98" end_index="6" portType="0" />
     <Dynamo.Graph.Connectors.ConnectorModel start="6d897f21-d7fa-4406-8feb-54cf3af3d1dd" start_index="0" end="8e9de23e-6cbd-4922-b16d-88e95981bd98" end_index="0" portType="0" />
     <Dynamo.Graph.Connectors.ConnectorModel start="2b46e64a-1471-4550-a842-3ebdf9f5466a" start_index="0" end="6d897f21-d7fa-4406-8feb-54cf3af3d1dd" end_index="0" portType="0" />
     <Dynamo.Graph.Connectors.ConnectorModel start="0386fe82-9747-4ec8-9b22-655e0cadeea6" start_index="0" end="2b46e64a-1471-4550-a842-3ebdf9f5466a" end_index="2" portType="0" />
     <Dynamo.Graph.Connectors.ConnectorModel start="31c198a4-21cb-41c8-b32c-70f049ec7876" start_index="0" end="0386fe82-9747-4ec8-9b22-655e0cadeea6" end_index="0" portType="0" />
-    <Dynamo.Graph.Connectors.ConnectorModel start="ce5a8e9d-05c9-4d39-bdd9-19b770b4d333" start_index="2" end="4a2a4f6a-3f41-440a-8de0-43210f89139d" end_index="0" portType="0" />
+    <Dynamo.Graph.Connectors.ConnectorModel start="ce5a8e9d-05c9-4d39-bdd9-19b770b4d333" start_index="0" end="4a2a4f6a-3f41-440a-8de0-43210f89139d" end_index="0" portType="0" />
     <Dynamo.Graph.Connectors.ConnectorModel start="ce5a8e9d-05c9-4d39-bdd9-19b770b4d333" start_index="5" end="09d9d3bc-3625-4ca8-a37c-2bd902c074ef" end_index="0" portType="0" />
     <Dynamo.Graph.Connectors.ConnectorModel start="09d9d3bc-3625-4ca8-a37c-2bd902c074ef" start_index="0" end="4a2a4f6a-3f41-440a-8de0-43210f89139d" end_index="1" portType="0" />
     <Dynamo.Graph.Connectors.ConnectorModel start="e06804fe-dfff-4555-9977-9554bd85dbae" start_index="0" end="f5a21932-147b-42c8-9074-cc566de52a11" end_index="0" portType="0" />
   </Connectors>
-  <Notes />
+  <Notes>
+    <Dynamo.Graph.Notes.NoteModel guid="1645f7d7-846f-400f-9a7e-58fb817f5834" text="This definition is using Honeybee and to run daylight analysis with Honeybee you need to install Radiance. Radiance can be downloaded and installed from this link:&#xD;&#xA;https://github.com/NREL/Radiance/releases/tag/5.2.0" x="567.971948952707" y="-563.499528515651" />
+  </Notes>
   <Annotations>
     <Dynamo.Graph.Annotations.AnnotationModel guid="0f94495b-03d9-42ae-a093-f37a0221a919" annotationText="This component fails for complex geometries. In those cases&#xD;&#xA;you can create the model surface by surface. You can also vote&#xD;&#xA;at the link below here so Autodesk opens up the Room API, so&#xD;&#xA;we can get the openings without failure!&#xD;&#xA;&#xD;&#xA;http://forums.autodesk.com/t5/revit-ideas/&#xD;&#xA;api-access-to-room-openings-geometry-and-materials-in-revit/&#xD;&#xA;idi-p/6642406" left="565.914494290537" top="43.8127214908534" width="686.163333333333" height="411.666666666667" fontSize="24" InitialTop="284.47938815752" InitialHeight="175" TextblockHeight="230.666666666667" backgrouund="#FFFFAA45">
       <Models ModelGuid="6bf86694-91a5-4c9e-9c2f-50438eef8f12" />
@@ -309,6 +310,6 @@
   </Annotations>
   <Presets />
   <Cameras>
-    <Camera Name="Background Preview" eyeX="5018.41834319422" eyeY="17432.9326934489" eyeZ="5716.89646058116" lookX="-6699.94021611805" lookY="-17056.3164574852" lookZ="-6180.22561888589" upX="-0.558929195366198" upY="0.649448020235626" upZ="-0.515572989798832" />
+    <Camera Name="Background Preview" eyeX="6707.77654381933" eyeY="15410.2809651791" eyeZ="8230.93473776591" lookX="-8389.29851647558" lookY="-15033.6637776791" lookZ="-8694.26383932841" upX="-0.435411793777907" upY="0.778973291654855" upZ="-0.451239705928625" />
   </Cameras>
 </Workspace>

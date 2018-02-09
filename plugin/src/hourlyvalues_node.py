@@ -22,13 +22,20 @@ if _analysisGrid:
             raise TypeError('Failed to read blindState_:\n{}'.format(e))
         states = None
     
-    print('Loading {} values for {}.'.format(_modes[_mode_], DateTime.fromHoy(hoy_)))
     
     if _mode_ < 2:
-        values = (v[_mode_] for v in _analysisGrid.combinedValueById(hoy_, states))
+        values = (v[_mode_] for v in _analysisGrid.combined_value_by_id(hoy_, states))
+        if _mode_ != 0 and not _analysisGrid.has_direct_values:
+                print('Direct values are not available. Results will be 0.')
     else:
-        cValues = _analysisGrid.combinedValueById(hoy_, states)
-        values = (v[0] - v[1] for v in cValues)
+        cValues = tuple(_analysisGrid.combined_value_by_id(hoy_, states))
+        if _analysisGrid.has_direct_values:
+            print('Loading {} values for {}.'.format(_modes[_mode_],
+                                                     DateTime.from_hoy(hoy_)))
+            values = (v[0] - v[1] for v in cValues)
+        else:
+            print('Loading total values for {}.'.format(DateTime.from_hoy(hoy_)))
+            values = (v[0] for v in cValues)
 
 # assign outputs to OUT
 OUT = (values,)
