@@ -47,7 +47,7 @@ else:
       <Symbol value="//Test point distance from base surface. Default is set to 0.01&#xD;&#xA;_disFromSurface_: double = 0.01;" />
     </Dynamo.Graph.Nodes.CustomNodes.Symbol>
     <Dynamo.Graph.Nodes.CustomNodes.Symbol guid="7b513a97-f86b-4a3b-820c-27260c17741b" type="Dynamo.Graph.Nodes.CustomNodes.Symbol" nickname="Input" x="247.692234266326" y="369.579112430488" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="True" IsFrozen="false" isPinned="false">
-      <Symbol value="//List of borders of test surfaces as polygons&#xD;&#xA;//Borders are used to filter test points&#xD;&#xA;_borders: var[]..[] = {{}};" />
+      <Symbol value="//List of borders of test surfaces as polygons&#xD;&#xA;//Borders are used to filter test points&#xD;&#xA;_borders: var[]..[];" />
     </Dynamo.Graph.Nodes.CustomNodes.Symbol>
     <Dynamo.Graph.Nodes.CustomNodes.Output guid="6bd6432a-cbec-4011-b53c-d154180e2593" type="Dynamo.Graph.Nodes.CustomNodes.Output" nickname="Output" x="1436.85660346308" y="123.937695424779" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" isPinned="false">
       <PortInfo index="0" default="False" />
