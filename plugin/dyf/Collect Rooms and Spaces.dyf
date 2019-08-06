@@ -1,60 +1,259 @@
-<Workspace Version="1.0.0.1180" X="77.1041474094356" Y="185.290610426362" zoom="0.63524834044862" Name="Collect Rooms and Spaces" Description="Collect rooms and MEP spaces in the Revit document.&#xD;&#xA;&#xD;&#xA;Use &quot;Rooms to HBZones&quot; node to convert them to Honeybee zones." ID="d5ab273a-33be-4b0a-9070-c6c03d4d2790" Category="Honeybee.Revit">
-  <NamespaceResolutionMap>
-    <ClassMap partialName="List" resolvedName="DSCore.List" assemblyName="DSCoreNodes.dll" />
-  </NamespaceResolutionMap>
-  <Elements>
-    <PythonNodeModels.PythonNode guid="fb6dc694-1948-45c0-8cdd-371faaf5a17f" type="PythonNodeModels.PythonNode" nickname="Python Script" x="383.46912859972" y="0.895180884639899" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" isPinned="false" inputcount="1">
-      <Script>import clr
-clr.AddReference("RevitAPI")
-from Autodesk.Revit.DB import FilteredElementCollector, BuiltInCategory
-
-clr.AddReference("RevitServices")
-from RevitServices.Persistence import DocumentManager
-
-def collectRooms(document=None):
-    """Collect all the rooms in the current Revit document."""
-    if not document:
-        document = DocumentManager.Instance.CurrentDBDocument
-    collector = FilteredElementCollector(document)
-    collector.OfCategory(BuiltInCategory.OST_Rooms)
-    roomIter = collector.GetElementIdIterator()
-    roomIter.Reset()
-    return tuple(document.GetElement(elId) for elId in roomIter)
-
-
-def collectMEPSpaces(document=None):
-    """Collect all the spaces in the current Revit document."""
-    if not document:
-        document = DocumentManager.Instance.CurrentDBDocument
-    collector = FilteredElementCollector(document)
-    collector.OfCategory(BuiltInCategory.OST_MEPSpaces)
-    roomIter = collector.GetElementIdIterator()
-    roomIter.Reset()
-    return tuple(document.GetElement(elId) for elId in roomIter)
-    
-
-if IN[0]:
-	doc = DocumentManager.Instance.CurrentDBDocument
-	OUT = collectRooms(doc), collectMEPSpaces(doc)</Script>
-    </PythonNodeModels.PythonNode>
-    <Dynamo.Graph.Nodes.CustomNodes.Symbol guid="2214d4e4-958e-4a2d-9ebb-933079328af4" type="Dynamo.Graph.Nodes.CustomNodes.Symbol" nickname="Input" x="-36.4553223523516" y="1.55333427210903" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="True" IsFrozen="false" isPinned="false">
-      <Symbol value="//Set to True to collect rooms and spaces.&#xD;&#xA;_collect: bool = false;" />
-    </Dynamo.Graph.Nodes.CustomNodes.Symbol>
-    <Dynamo.Graph.Nodes.CodeBlockNodeModel guid="95f5f198-1ffc-4229-ac65-28d7cacb50d3" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" nickname="Code Block" x="530.837442567021" y="4.86096302384703" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" isPinned="false" CodeText="out[0];&#xA;out[1];" ShouldFocus="false" />
-    <Dynamo.Graph.Nodes.CustomNodes.Output guid="bf33234a-0d4e-4294-a506-66d7f21fbe82" type="Dynamo.Graph.Nodes.CustomNodes.Output" nickname="Output" x="737.134070337305" y="-40.7542859356487" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" isPinned="false">
-      <Symbol value="//List of rooms&#xD;&#xA;rooms" />
-    </Dynamo.Graph.Nodes.CustomNodes.Output>
-    <Dynamo.Graph.Nodes.CustomNodes.Output guid="5ed16f4a-d953-4e62-8ba3-41fa112699c5" type="Dynamo.Graph.Nodes.CustomNodes.Output" nickname="Output" x="735.376863446696" y="24.584670422802" isVisible="true" isUpstreamVisible="true" lacing="Disabled" isSelectedInput="False" IsFrozen="false" isPinned="false">
-      <Symbol value="//List of spaces&#xD;&#xA;spaces" />
-    </Dynamo.Graph.Nodes.CustomNodes.Output>
-  </Elements>
-  <Connectors>
-    <Dynamo.Graph.Connectors.ConnectorModel start="fb6dc694-1948-45c0-8cdd-371faaf5a17f" start_index="0" end="95f5f198-1ffc-4229-ac65-28d7cacb50d3" end_index="0" portType="0" />
-    <Dynamo.Graph.Connectors.ConnectorModel start="2214d4e4-958e-4a2d-9ebb-933079328af4" start_index="0" end="fb6dc694-1948-45c0-8cdd-371faaf5a17f" end_index="0" portType="0" />
-    <Dynamo.Graph.Connectors.ConnectorModel start="95f5f198-1ffc-4229-ac65-28d7cacb50d3" start_index="0" end="bf33234a-0d4e-4294-a506-66d7f21fbe82" end_index="0" portType="0" />
-    <Dynamo.Graph.Connectors.ConnectorModel start="95f5f198-1ffc-4229-ac65-28d7cacb50d3" start_index="1" end="5ed16f4a-d953-4e62-8ba3-41fa112699c5" end_index="0" portType="0" />
-  </Connectors>
-  <Notes />
-  <Annotations />
-  <Presets />
-</Workspace>
+{
+  "Uuid": "d5ab273a-33be-4b0a-9070-c6c03d4d2790",
+  "IsCustomNode": true,
+  "Category": "Honeybee.Revit",
+  "Description": "Collect rooms and MEP spaces in the Revit document.\r\n\r\nUse \"Rooms to HBZones\" node to convert them to Honeybee zones.",
+  "Name": "Collect Rooms and Spaces",
+  "ElementResolver": {
+    "ResolutionMap": {
+      "List": {
+        "Key": "DSCore.List",
+        "Value": "DSCoreNodes.dll"
+      }
+    }
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "import clr\r\nclr.AddReference(\"RevitAPI\")\r\nfrom Autodesk.Revit.DB import FilteredElementCollector, BuiltInCategory\r\n\r\nclr.AddReference(\"RevitServices\")\r\nfrom RevitServices.Persistence import DocumentManager\r\n\r\ndef collectRooms(document=None):\r\n    \"\"\"Collect all the rooms in the current Revit document.\"\"\"\r\n    if not document:\r\n        document = DocumentManager.Instance.CurrentDBDocument\r\n    collector = FilteredElementCollector(document)\r\n    collector.OfCategory(BuiltInCategory.OST_Rooms)\r\n    roomIter = collector.GetElementIdIterator()\r\n    roomIter.Reset()\r\n    return tuple(document.GetElement(elId) for elId in roomIter)\r\n\r\n\r\ndef collectMEPSpaces(document=None):\r\n    \"\"\"Collect all the spaces in the current Revit document.\"\"\"\r\n    if not document:\r\n        document = DocumentManager.Instance.CurrentDBDocument\r\n    collector = FilteredElementCollector(document)\r\n    collector.OfCategory(BuiltInCategory.OST_MEPSpaces)\r\n    roomIter = collector.GetElementIdIterator()\r\n    roomIter.Reset()\r\n    return tuple(document.GetElement(elId) for elId in roomIter)\r\n    \r\n\r\nif IN[0]:\r\n\tdoc = DocumentManager.Instance.CurrentDBDocument\r\n\tOUT = collectRooms(doc), collectMEPSpaces(doc)",
+      "VariableInputPorts": true,
+      "Id": "fb6dc694194845c08cdd371faaf5a17f",
+      "Inputs": [
+        {
+          "Id": "c23b7db2e5284fa6a80dc8c1a96139cb",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "7710fff725844da69d1b7ab6766db759",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "NodeType": "InputNode",
+      "Parameter": {
+        "Name": "_collect",
+        "TypeName": "bool",
+        "TypeRank": 0,
+        "DefaultValue": "false",
+        "Description": "Set to True to collect rooms and spaces."
+      },
+      "Id": "2214d4e4958e4a2d9ebb933079328af4",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "bf6c43412d7c4a34afdf44016f327737",
+          "Name": "",
+          "Description": "Symbol",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "NodeType": "CodeBlockNode",
+      "Code": "out[0];\nout[1];",
+      "Id": "95f5f1981ffc4229ac6528d7cacb50d3",
+      "Inputs": [
+        {
+          "Id": "03f297c88f3640079e30292cbdad36dd",
+          "Name": "out",
+          "Description": "out",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "8a899c1add094c0186a3cec3be9108d4",
+          "Name": "",
+          "Description": "Value of expression at line 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "a16c9fe0d69543c7a4d3e8d387fd638d",
+          "Name": "",
+          "Description": "Value of expression at line 2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Output, DynamoCore",
+      "NodeType": "OutputNode",
+      "ElementResolver": null,
+      "Symbol": "//List of rooms\r\nrooms",
+      "Id": "bf33234a0d4e4294a50666d7f21fbe82",
+      "Inputs": [
+        {
+          "Id": "f9a03f99781741359deb3b148ccd75ed",
+          "Name": "",
+          "Description": "",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [],
+      "Replication": "Disabled",
+      "Description": "A function output, use with custom nodes"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Output, DynamoCore",
+      "NodeType": "OutputNode",
+      "ElementResolver": null,
+      "Symbol": "//List of spaces\r\nspaces",
+      "Id": "5ed16f4ad9534e628ba341fa112699c5",
+      "Inputs": [
+        {
+          "Id": "005f6440f9954a6090c6900e8ad60e02",
+          "Name": "",
+          "Description": "",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [],
+      "Replication": "Disabled",
+      "Description": "A function output, use with custom nodes"
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "7710fff725844da69d1b7ab6766db759",
+      "End": "03f297c88f3640079e30292cbdad36dd",
+      "Id": "f4cec08f4c254b4c9a2875f9b13b2044"
+    },
+    {
+      "Start": "bf6c43412d7c4a34afdf44016f327737",
+      "End": "c23b7db2e5284fa6a80dc8c1a96139cb",
+      "Id": "2b2fa290c5f1429a98eecc1585d86c4f"
+    },
+    {
+      "Start": "8a899c1add094c0186a3cec3be9108d4",
+      "End": "f9a03f99781741359deb3b148ccd75ed",
+      "Id": "6d54ad00ab53468ebdcf43c15becf3c9"
+    },
+    {
+      "Start": "a16c9fe0d69543c7a4d3e8d387fd638d",
+      "End": "005f6440f9954a6090c6900e8ad60e02",
+      "Id": "d283a0dcbf6147c391a6d74546d68b3b"
+    }
+  ],
+  "Dependencies": [],
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": false,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.0.3.8810",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": -34.0,
+      "EyeY": -34.0,
+      "EyeZ": 21.190000534057617,
+      "LookX": -14.1899995803833,
+      "LookY": -43.060001373291016,
+      "LookZ": -41.650001525878906,
+      "UpX": -0.17000000178813934,
+      "UpY": 0.85000002384185791,
+      "UpZ": -0.5
+    },
+    "NodeViews": [
+      {
+        "Id": "fb6dc694194845c08cdd371faaf5a17f",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "Python Script",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 383.46912859972,
+        "Y": 0.895180884639899
+      },
+      {
+        "Id": "2214d4e4958e4a2d9ebb933079328af4",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "Input",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": -36.4553223523516,
+        "Y": 1.55333427210903
+      },
+      {
+        "Id": "95f5f1981ffc4229ac6528d7cacb50d3",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "Code Block",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 530.837442567021,
+        "Y": 4.86096302384703
+      },
+      {
+        "Id": "bf33234a0d4e4294a50666d7f21fbe82",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "Output",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 737.134070337305,
+        "Y": -40.7542859356487
+      },
+      {
+        "Id": "5ed16f4ad9534e628ba341fa112699c5",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "Output",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 735.376863446696,
+        "Y": 24.584670422802
+      }
+    ],
+    "Annotations": [],
+    "X": 77.1041474094356,
+    "Y": 185.290610426362,
+    "Zoom": 0.63524834044862
+  }
+}

@@ -1,195 +1,830 @@
-<Workspace Category="Honeybee.00 :: Create" Description="Honeybee View.
--" ID="7809960b-7cc8-4165-ad13-3d8ee7c6054c" Name="View" Version="1.2.0.2690" X="400" Y="-100" zoom="0.5">
-  <NamespaceResolutionMap/>
-  <Elements>
-    <Dynamo.Graph.Nodes.CodeBlockNodeModel CodeText="&quot;Honeybee&quot;;&#xA;&quot;view_node.py&quot;;" ShouldFocus="false" guid="30c9d656-5d43-441b-a1ac-b090417b0d93" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="input python script" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" x="-750" y="390"/>
-    <PythonNodeModels.PythonNode guid="bacb236b-7cd1-45ae-b3c6-9b6e12c696ec" inputcount="2" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="import and prepare py code" type="PythonNodeModels.PythonNode" x="-355" y="385">
-      <PortInfo default="false" index="0"/>
-      <PortInfo default="false" index="1"/>
-      <Script>
-        
-&quot;&quot;&quot;Find packages from Dynamo folder and prepare the code.&quot;&quot;&quot;
-import clr
-from System import AppDomain, Environment, IO
-
-def tryGetPluginPath(plugin):
-    &quot;&quot;&quot;Try to get path to plugin folder.&quot;&quot;&quot;
-    clr.AddReference('ProtoGeometry')
-    _loc = tuple(a.Location
-                 for a in AppDomain.CurrentDomain.GetAssemblies()
-                 if 'ProtoGeometry' in a.FullName)
-
-    try:
-        _ver = float(_loc[0].split('\\')[-2])
-    except:
-        _ver = float(_loc[0].split('\\')[-2].split(' ')[-1])
-
-    assert _ver &gt;= 1.2, 'You need Dynamo 1.2 or higher to use this plugin!'
-
-    _appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)
-    _dynamoPath = '%s\\%.1f' % (('\\').join(_loc[0].split('\\')[-4:-2]), float(_loc[0].split('\\')[-2]))
-    # if the assembly is cached put Revit folder first, and then try to load it from core
-    _dynamoPaths = (_dynamoPath.replace('Dynamo Core', 'Dynamo Revit'),
-                    _dynamoPath.replace('Dynamo Revit', 'Dynamo Core'))
-    _settingsFilename = 'DynamoSettings.xml'
-
-    pkf = []
-    for path in _dynamoPaths:
-        settingsFile = IO.Path.Combine(_appdata, path, _settingsFilename)
-        if IO.File.Exists(settingsFile):
-            with open(settingsFile, 'rb') as outf:
-                for line in outf:
-                    if line.strip().startswith('&lt;CustomPackageFolders&gt;'):
-                        for l in outf:
-                            if l.strip().startswith('&lt;/CustomPackageFolders&gt;'):
-                                break
-                            else:
-                                pkf.append(l.replace('&lt;/string&gt;', '').replace('&lt;string&gt;', '').strip())
-
-    for p in pkf:
-        pp = IO.Path.Combine(p, 'packages', plugin, 'extra')
-        # In case of custom folders user may put honeybee under the root folder
-        ppp = IO.Path.Combine(p, plugin, 'extra')
-        if IO.Directory.Exists(pp):
-            return pp
-        elif IO.Directory.Exists(ppp):
-            return ppp
-
-
-try:
-    plugin, filename = IN
-
-    p = tryGetPluginPath(plugin)
-
-    if not p:
-        raise ImportError('{} is not installed! Install it from package manager.'.format(plugin))
-
-	# import the file and wrap it into sys.append
-    f = IO.Path.Combine(p, 'nodesrc', filename)
-    with open(f, 'rb') as inf:
-        source = '    '.join(inf.readlines())
-
-    header = 'try:\n    import sys\n' + \
-        '    sys.path.append(r\'{}\')\n\n'.format(p) + \
-        '    sys.path.append(r\'C:\Program Files (x86)\IronPython 2.7\Lib\')\n\n' + \
-        '    '
-
-    footer = '\nexcept Exception, e:\n' + \
-        '    import traceback\n' + \
-        '    OUT = &quot;ERROR:\\n\\t{}&quot;.format(str(e)) + \\\n' + \
-        '    &quot;\\n\\nIf you think this is a bug submit an issue on github.\\n&quot; + \\\n' + \
-        '    &quot;https://github.com/ladybug-tools/honeybee-dynamo/issues\\n&quot; +  \\\n' + \
-        '    &quot;and include below error message:\\n\\n&quot; + \\\n' + \
-        '    &quot;{}&quot;.format(traceback.format_exc())\n'
-
-    OUT = header + source + footer
-
-except Exception, e:
-    import sys
-    sys.path.append(r'C:\Program Files (x86)\IronPython 2.7\Lib')
-    import traceback
-    OUT = &quot;ERROR:\n\t{}&quot;.format(str(e)) + \
-        &quot;\n\nIf you think this is a bug submit an issue on github.\n&quot; + \
-        &quot;https://github.com/ladybug-tools/honeybee-dynamo/issues\n&quot; +  \
-        &quot;and include below error message:\n\n&quot; + \
-        &quot;{}&quot;.format(traceback.format_exc())
-
-      </Script>
-    </PythonNodeModels.PythonNode>
-    <PythonNodeModels.PythonStringNode guid="c729765e-85bc-4835-8678-76f41989ded1" inputcount="10" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="core" type="PythonNodeModels.PythonStringNode" x="-75" y="460">
-      <PortInfo default="false" index="0"/>
-      <PortInfo default="false" index="1"/>
-      <PortInfo default="false" index="2"/>
-      <PortInfo default="false" index="3"/>
-      <PortInfo default="false" index="4"/>
-      <PortInfo default="false" index="5"/>
-      <PortInfo default="false" index="6"/>
-      <PortInfo default="false" index="7"/>
-      <PortInfo default="false" index="8"/>
-      <PortInfo default="false" index="9"/>
-    </PythonNodeModels.PythonStringNode>
-    <Dynamo.Graph.Nodes.CustomNodes.Symbol guid="0832c1c4-ecb7-44b6-9c12-5cb9c72ec1f0" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="_name" type="Dynamo.Graph.Nodes.CustomNodes.Symbol" x="-750" y="475">
-      <Symbol value="// View name.&#xD;&#xA;_name: var;"/>
-    </Dynamo.Graph.Nodes.CustomNodes.Symbol>
-    <Dynamo.Graph.Nodes.CustomNodes.Symbol guid="95ce2823-6c8c-4cee-82df-76649f21e62e" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="_vLocation" type="Dynamo.Graph.Nodes.CustomNodes.Symbol" x="-750" y="570">
-      <Symbol value="// Set the view point (-vp) to (x, y, z). This is the focal&#xD;&#xA;// point of a perspective view or the center of a parallel projection.&#xD;&#xA;_vLocation: Autodesk.Point;"/>
-    </Dynamo.Graph.Nodes.CustomNodes.Symbol>
-    <Dynamo.Graph.Nodes.CustomNodes.Symbol guid="fb4cd32c-5415-4c39-baab-86164646cffd" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="_vDirection" type="Dynamo.Graph.Nodes.CustomNodes.Symbol" x="-750" y="665">
-      <Symbol value="// Set the view direction (-vd) vector to (x, y, z). The&#xD;&#xA;// length of this vector indicates the focal distance as needed by&#xD;&#xA;// the pixle depth of field (-pd) in rpict. Default: (0, 0, 1)&#xD;&#xA;_vDirection: Autodesk.Vector;"/>
-    </Dynamo.Graph.Nodes.CustomNodes.Symbol>
-    <Dynamo.Graph.Nodes.CustomNodes.Symbol guid="8ca0ed6d-bf38-4117-a724-3763e873a7c0" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="_vUpVector_" type="Dynamo.Graph.Nodes.CustomNodes.Symbol" x="-750" y="760">
-      <Symbol value="// Set the view up (-vu) vector (vertical direction) to (x, y, z).&#xD;&#xA;_vUpVector_: Autodesk.Vector = Autodesk.Vector.ByCoordinates(0,0,1);"/>
-    </Dynamo.Graph.Nodes.CustomNodes.Symbol>
-    <Dynamo.Graph.Nodes.CustomNodes.Symbol guid="562a4c69-87b6-4d89-8c68-bfc84bf9ce8f" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="_viewType_" type="Dynamo.Graph.Nodes.CustomNodes.Symbol" x="-750" y="855">
-      <Symbol value="// Set view type (-vt) to one of the choices below.&#xD;&#xA;// 0 Perspective (v)&#xD;&#xA;// 1 Hemispherical fisheye (h)&#xD;&#xA;// 2 Parallel (l)&#xD;&#xA;// 3 Cylindrical panorma (c)&#xD;&#xA;// 4 Angular fisheye (a)&#xD;&#xA;// 5 Planisphere [stereographic] projection (s)&#xD;&#xA;// For more detailed description about view types check rpict manual&#xD;&#xA;_viewType_: int = 0;"/>
-    </Dynamo.Graph.Nodes.CustomNodes.Symbol>
-    <Dynamo.Graph.Nodes.CustomNodes.Symbol guid="4f683bbc-423e-4263-8bac-f8565a29f2e4" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="_hViewAngle_" type="Dynamo.Graph.Nodes.CustomNodes.Symbol" x="-750" y="950">
-      <Symbol value="// Set the view horizontal size (-vs). For a perspective&#xD;&#xA;// projection (including fisheye views), val is the horizontal field&#xD;&#xA;// of view (in degrees). For a parallel projection, val is the view&#xD;&#xA;// width in world coordinates.&#xD;&#xA;_hViewAngle_: double = 45;"/>
-    </Dynamo.Graph.Nodes.CustomNodes.Symbol>
-    <Dynamo.Graph.Nodes.CustomNodes.Symbol guid="3e0f6724-1dd8-4684-9379-ac31a28d9c41" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="_vViewAngle_" type="Dynamo.Graph.Nodes.CustomNodes.Symbol" x="-750" y="1045">
-      <Symbol value="// Set the view vertical size (-vv). For a perspective&#xD;&#xA;// projection (including fisheye views), val is the horizontal field&#xD;&#xA;// of view (in degrees). For a parallel projection, val is the view&#xD;&#xA;// width in world coordinates.&#xD;&#xA;_vViewAngle_: double = 45;"/>
-    </Dynamo.Graph.Nodes.CustomNodes.Symbol>
-    <Dynamo.Graph.Nodes.CustomNodes.Symbol guid="73803d9d-0265-421d-bed0-2b2916183fad" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="_xResolution_" type="Dynamo.Graph.Nodes.CustomNodes.Symbol" x="-750" y="1140">
-      <Symbol value="// Set the maximum x resolution (-x) to an integer.&#xD;&#xA;_xResolution_: int = 420;"/>
-    </Dynamo.Graph.Nodes.CustomNodes.Symbol>
-    <Dynamo.Graph.Nodes.CustomNodes.Symbol guid="dcf1c14d-3f11-4d05-b27c-996ec589271f" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="_yResolution_" type="Dynamo.Graph.Nodes.CustomNodes.Symbol" x="-750" y="1235">
-      <Symbol value="// Set the maximum y resolution (-y) to an integer.&#xD;&#xA;_yResolution_: int = 420;"/>
-    </Dynamo.Graph.Nodes.CustomNodes.Symbol>
-    <Dynamo.Graph.Nodes.CodeBlockNodeModel CodeText="out[0];" ShouldFocus="false" guid="c8d706d7-8018-441d-b78e-fe38d60473cf" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="decompose outputs" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" x="150" y="515"/>
-    <Dynamo.Graph.Nodes.CustomNodes.Output guid="5c1b6ba3-a104-46e9-b430-15ab44e0103f" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="view" type="Dynamo.Graph.Nodes.CustomNodes.Output" x="380" y="475">
-      <Symbol value="// Honeybee view.&#xD;&#xA;view;"/>
-      <PortInfo default="false" index="0"/>
-    </Dynamo.Graph.Nodes.CustomNodes.Output>
-    <PythonNodeModels.PythonNode guid="8a7e33a5-594f-4cd0-9b40-a604f8ff9af2" inputcount="2" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="Error report" type="PythonNodeModels.PythonNode" x="150" y="380">
-      <PortInfo default="false" index="0"/>
-      <PortInfo default="false" index="1"/>
-      <Script>
-        
-&quot;&quot;&quot;Report errors&quot;&quot;&quot;
-importErr, runErr = IN
-errors = []
-
-if importErr and str(importErr).startswith(&quot;ERROR:&quot;):
-    errors.append(importErr)
-
-if runErr and str(runErr).startswith(&quot;ERROR:&quot;):
-    errors.append(runErr)
-
-if len(errors)==0:
-    OUT = &quot;All good! Vvizzzz.&quot;
-else:
-    OUT = &quot;\n&quot;.join(errors)
-
-      </Script>
-    </PythonNodeModels.PythonNode>
-    <Dynamo.Graph.Nodes.CustomNodes.Output guid="45aeca7b-b051-4b89-a9e7-d7193ae91462" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="ERRReport" type="Dynamo.Graph.Nodes.CustomNodes.Output" x="380" y="380">
-      <Symbol value="// Report&#xD;&#xA;ERRReport;"/>
-      <PortInfo default="false" index="0"/>
-    </Dynamo.Graph.Nodes.CustomNodes.Output>
-  </Elements>
-  <Connectors>
-    <Dynamo.Graph.Connectors.ConnectorModel end="bacb236b-7cd1-45ae-b3c6-9b6e12c696ec" end_index="0" portType="0" start="30c9d656-5d43-441b-a1ac-b090417b0d93" start_index="0"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="bacb236b-7cd1-45ae-b3c6-9b6e12c696ec" end_index="1" portType="0" start="30c9d656-5d43-441b-a1ac-b090417b0d93" start_index="1"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="c729765e-85bc-4835-8678-76f41989ded1" end_index="0" portType="0" start="bacb236b-7cd1-45ae-b3c6-9b6e12c696ec" start_index="0"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="c729765e-85bc-4835-8678-76f41989ded1" end_index="1" portType="0" start="0832c1c4-ecb7-44b6-9c12-5cb9c72ec1f0" start_index="0"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="c729765e-85bc-4835-8678-76f41989ded1" end_index="2" portType="0" start="95ce2823-6c8c-4cee-82df-76649f21e62e" start_index="0"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="c729765e-85bc-4835-8678-76f41989ded1" end_index="3" portType="0" start="fb4cd32c-5415-4c39-baab-86164646cffd" start_index="0"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="c729765e-85bc-4835-8678-76f41989ded1" end_index="4" portType="0" start="8ca0ed6d-bf38-4117-a724-3763e873a7c0" start_index="0"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="c729765e-85bc-4835-8678-76f41989ded1" end_index="5" portType="0" start="562a4c69-87b6-4d89-8c68-bfc84bf9ce8f" start_index="0"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="c729765e-85bc-4835-8678-76f41989ded1" end_index="6" portType="0" start="4f683bbc-423e-4263-8bac-f8565a29f2e4" start_index="0"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="c729765e-85bc-4835-8678-76f41989ded1" end_index="7" portType="0" start="3e0f6724-1dd8-4684-9379-ac31a28d9c41" start_index="0"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="c729765e-85bc-4835-8678-76f41989ded1" end_index="8" portType="0" start="73803d9d-0265-421d-bed0-2b2916183fad" start_index="0"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="c729765e-85bc-4835-8678-76f41989ded1" end_index="9" portType="0" start="dcf1c14d-3f11-4d05-b27c-996ec589271f" start_index="0"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="c8d706d7-8018-441d-b78e-fe38d60473cf" end_index="0" portType="0" start="c729765e-85bc-4835-8678-76f41989ded1" start_index="0"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="5c1b6ba3-a104-46e9-b430-15ab44e0103f" end_index="0" portType="0" start="c8d706d7-8018-441d-b78e-fe38d60473cf" start_index="0"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="8a7e33a5-594f-4cd0-9b40-a604f8ff9af2" end_index="0" portType="0" start="bacb236b-7cd1-45ae-b3c6-9b6e12c696ec" start_index="0"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="8a7e33a5-594f-4cd0-9b40-a604f8ff9af2" end_index="1" portType="0" start="c729765e-85bc-4835-8678-76f41989ded1" start_index="0"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="45aeca7b-b051-4b89-a9e7-d7193ae91462" end_index="0" portType="0" start="8a7e33a5-594f-4cd0-9b40-a604f8ff9af2" start_index="0"/>
-  </Connectors>
-  <Notes/>
-  <Annotations/>
-  <Presets/>
-  <Cameras>
-    <Camera Name="Background Preview" eyeX="-34.00" eyeY="-34.00" eyeZ="21.19" lookX="-14.19" lookY="-43.06" lookZ="-41.65" upX="-0.17" upY="0.85" upZ="-0.50"/>
-  </Cameras>
-</Workspace>
+{
+  "Uuid": "7809960b-7cc8-4165-ad13-3d8ee7c6054c",
+  "IsCustomNode": true,
+  "Category": "Honeybee.00 :: Create",
+  "Description": "Honeybee View.\r\n-",
+  "Name": "View",
+  "ElementResolver": {
+    "ResolutionMap": {
+      "Autodesk.Point": {
+        "Key": "Autodesk.DesignScript.Geometry.Point",
+        "Value": "ProtoGeometry.dll"
+      },
+      "Autodesk.Vector": {
+        "Key": "Autodesk.DesignScript.Geometry.Vector",
+        "Value": "ProtoGeometry.dll"
+      },
+      "Autodesk.DesignScript.Geometry.Vector": {
+        "Key": "Autodesk.DesignScript.Geometry.Vector",
+        "Value": "ProtoGeometry.dll"
+      }
+    }
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "NodeType": "CodeBlockNode",
+      "Code": "\"Honeybee\";\n\"view_node.py\";",
+      "Id": "30c9d6565d43441ba1acb090417b0d93",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "5c332b2ca08a4387a03d6a3c92335639",
+          "Name": "",
+          "Description": "Value of expression at line 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "918d807d046f4abf908aaef3307d03e1",
+          "Name": "",
+          "Description": "Value of expression at line 2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly"
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "\r\n        \r\n\"\"\"Find packages from Dynamo folder and prepare the code.\"\"\"\r\nimport clr\r\nfrom System import AppDomain, Environment, IO\r\nfrom System.Reflection import Assembly\r\n\r\ndef tryGetPluginPath(plugin):\r\n    \"\"\"Try to get path to plugin folder.\"\"\"\r\n    dynamo = Assembly.Load('DynamoCore')\r\n    dynamoV = dynamo.GetName().Version.ToString().split('.')\r\n    _ver = float(dynamoV[0] + '.' + dynamoV[1])\r\n\r\n    assert _ver >= 1.2, 'You need Dynamo 1.2 or higher to use this plugin!'\r\n\r\n    _appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)\r\n    _dynamoPath = '%s\\\\%s\\\\%.1f' % ('Dynamo', 'Dynamo Core', _ver)\r\n    # if the assembly is cached put Revit folder first, and then try to load it from core\r\n    _dynamoPaths = (_dynamoPath.replace('Dynamo Core', 'Dynamo Revit'),\r\n                    _dynamoPath.replace('Dynamo Revit', 'Dynamo Core'))\r\n    _settingsFilename = 'DynamoSettings.xml'\r\n\r\n    pkf = []\r\n    for path in _dynamoPaths:\r\n        settingsFile = IO.Path.Combine(_appdata, path, _settingsFilename)\r\n        if IO.File.Exists(settingsFile):\r\n            with open(settingsFile, 'rb') as outf:\r\n                for line in outf:\r\n                    if line.strip().startswith('<CustomPackageFolders>'):\r\n                        for l in outf:\r\n                            if l.strip().startswith('</CustomPackageFolders>'):\r\n                                break\r\n                            else:\r\n                                pkf.append(l.replace('</string>', '').replace('<string>', '').strip())\r\n\r\n    for p in pkf:\r\n        pp = IO.Path.Combine(p, 'packages', plugin, 'extra')\r\n        # In case of custom folders user may put honeybee under the root folder\r\n        ppp = IO.Path.Combine(p, plugin, 'extra')\r\n        if IO.Directory.Exists(pp):\r\n            return pp\r\n        elif IO.Directory.Exists(ppp):\r\n            return ppp\r\n\r\n\r\ntry:\r\n    plugin, filename = IN\r\n\r\n    p = tryGetPluginPath(plugin)\r\n\r\n    if not p:\r\n        raise ImportError('{} is not installed! Install it from package manager.'.format(plugin))\r\n\r\n\t# import the file and wrap it into sys.append\r\n    f = IO.Path.Combine(p, 'nodesrc', filename)\r\n    with open(f, 'rb') as inf:\r\n        source = '    '.join(inf.readlines())\r\n\r\n    header = 'try:\\n    import sys\\n' + \\\r\n        '    sys.path.append(r\\'{}\\')\\n\\n'.format(p) + \\\r\n        '    sys.path.append(r\\'C:\\Program Files (x86)\\IronPython 2.7\\Lib\\')\\n\\n' + \\\r\n        '    '\r\n\r\n    footer = '\\nexcept Exception, e:\\n' + \\\r\n        '    import traceback\\n' + \\\r\n        '    OUT = \"ERROR:\\\\n\\\\t{}\".format(str(e)) + \\\\\\n' + \\\r\n        '    \"\\\\n\\\\nIf you think this is a bug submit an issue on github.\\\\n\" + \\\\\\n' + \\\r\n        '    \"https://github.com/ladybug-tools/honeybee-dynamo/issues\\\\n\" +  \\\\\\n' + \\\r\n        '    \"and include below error message:\\\\n\\\\n\" + \\\\\\n' + \\\r\n        '    \"{}\".format(traceback.format_exc())\\n'\r\n\r\n    OUT = header + source + footer\r\n\r\nexcept Exception, e:\r\n    import sys\r\n    sys.path.append(r'C:\\Program Files (x86)\\IronPython 2.7\\Lib')\r\n    import traceback\r\n    OUT = \"ERROR:\\n\\t{}\".format(str(e)) + \\\r\n        \"\\n\\nIf you think this is a bug submit an issue on github.\\n\" + \\\r\n        \"https://github.com/ladybug-tools/honeybee-dynamo/issues\\n\" +  \\\r\n        \"and include below error message:\\n\\n\" + \\\r\n        \"{}\".format(traceback.format_exc())\r\n\r\n      ",
+      "VariableInputPorts": true,
+      "Id": "bacb236b7cd145aeb3c69b6e12c696ec",
+      "Inputs": [
+        {
+          "Id": "21cec1b04866457ab96655b61b193ed7",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "aa87176ac20e4c4788db36381aa611ff",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "0593807dd62b4ae99ef194dc3ce75f93",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonStringNode, PythonNodeModels",
+      "VariableInputPorts": true,
+      "NodeType": "ExtensionNode",
+      "Id": "c729765e85bc4835867876f41989ded1",
+      "Inputs": [
+        {
+          "Id": "156d1033f1154adc90605ef1f2d49f2e",
+          "Name": "script",
+          "Description": "Python script to run.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "b8028d7d7e544c1ca4707db7e390b944",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "0ab0afb98aca49a09fddc7d76214142e",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "1752bad733f449ee8c757b16627c94d2",
+          "Name": "IN[2]",
+          "Description": "Input #2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "e965e7289abe44be8384a6b3cb10568b",
+          "Name": "IN[3]",
+          "Description": "Input #3",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "20e8cd0675aa47cb82560789ebc90bcb",
+          "Name": "IN[4]",
+          "Description": "Input #4",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "ee686e8afcea44669501d2b44cce8ea0",
+          "Name": "IN[5]",
+          "Description": "Input #5",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "5bd9551cce0e4091a6a8d390fdd112db",
+          "Name": "IN[6]",
+          "Description": "Input #6",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "2f77261b09194ec9870e9db75985ef24",
+          "Name": "IN[7]",
+          "Description": "Input #7",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "a38882e002af439dad0b0aa66279742f",
+          "Name": "IN[8]",
+          "Description": "Input #8",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "d6f86a0fb0d34669b030a3a8185734df",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs a IronPython script from a string."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "NodeType": "InputNode",
+      "Parameter": {
+        "Name": "_name",
+        "TypeName": "var",
+        "TypeRank": 0,
+        "DefaultValue": null,
+        "Description": " View name."
+      },
+      "Id": "0832c1c4ecb744b69c125cb9c72ec1f0",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "8ba38843cb4347239ff1470694755f00",
+          "Name": "",
+          "Description": "Symbol",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "NodeType": "InputNode",
+      "Parameter": {
+        "Name": "_vLocation",
+        "TypeName": "Autodesk.DesignScript.Geometry.Point",
+        "TypeRank": 0,
+        "DefaultValue": null,
+        "Description": " Set the view point (-vp) to (x, y, z). This is the focal\n point of a perspective view or the center of a parallel projection."
+      },
+      "Id": "95ce28236c8c4cee82df76649f21e62e",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "fc2ded0a274548edae68bc9af8690151",
+          "Name": "",
+          "Description": "Symbol",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "NodeType": "InputNode",
+      "Parameter": {
+        "Name": "_vDirection",
+        "TypeName": "Autodesk.DesignScript.Geometry.Vector",
+        "TypeRank": 0,
+        "DefaultValue": null,
+        "Description": " Set the view direction (-vd) vector to (x, y, z). The\n length of this vector indicates the focal distance as needed by\n the pixle depth of field (-pd) in rpict. Default: (0, 0, 1)"
+      },
+      "Id": "fb4cd32c54154c39baab86164646cffd",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "9bd681b912fe48bbbdf95f83f911c5db",
+          "Name": "",
+          "Description": "Symbol",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "NodeType": "InputNode",
+      "Parameter": {
+        "Name": "_vUpVector_",
+        "TypeName": "Autodesk.DesignScript.Geometry.Vector",
+        "TypeRank": 0,
+        "DefaultValue": "Autodesk.DesignScript.Geometry.Vector.ByCoordinates(0, 0, 1)",
+        "Description": " Set the view up (-vu) vector (vertical direction) to (x, y, z)."
+      },
+      "Id": "8ca0ed6dbf384117a7243763e873a7c0",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "b9e0e73db14c44ea88a8acebf159c602",
+          "Name": "",
+          "Description": "Symbol",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "NodeType": "InputNode",
+      "Parameter": {
+        "Name": "_viewType_",
+        "TypeName": "int",
+        "TypeRank": 0,
+        "DefaultValue": "0",
+        "Description": " Set view type (-vt) to one of the choices below.\n 0 Perspective (v)\n 1 Hemispherical fisheye (h)\n 2 Parallel (l)\n 3 Cylindrical panorma (c)\n 4 Angular fisheye (a)\n 5 Planisphere [stereographic] projection (s)\n For more detailed description about view types check rpict manual"
+      },
+      "Id": "562a4c6987b64d898c68bfc84bf9ce8f",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "08a0156929e94ad6aec4aca9f4a1e850",
+          "Name": "",
+          "Description": "Symbol",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "NodeType": "InputNode",
+      "Parameter": {
+        "Name": "_hViewAngle_",
+        "TypeName": "double",
+        "TypeRank": 0,
+        "DefaultValue": "45",
+        "Description": " Set the view horizontal size (-vs). For a perspective\n projection (including fisheye views), val is the horizontal field\n of view (in degrees). For a parallel projection, val is the view\n width in world coordinates."
+      },
+      "Id": "4f683bbc423e42638bacf8565a29f2e4",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "e4eb1c53b6f34a26a67155f2f4875ecd",
+          "Name": "",
+          "Description": "Symbol",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "NodeType": "InputNode",
+      "Parameter": {
+        "Name": "_vViewAngle_",
+        "TypeName": "double",
+        "TypeRank": 0,
+        "DefaultValue": "45",
+        "Description": " Set the view vertical size (-vv). For a perspective\n projection (including fisheye views), val is the horizontal field\n of view (in degrees). For a parallel projection, val is the view\n width in world coordinates."
+      },
+      "Id": "3e0f67241dd846849379ac31a28d9c41",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "f2fc2ab2a1e441f98994790378ecf294",
+          "Name": "",
+          "Description": "Symbol",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "NodeType": "InputNode",
+      "Parameter": {
+        "Name": "_xResolution_",
+        "TypeName": "int",
+        "TypeRank": 0,
+        "DefaultValue": "420",
+        "Description": " Set the maximum x resolution (-x) to an integer."
+      },
+      "Id": "73803d9d0265421dbed02b2916183fad",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "15aaae0966af4b75bf2560a7d914f598",
+          "Name": "",
+          "Description": "Symbol",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "NodeType": "InputNode",
+      "Parameter": {
+        "Name": "_yResolution_",
+        "TypeName": "int",
+        "TypeRank": 0,
+        "DefaultValue": "420",
+        "Description": " Set the maximum y resolution (-y) to an integer."
+      },
+      "Id": "dcf1c14d3f114d05b27c996ec589271f",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "31742a34e1e2444a875063f4d2fcabbe",
+          "Name": "",
+          "Description": "Symbol",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "NodeType": "CodeBlockNode",
+      "Code": "out[0];",
+      "Id": "c8d706d78018441db78efe38d60473cf",
+      "Inputs": [
+        {
+          "Id": "85ad83c7b8d34e87a8de7220c28954c4",
+          "Name": "out",
+          "Description": "out",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "2819dab6d82043989b61c73c41f67656",
+          "Name": "",
+          "Description": "Value of expression at line 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Output, DynamoCore",
+      "NodeType": "OutputNode",
+      "ElementResolver": null,
+      "Symbol": "// Honeybee view.\r\nview;",
+      "Id": "5c1b6ba3a10446e9b43015ab44e0103f",
+      "Inputs": [
+        {
+          "Id": "264afb0d61b3417da4a5daa635a5de55",
+          "Name": "",
+          "Description": "",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [],
+      "Replication": "Disabled",
+      "Description": "A function output, use with custom nodes"
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "\r\n        \r\n\"\"\"Report errors\"\"\"\r\nimportErr, runErr = IN\r\nerrors = []\r\n\r\nif importErr and str(importErr).startswith(\"ERROR:\"):\r\n    errors.append(importErr)\r\n\r\nif runErr and str(runErr).startswith(\"ERROR:\"):\r\n    errors.append(runErr)\r\n\r\nif len(errors)==0:\r\n    OUT = \"All good! Vvizzzz.\"\r\nelse:\r\n    OUT = \"\\n\".join(errors)\r\n\r\n      ",
+      "VariableInputPorts": true,
+      "Id": "8a7e33a5594f4cd09b40a604f8ff9af2",
+      "Inputs": [
+        {
+          "Id": "8948a211a90248f4be42bc853f7fa895",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "a7cd08fba0c546439308bf65999871fb",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "299dcbb16f034db7903044474fbb18fa",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Output, DynamoCore",
+      "NodeType": "OutputNode",
+      "ElementResolver": null,
+      "Symbol": "// Report\r\nERRReport;",
+      "Id": "45aeca7bb0514b89a9e7d7193ae91462",
+      "Inputs": [
+        {
+          "Id": "1f08f2d03e59497683e38b382671ad78",
+          "Name": "",
+          "Description": "",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [],
+      "Replication": "Disabled",
+      "Description": "A function output, use with custom nodes"
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "5c332b2ca08a4387a03d6a3c92335639",
+      "End": "21cec1b04866457ab96655b61b193ed7",
+      "Id": "e8028da9b86a4dc397b91ea0fc96d1e5"
+    },
+    {
+      "Start": "918d807d046f4abf908aaef3307d03e1",
+      "End": "aa87176ac20e4c4788db36381aa611ff",
+      "Id": "cdb06d3abb374eb7bbc47609a6ef1614"
+    },
+    {
+      "Start": "0593807dd62b4ae99ef194dc3ce75f93",
+      "End": "156d1033f1154adc90605ef1f2d49f2e",
+      "Id": "773088ea709e448fb300eed87c4fb1d7"
+    },
+    {
+      "Start": "0593807dd62b4ae99ef194dc3ce75f93",
+      "End": "8948a211a90248f4be42bc853f7fa895",
+      "Id": "b7a26e8ffe534afaa18d06e6f8822e76"
+    },
+    {
+      "Start": "d6f86a0fb0d34669b030a3a8185734df",
+      "End": "85ad83c7b8d34e87a8de7220c28954c4",
+      "Id": "e6c711468c454524a25f07fcf1b3d39a"
+    },
+    {
+      "Start": "d6f86a0fb0d34669b030a3a8185734df",
+      "End": "a7cd08fba0c546439308bf65999871fb",
+      "Id": "c9b164c761854da5b09b979509a6e642"
+    },
+    {
+      "Start": "8ba38843cb4347239ff1470694755f00",
+      "End": "b8028d7d7e544c1ca4707db7e390b944",
+      "Id": "0734c2a8f9ac40a9970e9c9ceb341fc0"
+    },
+    {
+      "Start": "fc2ded0a274548edae68bc9af8690151",
+      "End": "0ab0afb98aca49a09fddc7d76214142e",
+      "Id": "f15bc0413d1c476e83053330784d24a8"
+    },
+    {
+      "Start": "9bd681b912fe48bbbdf95f83f911c5db",
+      "End": "1752bad733f449ee8c757b16627c94d2",
+      "Id": "8d32a5cabfa944afa6f03146c38a4485"
+    },
+    {
+      "Start": "b9e0e73db14c44ea88a8acebf159c602",
+      "End": "e965e7289abe44be8384a6b3cb10568b",
+      "Id": "5e2902c4a31e475e8bdb71b168f62332"
+    },
+    {
+      "Start": "08a0156929e94ad6aec4aca9f4a1e850",
+      "End": "20e8cd0675aa47cb82560789ebc90bcb",
+      "Id": "6777b4b1be124e9a8aecbb3266f43a08"
+    },
+    {
+      "Start": "e4eb1c53b6f34a26a67155f2f4875ecd",
+      "End": "ee686e8afcea44669501d2b44cce8ea0",
+      "Id": "6cc3638f87a24ac2bec83006b3a83a21"
+    },
+    {
+      "Start": "f2fc2ab2a1e441f98994790378ecf294",
+      "End": "5bd9551cce0e4091a6a8d390fdd112db",
+      "Id": "d8de8c0353bf4662b99164f2b248509e"
+    },
+    {
+      "Start": "15aaae0966af4b75bf2560a7d914f598",
+      "End": "2f77261b09194ec9870e9db75985ef24",
+      "Id": "495dd34968194cdd98bf20b5c6495c92"
+    },
+    {
+      "Start": "31742a34e1e2444a875063f4d2fcabbe",
+      "End": "a38882e002af439dad0b0aa66279742f",
+      "Id": "25662a1f2ac1434c9f85eef5004506bb"
+    },
+    {
+      "Start": "2819dab6d82043989b61c73c41f67656",
+      "End": "264afb0d61b3417da4a5daa635a5de55",
+      "Id": "7e00a644b8964efa8e67c6619c759295"
+    },
+    {
+      "Start": "299dcbb16f034db7903044474fbb18fa",
+      "End": "1f08f2d03e59497683e38b382671ad78",
+      "Id": "ba563a4ab0c74d34bf517f99e348397e"
+    }
+  ],
+  "Dependencies": [],
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": false,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.0.3.8810",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": -34.0,
+      "EyeY": -34.0,
+      "EyeZ": 21.190000534057617,
+      "LookX": -14.1899995803833,
+      "LookY": -43.060001373291016,
+      "LookZ": -41.650001525878906,
+      "UpX": -0.17000000178813934,
+      "UpY": 0.85000002384185791,
+      "UpZ": -0.5
+    },
+    "NodeViews": [
+      {
+        "Id": "30c9d6565d43441ba1acb090417b0d93",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "input python script",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": -750.0,
+        "Y": 390.0
+      },
+      {
+        "Id": "bacb236b7cd145aeb3c69b6e12c696ec",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "import and prepare py code",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": -355.0,
+        "Y": 385.0
+      },
+      {
+        "Id": "c729765e85bc4835867876f41989ded1",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "core",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": -75.0,
+        "Y": 460.0
+      },
+      {
+        "Id": "0832c1c4ecb744b69c125cb9c72ec1f0",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "_name",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": -750.0,
+        "Y": 475.0
+      },
+      {
+        "Id": "95ce28236c8c4cee82df76649f21e62e",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "_vLocation",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": -750.0,
+        "Y": 570.0
+      },
+      {
+        "Id": "fb4cd32c54154c39baab86164646cffd",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "_vDirection",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": -750.0,
+        "Y": 665.0
+      },
+      {
+        "Id": "8ca0ed6dbf384117a7243763e873a7c0",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "_vUpVector_",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": -750.0,
+        "Y": 760.0
+      },
+      {
+        "Id": "562a4c6987b64d898c68bfc84bf9ce8f",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "_viewType_",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": -750.0,
+        "Y": 855.0
+      },
+      {
+        "Id": "4f683bbc423e42638bacf8565a29f2e4",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "_hViewAngle_",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": -750.0,
+        "Y": 950.0
+      },
+      {
+        "Id": "3e0f67241dd846849379ac31a28d9c41",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "_vViewAngle_",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": -750.0,
+        "Y": 1045.0
+      },
+      {
+        "Id": "73803d9d0265421dbed02b2916183fad",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "_xResolution_",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": -750.0,
+        "Y": 1140.0
+      },
+      {
+        "Id": "dcf1c14d3f114d05b27c996ec589271f",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "_yResolution_",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": -750.0,
+        "Y": 1235.0
+      },
+      {
+        "Id": "c8d706d78018441db78efe38d60473cf",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "decompose outputs",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 150.0,
+        "Y": 515.0
+      },
+      {
+        "Id": "5c1b6ba3a10446e9b43015ab44e0103f",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "view",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 380.0,
+        "Y": 475.0
+      },
+      {
+        "Id": "8a7e33a5594f4cd09b40a604f8ff9af2",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "Error report",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 150.0,
+        "Y": 380.0
+      },
+      {
+        "Id": "45aeca7bb0514b89a9e7d7193ae91462",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "ERRReport",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 380.0,
+        "Y": 380.0
+      }
+    ],
+    "Annotations": [],
+    "X": 400.0,
+    "Y": -100.0,
+    "Zoom": 0.5
+  }
+}
