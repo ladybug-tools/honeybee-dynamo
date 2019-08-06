@@ -1,180 +1,717 @@
-<Workspace Category="Honeybee.03 :: Daylight :: Recipe" Description="Five-pahse daylight Recipe.
--" ID="bee0cf29-c02f-4854-b198-bf5771803849" Name="Grid-Based Five-Phase Daylight Recipe" Version="1.2.0.2690" X="400" Y="-100" zoom="0.5">
-  <NamespaceResolutionMap/>
-  <Elements>
-    <Dynamo.Graph.Nodes.CodeBlockNodeModel CodeText="&quot;Honeybee&quot;;&#xA;&quot;fivephasegbrecipe_node.py&quot;;" ShouldFocus="false" guid="8c9bca2f-7497-426f-b422-59190be3114e" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="input python script" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" x="-750" y="390"/>
-    <PythonNodeModels.PythonNode guid="789531da-37bc-4585-95fc-c9c439508c1a" inputcount="2" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="import and prepare py code" type="PythonNodeModels.PythonNode" x="-355" y="385">
-      <PortInfo default="false" index="0"/>
-      <PortInfo default="false" index="1"/>
-      <Script>
-        
-&quot;&quot;&quot;Find packages from Dynamo folder and prepare the code.&quot;&quot;&quot;
-import clr
-from System import AppDomain, Environment, IO
-from System.Reflection import Assembly
-
-def tryGetPluginPath(plugin):
-    &quot;&quot;&quot;Try to get path to plugin folder.&quot;&quot;&quot;
-    dynamo = Assembly.Load('DynamoCore')
-    dynamoV = dynamo.GetName().Version.ToString().split('.')
-    _ver = float(dynamoV[0] + '.' + dynamoV[1])
-
-    assert _ver &gt;= 1.2, 'You need Dynamo 1.2 or higher to use this plugin!'
-
-    _appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)
-    _dynamoPath = '%s\\%s\\%.1f' % ('Dynamo', 'Dynamo Core', _ver)
-    # if the assembly is cached put Revit folder first, and then try to load it from core
-    _dynamoPaths = (_dynamoPath.replace('Dynamo Core', 'Dynamo Revit'),
-                    _dynamoPath.replace('Dynamo Revit', 'Dynamo Core'))
-    _settingsFilename = 'DynamoSettings.xml'
-
-    pkf = []
-    for path in _dynamoPaths:
-        settingsFile = IO.Path.Combine(_appdata, path, _settingsFilename)
-        if IO.File.Exists(settingsFile):
-            with open(settingsFile, 'rb') as outf:
-                for line in outf:
-                    if line.strip().startswith('&lt;CustomPackageFolders&gt;'):
-                        for l in outf:
-                            if l.strip().startswith('&lt;/CustomPackageFolders&gt;'):
-                                break
-                            else:
-                                pkf.append(l.replace('&lt;/string&gt;', '').replace('&lt;string&gt;', '').strip())
-
-    for p in pkf:
-        pp = IO.Path.Combine(p, 'packages', plugin, 'extra')
-        # In case of custom folders user may put honeybee under the root folder
-        ppp = IO.Path.Combine(p, plugin, 'extra')
-        if IO.Directory.Exists(pp):
-            return pp
-        elif IO.Directory.Exists(ppp):
-            return ppp
-
-
-try:
-    plugin, filename = IN
-
-    p = tryGetPluginPath(plugin)
-
-    if not p:
-        raise ImportError('{} is not installed! Install it from package manager.'.format(plugin))
-
-	# import the file and wrap it into sys.append
-    f = IO.Path.Combine(p, 'nodesrc', filename)
-    with open(f, 'rb') as inf:
-        source = '    '.join(inf.readlines())
-
-    header = 'try:\n    import sys\n' + \
-        '    sys.path.append(r\'{}\')\n\n'.format(p) + \
-        '    sys.path.append(r\'C:\Program Files (x86)\IronPython 2.7\Lib\')\n\n' + \
-        '    '
-
-    footer = '\nexcept Exception, e:\n' + \
-        '    import traceback\n' + \
-        '    OUT = &quot;ERROR:\\n\\t{}&quot;.format(str(e)) + \\\n' + \
-        '    &quot;\\n\\nIf you think this is a bug submit an issue on github.\\n&quot; + \\\n' + \
-        '    &quot;https://github.com/ladybug-tools/honeybee-dynamo/issues\\n&quot; +  \\\n' + \
-        '    &quot;and include below error message:\\n\\n&quot; + \\\n' + \
-        '    &quot;{}&quot;.format(traceback.format_exc())\n'
-
-    OUT = header + source + footer
-
-except Exception, e:
-    import sys
-    sys.path.append(r'C:\Program Files (x86)\IronPython 2.7\Lib')
-    import traceback
-    OUT = &quot;ERROR:\n\t{}&quot;.format(str(e)) + \
-        &quot;\n\nIf you think this is a bug submit an issue on github.\n&quot; + \
-        &quot;https://github.com/ladybug-tools/honeybee-dynamo/issues\n&quot; +  \
-        &quot;and include below error message:\n\n&quot; + \
-        &quot;{}&quot;.format(traceback.format_exc())
-
-      </Script>
-    </PythonNodeModels.PythonNode>
-    <PythonNodeModels.PythonStringNode guid="3070bdb0-1311-4246-83b9-ac01f8f248e8" inputcount="8" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="core" type="PythonNodeModels.PythonStringNode" x="-75" y="460">
-      <PortInfo default="false" index="0"/>
-      <PortInfo default="false" index="1"/>
-      <PortInfo default="false" index="2"/>
-      <PortInfo default="false" index="3"/>
-      <PortInfo default="false" index="4"/>
-      <PortInfo default="false" index="5"/>
-      <PortInfo default="false" index="6"/>
-      <PortInfo default="false" index="7"/>
-    </PythonNodeModels.PythonStringNode>
-    <Dynamo.Graph.Nodes.CustomNodes.Symbol guid="7cc3e8ee-7008-4dc1-8f3b-c3049535810a" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="_skymtx" type="Dynamo.Graph.Nodes.CustomNodes.Symbol" x="-750" y="475">
-      <Symbol value="// A sky matrix or a sky vector. Find honeybee skies under 02::Daylight::Light Sources.&#xD;&#xA;_skymtx: var;"/>
-    </Dynamo.Graph.Nodes.CustomNodes.Symbol>
-    <Dynamo.Graph.Nodes.CustomNodes.Symbol guid="2d22d82b-1d2d-4fe7-ad98-5a79ca69ea79" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="_analysisGrids" type="Dynamo.Graph.Nodes.CustomNodes.Symbol" x="-750" y="570">
-      <Symbol value="// A list of Honeybee analysis grids.&#xD;&#xA;_analysisGrids: var[];"/>
-    </Dynamo.Graph.Nodes.CustomNodes.Symbol>
-    <Dynamo.Graph.Nodes.CustomNodes.Symbol guid="48eaa8b7-bf9a-4d70-8e44-c2defee7ee74" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="_analysisType_" type="Dynamo.Graph.Nodes.CustomNodes.Symbol" x="-750" y="665">
-      <Symbol value="// Analysis type. [0] illuminance(lux), [1] radiation (kwh),&#xD;&#xA;// [2] luminance (Candela).&#xD;&#xA;_analysisType_: int = 0;"/>
-    </Dynamo.Graph.Nodes.CustomNodes.Symbol>
-    <Dynamo.Graph.Nodes.CustomNodes.Symbol guid="a8611ba7-7428-4a4d-bcc0-41fb9808b76f" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="_vmtxPar_" type="Dynamo.Graph.Nodes.CustomNodes.Symbol" x="-750" y="760">
-      <Symbol value="// RfluxMtx parameters for view coefficient calculation.&#xD;&#xA;_vmtxPar_: var = null;"/>
-    </Dynamo.Graph.Nodes.CustomNodes.Symbol>
-    <Dynamo.Graph.Nodes.CustomNodes.Symbol guid="e6c0533f-b25d-40a6-86c1-35d6de169202" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="_dmtxPar_" type="Dynamo.Graph.Nodes.CustomNodes.Symbol" x="-750" y="855">
-      <Symbol value="// RfluxMtx parameters for daylight coefficient calculation.&#xD;&#xA;_dmtxPar_: var = null;"/>
-    </Dynamo.Graph.Nodes.CustomNodes.Symbol>
-    <Dynamo.Graph.Nodes.CustomNodes.Symbol guid="02ef571a-3e75-40b8-858e-d213535b5e28" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="reuseVmtx_" type="Dynamo.Graph.Nodes.CustomNodes.Symbol" x="-750" y="950">
-      <Symbol value="// A boolean to indicate if you want the analysis to use the view&#xD;&#xA;// coeff matrix results from the previous study if available.&#xD;&#xA;reuseVmtx_: bool = false;"/>
-    </Dynamo.Graph.Nodes.CustomNodes.Symbol>
-    <Dynamo.Graph.Nodes.CustomNodes.Symbol guid="e082f107-2eaf-48ae-ac2d-3ca47afe8f95" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="reuseDmtx_" type="Dynamo.Graph.Nodes.CustomNodes.Symbol" x="-750" y="1045">
-      <Symbol value="// A boolean to indicate if you want the analysis to use the daylight&#xD;&#xA;// coeff matrix results from the previous study if available (default: False).&#xD;&#xA;reuseDmtx_: bool = false;"/>
-    </Dynamo.Graph.Nodes.CustomNodes.Symbol>
-    <Dynamo.Graph.Nodes.CodeBlockNodeModel CodeText="out[0];" ShouldFocus="false" guid="56ce0940-6ad3-42f1-a970-78695edd3c0e" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="decompose outputs" type="Dynamo.Graph.Nodes.CodeBlockNodeModel" x="150" y="515"/>
-    <Dynamo.Graph.Nodes.CustomNodes.Output guid="39b4aec1-b13a-459d-886e-f6f409175c5c" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="analysisRecipe" type="Dynamo.Graph.Nodes.CustomNodes.Output" x="380" y="475">
-      <Symbol value="// Five-pahse analysis recipe. Connect this recipe to Run&#xD;&#xA;// Radiance Analysis.&#xD;&#xA;analysisRecipe;"/>
-      <PortInfo default="false" index="0"/>
-    </Dynamo.Graph.Nodes.CustomNodes.Output>
-    <PythonNodeModels.PythonNode guid="c5dedd62-7925-461c-b2d4-911c1a50754f" inputcount="2" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="Error report" type="PythonNodeModels.PythonNode" x="150" y="380">
-      <PortInfo default="false" index="0"/>
-      <PortInfo default="false" index="1"/>
-      <Script>
-        
-&quot;&quot;&quot;Report errors&quot;&quot;&quot;
-importErr, runErr = IN
-errors = []
-
-if importErr and str(importErr).startswith(&quot;ERROR:&quot;):
-    errors.append(importErr)
-
-if runErr and str(runErr).startswith(&quot;ERROR:&quot;):
-    errors.append(runErr)
-
-if len(errors)==0:
-    OUT = &quot;All good! Vvizzzz.&quot;
-else:
-    OUT = &quot;\n&quot;.join(errors)
-
-      </Script>
-    </PythonNodeModels.PythonNode>
-    <Dynamo.Graph.Nodes.CustomNodes.Output guid="d2f0ef23-90ed-47b6-9f13-2f56d3e4f238" isFrozen="false" isPinned="false" isSelectedInput="true" isUpstreamVisible="true" isVisible="true" lacing="Disabled" nickname="ERRReport" type="Dynamo.Graph.Nodes.CustomNodes.Output" x="380" y="380">
-      <Symbol value="// Report&#xD;&#xA;ERRReport;"/>
-      <PortInfo default="false" index="0"/>
-    </Dynamo.Graph.Nodes.CustomNodes.Output>
-  </Elements>
-  <Connectors>
-    <Dynamo.Graph.Connectors.ConnectorModel end="789531da-37bc-4585-95fc-c9c439508c1a" end_index="0" portType="0" start="8c9bca2f-7497-426f-b422-59190be3114e" start_index="0"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="789531da-37bc-4585-95fc-c9c439508c1a" end_index="1" portType="0" start="8c9bca2f-7497-426f-b422-59190be3114e" start_index="1"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="3070bdb0-1311-4246-83b9-ac01f8f248e8" end_index="0" portType="0" start="789531da-37bc-4585-95fc-c9c439508c1a" start_index="0"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="3070bdb0-1311-4246-83b9-ac01f8f248e8" end_index="1" portType="0" start="7cc3e8ee-7008-4dc1-8f3b-c3049535810a" start_index="0"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="3070bdb0-1311-4246-83b9-ac01f8f248e8" end_index="2" portType="0" start="2d22d82b-1d2d-4fe7-ad98-5a79ca69ea79" start_index="0"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="3070bdb0-1311-4246-83b9-ac01f8f248e8" end_index="3" portType="0" start="48eaa8b7-bf9a-4d70-8e44-c2defee7ee74" start_index="0"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="3070bdb0-1311-4246-83b9-ac01f8f248e8" end_index="4" portType="0" start="a8611ba7-7428-4a4d-bcc0-41fb9808b76f" start_index="0"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="3070bdb0-1311-4246-83b9-ac01f8f248e8" end_index="5" portType="0" start="e6c0533f-b25d-40a6-86c1-35d6de169202" start_index="0"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="3070bdb0-1311-4246-83b9-ac01f8f248e8" end_index="6" portType="0" start="02ef571a-3e75-40b8-858e-d213535b5e28" start_index="0"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="3070bdb0-1311-4246-83b9-ac01f8f248e8" end_index="7" portType="0" start="e082f107-2eaf-48ae-ac2d-3ca47afe8f95" start_index="0"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="56ce0940-6ad3-42f1-a970-78695edd3c0e" end_index="0" portType="0" start="3070bdb0-1311-4246-83b9-ac01f8f248e8" start_index="0"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="39b4aec1-b13a-459d-886e-f6f409175c5c" end_index="0" portType="0" start="56ce0940-6ad3-42f1-a970-78695edd3c0e" start_index="0"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="c5dedd62-7925-461c-b2d4-911c1a50754f" end_index="0" portType="0" start="789531da-37bc-4585-95fc-c9c439508c1a" start_index="0"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="c5dedd62-7925-461c-b2d4-911c1a50754f" end_index="1" portType="0" start="3070bdb0-1311-4246-83b9-ac01f8f248e8" start_index="0"/>
-    <Dynamo.Graph.Connectors.ConnectorModel end="d2f0ef23-90ed-47b6-9f13-2f56d3e4f238" end_index="0" portType="0" start="c5dedd62-7925-461c-b2d4-911c1a50754f" start_index="0"/>
-  </Connectors>
-  <Notes/>
-  <Annotations/>
-  <Presets/>
-  <Cameras>
-    <Camera Name="Background Preview" eyeX="-34.00" eyeY="-34.00" eyeZ="21.19" lookX="-14.19" lookY="-43.06" lookZ="-41.65" upX="-0.17" upY="0.85" upZ="-0.50"/>
-  </Cameras>
-</Workspace>
+{
+  "Uuid": "bee0cf29-c02f-4854-b198-bf5771803849",
+  "IsCustomNode": true,
+  "Category": "Honeybee.03 :: Daylight :: Recipe",
+  "Description": "Five-pahse daylight Recipe.\r\n-",
+  "Name": "Grid-Based Five-Phase Daylight Recipe",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "NodeType": "CodeBlockNode",
+      "Code": "\"Honeybee\";\n\"fivephasegbrecipe_node.py\";",
+      "Id": "8c9bca2f7497426fb42259190be3114e",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "dc26426d9a9e44a9b3f15b7f3387bf2f",
+          "Name": "",
+          "Description": "Value of expression at line 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "eb125c2caf664bcd98422dd51d6d4da0",
+          "Name": "",
+          "Description": "Value of expression at line 2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly"
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "\r\n        \r\n\"\"\"Find packages from Dynamo folder and prepare the code.\"\"\"\r\nimport clr\r\nfrom System import AppDomain, Environment, IO\r\nfrom System.Reflection import Assembly\r\n\r\ndef tryGetPluginPath(plugin):\r\n    \"\"\"Try to get path to plugin folder.\"\"\"\r\n    dynamo = Assembly.Load('DynamoCore')\r\n    dynamoV = dynamo.GetName().Version.ToString().split('.')\r\n    _ver = float(dynamoV[0] + '.' + dynamoV[1])\r\n\r\n    assert _ver >= 1.2, 'You need Dynamo 1.2 or higher to use this plugin!'\r\n\r\n    _appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)\r\n    _dynamoPath = '%s\\\\%s\\\\%.1f' % ('Dynamo', 'Dynamo Core', _ver)\r\n    # if the assembly is cached put Revit folder first, and then try to load it from core\r\n    _dynamoPaths = (_dynamoPath.replace('Dynamo Core', 'Dynamo Revit'),\r\n                    _dynamoPath.replace('Dynamo Revit', 'Dynamo Core'))\r\n    _settingsFilename = 'DynamoSettings.xml'\r\n\r\n    pkf = []\r\n    for path in _dynamoPaths:\r\n        settingsFile = IO.Path.Combine(_appdata, path, _settingsFilename)\r\n        if IO.File.Exists(settingsFile):\r\n            with open(settingsFile, 'rb') as outf:\r\n                for line in outf:\r\n                    if line.strip().startswith('<CustomPackageFolders>'):\r\n                        for l in outf:\r\n                            if l.strip().startswith('</CustomPackageFolders>'):\r\n                                break\r\n                            else:\r\n                                pkf.append(l.replace('</string>', '').replace('<string>', '').strip())\r\n\r\n    for p in pkf:\r\n        pp = IO.Path.Combine(p, 'packages', plugin, 'extra')\r\n        # In case of custom folders user may put honeybee under the root folder\r\n        ppp = IO.Path.Combine(p, plugin, 'extra')\r\n        if IO.Directory.Exists(pp):\r\n            return pp\r\n        elif IO.Directory.Exists(ppp):\r\n            return ppp\r\n\r\n\r\ntry:\r\n    plugin, filename = IN\r\n\r\n    p = tryGetPluginPath(plugin)\r\n\r\n    if not p:\r\n        raise ImportError('{} is not installed! Install it from package manager.'.format(plugin))\r\n\r\n\t# import the file and wrap it into sys.append\r\n    f = IO.Path.Combine(p, 'nodesrc', filename)\r\n    with open(f, 'rb') as inf:\r\n        source = '    '.join(inf.readlines())\r\n\r\n    header = 'try:\\n    import sys\\n' + \\\r\n        '    sys.path.append(r\\'{}\\')\\n\\n'.format(p) + \\\r\n        '    sys.path.append(r\\'C:\\Program Files (x86)\\IronPython 2.7\\Lib\\')\\n\\n' + \\\r\n        '    '\r\n\r\n    footer = '\\nexcept Exception, e:\\n' + \\\r\n        '    import traceback\\n' + \\\r\n        '    OUT = \"ERROR:\\\\n\\\\t{}\".format(str(e)) + \\\\\\n' + \\\r\n        '    \"\\\\n\\\\nIf you think this is a bug submit an issue on github.\\\\n\" + \\\\\\n' + \\\r\n        '    \"https://github.com/ladybug-tools/honeybee-dynamo/issues\\\\n\" +  \\\\\\n' + \\\r\n        '    \"and include below error message:\\\\n\\\\n\" + \\\\\\n' + \\\r\n        '    \"{}\".format(traceback.format_exc())\\n'\r\n\r\n    OUT = header + source + footer\r\n\r\nexcept Exception, e:\r\n    import sys\r\n    sys.path.append(r'C:\\Program Files (x86)\\IronPython 2.7\\Lib')\r\n    import traceback\r\n    OUT = \"ERROR:\\n\\t{}\".format(str(e)) + \\\r\n        \"\\n\\nIf you think this is a bug submit an issue on github.\\n\" + \\\r\n        \"https://github.com/ladybug-tools/honeybee-dynamo/issues\\n\" +  \\\r\n        \"and include below error message:\\n\\n\" + \\\r\n        \"{}\".format(traceback.format_exc())\r\n\r\n      ",
+      "VariableInputPorts": true,
+      "Id": "789531da37bc458595fcc9c439508c1a",
+      "Inputs": [
+        {
+          "Id": "03acc6c730914f5e817cc74e7c9183b2",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "49d7750294fc40a1b2e0ff1557e5a55b",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "a0312a62613141f0a7ed5a98031c8836",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonStringNode, PythonNodeModels",
+      "VariableInputPorts": true,
+      "NodeType": "ExtensionNode",
+      "Id": "3070bdb01311424683b9ac01f8f248e8",
+      "Inputs": [
+        {
+          "Id": "8c19d2f095a445f7b753cdaa8d02c489",
+          "Name": "script",
+          "Description": "Python script to run.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "c1bee501db4c4c2cbf3356a32990de9a",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "845bca45332e415ea425a0d1b528d06d",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "63f51b4394664441ba73154ef4fa9dd1",
+          "Name": "IN[2]",
+          "Description": "Input #2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "6c91cfb637e34f7982eac8debaeab529",
+          "Name": "IN[3]",
+          "Description": "Input #3",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "3e4ad93f16624fdba24d0e823c2e8bbb",
+          "Name": "IN[4]",
+          "Description": "Input #4",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "6889ed9c043a47b5b01b3fa58feef3e6",
+          "Name": "IN[5]",
+          "Description": "Input #5",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "f73ce850b2dd43b196dca08410bafead",
+          "Name": "IN[6]",
+          "Description": "Input #6",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "9897e86805714b448fe648190842eef2",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs a IronPython script from a string."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "NodeType": "InputNode",
+      "Parameter": {
+        "Name": "_skymtx",
+        "TypeName": "var",
+        "TypeRank": 0,
+        "DefaultValue": null,
+        "Description": " A sky matrix or a sky vector. Find honeybee skies under 02::Daylight::Light Sources."
+      },
+      "Id": "7cc3e8ee70084dc18f3bc3049535810a",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "e10151eb6ecf41c09ce525fe55c111d2",
+          "Name": "",
+          "Description": "Symbol",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "NodeType": "InputNode",
+      "Parameter": {
+        "Name": "_analysisGrids",
+        "TypeName": "var",
+        "TypeRank": 1,
+        "DefaultValue": null,
+        "Description": " A list of Honeybee analysis grids."
+      },
+      "Id": "2d22d82b1d2d4fe7ad985a79ca69ea79",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "cb8b2621db3a4f3fb522d78d840979c2",
+          "Name": "",
+          "Description": "Symbol",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "NodeType": "InputNode",
+      "Parameter": {
+        "Name": "_analysisType_",
+        "TypeName": "int",
+        "TypeRank": 0,
+        "DefaultValue": "0",
+        "Description": " Analysis type. [0] illuminance(lux), [1] radiation (kwh),\n [2] luminance (Candela)."
+      },
+      "Id": "48eaa8b7bf9a4d708e44c2defee7ee74",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "00cbde6d1fa24661b6cd7b26569c3779",
+          "Name": "",
+          "Description": "Symbol",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "NodeType": "InputNode",
+      "Parameter": {
+        "Name": "_vmtxPar_",
+        "TypeName": "var",
+        "TypeRank": 0,
+        "DefaultValue": "null",
+        "Description": " RfluxMtx parameters for view coefficient calculation."
+      },
+      "Id": "a8611ba774284a4dbcc041fb9808b76f",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "09f06d8ff7f84b78b47894af1e744e19",
+          "Name": "",
+          "Description": "Symbol",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "NodeType": "InputNode",
+      "Parameter": {
+        "Name": "_dmtxPar_",
+        "TypeName": "var",
+        "TypeRank": 0,
+        "DefaultValue": "null",
+        "Description": " RfluxMtx parameters for daylight coefficient calculation."
+      },
+      "Id": "e6c0533fb25d40a686c135d6de169202",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "41cea398a6fe42ad9a10bc46443ee413",
+          "Name": "",
+          "Description": "Symbol",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "NodeType": "InputNode",
+      "Parameter": {
+        "Name": "reuseVmtx_",
+        "TypeName": "bool",
+        "TypeRank": 0,
+        "DefaultValue": "false",
+        "Description": " A boolean to indicate if you want the analysis to use the view\n coeff matrix results from the previous study if available."
+      },
+      "Id": "02ef571a3e7540b8858ed213535b5e28",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "2597c6655c0d4967bff5f014c1703adb",
+          "Name": "",
+          "Description": "Symbol",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Symbol, DynamoCore",
+      "NodeType": "InputNode",
+      "Parameter": {
+        "Name": "reuseDmtx_",
+        "TypeName": "bool",
+        "TypeRank": 0,
+        "DefaultValue": "false",
+        "Description": " A boolean to indicate if you want the analysis to use the daylight\n coeff matrix results from the previous study if available (default: False)."
+      },
+      "Id": "e082f1072eaf48aeac2d3ca47afe8f95",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "1af6013b89824214a62bfbc74334449f",
+          "Name": "",
+          "Description": "Symbol",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A function parameter, use with custom nodes.\r\n\r\nYou can specify the type and default value for parameter. E.g.,\r\n\r\ninput : var[]..[]\r\nvalue : bool = false"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CodeBlockNodeModel, DynamoCore",
+      "NodeType": "CodeBlockNode",
+      "Code": "out[0];",
+      "Id": "56ce09406ad342f1a97078695edd3c0e",
+      "Inputs": [
+        {
+          "Id": "725d42187c3e4b4cb14f12a0e3063d46",
+          "Name": "out",
+          "Description": "out",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "0abdea14d6f24267899a391f62f8d887",
+          "Name": "",
+          "Description": "Value of expression at line 1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Allows for DesignScript code to be authored directly"
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Output, DynamoCore",
+      "NodeType": "OutputNode",
+      "ElementResolver": null,
+      "Symbol": "// Five-pahse analysis recipe. Connect this recipe to Run\r\n// Radiance Analysis.\r\nanalysisRecipe;",
+      "Id": "39b4aec1b13a459d886ef6f409175c5c",
+      "Inputs": [
+        {
+          "Id": "357853d88eee409b8d6b3fb924c7841d",
+          "Name": "",
+          "Description": "",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [],
+      "Replication": "Disabled",
+      "Description": "A function output, use with custom nodes"
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "\r\n        \r\n\"\"\"Report errors\"\"\"\r\nimportErr, runErr = IN\r\nerrors = []\r\n\r\nif importErr and str(importErr).startswith(\"ERROR:\"):\r\n    errors.append(importErr)\r\n\r\nif runErr and str(runErr).startswith(\"ERROR:\"):\r\n    errors.append(runErr)\r\n\r\nif len(errors)==0:\r\n    OUT = \"All good! Vvizzzz.\"\r\nelse:\r\n    OUT = \"\\n\".join(errors)\r\n\r\n      ",
+      "VariableInputPorts": true,
+      "Id": "c5dedd627925461cb2d4911c1a50754f",
+      "Inputs": [
+        {
+          "Id": "5f666d2ee92d4d788c1381e5892555b8",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "b127cfd75aae46d2b356b7ff6045196b",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "cd3bb60a05fb4a9da0cb6e3475099206",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Output, DynamoCore",
+      "NodeType": "OutputNode",
+      "ElementResolver": null,
+      "Symbol": "// Report\r\nERRReport;",
+      "Id": "d2f0ef2390ed47b69f132f56d3e4f238",
+      "Inputs": [
+        {
+          "Id": "64d6de6da99b42a88df513de24469e4e",
+          "Name": "",
+          "Description": "",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [],
+      "Replication": "Disabled",
+      "Description": "A function output, use with custom nodes"
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "dc26426d9a9e44a9b3f15b7f3387bf2f",
+      "End": "03acc6c730914f5e817cc74e7c9183b2",
+      "Id": "ba0e7e51835940cdbf49dfaf62ce2934"
+    },
+    {
+      "Start": "eb125c2caf664bcd98422dd51d6d4da0",
+      "End": "49d7750294fc40a1b2e0ff1557e5a55b",
+      "Id": "94b4a8d605404c719fbdc001303e67d7"
+    },
+    {
+      "Start": "a0312a62613141f0a7ed5a98031c8836",
+      "End": "8c19d2f095a445f7b753cdaa8d02c489",
+      "Id": "29fdb9202322410692955084c349fea9"
+    },
+    {
+      "Start": "a0312a62613141f0a7ed5a98031c8836",
+      "End": "5f666d2ee92d4d788c1381e5892555b8",
+      "Id": "e4febbab1b454aeaa92cc9fe5c5a99bf"
+    },
+    {
+      "Start": "9897e86805714b448fe648190842eef2",
+      "End": "725d42187c3e4b4cb14f12a0e3063d46",
+      "Id": "5df6b41b5a494925b25d0585791fa557"
+    },
+    {
+      "Start": "9897e86805714b448fe648190842eef2",
+      "End": "b127cfd75aae46d2b356b7ff6045196b",
+      "Id": "70209b6d77bd4ded97039eeb4aeb2060"
+    },
+    {
+      "Start": "e10151eb6ecf41c09ce525fe55c111d2",
+      "End": "c1bee501db4c4c2cbf3356a32990de9a",
+      "Id": "faa4c2ffec8842dfa20004bccb8886a1"
+    },
+    {
+      "Start": "cb8b2621db3a4f3fb522d78d840979c2",
+      "End": "845bca45332e415ea425a0d1b528d06d",
+      "Id": "090fa6bf208249aa9ce841aa3bc27eeb"
+    },
+    {
+      "Start": "00cbde6d1fa24661b6cd7b26569c3779",
+      "End": "63f51b4394664441ba73154ef4fa9dd1",
+      "Id": "2616ced33e5d49e59a31d3cce961b194"
+    },
+    {
+      "Start": "09f06d8ff7f84b78b47894af1e744e19",
+      "End": "6c91cfb637e34f7982eac8debaeab529",
+      "Id": "ec4869c4b71048ccbb73c79b666a3ad4"
+    },
+    {
+      "Start": "41cea398a6fe42ad9a10bc46443ee413",
+      "End": "3e4ad93f16624fdba24d0e823c2e8bbb",
+      "Id": "3810c6b89eb4442f9443aa6cdbb9a554"
+    },
+    {
+      "Start": "2597c6655c0d4967bff5f014c1703adb",
+      "End": "6889ed9c043a47b5b01b3fa58feef3e6",
+      "Id": "96c8aad8eee24973b039e1f88f2f6b88"
+    },
+    {
+      "Start": "1af6013b89824214a62bfbc74334449f",
+      "End": "f73ce850b2dd43b196dca08410bafead",
+      "Id": "2219ab25513a488ca0d4c9ac0b1d0d42"
+    },
+    {
+      "Start": "0abdea14d6f24267899a391f62f8d887",
+      "End": "357853d88eee409b8d6b3fb924c7841d",
+      "Id": "3b88f9ea22b34424af2e2842b6d31b33"
+    },
+    {
+      "Start": "cd3bb60a05fb4a9da0cb6e3475099206",
+      "End": "64d6de6da99b42a88df513de24469e4e",
+      "Id": "448a328437d74dac8f8de99d55c73b17"
+    }
+  ],
+  "Dependencies": [],
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": false,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.0.3.8810",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": -34.0,
+      "EyeY": -34.0,
+      "EyeZ": 21.190000534057617,
+      "LookX": -14.1899995803833,
+      "LookY": -43.060001373291016,
+      "LookZ": -41.650001525878906,
+      "UpX": -0.17000000178813934,
+      "UpY": 0.85000002384185791,
+      "UpZ": -0.5
+    },
+    "NodeViews": [
+      {
+        "Id": "8c9bca2f7497426fb42259190be3114e",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "input python script",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": -750.0,
+        "Y": 390.0
+      },
+      {
+        "Id": "789531da37bc458595fcc9c439508c1a",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "import and prepare py code",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": -355.0,
+        "Y": 385.0
+      },
+      {
+        "Id": "3070bdb01311424683b9ac01f8f248e8",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "core",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": -75.0,
+        "Y": 460.0
+      },
+      {
+        "Id": "7cc3e8ee70084dc18f3bc3049535810a",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "_skymtx",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": -750.0,
+        "Y": 475.0
+      },
+      {
+        "Id": "2d22d82b1d2d4fe7ad985a79ca69ea79",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "_analysisGrids",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": -750.0,
+        "Y": 570.0
+      },
+      {
+        "Id": "48eaa8b7bf9a4d708e44c2defee7ee74",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "_analysisType_",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": -750.0,
+        "Y": 665.0
+      },
+      {
+        "Id": "a8611ba774284a4dbcc041fb9808b76f",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "_vmtxPar_",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": -750.0,
+        "Y": 760.0
+      },
+      {
+        "Id": "e6c0533fb25d40a686c135d6de169202",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "_dmtxPar_",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": -750.0,
+        "Y": 855.0
+      },
+      {
+        "Id": "02ef571a3e7540b8858ed213535b5e28",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "reuseVmtx_",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": -750.0,
+        "Y": 950.0
+      },
+      {
+        "Id": "e082f1072eaf48aeac2d3ca47afe8f95",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "reuseDmtx_",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": -750.0,
+        "Y": 1045.0
+      },
+      {
+        "Id": "56ce09406ad342f1a97078695edd3c0e",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "decompose outputs",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 150.0,
+        "Y": 515.0
+      },
+      {
+        "Id": "39b4aec1b13a459d886ef6f409175c5c",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "analysisRecipe",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 380.0,
+        "Y": 475.0
+      },
+      {
+        "Id": "c5dedd627925461cb2d4911c1a50754f",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "Error report",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 150.0,
+        "Y": 380.0
+      },
+      {
+        "Id": "d2f0ef2390ed47b69f132f56d3e4f238",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Name": "ERRReport",
+        "ShowGeometry": true,
+        "Excluded": false,
+        "X": 380.0,
+        "Y": 380.0
+      }
+    ],
+    "Annotations": [],
+    "X": 400.0,
+    "Y": -100.0,
+    "Zoom": 0.5
+  }
+}
